@@ -162,10 +162,14 @@
           return '<img class="cmp-layer" src="' + esc(C.resolve(l.src, ep.imageBase)) + '" alt="" style="' + C.layerStyle(l, size) + '" loading="lazy" decoding="async">';
         }).join('');
       var exp = c.export && useExported(ep);
-      return '<div class="art is-compose' + (exp ? ' use-export' : '') + '" role="img" aria-label="' + alt + '" style="' + box + '">' +
+      /* 그림 부분(cmp-visual)만 하나의 이미지로 읽히게 하고, 시각·대사는 그 밖에 두어 따로 읽힌다 */
+      var visualA11y = alt ? ' role="img" aria-label="' + alt + '"' : ' aria-hidden="true"';
+      return '<div class="art is-compose' + (exp ? ' use-export' : '') + '" style="' + box + '">' +
         ph +
-        (exp ? '<img class="cmp-export" src="' + esc(C.resolve(c.export, ep.imageBase)) + '" alt="" width="' + size.w + '" height="' + size.h + '" loading="lazy" decoding="async">' : '') +
-        '<div class="cmp-live">' + live + '</div>' +
+        '<div class="cmp-visual"' + visualA11y + '>' +
+          (exp ? '<img class="cmp-export" src="' + esc(C.resolve(c.export, ep.imageBase)) + '" alt="" width="' + size.w + '" height="' + size.h + '" loading="lazy" decoding="async">' : '') +
+          '<div class="cmp-live">' + live + '</div>' +
+        '</div>' +
         time + overlayHtml + '</div>';
     }
 
@@ -350,23 +354,40 @@
       img.addEventListener('error', fail);
     });
 
-    /* 조립 컷: 배경이 들어오면 임시 컷을 가리고, 없는 레이어 파일은 조용히 뺀다 */
+    /* 조립 컷 로딩 상태
+     *  - export 모드: export 가 들어오면 표시. 실패하면 실시간 조립으로 바꾸고 상태를 다시 계산
+     *  - 실시간 조립: 배경이 들어오면 표시. 배경이 없는 컷(bg 미지정)은 레이어가 하나라도 들어오면 표시
+     *  - 없는 배경·레이어 파일은 조용히 뺀다 (배경 파일이 없으면 임시 컷을 남겨 빈 재료를 알 수 있게 함) */
     Array.prototype.forEach.call(app.querySelectorAll('.art.is-compose'), function (box) {
-      var bg = box.querySelector('.cmp-bg');
       var ex = box.querySelector('.cmp-export');
-      function shown() { box.classList.add('is-loaded'); }
-      function watch(img, ok, bad) {
-        if (img.complete && img.naturalWidth) ok();
-        else if (img.complete && img.currentSrc) bad();
+      var bg = box.querySelector('.cmp-bg');
+      var st = { ex: ex ? 'wait' : 'none', bg: bg ? 'wait' : 'none', layers: 0 };
+
+      function update() {
+        var ok;
+        if (box.classList.contains('use-export')) ok = st.ex === 'ok';
+        else if (st.bg === 'ok') ok = true;
+        else if (st.bg === 'none') ok = st.layers > 0;
+        else ok = false;
+        box.classList.toggle('is-loaded', ok);
+      }
+      function watch(img, onOk, onBad) {
+        var done = false;
+        function ok() { if (done) return; done = true; onOk(); update(); }
+        function bad() { if (done) return; done = true; onBad(); update(); }
         img.addEventListener('load', ok);
         img.addEventListener('error', bad);
+        if (img.complete) { if (img.naturalWidth) ok(); else if (img.currentSrc) bad(); }
       }
-      if (ex) watch(ex, shown, function () { ex.remove(); box.classList.remove('use-export'); });
-      if (bg) watch(bg, function () { if (!ex) shown(); else if (!box.classList.contains('use-export')) shown(); },
-        function () { bg.remove(); });
-      Array.prototype.forEach.call(box.querySelectorAll('.cmp-layer'), function (l) {
-        watch(l, function () {}, function () { l.remove(); });
+
+      if (ex) watch(ex, function () { st.ex = 'ok'; }, function () {
+        st.ex = 'failed'; ex.remove(); box.classList.remove('use-export');   /* 실시간 조립으로 전환 */
       });
+      if (bg) watch(bg, function () { st.bg = 'ok'; }, function () { st.bg = 'failed'; bg.remove(); });
+      Array.prototype.forEach.call(box.querySelectorAll('.cmp-layer'), function (l) {
+        watch(l, function () { st.layers++; }, function () { l.remove(); });
+      });
+      update();
     });
   }
 

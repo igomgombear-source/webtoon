@@ -74,8 +74,12 @@
           var m = document.createElement('p'); m.className = 'meta';
           m.textContent = r.size.w + '×' + r.size.h + ' → ' + (cut.compose.export || ('assets/cuts/' + ep.id + '/' + name));
           box.appendChild(m);
+          done++; status.textContent = done + ' / ' + cuts.length + ' 합성';
           if (r.missing.length) {
-            var x = document.createElement('p'); x.className = 'miss'; x.textContent = '없는 파일: ' + r.missing.join(', '); box.appendChild(x);
+            /* 재료가 하나라도 빠지면 불완전한 그림이 저장되지 않도록 링크를 만들지 않는다 */
+            var x = document.createElement('p'); x.className = 'miss';
+            x.textContent = '저장 불가 — 없는 파일: ' + r.missing.join(', '); box.appendChild(x);
+            return;
           }
           try {
             cv.toBlob(function (b) {
@@ -87,7 +91,6 @@
           } catch (e) {
             var w = document.createElement('p'); w.className = 'miss'; w.textContent = '저장할 수 없습니다: 로컬 서버에서 열어 주세요.'; box.appendChild(w);
           }
-          done++; status.textContent = done + ' / ' + cuts.length + ' 합성';
         });
       });
     }).catch(function (e) { status.textContent = '회차 파일을 불러오지 못했습니다: ' + e.message; });
