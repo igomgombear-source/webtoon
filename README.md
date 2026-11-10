@@ -40,23 +40,70 @@ webtoon/
 ├─ index.html                 진입점 (작품 메인 / 회차 화면을 주소 끝 #ep01 로 전환)
 ├─ css/style.css              전체 스타일
 ├─ js/app.js                  뷰어 (컷 표시, 휴대폰 화면, 지연 로딩, 진행률)
+├─ js/compose.js              조립 컷 계산 (뷰어와 내보내기 도구가 함께 씀)
 ├─ data/episodes.js           작품 정보와 회차 목록
 ├─ data/ep01.js               1화 70컷 데이터
-├─ assets/episodes/ep01/      1화 그림 폴더
+├─ assets/backgrounds/        배경 재료 (장소별 폴더)
+├─ assets/characters/         인물 재료 (인물별 폴더, 투명 PNG/WebP)
+├─ assets/props/              소품 재료 (투명 PNG/WebP)
+├─ assets/cuts/ep01/          1화 완성 컷 (핵심 컷, 내보낸 조립 컷)
+├─ assets/fonts/              표지 손글씨 글꼴 (OFL)
+├─ tools/export.html          조립 컷을 WebP 한 장으로 내보내는 도구
 ├─ .nojekyll                  GitHub Pages 가 파일을 그대로 쓰도록 하는 빈 파일
 └─ README.md
 ```
 
+각 assets 폴더의 README.md 에 파일 이름 규칙이 있습니다.
+
+## 컷 분류 (kind)
+
+| kind | 뜻 | 그림 |
+|---|---|---|
+| `text` | 문자·메일·알림·통화 화면, 검은 화면 | 없음. 뷰어가 텍스트로 표시 |
+| `compose` | 재료 조립 컷 | 배경 + 인물 + 소품을 겹쳐 표시 |
+| `key` | 따로 그리는 핵심 컷 | 완성 컷 한 장 (`image`) |
+
 ## 그림 넣기
 
-1. 그림 파일을 `assets/episodes/ep01/` 에 넣습니다. 예: `01.jpg`
-2. `data/ep01.js` 에서 해당 컷의 `image: null` 을 바꿉니다.
-   ```
-   image: '01.jpg', imageSize: { w: 800, h: 1200 },
-   ```
-   `imageSize` 는 그림 원본의 가로·세로 픽셀입니다. 넣어 두면 그림이 늦게 불러와져도 아래 컷이 밀리지 않습니다. 빼도 동작하지만, 그 컷이 로딩될 때 높이가 바뀔 수 있습니다.
-3. 그림은 잘리지 않고 원본 비율 그대로 보입니다. 파일이 없거나 이름이 틀리면 임시 컷이 그대로 남습니다.
-4. 그림에는 대사나 휴대폰 글자를 넣지 않습니다. 글자는 데이터에서 텍스트로 표시됩니다.
+컷의 그림 영역은 아래 순서로 정해집니다.
+
+1. `image` 가 있으면 완성 컷 한 장
+2. `compose.export` 가 있고 회차의 `useExportedCuts` 가 켜져 있으면, 미리 합성해 둔 WebP 한 장
+3. `compose` 가 있으면 배경 위에 투명 레이어를 화면에서 합성
+4. 아무것도 없으면 임시 컷
+
+### 완성 컷 (핵심 컷)
+
+`assets/cuts/ep01/01.webp` 에 넣고 `data/ep01.js` 에서 연결합니다.
+```
+image: '01.webp', imageSize: { w: 900, h: 1200 },
+```
+`imageSize` 는 그림 원본의 가로·세로 픽셀입니다. 넣어 두면 로딩 중에도 아래 컷이 밀리지 않습니다.
+
+### 조립 컷
+
+```
+compose: {
+  bg: 'assets/backgrounds/musicroom/night-wide.webp',
+  canvasSize: { w: 900, h: 1200 },
+  layers: [
+    { src: 'assets/characters/seungmin/reading.png', x: 20, y: 35, w: 60 }
+  ]
+}
+```
+- `canvasSize` 가 컷의 비율을 고정합니다.
+- `x`, `y`, `w` (선택 `h`) 는 모두 **캔버스 가로 폭 기준 %** 이고, 레이어 왼쪽 위 모서리 위치입니다. 화면 폭이 바뀌어도 상대 위치는 같습니다.
+- 선택 항목: `flip: true` 좌우 반전, `opacity: 0.8`
+- 파일이 아직 없으면 그 배경·레이어만 빠지고 임시 컷이 보입니다.
+
+### 조립 컷을 한 장으로 내보내기
+
+1. 서버를 켠 상태에서 `http://localhost:8000/tools/export.html` 을 엽니다.
+2. 회차를 고르고 **합성하기** → 컷마다 **저장** 을 눌러 WebP 를 받습니다.
+3. 받은 파일을 `assets/cuts/ep01/` 에 넣고, 그 컷의 compose 에 `export: 'assets/cuts/ep01/18.webp'` 를 적습니다.
+4. `data/ep01.js` 위쪽의 `useExportedCuts` 를 바꿉니다: `true` 항상 한 장 사용, `'mobile'` 휴대폰 폭에서만, `false` 화면에서 합성.
+
+그림에는 대사나 휴대폰 글자를 넣지 않습니다. 글자는 데이터에서 텍스트로 표시됩니다.
 
 ## 컷 데이터 항목
 
@@ -66,7 +113,9 @@ webtoon/
 |---|---|
 | `no` | 컷 번호 |
 | `type` | `panel` 그림 컷, `black` 검은 화면 자막, `phone` 휴대폰 화면 |
-| `image` / `imageSize` | 그림 파일 이름과 원본 크기 `{ w, h }` (선택) |
+| `kind` | 제작 분류 `text`, `compose`, `key` (선택) |
+| `image` / `imageSize` | 완성 컷 파일 이름과 원본 크기 `{ w, h }` |
+| `compose` | 재료 조립 `{ bg, canvasSize, layers, export }` (선택) |
 | `ratio` / `tone` / `desc` | 그림이 없을 때 임시 컷의 비율·색조·설명 |
 | `datetime` | `{ date, time }` — time 이 있으면 컷에 시각 표시 |
 | `scene` | 장면 전환 카드 `{ date, time, place }` |
@@ -77,6 +126,6 @@ webtoon/
 
 ## 새 회차 추가
 
-1. `data/ep01.js` 를 복사해 `data/ep02.js` 를 만들고 `id: 'ep02'`, `no: 2`, `imageBase: 'assets/episodes/ep02/'` 로 바꿉니다.
+1. `data/ep01.js` 를 복사해 `data/ep02.js` 를 만들고 `id: 'ep02'`, `no: 2`, `imageBase: 'assets/cuts/ep02/'` 로 바꿉니다.
 2. `data/episodes.js` 의 2화 항목에 `title`, `ready: true`, `file: 'data/ep02.js'` 를 넣습니다.
-3. 그림은 `assets/episodes/ep02/` 에 넣습니다.
+3. 완성 컷은 `assets/cuts/ep02/` 에 넣습니다. 배경·인물·소품 재료는 회차와 상관없이 함께 씁니다.

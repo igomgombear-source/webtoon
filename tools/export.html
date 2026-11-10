@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 이 도구의 모든 경로를 사이트 최상위 기준으로 맞춘다 (assets/…, data/…) -->
+<base href="../">
+<title>조립 컷 WebP 내보내기</title>
+<style>
+  body { margin: 0; padding: 20px; font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: #f4f4f2; color: #1b1d21; line-height: 1.5; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  p.lead { margin: 0 0 16px; color: #555; font-size: 14px; }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+  select, button { font-size: 15px; padding: 8px 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .item { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px; }
+  .item canvas { width: 100%; height: auto; display: block; background: #222; }
+  .item h2 { font-size: 15px; margin: 0 0 6px; }
+  .meta { font-size: 12px; color: #666; margin: 6px 0; word-break: break-all; }
+  .miss { font-size: 12px; color: #b3261e; margin: 6px 0; word-break: break-all; }
+  .empty { color: #666; }
+  a.dl { display: inline-block; margin-top: 4px; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>조립 컷 WebP 내보내기</h1>
+<p class="lead">
+  compose 가 있는 컷을 실제 크기(canvasSize)로 합성해 WebP 한 장으로 저장합니다.
+  저장한 파일을 <code>assets/cuts/epNN/</code> 에 넣고 컷 데이터에 <code>compose.export</code> 를 적은 뒤,
+  회차의 <code>useExportedCuts</code> 를 <code>true</code> 또는 <code>'mobile'</code> 로 바꾸면 뷰어가 그 한 장을 씁니다.
+  로컬 서버나 GitHub Pages 에서 열어야 합니다(파일을 바로 열면 저장이 막힙니다).
+</p>
+<div class="bar">
+  <label>회차 <select id="ep"></select></label>
+  <label>화질 <select id="q"><option value="0.92">높음 0.92</option><option value="0.85" selected>보통 0.85</option><option value="0.75">낮음 0.75</option></select></label>
+  <button id="run">합성하기</button>
+  <span id="status"></span>
+</div>
+<div class="grid" id="grid"></div>
+
+<script src="data/episodes.js"></script>
+<script src="js/compose.js"></script>
+<script>
+(function () {
+  var W = window.WEBTOON, C = W.compose;
+  var sel = document.getElementById('ep'), grid = document.getElementById('grid'), status = document.getElementById('status');
+  W.series.episodes.filter(function (e) { return e.ready; }).forEach(function (e) {
+    var o = document.createElement('option'); o.value = e.id; o.textContent = e.no + '화 ' + e.title; sel.appendChild(o);
+  });
+  function load(meta) {
+    return new Promise(function (ok, bad) {
+      if (W.episodeData[meta.id]) return ok(W.episodeData[meta.id]);
+      var s = document.createElement('script'); s.src = meta.file;
+      s.onload = function () { ok(W.episodeData[meta.id]); }; s.onerror = function () { bad(new Error(meta.file)); };
+      document.head.appendChild(s);
+    });
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  document.getElementById('run').onclick = function () {
+    var meta = W.series.episodes.filter(function (e) { return e.id === sel.value; })[0];
+    var q = +document.getElementById('q').value;
+    grid.innerHTML = ''; status.textContent = '불러오는 중…';
+    load(meta).then(function (ep) {
+      var cuts = ep.cuts.filter(function (c) { return c.compose; });
+      if (!cuts.length) { grid.innerHTML = '<p class="empty">이 회차에는 아직 compose 데이터가 있는 컷이 없습니다.</p>'; status.textContent = ''; return; }
+      var done = 0;
+      cuts.forEach(function (cut) {
+        var box = document.createElement('div'); box.className = 'item';
+        var name = (cut.compose.export ? cut.compose.export.split('/').pop() : pad(cut.no) + '.webp');
+        box.innerHTML = '<h2>#' + pad(cut.no) + ' ' + (cut.kind || '') + '</h2>';
+        var cv = document.createElement('canvas'); box.appendChild(cv); grid.appendChild(box);
+        C.draw(cv, cut, ep.imageBase).then(function (r) {
+          var m = document.createElement('p'); m.className = 'meta';
+          m.textContent = r.size.w + '×' + r.size.h + ' → ' + (cut.compose.export || ('assets/cuts/' + ep.id + '/' + name));
+          box.appendChild(m);
+          if (r.missing.length) {
+            var x = document.createElement('p'); x.className = 'miss'; x.textContent = '없는 파일: ' + r.missing.join(', '); box.appendChild(x);
+          }
+          try {
+            cv.toBlob(function (b) {
+              if (!b) return;
+              var a = document.createElement('a'); a.className = 'dl'; a.href = URL.createObjectURL(b);
+              a.download = name; a.textContent = name + ' 저장 (' + Math.round(b.size / 1024) + 'KB)';
+              box.appendChild(a);
+            }, 'image/webp', q);
+          } catch (e) {
+            var w = document.createElement('p'); w.className = 'miss'; w.textContent = '저장할 수 없습니다: 로컬 서버에서 열어 주세요.'; box.appendChild(w);
+          }
+          done++; status.textContent = done + ' / ' + cuts.length + ' 합성';
+        });
+      });
+    }).catch(function (e) { status.textContent = '회차 파일을 불러오지 못했습니다: ' + e.message; });
+  };
+})();
+</script>
+</body>
+</html>
