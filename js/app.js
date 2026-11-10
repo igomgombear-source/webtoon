@@ -67,17 +67,92 @@
     app.innerHTML =
       '<main class="home">' +
         '<header class="home-cover">' +
-          '<div class="cover-art" aria-hidden="true"><div class="cover-glow"></div></div>' +
-          '<div class="cover-text">' +
-            '<p class="home-genre">' + esc(s.genre) + '</p>' +
-            '<h1 class="home-title" id="page-heading" tabindex="-1">' + esc(s.title) + '</h1>' +
-            '<p class="home-status">' + esc(s.status) + '</p>' +
-            (first ? '<a class="home-start" href="#' + first.id + '">1화부터 보기</a>' : '') +
+          /* 해인의 잠긴 휴대폰 */
+          '<div class="cover-phone" aria-hidden="true">' +
+            '<div class="cover-screen">' +
+              '<div class="cover-status"><span></span><span class="ph-icons"><i></i><i></i><i></i></span></div>' +
+              '<p class="cover-date" id="cover-date"></p>' +
+              '<p class="cover-clock" id="cover-clock"></p>' +
+              '<div class="cover-notif">' +
+                '<span class="cover-avatar"></span>' +
+                '<div><p class="cover-name">권해인</p><p class="cover-last">마지막 접속 11월 1일</p></div>' +
+              '</div>' +
+              (first ?
+              '<div class="slide" id="slide">' +
+                '<span class="slide-label">밀어서 열기</span>' +
+                '<span class="slide-knob" id="slide-knob"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
+              '</div>' : '') +
+            '</div>' +
           '</div>' +
+          '<div class="cover-text">' +
+            '<h1 class="home-title" id="page-heading" tabindex="-1">마지막 <span class="dim">접속</span></h1>' +
+            '<p class="home-phrase">세 사람이 말하면 없던 호랑이도 생긴다</p>' +
+            '<p class="home-genre">' + esc(s.genre) + ' · ' + esc(s.status) + '</p>' +
+            (first ? '<a class="sr-only" href="#' + first.id + '">1화 〈' + esc(first.title) + '〉 보기</a>' : '') +
+          '</div>' +
+          '<p class="cover-scroll" aria-hidden="true">회차 목록</p>' +
         '</header>' +
         '<section class="home-list"><h2>회차</h2><ul>' + list + '</ul></section>' +
       '</main>';
     window.scrollTo(0, 0);
+    bindCover(first);
+  }
+
+  /* 잠금 화면 시계(지금 시각)와 밀어서 열기 */
+  function bindCover(first) {
+    var dEl = document.getElementById('cover-date');
+    var cEl = document.getElementById('cover-clock');
+    var days = ['일', '월', '화', '수', '목', '금', '토'];
+    function tick() {
+      var n = new Date();
+      dEl.textContent = (n.getMonth() + 1) + '월 ' + n.getDate() + '일 ' + days[n.getDay()] + '요일';
+      cEl.textContent = n.getHours() + ':' + pad2(n.getMinutes());
+    }
+    tick();
+    var timer = setInterval(tick, 10000);
+    cleanup.push(function () { clearInterval(timer); });
+
+    var slide = document.getElementById('slide');
+    var knob = document.getElementById('slide-knob');
+    if (!slide || !first) return;
+    var startX = 0, dx = 0, max = 0, dragging = false;
+
+    function setX(x) {
+      knob.style.transform = 'translateX(' + x + 'px)';
+      slide.style.setProperty('--p', max ? x / max : 0);
+    }
+    function down(e) {
+      dragging = true;
+      startX = e.clientX;
+      max = slide.clientWidth - knob.offsetWidth - 8;
+      slide.classList.add('is-drag');
+      try { knob.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault();
+    }
+    function move(e) {
+      if (!dragging) return;
+      dx = Math.max(0, Math.min(max, e.clientX - startX));
+      setX(dx);
+    }
+    function up() {
+      if (!dragging) return;
+      dragging = false;
+      slide.classList.remove('is-drag');
+      if (dx >= max * 0.85) {
+        setX(max);
+        slide.classList.add('is-open');
+        setTimeout(function () { location.hash = '#' + first.id; }, 320);
+      } else {
+        dx = 0;
+        setX(0);
+        if (Math.abs(e_last) < 4) { slide.classList.remove('is-hint'); void slide.offsetWidth; slide.classList.add('is-hint'); }
+      }
+    }
+    var e_last = 0;
+    knob.addEventListener('pointerdown', function (e) { e_last = 0; down(e); });
+    knob.addEventListener('pointermove', function (e) { if (dragging) e_last = e.clientX - startX; move(e); });
+    knob.addEventListener('pointerup', up);
+    knob.addEventListener('pointercancel', up);
   }
 
   /* ---------- 대사 ---------- */
