@@ -7,7 +7,9 @@
  *              'black'  검은 화면 자막 컷
  *              'phone'  휴대폰 화면 컷 (문자·메일·알림·통화를 실제 텍스트로 표시)
  *   image      그림 파일 이름. imageBase 기준 상대경로 (예: '01.jpg'). 없으면 null
- *   ratio      그림 영역 비율 '가로:세로'. 그림을 넣으면 그림 자체 비율을 따른다
+ *   imageSize  (선택) 그림 원본 크기 { w, h } (px). 넣어 두면 그림이 로딩되기 전에 컷 높이를 미리 잡아
+ *              아래 컷이 밀리지 않는다. 없으면 ratio 로 자리를 잡고, 로딩 후 원본 비율로 맞춘다
+ *   ratio      그림 영역 비율 '가로:세로'. 그림이 없을 때(임시 컷)와 imageSize 가 없을 때 쓰인다
  *   tone       임시 컷 배경 색조 (css/style.css 의 .tone-* 참고)
  *   desc       임시 컷에 보이는 장면 설명 (그림이 들어가면 표시되지 않음)
  *   datetime   { date, time }  time 이 있으면 컷 왼쪽 위에 시각 표시
@@ -19,6 +21,7 @@
  *              pos: { x, y } (0~100, %) 를 넣으면 그림 위 그 위치에 겹쳐 표시. 없으면 그림 아래에 표시
  *   phone      type 'phone' 일 때 화면 내용 (js/app.js 의 renderPhone 참고)
  *              owner: 'haein' (해인의 휴대폰, 밝은 화면) | 'seungmin' (승민의 휴대폰, 어두운 화면)
+ *              view 'notification' 에 focus: true 를 넣으면 알림 미리보기를 크게 보여 준다
  */
 WEBTOON.registerEpisode({
   id: 'ep01',
@@ -75,15 +78,13 @@ WEBTOON.registerEpisode({
       desc: '20:31 공유폴더 초대 메일 알림',
       phone: { owner: 'seungmin', view: 'notification',
         items: [{ app: '메일', from: '권해인', time: '20:31', title: '공유폴더 초대 · 작년 자료 검토',
-          body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요.' }] } },
+          body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요. 제가 없는 동안이라도 자료 자체는 보존되도록요. 확인 중인 자료이니 단정하지 말아 주세요.' }] } },
     { no: 12, type: 'phone',
       datetime: { date: '10월 30일', time: '20:31' },
-      desc: "메일 문구: '제가 없는 동안이라도 자료 자체는 보존되도록요'",
-      phone: { owner: 'seungmin', view: 'email',
-        from: '권해인', to: '이승민', time: '10월 30일 20:31', subject: '작년 자료 검토',
-        attachment: '공유폴더 초대',
-        body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요. 제가 없는 동안이라도 자료 자체는 보존되도록요. 확인 중인 자료이니 단정하지 말아 주세요.',
-        highlight: '제가 없는 동안이라도 자료 자체는 보존되도록요' },
+      desc: '20:31 공유폴더 초대 메일 알림 미리보기 (메일을 열지 않음)',
+      phone: { owner: 'seungmin', view: 'notification', focus: true,
+        items: [{ app: '메일', from: '권해인', time: '20:31', title: '공유폴더 초대 · 작년 자료 검토',
+          body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요. 제가 없는 동안이라도 자료 자체는 보존되도록요. 확인 중인 자료이니 단정하지 말아 주세요.' }] },
       spacing: { after: 80 } },
     { no: 13, type: 'panel', image: null, ratio: '4:5', tone: 'musicroom',
       datetime: { date: '10월 30일', time: '20:59' },
@@ -198,7 +199,7 @@ WEBTOON.registerEpisode({
       desc: '전날 공유폴더 초대 메일 알림 재확인',
       phone: { owner: 'seungmin', view: 'notification',
         items: [{ app: '메일', from: '권해인', time: '어제 20:31', title: '공유폴더 초대 · 작년 자료 검토',
-          body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요.' }] } },
+          body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요. 제가 없는 동안이라도 자료 자체는 보존되도록요. 확인 중인 자료이니 단정하지 말아 주세요.' }] } },
     { no: 52, type: 'phone',
       datetime: { date: '10월 31일' },
       desc: "'제가 없는 동안' 문구 강조",

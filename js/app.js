@@ -28,6 +28,12 @@
     var w = parseFloat(p[0]) || 4, h = parseFloat(p[1]) || 5;
     return 'aspect-ratio:' + w + ' / ' + h + ';';
   }
+  /* 그림 컷의 자리: imageSize {w,h} 가 있으면 그 비율, 없으면 ratio */
+  function artBoxStyle(cut) {
+    var z = cut.imageSize;
+    if (cut.image && z && +z.w > 0 && +z.h > 0) return 'aspect-ratio:' + (+z.w) + ' / ' + (+z.h) + ';';
+    return ratioStyle(cut.ratio);
+  }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
   function runCleanup() { while (cleanup.length) { try { cleanup.pop()(); } catch (e) {} } }
 
@@ -64,7 +70,7 @@
           '<div class="cover-art" aria-hidden="true"><div class="cover-glow"></div></div>' +
           '<div class="cover-text">' +
             '<p class="home-genre">' + esc(s.genre) + '</p>' +
-            '<h1 class="home-title">' + esc(s.title) + '</h1>' +
+            '<h1 class="home-title" id="page-heading" tabindex="-1">' + esc(s.title) + '</h1>' +
             '<p class="home-status">' + esc(s.status) + '</p>' +
             (first ? '<a class="home-start" href="#' + first.id + '">1화부터 보기</a>' : '') +
           '</div>' +
@@ -111,15 +117,19 @@
       ? '<span class="time-chip">' + esc(cut.datetime.time) + '</span>' : '';
     var ph =
       '<div class="placeholder tone-' + esc(cut.tone || 'default') + '">' +
-        '<span class="ph-no">#' + pad2(cut.no) + '</span>' +
+        '<span class="ph-no" aria-hidden="true">#' + pad2(cut.no) + '</span>' +
         '<span class="ph-desc">' + esc(placeholderLabel(cut)) + '</span>' +
-        '<span class="ph-note">그림 준비 중</span>' +
+        '<span class="ph-note" aria-hidden="true">그림 준비 중</span>' +
       '</div>';
     if (cut.image) {
       var src = /^(\.|\/|https?:)/.test(cut.image) ? cut.image : (ep.imageBase || '') + cut.image;
-      return '<div class="art has-image" data-ratio="' + esc(cut.ratio || '') + '" style="' + ratioStyle(cut.ratio) + '">' +
+      var z = cut.imageSize || {};
+      var sized = +z.w > 0 && +z.h > 0;
+      return '<div class="art has-image' + (sized ? ' is-sized' : '') + '" style="' + artBoxStyle(cut) + '">' +
         ph +
-        '<img class="art-img" src="' + esc(src) + '" alt="' + esc(cut.alt || cut.desc || '') + '" loading="lazy" decoding="async">' +
+        '<img class="art-img" src="' + esc(src) + '" alt="' + esc(cut.alt || cut.desc || '') + '"' +
+          (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
+          ' loading="lazy" decoding="async">' +
         time + overlayHtml + '</div>';
     }
     return '<div class="art" style="' + ratioStyle(cut.ratio) + '">' + ph + time + overlayHtml + '</div>';
@@ -132,10 +142,11 @@
 
   function notifCard(n) {
     return '<div class="notif">' +
-      '<div class="notif-head"><span class="app-icon app-' + (n.app === '메일' ? 'mail' : n.app === '전화' ? 'call' : 'msg') + '" aria-hidden="true"></span>' +
+      '<div class="notif-head" aria-hidden="true"><span class="app-icon app-' + (n.app === '메일' ? 'mail' : n.app === '전화' ? 'call' : 'msg') + '" aria-hidden="true"></span>' +
         '<span class="notif-app">' + esc(n.app) + '</span><span class="notif-time">' + esc(n.time) + '</span></div>' +
-      '<p class="notif-from">' + esc(n.from) + '</p>' +
+      '<p class="notif-from"><span class="sr-only">' + esc(n.app) + ' 알림, </span>' + esc(n.from) + '</p>' +
       (n.title ? '<p class="notif-title">' + esc(n.title) + '</p>' : '') +
+      '<p class="notif-time-sr sr-only">' + esc(n.time) + '</p>' +
       '<p class="notif-body">' + (n.body ? esc(n.body) : '<span class="muted">새 메시지</span>') + '</p>' +
     '</div>';
   }
@@ -149,7 +160,7 @@
     switch (p.view) {
       case 'notification':
         inner = statusBar(t) +
-          (p.overPlayer ? '<div class="player"><div class="player-art"></div><div class="player-bar"><span></span></div><div class="player-ctl" aria-hidden="true"><i></i><i class="play"></i><i></i></div></div>' : '') +
+          (p.overPlayer ? '<div class="player" aria-hidden="true"><div class="player-art"></div><div class="player-bar"><span></span></div><div class="player-ctl" aria-hidden="true"><i></i><i class="play"></i><i></i></div></div>' : '') +
           '<div class="notif-stack">' + (p.items || []).map(notifCard).join('') + '</div>';
         break;
 
@@ -174,9 +185,10 @@
 
       case 'sms':
         inner = statusBar(t) +
-          '<div class="sms-head"><span class="sms-back" aria-hidden="true">‹</span><span class="sms-avatar" aria-hidden="true"></span><span class="sms-name">' + esc(p.contact) + '</span></div>' +
+          '<div class="sms-head"><span class="sms-back" aria-hidden="true">‹</span><span class="sms-avatar" aria-hidden="true"></span><span class="sms-name"><span class="sr-only">문자 대화: </span>' + esc(p.contact) + '</span></div>' +
           '<div class="sms-thread">' + (p.messages || []).map(function (m) {
-            return '<div class="sms ' + (m.from === 'me' ? 'me' : 'them') + '"><p>' + esc(m.text) + '</p>' +
+            var who = m.from === 'me' ? '보낸 문자' : esc(p.contact) + '의 문자';
+            return '<div class="sms ' + (m.from === 'me' ? 'me' : 'them') + '"><p><span class="sr-only">' + who + ': </span>' + esc(m.text) + '</p>' +
               (m.time ? '<span class="sms-time">' + esc(m.time) + '</span>' : '') + '</div>';
           }).join('') + '</div>';
         break;
@@ -211,9 +223,10 @@
     }
 
     var label = owner === 'haein' ? '해인의 휴대폰' : '승민의 휴대폰';
-    return '<div class="phone-wrap"><div class="phone phone-' + owner + ' view-' + esc(p.view || 'none') + '" role="img" aria-label="' + label + '">' +
+    /* 화면 속 문자·메일 글자를 화면 읽기 프로그램이 읽을 수 있도록 role="img" 를 쓰지 않는다 */
+    return '<figure class="phone-wrap"><div class="phone phone-' + owner + ' view-' + esc(p.view || 'none') + (p.focus ? ' is-focus' : '') + '">' +
       '<div class="phone-screen">' + inner + '</div></div>' +
-      '<p class="phone-owner">' + label + '</p></div>';
+      '<figcaption class="phone-owner">' + label + '</figcaption></figure>';
   }
 
   /* ---------- 장면 전환 카드 ---------- */
@@ -265,11 +278,11 @@
       '<header class="topbar" id="topbar">' +
         '<a class="tb-back" href="#" aria-label="작품 메인으로">‹</a>' +
         '<p class="tb-title">' + ep.no + '화 〈' + esc(ep.title) + '〉</p>' +
-        '<span class="tb-count" id="tb-count">1 / ' + ep.cuts.length + '</span>' +
-        '<div class="tb-progress"><span id="tb-bar"></span></div>' +
+        '<span class="tb-count" id="tb-count" aria-hidden="true">1 / ' + ep.cuts.length + '</span>' +
+        '<div class="tb-progress" aria-hidden="true"><span id="tb-bar"></span></div>' +
       '</header>' +
       '<main class="viewer" id="viewer">' +
-        '<div class="ep-head"><p class="ep-head-no">' + ep.no + '화</p><h1>' + esc(ep.title) + '</h1></div>' +
+        '<div class="ep-head"><p class="ep-head-no">' + ep.no + '화</p><h1 id="page-heading" tabindex="-1">' + esc(ep.title) + '</h1></div>' +
         ep.cuts.map(function (c) { return renderCut(ep, c); }).join('') +
         '<div class="ep-silence" style="--after:' + Number(ep.endSpacing || 600) + ';" aria-hidden="true"></div>' +
         '<footer class="ep-end"><p class="end-mark">' + ep.no + '화 끝</p>' + nextHtml +
@@ -286,7 +299,14 @@
   function bindImages() {
     var imgs = app.querySelectorAll('.art-img');
     Array.prototype.forEach.call(imgs, function (img) {
-      function ok() { img.parentNode.classList.add('is-loaded'); }
+      function ok() {
+        var box = img.parentNode;
+        /* imageSize 가 없던 컷은 로딩 후 원본 비율로 맞춘다 (잘라내지 않음) */
+        if (!box.classList.contains('is-sized') && img.naturalWidth && img.naturalHeight) {
+          box.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight;
+        }
+        box.classList.add('is-loaded');
+      }
       function fail() { img.parentNode.classList.add('is-missing'); img.remove(); }
       if (img.complete && img.naturalWidth) ok();
       img.addEventListener('load', ok);
@@ -345,22 +365,31 @@
   }
 
   function renderError(msg) {
-    app.innerHTML = '<main class="home"><section class="home-list"><h2>불러오지 못했습니다</h2><p class="err">' + esc(msg) +
+    app.innerHTML = '<main class="home"><section class="home-list"><h2 id="page-heading" tabindex="-1">불러오지 못했습니다</h2><p class="err">' + esc(msg) +
       '</p><p><a class="home-start" href="#">작품 메인으로</a></p></section></main>';
   }
 
   /* ---------- 라우터 ---------- */
+  /* 화면이 바뀌면 제목으로 초점을 옮겨, 화면 읽기 프로그램이 페이지 처음부터 읽게 한다 */
+  var firstRoute = true;
+  function focusHeading() {
+    if (firstRoute) { firstRoute = false; return; }
+    var h = document.getElementById('page-heading');
+    if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
+  }
+
   function route() {
     runCleanup();
     var id = (location.hash || '').replace('#', '');
     var meta = W.series.episodes.filter(function (e) { return e.id === id; })[0];
-    if (!meta) return renderHome();
-    if (!meta.ready) return renderError(meta.no + '화는 아직 준비 중입니다.');
-    app.innerHTML = '<p class="loading">불러오는 중…</p>';
+    if (!meta) { renderHome(); return focusHeading(); }
+    if (!meta.ready) { renderError(meta.no + '화는 아직 준비 중입니다.'); return focusHeading(); }
+    app.innerHTML = '<p class="loading" role="status">불러오는 중…</p>';
     loadEpisode(meta, function (err, ep) {
-      if (err) return renderError(err.message);
+      if (err) { renderError(err.message); return focusHeading(); }
       if ((location.hash || '').replace('#', '') !== meta.id) return;
       renderEpisode(meta, ep);
+      focusHeading();
     });
   }
 
