@@ -116,6 +116,13 @@ WEBTOON.registerEpisode({
     { no: 18, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       lines: [{ who: '해인', text: '승민쌤, 내일 리허설 앞부분만 대신 진행해 주실 수 있어요?' }] },
     { no: 19, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        bg: 'assets/backgrounds/musicroom/night-wide.jpg',
+        canvasSize: { w: 900, h: 900 },
+        layers: [
+          { src: 'assets/characters/seungmin/sit-talk.webp', x: 24, y: 23.4, w: 84 }
+        ]
+      },
       lines: [{ who: '승민', text: '네. 학생들 모이면 강당에서 시작하면 되죠?' }] },
     { no: 20, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       lines: [{ who: '해인', text: '네. 아침에 행정실에서 확인할 게 있어서요. 음원은 이 휴대폰에 순서대로 준비해 뒀어요.' }] },
