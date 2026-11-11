@@ -271,9 +271,12 @@
   }
 
   /* ---------- 장면 전환 카드 ---------- */
-  function renderScene(sc) {
+  /* 장면 분위기(mood, 선택): 컷 앞뒤 여백까지 그 색으로 칠한다. 색은 css/style.css 의 [data-mood] */
+  function moodAttr(m) { return m ? ' data-mood="' + esc(m) + '"' : ''; }
+
+  function renderScene(sc, mood) {
     var parts = [sc.date, sc.time].filter(Boolean).map(esc).join(' · ');
-    return '<div class="scene-card reveal" data-transition="slow">' +
+    return '<div class="scene-card reveal" data-transition="slow"' + moodAttr(mood) + '>' +
       '<p class="scene-when">' + parts + '</p>' +
       (sc.place ? '<p class="scene-place">' + esc(sc.place) + '</p>' : '') +
     '</div>';
@@ -285,7 +288,7 @@
     var before = sp.before != null ? sp.before : 0;
     var after = sp.after != null ? sp.after : 48;
     var html = '';
-    if (cut.scene) html += renderScene(cut.scene);
+    if (cut.scene) html += renderScene(cut.scene, cut.mood);
 
     var body = '';
     if (cut.type === 'black') {
@@ -298,7 +301,7 @@
     }
 
     html += '<section class="cut cut-' + esc(cut.type) + ' reveal" id="cut-' + pad2(cut.no) + '" data-no="' + cut.no +
-      '" data-transition="' + esc(cut.transition || 'fade') + '"' +
+      '" data-transition="' + esc(cut.transition || 'fade') + '"' + moodAttr(cut.mood) +
       ' style="--before:' + Number(before) + ';--after:' + Number(after) + ';">' + body + '</section>';
     return html;
   }

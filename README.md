@@ -49,6 +49,8 @@ webtoon/
 ├─ assets/cuts/ep01/          1화 완성 컷 (핵심 컷, 내보낸 조립 컷)
 ├─ assets/fonts/              표지 손글씨 글꼴 (OFL)
 ├─ tools/export.html          조립 컷을 WebP 한 장으로 내보내는 도구
+├─ tools/review.html          휴대폰 폭 전체 스크롤 검수 창 (구간 캡처용)
+├─ assets/overlays/           조립 컷 조명 보정 레이어 (SVG)
 ├─ .nojekyll                  GitHub Pages 가 파일을 그대로 쓰도록 하는 빈 파일
 └─ README.md
 ```
@@ -121,6 +123,7 @@ compose: {
 | `scene` | 장면 전환 카드 `{ date, time, place }` |
 | `transition` | 등장 효과 `fade`, `slow`, `none` |
 | `spacing` | 컷 앞뒤 여백 `{ before, after }` (폭 360px 기준, 화면 폭에 비례) |
+| `mood` | 장면 분위기 (선택). 컷 앞뒤 여백까지 그 색으로 칠하고, 장면이 바뀌는 여백에서 색을 서서히 넘김. 값은 `css/style.css` 의 `[data-mood]` |
 | `lines` | 대사 `[{ who, text, style, pos }]` |
 | `phone` | 휴대폰 화면 내용 (`notification`, `lock`, `email`, `sms`, `call`, `calllog`, `zoom`) |
 

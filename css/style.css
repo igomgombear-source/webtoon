@@ -342,3 +342,111 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
   .reveal { opacity: 1 !important; transition: none !important; }
   .topbar { transition: none; }
 }
+
+/* ---------- 장면 분위기 (mood) ----------
+ * 컷 데이터의 mood 가 있으면 그 컷(과 장면 카드)의 앞뒤 여백까지 같은 색으로 칠해,
+ * 흰 네모 컷 나열이 아니라 스크롤 중에 장면의 공기가 이어지게 한다.
+ *  - 컷 여백(spacing)은 margin 대신 padding 으로 바꿔 색이 칠해지게 한다 (간격 값은 그대로)
+ *  - 다음 요소의 mood 가 다르면, 이 컷의 아래 여백(spacing.after) 전체를 다음 색으로 서서히 바꾼다 (:has 미지원 브라우저는 경계가 또렷하게 바뀜)
+ *  - 등장 효과는 컷 내용에만 걸어, 배경색은 항상 보이게 한다
+ * mood 가 없는 컷은 이전과 똑같이 보인다. */
+:root {
+  --mood-corridor: #080a0f;   /* 문화회관 관계자 통로: 일이 벌어진 뒤의 공간 */
+  --mood-void: #000;          /* 검은 화면 / 시간 단절 / 엔딩 */
+  --mood-night: #0a1020;      /* 밤 학교 바깥 */
+  --mood-lamp: #1b1612;       /* 밤 음악실: 따뜻한 실내등 */
+  --mood-lamp-deep: #110e0c;  /* 휴대폰 전달 직전: 같은 방, 조금 더 어둡게 */
+  --mood-morning: #e5e7ea;    /* 강당 아침: 밝지만 흰색이 아닌 서늘한 회백색 */
+  --mood-alert: #252b33;      /* 09:17 메시지: 아침 공기 속 한순간의 어둠 */
+  --mood-drift: #ccd1d7;      /* 해인 부재: 시간이 어긋나는 흐린 청회색 */
+  --mood-slate: #283038;      /* 전화·알림 재확인: 불안의 정점 */
+  --mood-frost: #d2d9e1;      /* 효은 등장: 낮이지만 차가운 공기 */
+  --mood-cold-deep: #343e4a;  /* 휴대폰을 넘긴 뒤 비어 있는 강당 */
+  --mood-home: #1c1a18;       /* 승민의 집 저녁 */
+  --mood-hush: #0b0c0e;       /* 11월 2일 아침 전화: 무거운 정적 */
+}
+[data-mood="corridor"]   { --m: var(--mood-corridor); }
+[data-mood="void"]       { --m: var(--mood-void); }
+[data-mood="night"]      { --m: var(--mood-night); }
+[data-mood="lamp"]       { --m: var(--mood-lamp); }
+[data-mood="lamp-deep"]  { --m: var(--mood-lamp-deep); }
+[data-mood="morning"]    { --m: var(--mood-morning); }
+[data-mood="alert"]      { --m: var(--mood-alert); }
+[data-mood="drift"]      { --m: var(--mood-drift); }
+[data-mood="slate"]      { --m: var(--mood-slate); }
+[data-mood="frost"]      { --m: var(--mood-frost); }
+[data-mood="cold-deep"]  { --m: var(--mood-cold-deep); }
+[data-mood="home"]       { --m: var(--mood-home); }
+[data-mood="hush"]       { --m: var(--mood-hush); }
+
+/* 다음 요소의 분위기 색 (아래 여백을 그 색으로 넘긴다) */
+.viewer > :has(+ [data-mood="corridor"])  { --m-next: var(--mood-corridor); }
+.viewer > :has(+ [data-mood="void"])      { --m-next: var(--mood-void); }
+.viewer > :has(+ [data-mood="night"])     { --m-next: var(--mood-night); }
+.viewer > :has(+ [data-mood="lamp"])      { --m-next: var(--mood-lamp); }
+.viewer > :has(+ [data-mood="lamp-deep"]) { --m-next: var(--mood-lamp-deep); }
+.viewer > :has(+ [data-mood="morning"])   { --m-next: var(--mood-morning); }
+.viewer > :has(+ [data-mood="alert"])     { --m-next: var(--mood-alert); }
+.viewer > :has(+ [data-mood="drift"])     { --m-next: var(--mood-drift); }
+.viewer > :has(+ [data-mood="slate"])     { --m-next: var(--mood-slate); }
+.viewer > :has(+ [data-mood="frost"])     { --m-next: var(--mood-frost); }
+.viewer > :has(+ [data-mood="cold-deep"]) { --m-next: var(--mood-cold-deep); }
+.viewer > :has(+ [data-mood="home"])      { --m-next: var(--mood-home); }
+.viewer > :has(+ [data-mood="hush"])      { --m-next: var(--mood-hush); }
+.viewer > .cut[data-mood="void"] + .ep-silence { --m-next: var(--mood-void); }
+
+.cut[data-mood] {
+  margin-top: 0; margin-bottom: 0;
+  padding-top: calc(var(--before, 0) * var(--u));
+  padding-bottom: calc(var(--after, 48) * var(--u));
+  background: linear-gradient(180deg,
+    var(--m) 0,
+    var(--m) calc(100% - var(--after, 48) * var(--u)),
+    var(--m-next, var(--m)) 100%);
+}
+.scene-card[data-mood] { background: var(--m); }
+/* 회차 제목 → 첫 장면, 마지막 컷 → 회차 끝 여백 */
+.ep-head { background: linear-gradient(180deg, var(--bg) 0, var(--bg) 40%, var(--m-next, var(--bg)) 100%); }
+.ep-silence { background: var(--m-next, transparent); }
+
+/* 등장 효과는 내용에만 */
+.reveal[data-mood] { opacity: 1; transition: none; }
+.reveal[data-mood] > * { opacity: 0; transition: opacity .6s ease; }
+.reveal[data-mood][data-transition="slow"] > * { transition-duration: 1.6s; }
+.reveal[data-mood][data-transition="none"] > * { opacity: 1; transition: none; }
+.reveal[data-mood].is-in > * { opacity: 1; }
+
+/* 밝은 분위기(아침 강당·부재·효은)에서는 글자색을 어둡게 */
+[data-mood="morning"], [data-mood="drift"], [data-mood="frost"] {
+  --text-dim: #59616c;
+  --ink: #252a31;
+}
+[data-mood="morning"] .scene-when, [data-mood="drift"] .scene-when, [data-mood="frost"] .scene-when { color: #6b5428; }
+[data-mood="morning"] .scene-place, [data-mood="drift"] .scene-place, [data-mood="frost"] .scene-place { color: var(--ink); }
+[data-mood="morning"] .line-speech .bubble,
+[data-mood="drift"] .line-speech .bubble,
+[data-mood="frost"] .line-speech .bubble { background: #fff; box-shadow: 0 0 0 1px rgba(30,36,44,.16); }
+[data-mood="morning"] .line-thought .bubble,
+[data-mood="drift"] .line-thought .bubble,
+[data-mood="frost"] .line-thought .bubble { background: rgba(0,0,0,.05); color: var(--ink); }
+[data-mood="morning"] .phone,
+[data-mood="drift"] .phone,
+[data-mood="frost"] .phone { box-shadow: 0 0 0 1.5px #3a3f47, 0 14px 30px rgba(20,26,34,.28); }
+
+/* 장면 카드: 아주 어두운 장면에서는 시각을 덜 밝게, 공간을 더 넓게 */
+.scene-card[data-mood="corridor"], .scene-card[data-mood="night"], .scene-card[data-mood="hush"] {
+  padding-top: calc(120 * var(--u)); padding-bottom: calc(88 * var(--u));
+}
+.scene-card[data-mood="corridor"] .scene-when { color: #8d9bb0; }
+.scene-card[data-mood="hush"] .scene-when { color: #c9cdd2; letter-spacing: .08em; }
+
+/* 검은 화면 자막 (이틀 전): 넓은 정적 */
+.cut[data-mood="void"] .black-cut { min-height: calc(520 * var(--u)); }
+.cut[data-mood="void"] .black-cut p { font-size: 22px; letter-spacing: .4em; color: #c9ccd1; }
+
+/* 그림 영역 경계: 어두운 장면에서 컷이 배경 속에 가라앉게 */
+.cut[data-mood="corridor"] .art, .cut[data-mood="hush"] .art, .cut[data-mood="void"] .art { box-shadow: 0 0 calc(40 * var(--u)) rgba(0,0,0,.6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal[data-mood] > * { opacity: 1 !important; transition: none !important; }
+}

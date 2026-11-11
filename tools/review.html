@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>회차 스크롤 검수 창</title>
+<!--
+  검수용: 회차 전체를 휴대폰 폭으로 펼쳐 놓고 그중 한 구간만 보여 준다. 헤드리스 브라우저로 구간별 캡처를 뜰 때 쓴다.
+  tools/review.html?ep=ep01&w=375&from=0&h=3000
+    w     화면 폭(px)      from  회차 맨 위에서부터 시작 위치(px)      h  보여 줄 높이(px)
+  회차 전체가 한 화면에 들어간 상태로 그려지므로 모든 컷이 등장 효과 없이 보이고, 그림도 모두 불러온다.
+  document.title 이 'ready <전체 높이>' 로 바뀌면 준비 완료.
+-->
+<style>
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  #win { position: relative; overflow: hidden; }
+  iframe { position: absolute; left: 0; top: 0; border: 0; display: block; }
+</style>
+</head>
+<body>
+<div id="win"><iframe id="f" title="회차 화면"></iframe></div>
+<script>
+  var q = new URLSearchParams(location.search);
+  var w = +q.get('w') || 375, from = +q.get('from') || 0, h = +q.get('h') || 3000;
+  var win = document.getElementById('win'), f = document.getElementById('f');
+  win.style.width = w + 'px'; win.style.height = h + 'px';
+  f.style.width = w + 'px'; f.style.height = '80000px'; f.style.top = (-from) + 'px';
+  f.onload = function () {
+    var d = f.contentDocument;
+    setTimeout(function () {
+      var bar = d.getElementById('topbar'); if (bar) bar.style.display = 'none';
+      var full = Math.ceil(d.getElementById('app').getBoundingClientRect().height);
+      f.style.height = full + 'px';
+      document.title = 'ready ' + full;
+    }, 1500);
+  };
+  f.src = '../index.html#' + (q.get('ep') || 'ep01');
+</script>
+</body>
+</html>
