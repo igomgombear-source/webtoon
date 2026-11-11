@@ -67,6 +67,10 @@ WEBTOON.registerEpisode({
 
     /* ---------- 06~28 10월 30일 밤 음악실 ---------- */
     { no: 6, mood: 'night', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'schoolnight',
+      compose: {
+        bg: 'assets/backgrounds/schoolgate/night-wide.webp',
+        canvasSize: { w: 1664, h: 936 }
+      },
       scene: { date: '10월 30일', time: '밤', place: '양평중학교' },
       datetime: { date: '10월 30일' },
       desc: '야간의 양평중학교', transition: 'slow', spacing: { after: 96 } },
@@ -75,20 +79,47 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1200, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -25, y: 0, w: 150 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.17, y: 20.83, w: 61.27 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -17.83, y: 16.33, w: 91.08 },
+          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.17, y: 8.6, w: 61.27 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -17.83, y: 4.3, w: 91.08 },
+          { src: 'assets/props/musicroom-desk-rehearsal.webp', x: -4.5, y: 41.8, w: 109 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 75 }
         ]
       },
       datetime: { date: '10월 30일' },
       desc: '음악실에서 준비 중인 승민과 해인' },
     { no: 8, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom',
+      compose: {
+        bg: 'assets/backgrounds/musicroom/night-desk.webp',
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/props/sheet-music-turn.webp', x: -7, y: 11, w: 110 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       datetime: { date: '10월 30일' },
       desc: '리허설 자료 정리' },
     { no: 9, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom',
+      compose: {
+        bg: 'assets/backgrounds/musicroom/night-desk.webp',
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 18, y: 8, w: 68, h: 114, opacity: 0.8 },
+          { src: 'assets/props/haein-phone-front.webp', x: 23.5, y: 8.8, w: 53 },
+          { src: 'assets/overlays/haein-phone-playlist.svg', x: 27.75, y: 16, w: 44.5 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       datetime: { date: '10월 30일' },
       desc: '해인 휴대폰의 재생목록' },
     { no: 10, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom',
+      compose: {
+        bg: 'assets/backgrounds/musicroom/night-locker.webp',
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/overlays/locker-17-label.svg', x: 41, y: 43.05, w: 18 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       datetime: { date: '10월 30일' },
       desc: '음악실 17번 보관함', spacing: { after: 80 } },
     { no: 11, mood: 'lamp', type: 'phone', kind: 'text',
@@ -105,6 +136,18 @@ WEBTOON.registerEpisode({
           body: '승민쌤, 합창제 자료에 확인이 필요한 부분이 있어 공유해 둘게요. 제가 없는 동안이라도 자료 자체는 보존되도록요. 확인 중인 자료이니 단정하지 말아 주세요.' }] },
       spacing: { after: 80 } },
     { no: 13, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom',
+      compose: {
+        bg: 'assets/backgrounds/musicroom/night-desk.webp',
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/props/brown-envelope.webp', x: -4, y: 11, w: 99 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 44, y: 45, w: 65, h: 76, opacity: 0.42 },
+          { src: 'assets/props/haein-phone-camera-hand.webp', x: 48.5, y: 40, w: 54.5 },
+          { src: 'assets/overlays/haein-phone-camera.svg', x: 48.5, y: 40, w: 54.5 },
+          { src: 'assets/props/brown-envelope.webp', x: 55.65, y: 61, w: 25.3 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       datetime: { date: '10월 30일', time: '20:59' },
       desc: '20:59 갈색 서류 봉투 사진' },
     { no: 14, mood: 'lamp', type: 'phone', kind: 'text',
@@ -114,6 +157,14 @@ WEBTOON.registerEpisode({
         items: [{ app: '메시지', from: '서진석', time: '21:11',
           body: '아까 학교 앞을 지나왔는데 음악실 불이 켜져 있더군요. 아직 계세요?' }] } },
     { no: 15, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom',
+      compose: {
+        canvasSize: { w: 900, h: 1125 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -25, y: 0, w: 250 },
+          { src: 'assets/characters/haein/sit-phone.webp', x: 0.5, y: 8, w: 94 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       datetime: { date: '10월 30일' },
       desc: '메시지를 확인하는 해인' },
     { no: 16, mood: 'lamp', type: 'phone', kind: 'text',
@@ -123,6 +174,15 @@ WEBTOON.registerEpisode({
         entries: [{ name: '최기훈', kind: '수신', time: '21:20', duration: '46초' }] },
       spacing: { after: 96 } },
     { no: 17, mood: 'lamp', spacing: { after: 72 }, type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom',
+      compose: {
+        canvasSize: { w: 900, h: 1125 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -148.5, y: 0, w: 250 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 44.5, y: 113.5, w: 31, h: 8 },
+          { src: 'assets/characters/seungmin/stand-leave.webp', x: 44, y: 14.5, w: 34 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       datetime: { date: '10월 30일', time: '21:37' },
       desc: '21:37 승민이 퇴근하려는 장면' },
     { no: 18, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
@@ -146,6 +206,14 @@ WEBTOON.registerEpisode({
       },
       lines: [{ who: '승민', text: '네. 학생들 모이면 강당에서 시작하면 되죠?' }] },
     { no: 20, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -13.5, y: 0, w: 200 },
+          { src: 'assets/characters/haein/sit-point.webp', x: -11.4, y: 5, w: 124 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '해인', text: '네. 아침에 행정실에서 확인할 게 있어서요. 음원은 이 휴대폰에 순서대로 준비해 뒀어요.' }] },
     { no: 21, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       compose: {
@@ -158,6 +226,16 @@ WEBTOON.registerEpisode({
       },
       lines: [{ who: '승민', text: '휴대폰을 맡기시게요? 파일만 보내주셔도 되는데.' }] },
     { no: 22, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -80.2, y: 0, w: 200 },
+          { src: 'assets/characters/seungmin/sit-talk.webp', x: 51.4, y: 24.5, w: 49.4 },
+          { src: 'assets/props/musicroom-desk-rehearsal.webp', x: -11, y: 60, w: 122 },
+          { src: 'assets/characters/haein/over-shoulder.webp', x: -15, y: 25, w: 86 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '해인', text: '강당 장비에 연결해서 시작 부분과 음량을 맞춰 놨어요. 첫 리허설은 그대로 틀어 주시면 돼요.' }] },
     { no: 23, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       compose: {
@@ -174,7 +252,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -2.1, y: 0, w: 200 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -25.6, y: 23.3, w: 110.4 },
+          { src: 'assets/characters/haein/sit-explain.webp', x: -27, y: 18, w: 126 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -199,14 +277,14 @@ WEBTOON.registerEpisode({
         ]
       },
       lines: [{ who: '해인', text: '열 시 반쯤 제가 찾으러 올게요. 잠금은 풀어 둘게요. 부탁드려요.' }] },
-    { no: 27, mood: 'lamp-deep', transition: 'slow', spacing: { after: 96 }, type: 'panel', kind: 'key', image: null, ratio: '4:5', tone: 'musicroom', datetime: { date: '10월 30일' },
+    { no: 27, mood: 'lamp-deep', transition: 'slow', spacing: { after: 96 }, type: 'panel', kind: 'key', image: '27.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'musicroom', datetime: { date: '10월 30일' },
       desc: '해인이 승민에게 휴대폰 전달' },
     { no: 28, mood: 'lamp-deep', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom', datetime: { date: '10월 30일' },
       compose: {
         canvasSize: { w: 900, h: 1125 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -73.8, y: 0, w: 250 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.78, y: 70, w: 64.19 },
+          { src: 'assets/characters/seungmin/sit-hold-phone.webp', x: 41.78, y: 65.2, w: 61.8 },
           { src: 'assets/characters/haein/sit-talk.webp', x: -16.67, y: 66.1, w: 92 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
         ]

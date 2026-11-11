@@ -1,6 +1,7 @@
 # 《마지막 접속》 1화 70컷 — 작업 상태 및 인계 보고서
 
 - 작성: Claude Code (2026-11-11)
+- 음악실 원화·소품 적용 및 검증: Codex (2026-11-11)
 - 저장소: `igomgombear-source/webtoon`
 - 작업 브랜치: `ep01-full-direction` (기준: `ep01-cut19-seungmin-compose` ← `main` 3c791c9)
 - **main 병합 금지 / 공개 배포 금지** (사용자 최종 검수 전)
@@ -10,10 +11,8 @@
 
 ## 0. 한 줄 요약
 
-1화 **스크롤 연출(여백·배경 톤·장면 전환)은 70컷 전체에 적용 완료**.
-**그림은 70컷 중 9컷(07·18·19·21·23·24·25·26·28)을 공식 원화로 조립 완료** (07·28은 소품 미포함, §3 참고). 나머지 그림이 필요한 42컷은 **공식 원화(인물·배경·소품·key)가 없어 임시 컷 상태**다. text 19컷은 기존 휴대폰/검은 화면 UI로 완성 상태.
-
-→ **1화는 아직 '완성 웹툰'이 아니다.** 연출 골격 + 일부 원화 상태.
+1화 70컷 중 **원화 적용 19컷 · text UI 19컷 · 원화 대기 32컷**이다.
+06~28컷 음악실 구간에는 원화 19컷과 text UI 4컷이 연결되어 있다. 대사·날짜·시각·순서와 70컷의 여백·배경 톤·장면 전환은 `802cd1c` 기준이다.
 
 ---
 
@@ -34,7 +33,7 @@
 
 ---
 
-## 2. 이번 작업에서 실제로 바뀐 것
+## 2. 음악실 적용 전 작업 내역 (`802cd1c` 기준)
 
 | 파일 | 변경 | 비고 |
 |---|---|---|
@@ -52,6 +51,28 @@
 ### 2-1. 제작 마스터 v2 와의 차이 (사용자 최신 지시 우선)
 마스터 v2 §1 은 "기존 간격·전환 수정 금지"였으나, 사용자 최신 지시("컷 spacing, scene transition, tone, black/text 컷 활용을 적극 검토, 기존 데이터 필드 활용 선에서 여백과 톤 조정")에 따라 **`spacing.after`, `transition`, `endSpacing` 만** 조정했다. 대사·시간·순서는 그대로다. 되돌리려면 `git diff main -- data/ep01.js` 에서 `spacing`/`transition` 줄만 되돌리면 된다.
 
+### 2-2. 음악실 06~28컷에 적용한 원화와 소품
+
+공식 음악실 배경과 해인·승민의 `sit-talk.webp`를 바탕으로 A안 선화, 셀 채색, 밤 실내 조명에 맞춰 원화를 제작했다. 해인 폰은 회보라색 무광 케이스와 좌상단의 대각선 듀얼 렌즈를 사용한다. 27컷은 화면 왼쪽의 해인에서 오른쪽의 승민으로 건네며, 61컷은 같은 폰을 반대 방향으로 건넨다.
+
+| 컷 | 적용 파일과 작화 지시 |
+|---:|---|
+| 06 | `assets/backgrounds/schoolgate/night-wide.webp` — 10월 밤, 교문 너머로 음악실 창만 따뜻하게 켜진 학교 외관 |
+| 07·22 | `assets/props/musicroom-desk-rehearsal.webp` — 공식 교실 책상과 같은 꿀색 상판, 악보 두 장, 화면을 끈 해인 폰. 22는 `assets/characters/haein/over-shoulder.webp`로 해인 어깨 너머 승민을 봄 |
+| 08·09·13 | `assets/backgrounds/musicroom/night-desk.webp` — 앰버 조명이 닿는 같은 책상 상판을 다른 거리로 사용 |
+| 08 | `assets/props/sheet-music-turn.webp` — 아이보리 니트 소매, 악보 가장자리를 집어 넘기는 손 |
+| 09 | `assets/props/haein-phone-front.webp`와 `assets/overlays/haein-phone-playlist.svg` — 정면 폰과 재생목록. 곡명·재생 시각 없이 순서 표시 |
+| 10 | `assets/backgrounds/musicroom/night-locker.webp`와 `assets/overlays/locker-17-label.svg` — 기존 오른쪽 수납장 하부와 금속 명판의 `17` |
+| 13 | `assets/props/brown-envelope.webp`, `assets/props/haein-phone-camera-hand.webp`, `assets/overlays/haein-phone-camera.svg` — 갈색 봉투와 폰을 들어 촬영하는 손. 뷰파인더 안에도 같은 봉투를 재사용 |
+| 15 | `assets/characters/haein/sit-phone.webp` — 해인이 자기 폰을 내려다보며 메시지를 확인 |
+| 17 | `assets/characters/seungmin/stand-leave.webp` — 승민이 가방을 챙기는 전신, 기존 의상과 운동화 |
+| 20 | `assets/characters/haein/sit-point.webp` — 해인이 폰을 들고 반대쪽 검지로 가리킴 |
+| 24 | `assets/characters/haein/sit-explain.webp` — 창가 쪽 미디엄 와이드에서 한 손을 펴 설명 |
+| 27 | `assets/cuts/ep01/27.webp` — 1120×1400 독립 원화, 아이보리 소매의 손이 폰을 내밀고 갈색 소매의 손이 받침 |
+| 28 | `assets/characters/seungmin/sit-hold-phone.webp` — 승민이 받은 폰의 뒷면과 손이 보이는 투샷, 위쪽 방 여백 유지 |
+
+인물·소품은 투명 WebP를 사용한다. 재생목록, 보관함 번호, 카메라 조작 화면은 SVG 레이어이며 `assets/overlays/contact-shadow.svg`는 책상과 바닥 그림자에 공통으로 쓴다.
+
 ---
 
 ## 3. 70컷 상태표
@@ -65,28 +86,28 @@
 | 03 | key | corridor | 🎨 | key 원화: 손 + 파란 파일 17 모서리 (숫자는 후편집) |
 | 04 | key | corridor | 🎨 | key 원화: 계단참·발끝·난간 (BG02 구조 고정) |
 | 05 | text | void | 📱 | — (검은 화면 '이틀 전') |
-| 06 | compose | night | 🎨 | BG03 양평중 야간 외관 |
-| **07** | compose | lamp | ✅* | 투샷: 해인(앞, 왼쪽, 오른쪽을 봄) + 승민(오른쪽, 왼쪽을 봄). *테이블 위 서류·폰 소품 없음 — 소품 PNG가 생기면 추가 |
-| 08 | compose | lamp | 🎨 | BG05 책상 클로즈업 + 악보 넘기는 손 |
-| 09 | compose | lamp | 🎨 | P02 해인 폰 (음원 목록은 UI 레이어) |
-| 10 | compose | lamp | 🎨 | BG06 17번 보관함 고해상도 (현재 배경 확대는 해상도 부족) + '17' SVG 라벨 |
+| 06 | compose | night | ✅ | BG03 양평중 야간 외관 |
+| 07 | compose | lamp | ✅ | 해인·승민 투샷과 책상 위 악보·해인 폰 |
+| 08 | compose | lamp | ✅ | BG05 책상 클로즈업과 악보 넘기는 손 |
+| 09 | compose | lamp | ✅ | P02 해인 폰 정면과 재생목록 SVG |
+| 10 | compose | lamp | ✅ | BG06 보관함 클로즈업과 `17` SVG 명판 |
 | 11·12 | text | lamp | 📱 | — |
-| 13 | compose | lamp | 🎨 | P06 갈색 봉투 + 사진 찍는 손 |
+| 13 | compose | lamp | ✅ | P06 갈색 봉투와 촬영하는 손, 뷰파인더 SVG |
 | 14 | text | lamp | 📱 | — |
-| 15 | compose | lamp | 🎨 | 해인 PNG (폰 보는 자세) |
+| 15 | compose | lamp | ✅ | 휴대폰을 내려다보는 해인 |
 | 16 | text | lamp | 📱 | — |
-| 17 | compose | lamp | 🎨 | 승민 PNG (서서 퇴근 준비, 가방 P07) |
+| 17 | compose | lamp | ✅ | 가방을 챙겨 일어선 승민 |
 | **18** | compose | lamp | ✅ | 해인 미디엄 + 음악실(창문·피아노 쪽) |
 | **19** | compose | lamp | ✅ | 승민 바스트 + 음악실(칠판 쪽) + 조명 보정 |
-| 20 | compose | lamp | 🎨 | 해인 `sit-point`(자기 휴대폰을 가리키는 손) 필요 — 대사가 "이 휴대폰"이라 손 없는 대화 포즈로 대체하지 않음 |
+| 20 | compose | lamp | ✅ | 자기 휴대폰을 가리키는 해인 |
 | **21** | compose | lamp | ✅ | 승민 리액션(약간 확대, 왼쪽 여백) |
-| 22 | compose | lamp | 🎨 | 해인 오버숄더 + 책상·폰·악보 |
+| 22 | compose | lamp | ✅ | 해인 어깨 너머의 승민과 책상 위 폰·악보 |
 | **23** | compose | lamp | ✅ | 승민 클로즈업 |
-| **24** | compose | lamp | ✅ | 해인 미디엄 와이드(18보다 작게, 창밖 밤 노출). 마스터의 "손짓"은 미표현 |
+| **24** | compose | lamp | ✅ | 밤 창가의 해인 미디엄 와이드와 설명하는 손짓 |
 | **25** | compose | lamp-deep | ✅ | 승민 클로즈업(인물 오른쪽, 빈 왼쪽 여백으로 불안) |
 | **26** | compose | lamp-deep | ✅ | 해인 클로즈업 |
-| 27 | key | lamp-deep | 🎨 | key 원화: 해인→승민 폰 전달 손 (61과 역방향) |
-| **28** | compose | lamp-deep | ✅* | 투샷, 인물은 화면 아래쪽 1/3 + 위로 큰 방 여백(불길함). *승민의 손이 프레임 밖이라 "해인 폰 소지"는 보이지 않음 — 폰 든 승민 PNG가 생기면 교체 권장 |
+| 27 | key | lamp-deep | ✅ | 해인→승민 폰 전달 독립 원화 (61과 역방향) |
+| 28 | compose | lamp-deep | ✅ | 승민의 손에 해인 폰이 보이는 투샷과 위쪽 방 여백 |
 | 29 | compose | morning | 🎨 | BG07 강당 외관 아침 |
 | 30 | compose | morning | 🎨 | BG08 강당 실내 입구 + 학생군 베이스 |
 | 31 | compose | morning | 🎨 | BG10 음향석 + P08 콘솔 + 해인 폰 |
@@ -120,7 +141,7 @@
 | 69 | compose | hush | 🎨 | BG12 집(아침 빛) + 승민 통화 자세 |
 | 70 | key | void | 🎨 | key 원화: 승민 극클로즈업 |
 
-집계: ✅ 9 (그중 ✅* 소품·동작 일부 미표현 2: 07·28) · 📱 19 · 🎨 42 (compose 35 + key 7).
+집계: ✅ 19 (compose 18 + key 1) · 📱 19 · 🎨 32 (compose 26 + key 6).
 
 ---
 
@@ -129,24 +150,20 @@
 모든 인물은 투명 PNG/WebP, 같은 인물은 같은 축척. 그림 속 한글·숫자 금지.
 
 **인물** `assets/characters/<인물>/<자세>-<표정>.webp`
-- `haein/` 해인 — `sit-talk` **확보(2차 작업)**. 남은 것: `sit-phone`(폰 보기, 15), `sit-point`(자기 폰 가리킴, 20), `over-shoulder`(뒷모습·어깨, 22), `handoff` 손(27 key). 같은 축척·같은 의상(아이보리 니트, 금 귀걸이·목걸이)·같은 조명으로
-- `seungmin/` 승민 추가 자세 — `stand-leave`(17), `stand-wait`(43·62), `sit-console`(34·37), `phone-call`(69), 강당 아침용은 같은 PNG + 아침 조명 레이어로 해결 가능
+- `seungmin/` 승민 추가 자세 — `stand-wait`(43·62), `sit-console`(34·37), `phone-call`(69). 강당 아침용은 기존 대화 자세에 아침 조명 레이어를 사용할 수 있다.
 - `hyoeun/` 효은 (10/31 강당 의상 1세트) — `stand-enter`, `stand-talk`, `stand-hand`
 - `student/` 합창부 학생군 베이스 1~2장 + 질문 학생 1명
 
 **배경** `assets/backgrounds/<장소>/<시간대>-<각도>.webp` (가로 1536 이상 권장, 세로 컷용은 세로 원본 필요)
 - `hall-corridor/evening-wide` (BG01, 01·02), `stairs/evening-landing` (BG02, 04)
-- `schoolgate/night-wide` (BG03, 06)
-- `musicroom/night-desk` (BG05 책상 클로즈업, 08·09·13·15·22·27) — 공식 음악실과 같은 책상·악보
-- `musicroom/night-locker` (BG06 보관함, 10) — 현재 배경을 3~4배 확대하면 해상도가 부족하므로 별도 원본 필요
 - `auditorium/morning-exterior` (BG07), `auditorium/morning-entrance` (BG08), `auditorium/morning-stage` (BG09), `auditorium/morning-booth` (BG10)
 - `home/evening-wide` (BG11), `home/morning-wide` (BG12, BG11 과 같은 공간)
 
 **소품** `assets/props/<소품>.webp`
-- `haein-phone`(앞·뒤·옆), `seungmin-phone`, `blue-file-17`, `brown-envelope`, `sheet-music`, `audio-console`, `school-pc`, `wall-clock`, `locker-17-label`(또는 SVG)
+- `haein-phone` 독립 뒷면·옆면 (정면 `haein-phone-front.webp` 확보), `seungmin-phone`, `blue-file-17`, `audio-console`, `school-pc`, `wall-clock`
 
 **key 원화** `assets/cuts/ep01/NN.webp` + `data/ep01.js` 에 `image: 'NN.webp', imageSize: { w, h }`
-- 01 (3:4), 03 (1:1), 04 (3:4), 27 (4:5), 33 (16:9), 61 (4:5), 70 (4:5) — 비율은 현재 `ratio` 값 기준
+- 01 (3:4), 03 (1:1), 04 (3:4), 33 (16:9), 61 (4:5), 70 (4:5) — 비율은 현재 `ratio` 값 기준
 
 **조명 보정 레이어** `assets/overlays/`
 - `auditorium-morning-grade.svg`(서늘한 회백, 약한 청색), `auditorium-cold-grade.svg`(55~62), `home-evening-grade.svg`, `home-dawn-grade.svg` — `musicroom-night-grade.svg` 를 복사해 색만 바꾸면 된다
@@ -222,25 +239,29 @@ diff <(git show main:data/ep01.js | ext) <(ext < data/ep01.js) && echo SAME
 grep -oE "kind: '(text|compose|key)'" data/ep01.js | sort | uniq -c   # compose 44 / key 7 / text 19
 ```
 
-**이번 결과 (2026-11-11, Edge 헤드리스 375px·DPR2, 전체 높이 41,143px, 14구간)**
+**이전 결과 (`802cd1c`, Edge 헤드리스 375px·DPR2)**
 - 대사·시간·장면 필드 445개 main 과 동일, 컷 순서 1~70, 분류 19/44/7 유지.
 - 19·21·23·25 조립 컷: 레이어 3개 모두 로딩, 승민 1313×1342 확인, 말풍선과 겹침 없음.
 - mood 색 전환: 프롤로그 어둠 → 검정 '이틀 전' → 남색 → 음악실 → 아침 회백 → 09:17 어둠 → 부재 청회 → slate → frost → 집 → 검정 엔딩 순으로 끊김 없이 이어짐 확인.
 - 가로 스크롤 없음. 임시 컷은 "핵심 컷/조립 컷 · 그림 준비 중" 표시가 그대로 보여 미완성임이 드러남 (의도).
 - 미확인: 실제 iOS Safari / 안드로이드 실기기, `tools/export.html` 로 19·21·23·25 WebP 내보내기(SVG 레이어 포함) 결과.
 
+**음악실 적용 결과 (2026-11-11, 로컬 Edge)**
+
+- `main` 기준 대사·시각·장면·휴대폰 UI 데이터와 `802cd1c` 기준 비율·여백·등장 효과·mood를 비교했다. 70컷 순서와 분류 19/44/7이 일치한다.
+- 360·375·430·960px 뷰어에서 원화 19컷과 UI 19컷 로딩, 남은 임시 컷 32개, 가로 넘침 없음 확인. 375px에서 변경한 13컷의 구도와 텍스트를 확인했다. `tools/review.html`은 `ready 41143 missing=none`을 반환했다.
+- `tools/export.html`에서 조립 18컷을 SVG와 함께 합성했다. 09·10·13컷의 WebP 다운로드도 검증했다. 모바일 실기기 검수는 전체 원화 적용 후 진행한다.
+
 ---
 
 ## 8. 다음 작업 순서 (권장)
 
-1. 해인 PNG 4종 확보 → 07·15·18·20·22·24·26·28 조립 (위 시선축 규칙). 이것만으로 음악실 장면(06~28)이 대부분 완성된다.
-2. key 27 원화 → 음악실 장면 완성.
-3. 강당 배경 4종 + 학생군 + 효은 → 29~62. 아침 조명 레이어 추가.
-4. 문화회관 BG01·BG02 + key 01·03·04 → 프롤로그.
-5. 집 BG11·BG12 + key 70 → 엔딩.
-6. 각 단계마다 §7 회귀 검사 + 375px 캡처. 완성 컷만 ✅ 로 표에 반영.
-7. 전부 끝난 뒤 `tools/export.html` 로 조립 컷 WebP 내보내기 → `useExportedCuts: 'mobile'` 검토.
-8. 사용자 최종 검수 후에만 main 병합.
+1. 강당 배경 4종 + 학생군 + 효은 → 29~62. 아침 조명 레이어 추가. 61컷의 폰은 §2-2 참고.
+2. 문화회관 BG01·BG02 + key 01·03·04 → 프롤로그.
+3. 집 BG11·BG12 + key 70 → 엔딩.
+4. 각 단계마다 §7 회귀 검사 + 375px 캡처. 완성 컷만 ✅ 로 표에 반영.
+5. 전부 끝난 뒤 `tools/export.html` 로 조립 컷 WebP 내보내기 → `useExportedCuts: 'mobile'` 검토.
+6. 1화 70컷 완성 후 사용자 최종 검수.
 
 ## 9. main 병합 전 주의사항
 - `참고_비공개` 이미지가 커밋에 섞이지 않았는지 `git log --stat main..HEAD` 로 확인.
