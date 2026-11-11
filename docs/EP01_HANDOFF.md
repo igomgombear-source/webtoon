@@ -11,7 +11,7 @@
 ## 0. 한 줄 요약
 
 1화 **스크롤 연출(여백·배경 톤·장면 전환)은 70컷 전체에 적용 완료**.
-**그림은 70컷 중 4컷(19·21·23·25)만 본편 수준 원화로 조립 완료**, 나머지 66컷 중 그림이 필요한 47컷은 **공식 원화(인물·배경·소품·key)가 없어 임시 컷 상태**다. text 19컷은 기존 휴대폰/검은 화면 UI로 완성 상태.
+**그림은 70컷 중 9컷(07·18·19·21·23·24·25·26·28)을 공식 원화로 조립 완료** (07·28은 소품 미포함, §3 참고). 나머지 그림이 필요한 42컷은 **공식 원화(인물·배경·소품·key)가 없어 임시 컷 상태**다. text 19컷은 기존 휴대폰/검은 화면 UI로 완성 상태.
 
 → **1화는 아직 '완성 웹툰'이 아니다.** 연출 골격 + 일부 원화 상태.
 
@@ -39,6 +39,7 @@
 | 파일 | 변경 | 비고 |
 |---|---|---|
 | `assets/characters/seungmin/sit-talk.webp` | 최신 승인본(1313×1342, RGBA)으로 교체 | 과거 1313×1198 버전 폐기. 원본 PNG를 브라우저에서 WebP(q0.9, 알파 유지)로 변환, 261,884 bytes. 모서리 알파 0 / 얼굴 알파 253 확인 |
+| `assets/characters/haein/sit-talk.webp` | 신규 (2차 작업) | 해인 공식 대화 포즈 1656×1220 RGBA → WebP q0.9, 160,196 bytes, 알파 유지 확인. 화면 오른쪽을 보는 대화 표정, 손·휴대폰 없음 |
 | `assets/backgrounds/musicroom/night-wide.jpg` | 변경 없음 | 공식 `1000035291.png` 와 sha256 동일 (원본은 확장자만 png 인 JPEG) |
 | `assets/overlays/musicroom-night-grade.svg` | 신규 | 밤 음악실 조명 보정 레이어 (따뜻한 빛 10% + 가장자리 어둠). 조립 컷 맨 위 레이어 |
 | `data/ep01.js` | 70컷 전부 `mood` 추가, 일부 `spacing.after`/`transition` 조정, 19·21·23·25 `compose` 연결, `endSpacing` 900→1400 | 대사·시간·장면·phone 내용 무변경 |
@@ -65,7 +66,7 @@
 | 04 | key | corridor | 🎨 | key 원화: 계단참·발끝·난간 (BG02 구조 고정) |
 | 05 | text | void | 📱 | — (검은 화면 '이틀 전') |
 | 06 | compose | night | 🎨 | BG03 양평중 야간 외관 |
-| 07 | compose | lamp | 🎨 | 해인 PNG + 승민 다른 자세 PNG (투샷) |
+| **07** | compose | lamp | ✅* | 투샷: 해인(앞, 왼쪽, 오른쪽을 봄) + 승민(오른쪽, 왼쪽을 봄). *테이블 위 서류·폰 소품 없음 — 소품 PNG가 생기면 추가 |
 | 08 | compose | lamp | 🎨 | BG05 책상 클로즈업 + 악보 넘기는 손 |
 | 09 | compose | lamp | 🎨 | P02 해인 폰 (음원 목록은 UI 레이어) |
 | 10 | compose | lamp | 🎨 | BG06 17번 보관함 고해상도 (현재 배경 확대는 해상도 부족) + '17' SVG 라벨 |
@@ -75,17 +76,17 @@
 | 15 | compose | lamp | 🎨 | 해인 PNG (폰 보는 자세) |
 | 16 | text | lamp | 📱 | — |
 | 17 | compose | lamp | 🎨 | 승민 PNG (서서 퇴근 준비, 가방 P07) |
-| 18 | compose | lamp | 🎨 | 해인 PNG (말하는 미디엄) |
+| **18** | compose | lamp | ✅ | 해인 미디엄 + 음악실(창문·피아노 쪽) |
 | **19** | compose | lamp | ✅ | 승민 바스트 + 음악실(칠판 쪽) + 조명 보정 |
-| 20 | compose | lamp | 🎨 | 해인 PNG (폰 가리키는 손) |
+| 20 | compose | lamp | 🎨 | 해인 `sit-point`(자기 휴대폰을 가리키는 손) 필요 — 대사가 "이 휴대폰"이라 손 없는 대화 포즈로 대체하지 않음 |
 | **21** | compose | lamp | ✅ | 승민 리액션(약간 확대, 왼쪽 여백) |
 | 22 | compose | lamp | 🎨 | 해인 오버숄더 + 책상·폰·악보 |
 | **23** | compose | lamp | ✅ | 승민 클로즈업 |
-| 24 | compose | lamp | 🎨 | 해인 미디엄 (손짓) |
+| **24** | compose | lamp | ✅ | 해인 미디엄 와이드(18보다 작게, 창밖 밤 노출). 마스터의 "손짓"은 미표현 |
 | **25** | compose | lamp-deep | ✅ | 승민 클로즈업(인물 오른쪽, 빈 왼쪽 여백으로 불안) |
-| 26 | compose | lamp-deep | 🎨 | 해인 클로즈업 |
+| **26** | compose | lamp-deep | ✅ | 해인 클로즈업 |
 | 27 | key | lamp-deep | 🎨 | key 원화: 해인→승민 폰 전달 손 (61과 역방향) |
-| 28 | compose | lamp-deep | 🎨 | 해인 + 승민(폰 소지) 투샷 |
+| **28** | compose | lamp-deep | ✅* | 투샷, 인물은 화면 아래쪽 1/3 + 위로 큰 방 여백(불길함). *승민의 손이 프레임 밖이라 "해인 폰 소지"는 보이지 않음 — 폰 든 승민 PNG가 생기면 교체 권장 |
 | 29 | compose | morning | 🎨 | BG07 강당 외관 아침 |
 | 30 | compose | morning | 🎨 | BG08 강당 실내 입구 + 학생군 베이스 |
 | 31 | compose | morning | 🎨 | BG10 음향석 + P08 콘솔 + 해인 폰 |
@@ -119,7 +120,7 @@
 | 69 | compose | hush | 🎨 | BG12 집(아침 빛) + 승민 통화 자세 |
 | 70 | key | void | 🎨 | key 원화: 승민 극클로즈업 |
 
-집계: ✅ 4 · 📱 19 · 🎨 47 (compose 40 + key 7).
+집계: ✅ 9 (그중 ✅* 소품·동작 일부 미표현 2: 07·28) · 📱 19 · 🎨 42 (compose 35 + key 7).
 
 ---
 
@@ -128,7 +129,7 @@
 모든 인물은 투명 PNG/WebP, 같은 인물은 같은 축척. 그림 속 한글·숫자 금지.
 
 **인물** `assets/characters/<인물>/<자세>-<표정>.webp`
-- `haein/` 해인 (36세, C컬 옆가르마, 승민과 비슷한 키) — 최소: `sit-talk`, `sit-phone`(폰 보기), `sit-point`(폰 가리킴), `handoff`(폰 건넴) — 10/30 밤 음악실 전용
+- `haein/` 해인 — `sit-talk` **확보(2차 작업)**. 남은 것: `sit-phone`(폰 보기, 15), `sit-point`(자기 폰 가리킴, 20), `over-shoulder`(뒷모습·어깨, 22), `handoff` 손(27 key). 같은 축척·같은 의상(아이보리 니트, 금 귀걸이·목걸이)·같은 조명으로
 - `seungmin/` 승민 추가 자세 — `stand-leave`(17), `stand-wait`(43·62), `sit-console`(34·37), `phone-call`(69), 강당 아침용은 같은 PNG + 아침 조명 레이어로 해결 가능
 - `hyoeun/` 효은 (10/31 강당 의상 1세트) — `stand-enter`, `stand-talk`, `stand-hand`
 - `student/` 합창부 학생군 베이스 1~2장 + 질문 학생 1명
@@ -212,6 +213,7 @@ layers: [
 **로컬 실행**: 저장소 폴더에서 `python -m http.server 8000` → `http://localhost:8000/#ep01`
 
 **375px 전체 스크롤 검수 캡처**: `http://localhost:8000/tools/review.html?w=375&from=0&h=3000` 의 `from` 을 3000씩 늘리며 캡처 (헤드리스 Chrome/Edge: `--headless=new --window-size=375,3000 --force-device-scale-factor=2 --virtual-time-budget=15000 --screenshot=...`).
+- 캡처 창은 지연 로딩을 끄고 모든 그림을 불러오고 디코딩한 뒤 제목을 `ready <높이> missing=<빠진 레이어가 있는 컷|none>` 으로 바꾼다. 로컬 서버가 느리면 레이어가 빠질 수 있으므로 서버 없이 `file://` + `--allow-file-access-from-files` 로 여는 것이 가장 안정적이다.
 
 **회귀 검사 (대사·시간·장면이 main 과 같은지)**
 ```

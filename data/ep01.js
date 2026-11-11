@@ -71,6 +71,15 @@ WEBTOON.registerEpisode({
       datetime: { date: '10월 30일' },
       desc: '야간의 양평중학교', transition: 'slow', spacing: { after: 96 } },
     { no: 7, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '4:3', tone: 'musicroom',
+      compose: {
+        canvasSize: { w: 1200, h: 900 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -25, y: 0, w: 150 },
+          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.17, y: 20.83, w: 61.27 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -17.83, y: 16.33, w: 91.08 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 75 }
+        ]
+      },
       datetime: { date: '10월 30일' },
       desc: '음악실에서 준비 중인 승민과 해인' },
     { no: 8, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom',
@@ -117,6 +126,14 @@ WEBTOON.registerEpisode({
       datetime: { date: '10월 30일', time: '21:37' },
       desc: '21:37 승민이 퇴근하려는 장면' },
     { no: 18, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 900, h: 900 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -8.6, y: 0, w: 200 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -30, y: 10.56, w: 128.8 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '해인', text: '승민쌤, 내일 리허설 앞부분만 대신 진행해 주실 수 있어요?' }] },
     { no: 19, mood: 'lamp', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       compose: {
@@ -153,6 +170,14 @@ WEBTOON.registerEpisode({
       },
       lines: [{ who: '승민', text: '그 뒤에 반복해서 연습할 곡은요?' }] },
     { no: 24, mood: 'lamp', spacing: { after: 56 }, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 900, h: 900 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -2.1, y: 0, w: 200 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -25.6, y: 23.3, w: 110.4 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '해인', text: '컴퓨터로 옮겨도 괜찮아요. 그때 시작 부분과 음량만 다시 맞춰 주세요.' }] },
     { no: 25, mood: 'lamp-deep', spacing: { after: 64 }, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
       compose: {
@@ -165,10 +190,27 @@ WEBTOON.registerEpisode({
       },
       lines: [{ who: '승민', text: '알겠습니다. 휴대폰은 언제 돌려드리면 될까요?' }] },
     { no: 26, mood: 'lamp-deep', spacing: { after: 96 }, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 900, h: 900 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -31.2, y: -10, w: 240 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -50.6, y: -3.2, w: 174.8 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '해인', text: '열 시 반쯤 제가 찾으러 올게요. 잠금은 풀어 둘게요. 부탁드려요.' }] },
     { no: 27, mood: 'lamp-deep', transition: 'slow', spacing: { after: 96 }, type: 'panel', kind: 'key', image: null, ratio: '4:5', tone: 'musicroom', datetime: { date: '10월 30일' },
       desc: '해인이 승민에게 휴대폰 전달' },
     { no: 28, mood: 'lamp-deep', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'musicroom', datetime: { date: '10월 30일' },
+      compose: {
+        canvasSize: { w: 900, h: 1125 },
+        layers: [
+          { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -73.8, y: 0, w: 250 },
+          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.78, y: 70, w: 64.19 },
+          { src: 'assets/characters/haein/sit-talk.webp', x: -16.67, y: 66.1, w: 92 },
+          { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       lines: [{ who: '해인', text: '고마워요. 승민쌤은 확인하고 말하는 사람이라 좋아요.' }],
       spacing: { after: 360 } },
 

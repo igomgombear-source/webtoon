@@ -7,8 +7,8 @@
   검수용: 회차 전체를 휴대폰 폭으로 펼쳐 놓고 그중 한 구간만 보여 준다. 헤드리스 브라우저로 구간별 캡처를 뜰 때 쓴다.
   tools/review.html?ep=ep01&w=375&from=0&h=3000
     w     화면 폭(px)      from  회차 맨 위에서부터 시작 위치(px)      h  보여 줄 높이(px)
-  회차 전체가 한 화면에 들어간 상태로 그려지므로 모든 컷이 등장 효과 없이 보이고, 그림도 모두 불러온다.
-  document.title 이 'ready <전체 높이>' 로 바뀌면 준비 완료.
+  모든 컷을 등장 효과 없이 표시하고, 지연 로딩을 끄고 모든 그림을 불러온 뒤 from 위치로 스크롤한다.
+  document.title 이 'ready <전체 높이> missing=<레이어가 빠진 조립 컷 | none>' 으로 바뀌면 준비 완료.
 -->
 <style>
   html, body { margin: 0; background: #000; overflow: hidden; }
@@ -23,14 +23,35 @@
   var w = +q.get('w') || 375, from = +q.get('from') || 0, h = +q.get('h') || 3000;
   var win = document.getElementById('win'), f = document.getElementById('f');
   win.style.width = w + 'px'; win.style.height = h + 'px';
-  f.style.width = w + 'px'; f.style.height = '80000px'; f.style.top = (-from) + 'px';
+  f.style.width = w + 'px'; f.style.height = h + 'px';
   f.onload = function () {
     var d = f.contentDocument;
     setTimeout(function () {
       var bar = d.getElementById('topbar'); if (bar) bar.style.display = 'none';
-      var full = Math.ceil(d.getElementById('app').getBoundingClientRect().height);
-      f.style.height = full + 'px';
-      document.title = 'ready ' + full;
+      /* 지연 로딩을 끄고 모든 그림(조립 레이어 포함)이 다 들어온 뒤에 준비 완료로 표시 */
+      var imgs = Array.prototype.slice.call(d.images);
+      imgs.forEach(function (i) { i.loading = 'eager'; i.decoding = 'sync'; });
+      Promise.all(imgs.map(function (i) {
+        return i.complete ? 0 : new Promise(function (r) { i.addEventListener('load', r); i.addEventListener('error', r); });
+      })).then(function () {
+        /* 헤드리스 캡처가 디코딩 전 화면을 찍지 않도록 모든 그림 디코딩까지 기다린다 */
+        return Promise.all(imgs.map(function (i) { if (!(i.isConnected && i.decode)) return 0;
+          return Promise.race([i.decode().catch(function () {}), new Promise(function (r) { setTimeout(r, 3000); })]); }));
+      }).then(function () { return new Promise(function (r) { setTimeout(r, 300); }); }).then(function () {
+        var full = Math.ceil(d.getElementById('app').getBoundingClientRect().height);
+        Array.prototype.forEach.call(d.querySelectorAll('.reveal'), function (el) { el.classList.add('is-in'); });
+        f.contentWindow.scrollTo(0, from);
+        /* 로딩 검사: 데이터의 조립 레이어 수보다 화면에 남은 레이어가 적은 컷(=불러오지 못해 빠진 레이어) */
+        var ep = f.contentWindow.WEBTOON.episodeData[q.get('ep') || 'ep01'], miss = [];
+        (ep ? ep.cuts : []).forEach(function (c) {
+          var want = c.compose ? (c.compose.layers || []).length + (c.compose.bg ? 1 : 0) : 0;
+          if (!want) return;
+          var box = d.querySelector('#cut-' + (c.no < 10 ? '0' : '') + c.no + ' .art');
+          var have = box ? box.querySelectorAll('.cmp-bg, .cmp-layer').length : 0;
+          if (have < want) miss.push(c.no + '(' + have + '/' + want + ')');
+        });
+        document.title = 'ready ' + full + ' missing=' + (miss.join(',') || 'none');
+      });
     }, 1500);
   };
   f.src = '../index.html#' + (q.get('ep') || 'ep01');
