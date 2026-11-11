@@ -43,6 +43,8 @@ webtoon/
 ├─ js/compose.js              조립 컷 계산 (뷰어와 내보내기 도구가 함께 씀)
 ├─ data/episodes.js           작품 정보와 회차 목록
 ├─ data/characters.js         인물 그림 중앙 목록 (조립 컷에서 @인물/이름 으로 부름)
+├─ data/cast.js               인물 공식 설정 (사용자 확정 키·외형·안경, 제작·검수 기준)
+├─ tools/qa/                  1화 자동 검수 (tools/qa/README.md)
 ├─ data/ep01.js               1화 70컷 데이터
 ├─ assets/backgrounds/        배경 재료 (장소별 폴더)
 ├─ assets/characters/         인물 재료 (인물별 폴더, 투명 PNG/WebP)

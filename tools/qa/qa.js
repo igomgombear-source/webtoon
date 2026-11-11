@@ -235,6 +235,19 @@
         if (g.img && (g.w !== e2.size.w || g.h !== e2.size.h)) add('warn', '@' + name, '목록 크기 ' + e2.size.w + '×' + e2.size.h + ' 와 실제 ' + g.w + '×' + g.h + ' 가 다름');
       }
     }
+    /* 공식 설정(data/cast.js)과 그림 항목 비교: 지금은 안경 유무 */
+    var cast = W.cast || {}, byAlias = {};
+    refs.forEach(function (r) { if (r.alias) (byAlias[r.alias] = byAlias[r.alias] || []).indexOf(r.cut) < 0 && byAlias[r.alias].push(r.cut); });
+    if (!W.cast) add('warn', '공식 설정', 'data/cast.js 를 불러오지 못해 공식 설정 비교를 못 함');
+    Object.keys(byAlias).forEach(function (alias) {
+      var who = cast[alias.split('/')[0]], e3 = chars[alias] || {}, cutsTxt = byAlias[alias].map(pad).join('·');
+      if (!who || who.glasses === undefined) return;
+      if (/^haein\/hand-|\/hand-/.test(alias)) return;   /* 손만 나오는 그림 */
+      if (who.glasses === true && e3.glasses !== true)
+        add('warn', '@' + alias, who.name + ' 공식 설정은 안경 착용인데 ' + (e3.glasses === false ? '이 그림은 안경 없음' : '그림의 안경 여부가 목록에 없음') + ' (컷 ' + cutsTxt + ')');
+      if (who.glasses === false && e3.glasses === true)
+        add('warn', '@' + alias, who.name + ' 공식 설정은 안경 없음인데 이 그림은 안경을 씀 (컷 ' + cutsTxt + ')');
+    });
     report.refs = refs.map(function (r) { return { cut: r.cut, role: r.role, src: r.src, path: r.path }; });
   }
 
