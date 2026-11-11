@@ -3,6 +3,7 @@
 - 작성: Claude Code (2026-11-11)
 - 음악실 원화·소품 적용 및 검증: Codex (2026-11-11)
 - 강당 원화·소품 적용 및 검증: Codex (2026-11-11)
+- 프롤로그·엔딩 원화 적용 및 전체 뷰어 검증: Codex (2026-11-11)
 - 저장소: `igomgombear-source/webtoon`
 - 작업 브랜치: `ep01-full-direction` (기준: `ep01-cut19-seungmin-compose` ← `main` 3c791c9)
 - **main 병합 금지 / 공개 배포 금지** (사용자 최종 검수 전)
@@ -12,8 +13,8 @@
 
 ## 0. 한 줄 요약
 
-1화 70컷 중 **원화 적용 44컷 · text UI 19컷 · 원화 대기 7컷**이다.
-06~28컷 음악실과 29~62컷 강당의 원화 및 UI를 연결했다. 원화 대기 컷은 01·02·03·04·63·69·70이다. 대사·날짜·시각·순서와 70컷의 여백·배경 톤·장면 전환은 `c2d54f6` 기준이다.
+1화 70컷에 **원화 51컷과 text UI 19컷**을 연결했다. 뷰어의 그림 미적용 컷은 0개다.
+음악실의 해인 외형은 정본 교체 대기 상태다. 외형 교체 범위는 07·15·18·20·22·24·26·28컷이며, 의상이 바뀌면 08·13·27컷의 소매도 맞춘다. [해인 교체 범위](HAEIN_REPLACEMENT.md)
 
 ---
 
@@ -95,41 +96,55 @@
 
 효은은 제작 마스터의 교사 설정에서 기준화를 새로 만들었다. 낮게 묶은 흑발과 청회색 코트, 밝은 회색 목폴라로 56~61컷의 외형을 통일한다. 승민 폰은 각진 흑연색 케이스와 세로형 단일 렌즈, 해인 폰은 음악실과 같은 회보라색 케이스와 대각선 듀얼 렌즈를 사용한다.
 
+### 2-4. 프롤로그 01~04컷과 엔딩 63·69·70컷에 적용한 원화
+
+| 컷 | 적용 파일과 작화 지시 |
+|---:|---|
+| 01 | `assets/cuts/ep01/01.webp` — 18:34 문화회관 복도, 공연장 문틈의 황색 빛, 먼 실루엣과 파란 파일 가장자리 |
+| 02 | `assets/backgrounds/hall-corridor/evening-wide.webp` — 비어 있는 관계자 통로와 끝쪽의 계단 입구 |
+| 03 | `assets/cuts/ep01/03.webp`와 `assets/overlays/blue-file-17-label.svg` — 정체를 알 수 없는 손과 파일의 모서리, 명판의 `17`을 별도 SVG로 적용 |
+| 04 | `assets/cuts/ep01/04.webp` — 복도 끝의 계단참을 아래에서 본 난간과 익명의 발끝 |
+| 63 | `assets/backgrounds/home/evening-wide.webp`와 기존 `@seungmin/stand-leave` — 저녁에 돌아온 승민, 현관과 조명이 켜진 거실 |
+| 69 | `assets/backgrounds/home/morning-wide.webp`와 `assets/characters/seungmin/phone-call.webp` — 같은 거실의 아침 빛, 흑연색 폰으로 전화를 받는 승민, 경찰의 기존 음성 대사 |
+| 70 | `assets/cuts/ep01/70.webp` — 같은 통화에서 굳은 승민의 얼굴과 폰 가장자리 클로즈업 |
+
+01~04컷의 문화회관은 학교 강당과 별도 공간이다. 63·69컷의 거실은 가상의 같은 공간이며 시간에 따라 조명을 바꿨다. 03컷은 key 분류를 유지하면서 독립 원화 위에 SVG를 표시한다.
+
 ---
 
 ## 3. 70컷 상태표
 
-범례: ✅ 완성(본편 수준) · 🎨 연출만 적용(그림 없음, 임시 컷 표시) · 📱 text UI 완성
+범례: ✅ 원화 적용 및 검수 · 🔄 원화 적용, 해인 외형 교체 대기 · 📱 text UI
 
 | 컷 | 분류 | mood | 상태 | 필요한 것 |
 |---:|---|---|---|---|
-| 01 | key | corridor | 🎨 | key 원화: 문화회관 복도, 비식별 실루엣, 파란 파일 일부 |
-| 02 | compose | corridor | 🎨 | BG01 관계자 통로(밝은 행사장 문틈 vs 어두운 통로, 인물 없음) |
-| 03 | key | corridor | 🎨 | key 원화: 손 + 파란 파일 17 모서리 (숫자는 후편집) |
-| 04 | key | corridor | 🎨 | key 원화: 계단참·발끝·난간 (BG02 구조 고정) |
+| 01 | key | corridor | ✅ | 문화회관 복도, 비식별 실루엣과 파란 파일 일부 |
+| 02 | compose | corridor | ✅ | 밝은 행사장 문틈과 빈 관계자 통로 |
+| 03 | key | corridor | ✅ | 손과 파란 파일 모서리, `17` SVG |
+| 04 | key | corridor | ✅ | 계단참·발끝·난간 |
 | 05 | text | void | 📱 | — (검은 화면 '이틀 전') |
 | 06 | compose | night | ✅ | BG03 양평중 야간 외관 |
-| 07 | compose | lamp | ✅ | 해인·승민 투샷과 책상 위 악보·해인 폰 |
+| 07 | compose | lamp | 🔄 | 해인·승민 투샷과 책상 위 악보·해인 폰 |
 | 08 | compose | lamp | ✅ | BG05 책상 클로즈업과 악보 넘기는 손 |
 | 09 | compose | lamp | ✅ | P02 해인 폰 정면과 재생목록 SVG |
 | 10 | compose | lamp | ✅ | BG06 보관함 클로즈업과 `17` SVG 명판 |
 | 11·12 | text | lamp | 📱 | — |
 | 13 | compose | lamp | ✅ | P06 갈색 봉투와 촬영하는 손, 뷰파인더 SVG |
 | 14 | text | lamp | 📱 | — |
-| 15 | compose | lamp | ✅ | 휴대폰을 내려다보는 해인 |
+| 15 | compose | lamp | 🔄 | 휴대폰을 내려다보는 해인 |
 | 16 | text | lamp | 📱 | — |
 | 17 | compose | lamp | ✅ | 가방을 챙겨 일어선 승민 |
-| **18** | compose | lamp | ✅ | 해인 미디엄 + 음악실(창문·피아노 쪽) |
+| **18** | compose | lamp | 🔄 | 해인 미디엄 + 음악실(창문·피아노 쪽) |
 | **19** | compose | lamp | ✅ | 승민 바스트 + 음악실(칠판 쪽) + 조명 보정 |
-| 20 | compose | lamp | ✅ | 자기 휴대폰을 가리키는 해인 |
+| 20 | compose | lamp | 🔄 | 자기 휴대폰을 가리키는 해인 |
 | **21** | compose | lamp | ✅ | 승민 리액션(약간 확대, 왼쪽 여백) |
-| 22 | compose | lamp | ✅ | 해인 어깨 너머의 승민과 책상 위 폰·악보 |
+| 22 | compose | lamp | 🔄 | 해인 어깨 너머의 승민과 책상 위 폰·악보 |
 | **23** | compose | lamp | ✅ | 승민 클로즈업 |
-| **24** | compose | lamp | ✅ | 밤 창가의 해인 미디엄 와이드와 설명하는 손짓 |
+| **24** | compose | lamp | 🔄 | 밤 창가의 해인 미디엄 와이드와 설명하는 손짓 |
 | **25** | compose | lamp-deep | ✅ | 승민 클로즈업(인물 오른쪽, 빈 왼쪽 여백으로 불안) |
-| **26** | compose | lamp-deep | ✅ | 해인 클로즈업 |
+| **26** | compose | lamp-deep | 🔄 | 해인 클로즈업 |
 | 27 | key | lamp-deep | ✅ | 해인→승민 폰 전달 독립 원화 (61과 역방향) |
-| 28 | compose | lamp-deep | ✅ | 승민의 손에 해인 폰이 보이는 투샷과 위쪽 방 여백 |
+| 28 | compose | lamp-deep | 🔄 | 승민의 손에 해인 폰이 보이는 투샷과 위쪽 방 여백 |
 | 29 | compose | morning | ✅ | 08:58 강당 외관 |
 | 30 | compose | morning | ✅ | 강당 입구로 들어오는 합창부 |
 | 31 | compose | morning | ✅ | 해인 폰과 음향 콘솔을 연결하는 손 |
@@ -157,35 +172,19 @@
 | 59 | compose | frost | ✅ | 해인 폰을 들고 묻는 승민과 듣는 효은 |
 | 61 | key | cold-deep | ✅ | 10:52 승민→효은 해인 폰 전달 독립 원화 |
 | 62 | compose | cold-deep | ✅ | 강당에 혼자 남아 빈 문을 보는 승민 |
-| 63 | compose | home | 🎨 | BG11 승민 집 저녁 + 승민 |
+| 63 | compose | home | ✅ | 저녁에 집 현관에 들어선 승민 |
 | 64~67 | text | home | 📱 | — |
 | 68 | text | hush | 📱 | — |
-| 69 | compose | hush | 🎨 | BG12 집(아침 빛) + 승민 통화 자세 |
-| 70 | key | void | 🎨 | key 원화: 승민 극클로즈업 |
+| 69 | compose | hush | ✅ | 아침 거실에서 경찰 전화를 받는 승민 |
+| 70 | key | void | ✅ | 통화 중 승민 극클로즈업 |
 
-집계: ✅ 44 (compose 41 + key 3) · 📱 19 · 🎨 7 (compose 3 + key 4).
+집계는 원화 51컷(검수 43, 해인 외형 교체 대기 8)과 text UI 19컷이다.
 
 ---
 
-## 4. 누락 에셋 목록 (만들어야 할 것, 파일 경로 규칙 포함)
+## 4. 해인 정본 교체 대기
 
-모든 인물은 투명 PNG/WebP, 같은 인물은 같은 축척. 그림 속 한글·숫자 금지.
-
-**인물** `assets/characters/<인물>/<자세>-<표정>.webp`
-- `seungmin/` 승민 집 저녁 자세(63), `phone-call`(69)
-
-**배경** `assets/backgrounds/<장소>/<시간대>-<각도>.webp` (가로 1536 이상 권장, 세로 컷용은 세로 원본 필요)
-- `hall-corridor/evening-wide` (BG01, 01·02), `stairs/evening-landing` (BG02, 04)
-- `home/evening-wide` (BG11), `home/morning-wide` (BG12, BG11 과 같은 공간)
-
-**소품** `assets/props/<소품>.webp`
-- `blue-file-17` (01·03, 숫자는 SVG)
-
-**key 원화** `assets/cuts/ep01/NN.webp` + `data/ep01.js` 에 `image: 'NN.webp', imageSize: { w, h }`
-- 01 (3:4), 03 (1:1), 04 (3:4), 70 (4:5) — 비율은 현재 `ratio` 값 기준
-
-**조명 보정 레이어** `assets/overlays/`
-- `home-evening-grade.svg`, `home-dawn-grade.svg`
+외형 정본을 확보하면 `data/characters.js`의 해인 항목을 교체한다. 컷별 범위와 투명 원본 규격은 [해인 교체 문서](HAEIN_REPLACEMENT.md)에 있다.
 
 ---
 
@@ -278,19 +277,22 @@ grep -oE "kind: '(text|compose|key)'" data/ep01.js | sort | uniq -c   # compose 
 - 대사·시각·장면·휴대폰 UI는 `main`, 컷 비율과 스크롤 연출은 `c2d54f6`과 일치한다. 70컷의 순서와 분류(text 19 · compose 44 · key 7)를 확인했다.
 - 33컷 무대에는 합창부 학생만 등장한다. 37컷에서 승민은 09:17 알림을 흘깃 보고, 39컷에서 화면을 끈다. 53컷은 10:35 잠금화면에 남은 기존 09:17 알림이다. 61컷에서 27컷과 같은 폰을 반대 방향으로 넘긴다.
 
+**1화 전체 연결 결과 (2026-11-11, 로컬 Edge)**
+
+- 360·375·430·960px에서 원화 51컷과 UI 19컷이 로드됐다. 그림 미적용, 누락 레이어, 가로 넘침, 대사 겹침은 각각 0개였다. 375px에서 01~04·63·69·70컷을 추가로 시각 검수했다.
+- `tools/review.html`은 `ready 41143 missing=none`을 반환했다. `tools/export.html`의 레이어 사용 컷 45개에서 저장 링크를 확인했고 03·42·44·59·69컷을 WebP로 다운로드했다.
+- 원문·시간·날짜·장면·휴대폰 UI는 `main`과 일치한다. 컷 비율과 여백, 전환, mood도 강당 적용 커밋 `ddf2dbb`와 일치한다. 문화회관의 18:34 표시, 03컷 파일 번호, 69컷의 경찰 음성 대사와 70컷의 마지막 대사를 대조했다.
+
 ---
 
 ## 8. 다음 작업 순서 (권장)
 
-1. 문화회관 BG01·BG02 + key 01·03·04 → 프롤로그 01~04.
-2. 집 BG11·BG12 + key 70 → 엔딩 63·69·70.
-3. 각 단계마다 §7 회귀 검사 + 375px 캡처. 완성 컷만 ✅ 로 표에 반영.
-4. 전부 끝난 뒤 `tools/export.html` 로 조립 컷 WebP 내보내기 → `useExportedCuts: 'mobile'` 검토.
-5. 1화 70컷 완성 후 사용자 최종 검수.
+1. 해인 외형 정본 적용 및 해당 컷의 구도 재검수.
+2. 1화 전체 모바일 실기기 및 사용자 최종 검수.
 
 ## 9. main 병합 전 주의사항
 - `참고_비공개` 이미지가 커밋에 섞이지 않았는지 `git log --stat main..HEAD` 로 확인.
-- 임시 컷(🎨)이 남아 있으면 공개 사이트에 그대로 "그림 준비 중"이 보인다. 완성 전 병합 금지.
+- 해인 정본 교체와 사용자 최종 검수는 작업 브랜치에서 진행한다.
 - `spacing`/`transition` 조정은 마스터 v2 §1 과 다르다 (§2-1). 총괄 승인 필요.
 - `:has()` 미지원 구형 브라우저에서는 장면 색 경계가 그라데이션 없이 바뀐다.
 - `assets/characters/seungmin/sit-talk.webp` 는 파일명이 같고 내용만 바뀌었다. 브라우저 캐시 주의.
@@ -299,7 +301,7 @@ grep -oE "kind: '(text|compose|key)'" data/ep01.js | sort | uniq -c   # compose 
 
 ## 10. 해인 교체 준비 · 기술 검수 (Claude Code, 2026-11-11, `c2d54f6` 이후)
 
-위 1~9절의 기존 내용은 그대로 두고 이 절만 추가했다.
+아래 기술 검수 결과는 해인 교체 준비 커밋 `33eddfa` 시점의 이력이다.
 
 **해인 교체 준비** — 자세한 내용은 `docs/HAEIN_REPLACEMENT.md`.
 - 인물 그림 경로를 `data/characters.js` 한 곳에서 관리하도록 바꿨다. `data/ep01.js` 의 인물 레이어는 `src: '@haein/sit-talk'` 처럼 이름으로 부른다 (경로 문자열 18곳만 바뀜, 좌표·대사·시간·비율 무변경).

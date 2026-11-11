@@ -48,17 +48,28 @@ WEBTOON.registerEpisode({
   endSpacing: 1400,
   cuts: [
     /* ---------- 01~05 프롤로그 ---------- */
-    { no: 1, mood: 'corridor', type: 'panel', kind: 'key', image: null, ratio: '3:4', tone: 'hall',
+    { no: 1, mood: 'corridor', type: 'panel', kind: 'key', image: '01.webp', imageSize: { w: 1080, h: 1440 }, ratio: '3:4', tone: 'hall',
       scene: { date: '11월 1일', time: '18:34', place: '양평문화회관' },
       datetime: { date: '11월 1일', time: '18:34' },
       desc: '11월 1일 18:34, 양평문화회관 복도', transition: 'slow', spacing: { before: 40, after: 96 } },
     { no: 2, mood: 'corridor', type: 'panel', kind: 'compose', image: null, ratio: '9:16', tone: 'backstage',
+      compose: {
+        bg: 'assets/backgrounds/hall-corridor/evening-wide.webp',
+        canvasSize: { w: 936, h: 1664 }
+      },
       datetime: { date: '11월 1일' },
       desc: '행사장과 대비되는 어두운 관계자 통로', spacing: { after: 96 } },
     { no: 3, mood: 'corridor', type: 'panel', kind: 'key', image: null, ratio: '1:1', tone: 'backstage',
+      compose: {
+        bg: 'assets/cuts/ep01/03.webp',
+        canvasSize: { w: 1250, h: 1250 },
+        layers: [
+          { src: 'assets/overlays/blue-file-17-label.svg', x: 46.45, y: 45.28, w: 16 }
+        ]
+      },
       datetime: { date: '11월 1일' },
       desc: '누군가 들고 있는 파란 파일의 일부', spacing: { after: 120 } },
-    { no: 4, mood: 'corridor', type: 'panel', kind: 'key', image: null, ratio: '3:4', tone: 'backstage',
+    { no: 4, mood: 'corridor', type: 'panel', kind: 'key', image: '04.webp', imageSize: { w: 993, h: 1324 }, ratio: '3:4', tone: 'backstage',
       datetime: { date: '11월 1일' },
       desc: '계단참과 발끝, 사건 암시', spacing: { after: 160 } },
     { no: 5, mood: 'void', type: 'black', kind: 'text', text: '이틀 전',
@@ -595,6 +606,14 @@ WEBTOON.registerEpisode({
 
     /* ---------- 63~67 마지막 안부 문자 ---------- */
     { no: 63, mood: 'home', spacing: { after: 96 }, type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'home',
+      compose: {
+        bg: 'assets/backgrounds/home/evening-wide.webp',
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 14, y: 72.1, w: 11, h: 3.6, opacity: 0.78 },
+          { src: '@seungmin/stand-leave', x: 14.2, y: 42.2, w: 10.4 }
+        ]
+      },
       scene: { date: '10월 31일', time: '저녁', place: '승민의 집' },
       datetime: { date: '10월 31일' },
       desc: '10월 31일 저녁, 집에 돌아온 승민', transition: 'slow' },
@@ -634,13 +653,20 @@ WEBTOON.registerEpisode({
       phone: { owner: 'seungmin', view: 'call', state: 'incoming', name: '양평경찰서', status: '수신 전화' },
       transition: 'slow', spacing: { after: 180 } },
     { no: 69, mood: 'hush', transition: 'slow', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'dawn', datetime: { date: '11월 2일' },
+      compose: {
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/backgrounds/home/morning-wide.webp', x: -50, y: -41, w: 151 },
+          { src: '@seungmin/phone-call', x: -6, y: 20, w: 103.5 }
+        ]
+      },
       desc: '문상윤의 전화 음성 (문상윤은 화면에 등장하지 않음)',
       lines: [
         { who: '문상윤', style: 'phone', text: '권해인 선생님이 어제 저녁 양평문화회관 계단에서 숨진 채 발견되셨습니다.' },
         { who: '문상윤', style: 'phone', text: '사고로 보고 있습니다.' },
         { who: '문상윤', style: 'phone', text: '최근 건강 상태에 대해 들으신 게 있습니까?' }
       ], spacing: { after: 260 } },
-    { no: 70, mood: 'void', type: 'panel', kind: 'key', image: null, ratio: '4:5', tone: 'dawn', datetime: { date: '11월 2일' },
+    { no: 70, mood: 'void', type: 'panel', kind: 'key', image: '70.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'dawn', datetime: { date: '11월 2일' },
       lines: [{ who: '승민', text: '그저께… 몸이 안 좋다는 문자를 받았습니다.' }],
       transition: 'slow', spacing: { after: 0 } }
   ]

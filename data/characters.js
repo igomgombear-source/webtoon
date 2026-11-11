@@ -23,12 +23,13 @@ WEBTOON.characters = {
   'seungmin/sit-hold-phone': { src: 'assets/characters/seungmin/sit-hold-phone.webp', size: { w: 1241, h: 1268 }, status: 'official' },
   'seungmin/stand-leave':    { src: 'assets/characters/seungmin/stand-leave.webp',    size: { w: 573,  h: 1769 }, status: 'official' },
 
-  /* ---------- 강당 인물 ---------- */
+  /* ---------- 제작 원화 ---------- */
   'seungmin/sit-check-score': { src: 'assets/characters/seungmin/sit-check-score.webp', size: { w: 1241, h: 1268 }, status: 'production' },
   'seungmin/sit-glance-phone': { src: 'assets/characters/seungmin/sit-glance-phone.webp', size: { w: 1241, h: 1268 }, status: 'production' },
   'seungmin/stand-wait-phone': { src: 'assets/characters/seungmin/stand-wait-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
   'seungmin/stand-question-phone': { src: 'assets/characters/seungmin/stand-question-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
   'seungmin/stand-alone': { src: 'assets/characters/seungmin/stand-alone.webp', size: { w: 495, h: 1832 }, status: 'production' },
+  'seungmin/phone-call': { src: 'assets/characters/seungmin/phone-call.webp', size: { w: 1241, h: 1268 }, status: 'production' },
   'hyoeun/stand-enter': { src: 'assets/characters/hyoeun/stand-enter.webp', size: { w: 538, h: 1773 }, status: 'production' },
   'hyoeun/stand-talk': { src: 'assets/characters/hyoeun/stand-talk.webp', size: { w: 1165, h: 1350 }, status: 'production' },
   'hyoeun/stand-gesture': { src: 'assets/characters/hyoeun/stand-gesture.webp', size: { w: 1199, h: 1312 }, status: 'production' },
