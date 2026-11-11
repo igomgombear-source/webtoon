@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1화 자동 검수</title>
+<!--
+  1화 자동 검수 창. 브라우저로 열면 검사를 돌리고 결과 표를 보여 준다.
+  로컬 서버로 저장소 루트를 띄운 뒤 열어야 한다 (file:// 로는 그림 픽셀을 읽을 수 없음).
+    http://localhost:8765/tools/qa/qa.html
+  주소 옵션
+    ?ep=ep01           검사할 회차 (기본 ep01)
+    &widths=360,375    화면 폭 목록 (기본 320,360,375,390,412,430,768)
+    &skip=viewer,alpha 건너뛸 검사 (data, refs, alpha, viewer)
+    &auto=1            결과 JSON 을 /__qa/result 로 보낸다 (tools/qa/run.ps1 이 씀)
+    &baseline=1        지금 데이터로 기준 파일 내용을 만들어 /__qa/baseline 으로 보낸다
+  자세한 사용법: tools/qa/README.md
+-->
+<style>
+  :root { color-scheme: light dark; --bg: #fff; --fg: #1b1d22; --mut: #6b7280; --line: #e3e5ea;
+          --fail: #c62828; --warn: #b26a00; --ok: #2e7d32; --info: #49607a; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #15171c; --fg: #e8e9ec; --mut: #9aa1ad; --line: #2b2f37;
+          --fail: #ff6b6b; --warn: #f0a640; --ok: #6cc070; --info: #8fb0d0; } }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  #status { color: var(--mut); margin-bottom: 12px; }
+  .sum b { margin-right: 12px; }
+  .fail { color: var(--fail); } .warn { color: var(--warn); } .ok { color: var(--ok); } .info { color: var(--info); }
+  section { border-top: 1px solid var(--line); padding: 8px 0; }
+  h2 { font-size: 15px; margin: 4px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  td { border-bottom: 1px solid var(--line); padding: 3px 6px; vertical-align: top; word-break: break-word; }
+  td:first-child { width: 48px; font-weight: 600; }
+  td:nth-child(2) { width: 120px; color: var(--mut); }
+  /* 검사 중 iframe 은 화면 안에 있어야 지연 로딩이 실제처럼 동작한다 */
+  #frames { position: fixed; left: 0; top: 0; z-index: 9; background: var(--bg); }
+  #frames:empty { display: none; }
+</style>
+</head>
+<body>
+<h1>1화 자동 검수</h1>
+<div id="status">준비 중…</div>
+<div id="out"></div>
+<div id="frames"></div>
+<script src="../../data/episodes.js"></script>
+<script src="../../data/characters.js"></script>
+<script src="../../js/compose.js"></script>
+<script src="qa.js"></script>
+</body>
+</html>
