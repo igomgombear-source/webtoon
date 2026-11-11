@@ -21,7 +21,7 @@
 
 | 컷 | 분류 | 교체 파일 (중앙 이름) | 보이는 부분 | 교체 방법 |
 |---:|---|---|---|---|
-| 56 | compose | `assets/characters/hyoeun/stand-enter.webp` (`@hyoeun/stand-enter`, 538×1773) | 전신 (입구에 등장, 작게) | 파일 교체 — 전신이라 슬랙스·재킷 길이가 그대로 드러남 |
+| 56 | compose | `assets/characters/hyoeun/stand-enter-official.webp` (`@hyoeun/stand-enter`, 538×1773) | 전신 (입구에 등장, 작게) | **교체 완료 (v5 팩)** — 좌표 x 36, y 25.1, w 23.04. 총괄 QA 대기 |
 | 57 | compose | `hyoeun/stand-talk.webp` (`@hyoeun/stand-talk`, 1165×1350) | 얼굴·상반신 | 파일 교체 — 명찰 보이게 |
 | 58 | compose | `hyoeun/stand-gesture.webp` (`@hyoeun/stand-gesture`, 1199×1312) | 몸통·손짓 (얼굴 위쪽 잘림) | 파일 교체 — 셔츠·재킷·명찰이 화면 중심 |
 | 59 | compose | `hyoeun/stand-listen.webp` (`@hyoeun/stand-listen`, 1165×1350) | 상반신 (승민과 투샷) | 효은 파일만 교체. 승민 레이어 `@seungmin/stand-question-phone` 은 유지 |
@@ -132,3 +132,13 @@
 - 해인 실제 사진 확보 → 해인 컷 교체.
 - 교체 그림이 오면 이 문서 2절과 같은 외곽 검사를 다시 한다 (불투명도 16 이하 외곽 색, 투명 픽셀 RGB).
 - 실제 iOS Safari·안드로이드 기기 확인 (아직 미확인).
+
+## 6. 효은 v5 팩 검토 (2026-11-11)
+
+| 파일 | 판정 |
+|---|---|
+| `hyoeun_stand_enter_official.webp` | **56컷 적용.** 공식 디자인(블루그레이 짧은 재킷, 흰 셔츠, 검은 슬랙스, 낮게 묶은 머리, 교직원 명찰)과 일치. 538×1773 투명, 외곽 잔여 픽셀 0 |
+| `cut61_handoff_candidate.webp` (1120×1400) | **보류.** ① 위쪽 가장자리에 들쭉날쭉한 검은 띠 ② 명찰 글자가 깨진 가짜 한글 ③ 승민 소매가 갈색 니트 소맷부리라 기존 승민 의상(짙은 갈색 재킷 + 올리브 소맷부리)과 다름 ④ 효은 재킷 아랫단이 프레임 끝까지 내려와 긴 코트처럼 보임 ⑤ 배경이 음향석·객석에서 무대·피아노 쪽으로 바뀜. 폰은 회보라 케이스로 맞음 |
+| `cut56~61_sheet_crop_draft.webp` (약 470~590px) | 사용 안 함. 배경과 다른 인물이 합쳐진 장면 참고용이고 해상도가 낮다 |
+
+57~60컷용 효은 투명 그림(인물만, 고해상도)은 팩에 없다. 승인된 그림 없이 새로 그리지 않았다.

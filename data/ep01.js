@@ -542,7 +542,7 @@ WEBTOON.registerEpisode({
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-entrance.webp', x: -10.4, y: 0, w: 237.04 },
           { src: 'assets/overlays/contact-shadow.svg', x: 37.7, y: 95.7, w: 20, h: 5.1, opacity: 0.68 },
-          { src: '@hyoeun/stand-enter', x: 36.2, y: 28, w: 21.6 },
+          { src: '@hyoeun/stand-enter', x: 36, y: 25.1, w: 23.04 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 133.3333 }
         ]
       },

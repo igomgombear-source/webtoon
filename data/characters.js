@@ -32,7 +32,7 @@ WEBTOON.characters = {
   'seungmin/stand-question-phone': { src: 'assets/characters/seungmin/stand-question-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
   'seungmin/stand-alone': { src: 'assets/characters/seungmin/stand-alone.webp', size: { w: 495, h: 1832 }, status: 'production' },
   'seungmin/phone-call': { src: 'assets/characters/seungmin/phone-call.webp', size: { w: 1241, h: 1268 }, status: 'production' },
-  'hyoeun/stand-enter': { src: 'assets/characters/hyoeun/stand-enter.webp', size: { w: 538, h: 1773 }, status: 'replace', note: '공식 디자인과 의상 다름(긴 코트·회색 목폴라) — 공식 효은 이미지로 교체' },
+  'hyoeun/stand-enter': { src: 'assets/characters/hyoeun/stand-enter-official.webp', size: { w: 538, h: 1773 }, status: 'production', note: '공식 디자인 반영 전신 (v5 팩, 무손실). 이전 파일 stand-enter.webp 는 비교용으로 남김. 총괄 QA 대기' },
   'hyoeun/stand-talk': { src: 'assets/characters/hyoeun/stand-talk.webp', size: { w: 1165, h: 1350 }, status: 'replace', note: '공식 디자인과 의상 다름(긴 코트·회색 목폴라) — 공식 효은 이미지로 교체' },
   'hyoeun/stand-gesture': { src: 'assets/characters/hyoeun/stand-gesture.webp', size: { w: 1199, h: 1312 }, status: 'replace', note: '공식 디자인과 의상 다름(긴 코트·회색 목폴라) — 공식 효은 이미지로 교체' },
   'hyoeun/stand-listen': { src: 'assets/characters/hyoeun/stand-listen.webp', size: { w: 1165, h: 1350 }, status: 'replace', note: '공식 디자인과 의상 다름(긴 코트·회색 목폴라) — 공식 효은 이미지로 교체' },
