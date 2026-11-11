@@ -11,6 +11,7 @@
  *
  * status
  *   'official'   공식 승인 그림
+ *   'production' 기존 설정에 맞춰 제작하고 뷰어에서 확인한 원화
  *   'temporary'  임시 디자인. 공식 그림이 오면 교체한다 (지우거나 고치지 말 것)
  * size  원본 픽셀 크기. 교체 그림이 같은 크기인지 확인할 때 쓴다.
  */
@@ -21,6 +22,21 @@ WEBTOON.characters = {
   'seungmin/sit-talk':       { src: 'assets/characters/seungmin/sit-talk.webp',       size: { w: 1313, h: 1342 }, status: 'official' },
   'seungmin/sit-hold-phone': { src: 'assets/characters/seungmin/sit-hold-phone.webp', size: { w: 1241, h: 1268 }, status: 'official' },
   'seungmin/stand-leave':    { src: 'assets/characters/seungmin/stand-leave.webp',    size: { w: 573,  h: 1769 }, status: 'official' },
+
+  /* ---------- 강당 인물 ---------- */
+  'seungmin/sit-check-score': { src: 'assets/characters/seungmin/sit-check-score.webp', size: { w: 1241, h: 1268 }, status: 'production' },
+  'seungmin/sit-glance-phone': { src: 'assets/characters/seungmin/sit-glance-phone.webp', size: { w: 1241, h: 1268 }, status: 'production' },
+  'seungmin/stand-wait-phone': { src: 'assets/characters/seungmin/stand-wait-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
+  'seungmin/stand-question-phone': { src: 'assets/characters/seungmin/stand-question-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
+  'seungmin/stand-alone': { src: 'assets/characters/seungmin/stand-alone.webp', size: { w: 495, h: 1832 }, status: 'production' },
+  'hyoeun/stand-enter': { src: 'assets/characters/hyoeun/stand-enter.webp', size: { w: 538, h: 1773 }, status: 'production' },
+  'hyoeun/stand-talk': { src: 'assets/characters/hyoeun/stand-talk.webp', size: { w: 1165, h: 1350 }, status: 'production' },
+  'hyoeun/stand-gesture': { src: 'assets/characters/hyoeun/stand-gesture.webp', size: { w: 1199, h: 1312 }, status: 'production' },
+  'hyoeun/stand-listen': { src: 'assets/characters/hyoeun/stand-listen.webp', size: { w: 1165, h: 1350 }, status: 'production' },
+  'hyoeun/stand-look-aside': { src: 'assets/characters/hyoeun/stand-look-aside.webp', size: { w: 1325, h: 1187 }, status: 'production' },
+  'student/choir-enter': { src: 'assets/characters/student/choir-enter.webp', size: { w: 1140, h: 1005 }, status: 'production' },
+  'student/choir-sing': { src: 'assets/characters/student/choir-sing.webp', size: { w: 1231, h: 1024 }, status: 'production' },
+  'student/choir-question': { src: 'assets/characters/student/choir-question.webp', size: { w: 1024, h: 1536 }, status: 'production' },
 
   /* ---------- 권해인 (임시 디자인 — 공식 참고 사진을 받으면 교체) ---------- */
   'haein/sit-talk':          { src: 'assets/characters/haein/sit-talk.webp',      size: { w: 1656, h: 1220 }, status: 'temporary', note: '대화 표정, 손·휴대폰 없음' },

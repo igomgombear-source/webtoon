@@ -294,19 +294,57 @@ WEBTOON.registerEpisode({
 
     /* ---------- 29~43 10월 31일 리허설 ---------- */
     { no: 29, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium',
+      compose: {
+        bg: 'assets/backgrounds/auditorium/morning-exterior.webp',
+        canvasSize: { w: 1664, h: 936 }
+      },
       scene: { date: '10월 31일', time: '08:58', place: '양평중학교 강당' },
       datetime: { date: '10월 31일', time: '08:58' },
       desc: '08:58 강당 외부', transition: 'slow' },
     { no: 30, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/morning-entrance.webp',
+        canvasSize: { w: 1664, h: 936 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 14.7, y: 37.9, w: 34, h: 5.6, opacity: 0.6 },
+          { src: '@student/choir-enter', x: 14.5, y: 14, w: 32 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 56.25 }
+        ]
+      },
       desc: '합창부 학생들 입장' },
     { no: 31, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/booth-desk.webp',
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/props/auditorium-phone-connect.webp', x: -2, y: 31, w: 104 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       desc: '해인의 휴대폰을 음향 장비에 연결' },
     { no: 32, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:3', tone: 'auditorium',
+      compose: {
+        canvasSize: { w: 1200, h: 900 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-stage.webp', x: -19, y: -0.5, w: 136 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 42, y: 48.1, w: 44.5, h: 2.9, opacity: 0.58 },
+          { src: '@student/choir-sing', x: 41.52, y: 11.47, w: 45.56 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 75 }
+        ]
+      },
       datetime: { date: '10월 31일', time: '09:00' },
       desc: '09:00 리허설 시작' },
-    { no: 33, mood: 'morning', type: 'panel', kind: 'key', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
+    { no: 33, mood: 'morning', type: 'panel', kind: 'key', image: '33.webp', imageSize: { w: 1664, h: 936 }, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
       desc: '합창 장면' },
     { no: 34, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -122.2, y: 0, w: 222.23 },
+          { src: '@seungmin/sit-check-score', x: 4, y: 25, w: 100 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       desc: '음원과 악보를 확인하는 승민', spacing: { after: 120 } },
     { no: 35, mood: 'alert', spacing: { after: 64 }, type: 'phone', kind: 'text',
       datetime: { date: '10월 31일', time: '09:17' },
@@ -319,30 +357,120 @@ WEBTOON.registerEpisode({
       phone: { owner: 'haein', view: 'zoom', time: '09:17',
         text: '홍온유 학생 일은 이번에도 그냥 넘어가실 건가요?' } },
     { no: 37, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -116.8, y: -4, w: 230 },
+          { src: '@seungmin/sit-glance-phone', x: 2, y: 14, w: 109 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       desc: '알림을 확인하는 승민' },
     { no: 38, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1664, h: 936 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-stage.webp', x: -21.5, y: -5.6, w: 123 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 33.5, y: 38.1, w: 41, h: 2.9, opacity: 0.62 },
+          { src: '@student/choir-sing', x: 33.24, y: 5.22, w: 41.2 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 56.25 }
+        ]
+      },
       desc: '계속되는 합창' },
     { no: 39, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/booth-desk.webp',
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 5, y: 10, w: 92, h: 91, opacity: 0.4 },
+          { src: 'assets/props/haein-phone-screen-off.webp', x: 5.4, y: 5.4, w: 94.6 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       desc: '승민이 알림을 열지 않고 화면을 끔' },
     { no: 40, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:3', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/cuts/ep01/40-rehearsal.webp',
+        canvasSize: { w: 1440, h: 1080 },
+        layers: [
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 75 }
+        ]
+      },
       desc: '연습 장면과 시간 경과', spacing: { after: 160 } },
     { no: 41, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium',
+      compose: {
+        bg: 'assets/cuts/ep01/41-dismissal.webp',
+        canvasSize: { w: 1664, h: 936 },
+        layers: [
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 56.25 }
+        ]
+      },
       datetime: { date: '10월 31일', time: '10:15' },
       desc: '10:15 리허설 종료' },
     { no: 42, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/booth-copy.webp',
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/overlays/auditorium-audio-copy.svg', x: 18.5, y: 38.6, w: 64.5 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 125 }
+        ]
+      },
       desc: '반복 연습용 음원을 학교 컴퓨터로 복사' },
     { no: 43, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1120, h: 1400 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -122.2, y: 0, w: 222.23 },
+          { src: '@seungmin/stand-wait-phone', x: 20, y: 23, w: 75.2 },
+          { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 125, opacity: 0.9 }
+        ]
+      },
       desc: '반환할 휴대폰을 들고 있는 승민', spacing: { after: 240 } },
 
     /* ---------- 44~54 오지 않는 해인 ---------- */
     { no: 44, mood: 'drift', spacing: { after: 120 }, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium',
+      compose: {
+        bg: 'assets/backgrounds/auditorium/clock-wall.webp',
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 16, y: 13.7, w: 69, h: 63, opacity: 0.64 },
+          { src: 'assets/props/auditorium-clock-frame.webp', x: 19, y: 10, w: 62 },
+          { src: 'assets/overlays/auditorium-clock-1030.svg', x: 19, y: 10, w: 62 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       datetime: { date: '10월 31일', time: '10:30' },
       desc: '10:30 시계', transition: 'slow' },
     { no: 45, mood: 'drift', spacing: { after: 120 }, type: 'panel', kind: 'compose', image: null, ratio: '3:4', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/morning-entrance-front.webp',
+        canvasSize: { w: 1080, h: 1440 },
+        layers: [
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 133.3333 }
+        ]
+      },
       desc: '해인이 나타나지 않는 강당 입구' },
     { no: 46, mood: 'drift', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -74, y: -1.3, w: 182 },
+          { src: '@student/choir-question', x: 4, y: 34.5, w: 45.5 },
+          { src: '@seungmin/sit-hold-phone', x: 43.5, y: 25, w: 74.8 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '학생', text: '쌤, 해인쌤은 언제 오세요? 다음 곡 음원이 필요한데요.' }] },
     { no: 47, mood: 'drift', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -87.4, y: -5, w: 190 },
+          { src: '@seungmin/sit-talk', x: 7, y: 1, w: 114 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '승민', text: '곧 오실 거야.' }], spacing: { after: 180 } },
     { no: 48, mood: 'slate', spacing: { after: 64 }, type: 'phone', kind: 'text',
       datetime: { date: '10월 31일', time: '10:33' },
@@ -354,6 +482,17 @@ WEBTOON.registerEpisode({
       phone: { owner: 'seungmin', view: 'call', state: 'ended', name: '교무실', status: '응답 없음' },
       spacing: { after: 140 } },
     { no: 50, mood: 'slate', spacing: { after: 96 }, type: 'panel', kind: 'compose', image: null, ratio: '4:3', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/booth-desk.webp',
+        canvasSize: { w: 1200, h: 900 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 10, y: 7.5, w: 40, h: 66, opacity: 0.78 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 53.6, y: 7.5, w: 37, h: 66, opacity: 0.78 },
+          { src: 'assets/props/haein-phone-back.webp', x: 14.5, y: 9, w: 29.5 },
+          { src: 'assets/props/seungmin-phone-back.webp', x: 57.8, y: 9.1, w: 28.5 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 75 }
+        ]
+      },
       desc: '승민과 해인의 서로 다른 휴대폰' },
     { no: 51, mood: 'slate', spacing: { after: 64 }, type: 'phone', kind: 'text',
       datetime: { date: '10월 31일' },
@@ -387,20 +526,71 @@ WEBTOON.registerEpisode({
       phone: { owner: 'seungmin', view: 'sms', contact: '임효은',
         messages: [{ from: 'them', text: '승민쌤 강당이세요? 잠깐 갈게요.', time: '10:45' }] } },
     { no: 56, mood: 'frost', spacing: { after: 72 }, type: 'panel', kind: 'compose', image: null, ratio: '3:4', tone: 'auditorium',
+      compose: {
+        canvasSize: { w: 1080, h: 1440 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-entrance.webp', x: -10.4, y: 0, w: 237.04 },
+          { src: 'assets/overlays/contact-shadow.svg', x: 37.7, y: 95.7, w: 20, h: 5.1, opacity: 0.68 },
+          { src: '@hyoeun/stand-enter', x: 36.2, y: 28, w: 21.6 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 133.3333 }
+        ]
+      },
       datetime: { date: '10월 31일', time: '10:50' },
       desc: '10:50 효은 등장' },
     { no: 57, mood: 'frost', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -86.5, y: -5, w: 190 },
+          { src: '@hyoeun/stand-talk', x: 6.5, y: 5.7, w: 87.8 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '효은', text: '해인 선생님이 몸이 안 좋아서 못 오신대요.' }] },
     { no: 58, mood: 'frost', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -104, y: -7, w: 215 },
+          { src: '@hyoeun/stand-gesture', x: -21, y: -31, w: 122 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '효은', text: '휴대폰은 제가 전해 드리기로 했어요.' }] },
     { no: 59, mood: 'frost', type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -75.6, y: -1, w: 180 },
+          { src: '@hyoeun/stand-listen', x: 0.1, y: 21.3, w: 68 },
+          { src: '@seungmin/stand-question-phone', x: 47, y: 22.3, w: 58 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '승민', text: '해인쌤과 직접 통화해 볼 수 있을까요?' }] },
     { no: 60, mood: 'frost', spacing: { after: 96 }, type: 'panel', kind: 'compose', image: null, ratio: '1:1', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        canvasSize: { w: 1000, h: 1000 },
+        layers: [
+          { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -100.5, y: -6.5, w: 203 },
+          { src: '@hyoeun/stand-look-aside', x: -15, y: 1.5, w: 116 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
+        ]
+      },
       lines: [{ who: '효은', text: '지금은 쉬셔야 한대요. 제가 바로 갖다 드릴게요.' }] },
-    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: null, ratio: '4:5', tone: 'auditorium',
+    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: '61.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'auditorium',
       datetime: { date: '10월 31일', time: '10:52' },
       desc: '10:52 승민이 효은에게 휴대폰 전달' },
     { no: 62, mood: 'cold-deep', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
+      compose: {
+        bg: 'assets/backgrounds/auditorium/morning-entrance.webp',
+        canvasSize: { w: 1664, h: 936 },
+        layers: [
+          { src: 'assets/overlays/contact-shadow.svg', x: 39.5, y: 42.4, w: 9.5, h: 3, opacity: 0.72 },
+          { src: '@seungmin/stand-alone', x: 40, y: 15.3, w: 7.6 },
+          { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 56.25 }
+        ]
+      },
       desc: '효은이 떠나고 승민이 강당에 남음', spacing: { after: 320 } },
 
     /* ---------- 63~67 마지막 안부 문자 ---------- */

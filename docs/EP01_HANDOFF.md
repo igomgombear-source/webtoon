@@ -2,6 +2,7 @@
 
 - 작성: Claude Code (2026-11-11)
 - 음악실 원화·소품 적용 및 검증: Codex (2026-11-11)
+- 강당 원화·소품 적용 및 검증: Codex (2026-11-11)
 - 저장소: `igomgombear-source/webtoon`
 - 작업 브랜치: `ep01-full-direction` (기준: `ep01-cut19-seungmin-compose` ← `main` 3c791c9)
 - **main 병합 금지 / 공개 배포 금지** (사용자 최종 검수 전)
@@ -11,8 +12,8 @@
 
 ## 0. 한 줄 요약
 
-1화 70컷 중 **원화 적용 19컷 · text UI 19컷 · 원화 대기 32컷**이다.
-06~28컷 음악실 구간에는 원화 19컷과 text UI 4컷이 연결되어 있다. 대사·날짜·시각·순서와 70컷의 여백·배경 톤·장면 전환은 `802cd1c` 기준이다.
+1화 70컷 중 **원화 적용 44컷 · text UI 19컷 · 원화 대기 7컷**이다.
+06~28컷 음악실과 29~62컷 강당의 원화 및 UI를 연결했다. 원화 대기 컷은 01·02·03·04·63·69·70이다. 대사·날짜·시각·순서와 70컷의 여백·배경 톤·장면 전환은 `c2d54f6` 기준이다.
 
 ---
 
@@ -73,6 +74,27 @@
 
 인물·소품은 투명 WebP를 사용한다. 재생목록, 보관함 번호, 카메라 조작 화면은 SVG 레이어이며 `assets/overlays/contact-shadow.svg`는 책상과 바닥 그림자에 공통으로 쓴다.
 
+### 2-3. 강당 29~62컷에 적용한 원화와 소품
+
+첨부 ZIP의 분할 18장과 별도 33컷 후보를 검토했다. `ep01_cut33_stage_candidate.webp`의 합창대·피아노 배치, `set_a_r1c1.webp`의 외관 시점, `set_b_r1c1.webp`의 출입구 깊이만 참고했다. 본편에는 같은 2D 선화와 서늘한 아침 자연광을 적용한 새 원화를 사용했다.
+
+| 컷 | 적용 파일과 작화 지시 |
+|---:|---|
+| 29 | `assets/backgrounds/auditorium/morning-exterior.webp` — 10/31 아침, 학교 교정의 낮은 강당 외관 |
+| 30·45·56·62 | `assets/backgrounds/auditorium/morning-entrance.webp`와 `morning-entrance-front.webp` — 뒤편 왼쪽 목재 출입문, 문 아래로 들어오는 자연광, 회갈색 객석. 30은 `assets/characters/student/choir-enter.webp`로 합창부 입장, 45는 빈 문 정면, 62는 `assets/characters/seungmin/stand-alone.webp`로 혼자 남은 승민 |
+| 31·39·50 | `assets/backgrounds/auditorium/booth-desk.webp` — 회갈색 음향석 상판. `assets/props/auditorium-phone-connect.webp`는 연결하는 손과 콘솔, `haein-phone-screen-off.webp`는 케이블을 꽂은 채 옆 버튼으로 화면을 끄는 손, `haein-phone-back.webp`와 `seungmin-phone-back.webp`는 두 기기의 후면 |
+| 32·38 | `assets/backgrounds/auditorium/morning-stage.webp`와 `assets/characters/student/choir-sing.webp` — 왼쪽 그랜드피아노, 와인색 커튼, 3단 받침대, 동일 교복을 입은 학생 합창단 |
+| 33 | `assets/cuts/ep01/33.webp` — 1664×936 독립 원화. 객석과 음향석 너머 3열 학생 합창단, 피아노와 무대의 거리감 |
+| 34·37·43 | `assets/backgrounds/auditorium/morning-booth.webp` — 뒤편 오른쪽 음향석. `assets/characters/seungmin/`의 `sit-check-score.webp`, `sit-glance-phone.webp`, `stand-wait-phone.webp`로 악보 확인, 알림을 흘깃 보는 표정, 해인 폰을 들고 기다리는 자세 |
+| 40·41 | `assets/cuts/ep01/40-rehearsal.webp`와 `41-dismissal.webp` — 같은 합창단의 측면 연습, 뒤쪽 객석에서 본 학생 퇴장 |
+| 42 | `assets/backgrounds/auditorium/booth-copy.webp`와 `assets/overlays/auditorium-audio-copy.svg` — 학교 PC에 연결된 해인 폰과 음원 복사 표시 |
+| 44 | `assets/backgrounds/auditorium/clock-wall.webp`, `assets/props/auditorium-clock-frame.webp`, `assets/overlays/auditorium-clock-1030.svg` — 10시와 11시 중간의 시침, 6을 가리키는 분침 |
+| 46·47 | `assets/characters/student/choir-question.webp`와 기존 승민 `sit-hold-phone.webp`, `sit-talk.webp` — 악보집을 든 학생의 질문과 승민의 답변 |
+| 56~60 | `assets/characters/hyoeun/`의 `stand-enter.webp`, `stand-talk.webp`, `stand-gesture.webp`, `stand-listen.webp`, `stand-look-aside.webp` — 효은 등장, 설명, 빈손 손짓, 승민 질문을 듣는 표정, 시선을 낮춘 대답. 59는 `assets/characters/seungmin/stand-question-phone.webp`와 투샷 |
+| 61 | `assets/cuts/ep01/61.webp` — 1120×1400 독립 원화. 화면 오른쪽 승민의 짙은 갈색 재킷 소매에서 왼쪽 효은의 청회색 코트 소매로 해인 폰을 건넨다 |
+
+효은은 제작 마스터의 교사 설정에서 기준화를 새로 만들었다. 낮게 묶은 흑발과 청회색 코트, 밝은 회색 목폴라로 56~61컷의 외형을 통일한다. 승민 폰은 각진 흑연색 케이스와 세로형 단일 렌즈, 해인 폰은 음악실과 같은 회보라색 케이스와 대각선 듀얼 렌즈를 사용한다.
+
 ---
 
 ## 3. 70컷 상태표
@@ -108,40 +130,40 @@
 | **26** | compose | lamp-deep | ✅ | 해인 클로즈업 |
 | 27 | key | lamp-deep | ✅ | 해인→승민 폰 전달 독립 원화 (61과 역방향) |
 | 28 | compose | lamp-deep | ✅ | 승민의 손에 해인 폰이 보이는 투샷과 위쪽 방 여백 |
-| 29 | compose | morning | 🎨 | BG07 강당 외관 아침 |
-| 30 | compose | morning | 🎨 | BG08 강당 실내 입구 + 학생군 베이스 |
-| 31 | compose | morning | 🎨 | BG10 음향석 + P08 콘솔 + 해인 폰 |
-| 32 | compose | morning | 🎨 | BG09 무대 + 학생군 |
-| 33 | key | morning | 🎨 | key 원화: 합창 리허설 전경 (해인 없음) |
-| 34 | compose | morning | 🎨 | 승민 미디엄(아침 조명) + BG10 |
+| 29 | compose | morning | ✅ | 08:58 강당 외관 |
+| 30 | compose | morning | ✅ | 강당 입구로 들어오는 합창부 |
+| 31 | compose | morning | ✅ | 해인 폰과 음향 콘솔을 연결하는 손 |
+| 32 | compose | morning | ✅ | 09:00 무대에서 리허설 시작 |
+| 33 | key | morning | ✅ | 학생 합창 리허설 전경 독립 원화 |
+| 34 | compose | morning | ✅ | 음향석에서 악보를 보는 승민 |
 | 35·36 | text | alert | 📱 | — |
-| 37 | compose | morning | 🎨 | 승민 손·눈 (알림 열지 않음) |
-| 38 | compose | morning | 🎨 | BG09 재사용 |
-| 39 | compose | morning | 🎨 | 해인 폰 + 승민 손 (화면 끔) |
-| 40 | compose | morning | 🎨 | BG09 다른 크롭 |
-| 41 | compose | morning | 🎨 | BG09 후면 + 학생 |
-| 42 | compose | morning | 🎨 | BG10 + P11 학교 PC |
-| 43 | compose | morning | 🎨 | 승민 중경 + 해인 폰 |
-| 44 | compose | drift | 🎨 | P12 벽시계 (시각은 SVG 후편집) |
-| 45 | compose | drift | 🎨 | BG08 빈 입구 대칭 |
-| 46 | compose | drift | 🎨 | 질문 학생 + 승민 |
-| 47 | compose | drift | 🎨 | 승민 바스트(강당) — 승민 PNG 재사용 가능하나 **강당 배경 없음** |
+| 37 | compose | morning | ✅ | 알림에 시선이 멈추는 승민 |
+| 38 | compose | morning | ✅ | 계속되는 합창 |
+| 39 | compose | morning | ✅ | 해인 폰의 옆 버튼을 눌러 화면을 끄는 승민 |
+| 40 | compose | morning | ✅ | 연습 중 악보를 넘기는 학생들, 무대 측면 |
+| 41 | compose | morning | ✅ | 10:15 리허설 종료 후 무대를 내려오는 학생들 |
+| 42 | compose | morning | ✅ | 학교 PC 음원 복사와 연결된 해인 폰 |
+| 43 | compose | morning | ✅ | 반환할 폰을 들고 기다리는 승민 |
+| 44 | compose | drift | ✅ | 10:30 벽시계와 SVG 시곗바늘 |
+| 45 | compose | drift | ✅ | 빈 강당 출입문 정면 |
+| 46 | compose | drift | ✅ | 해인이 언제 오는지 묻는 학생과 듣는 승민 |
+| 47 | compose | drift | ✅ | 학생에게 답하는 승민 |
 | 48·49 | text | slate | 📱 | — |
-| 50 | compose | slate | 🎨 | P02 + P03 두 폰 |
+| 50 | compose | slate | ✅ | 케이스와 카메라가 다른 두 폰 |
 | 51~54 | text | slate | 📱 | — |
 | 55 | text | frost | 📱 | — |
-| 56 | compose | frost | 🎨 | 효은 PNG (입구 등장) + BG08 |
-| 57·58·60 | compose | frost | 🎨 | 효은 PNG (미디엄/손짓/클로즈업) |
-| 59 | compose | frost | 🎨 | 승민 + 효은 투샷 |
-| 61 | key | cold-deep | 🎨 | key 원화: 승민→효은 폰 전달 (27과 역방향, 같은 폰) |
-| 62 | compose | cold-deep | 🎨 | BG08 롱샷, 승민 혼자 |
+| 56 | compose | frost | ✅ | 10:50 강당 입구에 나타난 효은 |
+| 57·58·60 | compose | frost | ✅ | 효은의 설명, 빈손 손짓, 시선을 낮춘 답변 |
+| 59 | compose | frost | ✅ | 해인 폰을 들고 묻는 승민과 듣는 효은 |
+| 61 | key | cold-deep | ✅ | 10:52 승민→효은 해인 폰 전달 독립 원화 |
+| 62 | compose | cold-deep | ✅ | 강당에 혼자 남아 빈 문을 보는 승민 |
 | 63 | compose | home | 🎨 | BG11 승민 집 저녁 + 승민 |
 | 64~67 | text | home | 📱 | — |
 | 68 | text | hush | 📱 | — |
 | 69 | compose | hush | 🎨 | BG12 집(아침 빛) + 승민 통화 자세 |
 | 70 | key | void | 🎨 | key 원화: 승민 극클로즈업 |
 
-집계: ✅ 19 (compose 18 + key 1) · 📱 19 · 🎨 32 (compose 26 + key 6).
+집계: ✅ 44 (compose 41 + key 3) · 📱 19 · 🎨 7 (compose 3 + key 4).
 
 ---
 
@@ -150,23 +172,20 @@
 모든 인물은 투명 PNG/WebP, 같은 인물은 같은 축척. 그림 속 한글·숫자 금지.
 
 **인물** `assets/characters/<인물>/<자세>-<표정>.webp`
-- `seungmin/` 승민 추가 자세 — `stand-wait`(43·62), `sit-console`(34·37), `phone-call`(69). 강당 아침용은 기존 대화 자세에 아침 조명 레이어를 사용할 수 있다.
-- `hyoeun/` 효은 (10/31 강당 의상 1세트) — `stand-enter`, `stand-talk`, `stand-hand`
-- `student/` 합창부 학생군 베이스 1~2장 + 질문 학생 1명
+- `seungmin/` 승민 집 저녁 자세(63), `phone-call`(69)
 
 **배경** `assets/backgrounds/<장소>/<시간대>-<각도>.webp` (가로 1536 이상 권장, 세로 컷용은 세로 원본 필요)
 - `hall-corridor/evening-wide` (BG01, 01·02), `stairs/evening-landing` (BG02, 04)
-- `auditorium/morning-exterior` (BG07), `auditorium/morning-entrance` (BG08), `auditorium/morning-stage` (BG09), `auditorium/morning-booth` (BG10)
 - `home/evening-wide` (BG11), `home/morning-wide` (BG12, BG11 과 같은 공간)
 
 **소품** `assets/props/<소품>.webp`
-- `haein-phone` 독립 뒷면·옆면 (정면 `haein-phone-front.webp` 확보), `seungmin-phone`, `blue-file-17`, `audio-console`, `school-pc`, `wall-clock`
+- `blue-file-17` (01·03, 숫자는 SVG)
 
 **key 원화** `assets/cuts/ep01/NN.webp` + `data/ep01.js` 에 `image: 'NN.webp', imageSize: { w, h }`
-- 01 (3:4), 03 (1:1), 04 (3:4), 33 (16:9), 61 (4:5), 70 (4:5) — 비율은 현재 `ratio` 값 기준
+- 01 (3:4), 03 (1:1), 04 (3:4), 70 (4:5) — 비율은 현재 `ratio` 값 기준
 
 **조명 보정 레이어** `assets/overlays/`
-- `auditorium-morning-grade.svg`(서늘한 회백, 약한 청색), `auditorium-cold-grade.svg`(55~62), `home-evening-grade.svg`, `home-dawn-grade.svg` — `musicroom-night-grade.svg` 를 복사해 색만 바꾸면 된다
+- `home-evening-grade.svg`, `home-dawn-grade.svg`
 
 ---
 
@@ -252,16 +271,22 @@ grep -oE "kind: '(text|compose|key)'" data/ep01.js | sort | uniq -c   # compose 
 - 360·375·430·960px 뷰어에서 원화 19컷과 UI 19컷 로딩, 남은 임시 컷 32개, 가로 넘침 없음 확인. 375px에서 변경한 13컷의 구도와 텍스트를 확인했다. `tools/review.html`은 `ready 41143 missing=none`을 반환했다.
 - `tools/export.html`에서 조립 18컷을 SVG와 함께 합성했다. 09·10·13컷의 WebP 다운로드도 검증했다. 모바일 실기기 검수는 전체 원화 적용 후 진행한다.
 
+**강당 적용 결과 (2026-11-11, 로컬 Edge)**
+
+- 29~62컷에 조립 23컷과 key 2컷을 연결했다. 360·375·430·960px에서 원화 44컷과 UI 19컷이 로드됐고, 가로 넘침과 말풍선 겹침이 없었다. 375px에서 강당 그림 컷 25개의 구도와 텍스트를 확인했다.
+- `tools/review.html`은 `ready 41143 missing=none`을 반환했다. `tools/export.html`에서 조립 41컷을 SVG와 함께 합성했고, 32·42·44·59컷의 WebP 다운로드를 검증했다.
+- 대사·시각·장면·휴대폰 UI는 `main`, 컷 비율과 스크롤 연출은 `c2d54f6`과 일치한다. 70컷의 순서와 분류(text 19 · compose 44 · key 7)를 확인했다.
+- 33컷 무대에는 합창부 학생만 등장한다. 37컷에서 승민은 09:17 알림을 흘깃 보고, 39컷에서 화면을 끈다. 53컷은 10:35 잠금화면에 남은 기존 09:17 알림이다. 61컷에서 27컷과 같은 폰을 반대 방향으로 넘긴다.
+
 ---
 
 ## 8. 다음 작업 순서 (권장)
 
-1. 강당 배경 4종 + 학생군 + 효은 → 29~62. 아침 조명 레이어 추가. 61컷의 폰은 §2-2 참고.
-2. 문화회관 BG01·BG02 + key 01·03·04 → 프롤로그.
-3. 집 BG11·BG12 + key 70 → 엔딩.
-4. 각 단계마다 §7 회귀 검사 + 375px 캡처. 완성 컷만 ✅ 로 표에 반영.
-5. 전부 끝난 뒤 `tools/export.html` 로 조립 컷 WebP 내보내기 → `useExportedCuts: 'mobile'` 검토.
-6. 1화 70컷 완성 후 사용자 최종 검수.
+1. 문화회관 BG01·BG02 + key 01·03·04 → 프롤로그 01~04.
+2. 집 BG11·BG12 + key 70 → 엔딩 63·69·70.
+3. 각 단계마다 §7 회귀 검사 + 375px 캡처. 완성 컷만 ✅ 로 표에 반영.
+4. 전부 끝난 뒤 `tools/export.html` 로 조립 컷 WebP 내보내기 → `useExportedCuts: 'mobile'` 검토.
+5. 1화 70컷 완성 후 사용자 최종 검수.
 
 ## 9. main 병합 전 주의사항
 - `참고_비공개` 이미지가 커밋에 섞이지 않았는지 `git log --stat main..HEAD` 로 확인.
