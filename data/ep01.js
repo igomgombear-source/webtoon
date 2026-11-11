@@ -79,8 +79,8 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1200, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -25, y: 0, w: 150 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 41.17, y: 8.6, w: 61.27 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -17.83, y: 4.3, w: 91.08 },
+          { src: '@seungmin/sit-talk', x: 41.17, y: 8.6, w: 61.27 },
+          { src: '@haein/sit-talk', x: -17.83, y: 4.3, w: 91.08 },
           { src: 'assets/props/musicroom-desk-rehearsal.webp', x: -4.5, y: 41.8, w: 109 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 75 }
         ]
@@ -92,7 +92,7 @@ WEBTOON.registerEpisode({
         bg: 'assets/backgrounds/musicroom/night-desk.webp',
         canvasSize: { w: 1000, h: 1000 },
         layers: [
-          { src: 'assets/props/sheet-music-turn.webp', x: -7, y: 11, w: 110 },
+          { src: '@haein/hand-sheet-music', x: -7, y: 11, w: 110 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -142,7 +142,7 @@ WEBTOON.registerEpisode({
         layers: [
           { src: 'assets/props/brown-envelope.webp', x: -4, y: 11, w: 99 },
           { src: 'assets/overlays/contact-shadow.svg', x: 44, y: 45, w: 65, h: 76, opacity: 0.42 },
-          { src: 'assets/props/haein-phone-camera-hand.webp', x: 48.5, y: 40, w: 54.5 },
+          { src: '@haein/hand-phone-camera', x: 48.5, y: 40, w: 54.5 },
           { src: 'assets/overlays/haein-phone-camera.svg', x: 48.5, y: 40, w: 54.5 },
           { src: 'assets/props/brown-envelope.webp', x: 55.65, y: 61, w: 25.3 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
@@ -161,7 +161,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 1125 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -25, y: 0, w: 250 },
-          { src: 'assets/characters/haein/sit-phone.webp', x: 0.5, y: 8, w: 94 },
+          { src: '@haein/sit-phone', x: 0.5, y: 8, w: 94 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
         ]
       },
@@ -179,7 +179,7 @@ WEBTOON.registerEpisode({
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -148.5, y: 0, w: 250 },
           { src: 'assets/overlays/contact-shadow.svg', x: 44.5, y: 113.5, w: 31, h: 8 },
-          { src: 'assets/characters/seungmin/stand-leave.webp', x: 44, y: 14.5, w: 34 },
+          { src: '@seungmin/stand-leave', x: 44, y: 14.5, w: 34 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
         ]
       },
@@ -190,7 +190,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -8.6, y: 0, w: 200 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -30, y: 10.56, w: 128.8 },
+          { src: '@haein/sit-talk', x: -30, y: 10.56, w: 128.8 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -200,7 +200,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -80.2, y: 0, w: 200 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 18, y: 5.9, w: 92 },
+          { src: '@seungmin/sit-talk', x: 18, y: 5.9, w: 92 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -210,7 +210,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -13.5, y: 0, w: 200 },
-          { src: 'assets/characters/haein/sit-point.webp', x: -11.4, y: 5, w: 124 },
+          { src: '@haein/sit-point', x: -11.4, y: 5, w: 124 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -220,7 +220,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -114.7, y: -6.7, w: 230 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 14.4, y: 8.7, w: 110 },
+          { src: '@seungmin/sit-talk', x: 14.4, y: 8.7, w: 110 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -230,9 +230,9 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -80.2, y: 0, w: 200 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 51.4, y: 24.5, w: 49.4 },
+          { src: '@seungmin/sit-talk', x: 51.4, y: 24.5, w: 49.4 },
           { src: 'assets/props/musicroom-desk-rehearsal.webp', x: -11, y: 60, w: 122 },
-          { src: 'assets/characters/haein/over-shoulder.webp', x: -15, y: 25, w: 86 },
+          { src: '@haein/over-shoulder', x: -15, y: 25, w: 86 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -242,7 +242,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -110.9, y: -10, w: 260 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: -0.8, y: 1.8, w: 140 },
+          { src: '@seungmin/sit-talk', x: -0.8, y: 1.8, w: 140 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -252,7 +252,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -2.1, y: 0, w: 200 },
-          { src: 'assets/characters/haein/sit-explain.webp', x: -27, y: 18, w: 126 },
+          { src: '@haein/sit-explain', x: -27, y: 18, w: 126 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -262,7 +262,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -111, y: -4, w: 215 },
-          { src: 'assets/characters/seungmin/sit-talk.webp', x: 12.4, y: 8.6, w: 125 },
+          { src: '@seungmin/sit-talk', x: 12.4, y: 8.6, w: 125 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -272,7 +272,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 900 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -31.2, y: -10, w: 240 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -50.6, y: -3.2, w: 174.8 },
+          { src: '@haein/sit-talk', x: -50.6, y: -3.2, w: 174.8 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -284,8 +284,8 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 900, h: 1125 },
         layers: [
           { src: 'assets/backgrounds/musicroom/night-wide.jpg', x: -73.8, y: 0, w: 250 },
-          { src: 'assets/characters/seungmin/sit-hold-phone.webp', x: 41.78, y: 65.2, w: 61.8 },
-          { src: 'assets/characters/haein/sit-talk.webp', x: -16.67, y: 66.1, w: 92 },
+          { src: '@seungmin/sit-hold-phone', x: 41.78, y: 65.2, w: 61.8 },
+          { src: '@haein/sit-talk', x: -16.67, y: 66.1, w: 92 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
         ]
       },

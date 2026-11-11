@@ -269,3 +269,23 @@ grep -oE "kind: '(text|compose|key)'" data/ep01.js | sort | uniq -c   # compose 
 - `spacing`/`transition` 조정은 마스터 v2 §1 과 다르다 (§2-1). 총괄 승인 필요.
 - `:has()` 미지원 구형 브라우저에서는 장면 색 경계가 그라데이션 없이 바뀐다.
 - `assets/characters/seungmin/sit-talk.webp` 는 파일명이 같고 내용만 바뀌었다. 브라우저 캐시 주의.
+
+---
+
+## 10. 해인 교체 준비 · 기술 검수 (Claude Code, 2026-11-11, `c2d54f6` 이후)
+
+위 1~9절의 기존 내용은 그대로 두고 이 절만 추가했다.
+
+**해인 교체 준비** — 자세한 내용은 `docs/HAEIN_REPLACEMENT.md`.
+- 인물 그림 경로를 `data/characters.js` 한 곳에서 관리하도록 바꿨다. `data/ep01.js` 의 인물 레이어는 `src: '@haein/sit-talk'` 처럼 이름으로 부른다 (경로 문자열 18곳만 바뀜, 좌표·대사·시간·비율 무변경).
+- `js/compose.js` 의 `resolve()` 에 `@이름` 처리를 추가했다 (5절의 "compose.js 수정 없음"은 이 커밋부터 해당하지 않음). 목록에 없는 이름은 불러오기 실패로 처리되어 `missing` 에 이름 그대로 나온다.
+- `index.html`, `tools/export.html` 에 `data/characters.js` 를 불러오는 줄을 추가했다 (`tools/review.html` 은 index.html 을 띄우므로 자동 적용).
+- 해인 그림 파일은 지우거나 고치지 않았다.
+
+**기술 검수 결과** (로컬 서버 + Edge 헤드리스)
+- 대사·시각·장면 필드 445개 main 과 동일, 컷 순서 1~70, 분류 text 19 / compose 44 / key 7, 비율 main 과 동일.
+- 참조 에셋 23개(레이어 22 + key 27) 모두 저장소에 있음, 대소문자까지 경로 일치. 확장자와 실제 형식 일치 (webp=RIFF/WEBP, jpg=JPEG, svg=XML).
+- 조립 컷 18개를 변경 전 데이터와 픽셀 단위로 비교: 18/18 동일 (중앙 관리 전환으로 화면이 바뀌지 않음).
+- 320·360·375·390·412·430·768px: 가로 넘침 없음, 깨진 그림 0, 빠진 레이어 0, 원화 표시 19컷, 임시 컷 32개는 "그림 준비 중" 그대로 표시.
+- 지연 로딩: 그림 65개 모두 `loading="lazy"`. 실시간 헤드리스 375px 에서 첫 화면(첫 그림이 4237px 아래)일 때 요청 0개, 끝까지 스크롤 후 65/65 로딩.
+- 미확인: 실제 iOS Safari·안드로이드 실기기.

@@ -42,6 +42,7 @@ webtoon/
 ├─ js/app.js                  뷰어 (컷 표시, 휴대폰 화면, 지연 로딩, 진행률)
 ├─ js/compose.js              조립 컷 계산 (뷰어와 내보내기 도구가 함께 씀)
 ├─ data/episodes.js           작품 정보와 회차 목록
+├─ data/characters.js         인물 그림 중앙 목록 (조립 컷에서 @인물/이름 으로 부름)
 ├─ data/ep01.js               1화 70컷 데이터
 ├─ assets/backgrounds/        배경 재료 (장소별 폴더)
 ├─ assets/characters/         인물 재료 (인물별 폴더, 투명 PNG/WebP)
@@ -96,6 +97,7 @@ compose: {
 - `canvasSize` 가 컷의 비율을 고정합니다.
 - `x`, `y`, `w` (선택 `h`) 는 모두 **캔버스 가로 폭 기준 %** 이고, 레이어 왼쪽 위 모서리 위치입니다. 화면 폭이 바뀌어도 상대 위치는 같습니다.
 - 선택 항목: `flip: true` 좌우 반전, `opacity: 0.8`
+- 인물 레이어는 `src: '@haein/sit-talk'` 처럼 `data/characters.js` 의 이름으로 부릅니다. 인물 그림을 바꿀 때는 이 목록의 경로 한 줄만 고치면 그 그림을 쓰는 모든 컷이 바뀝니다. 해인 교체 절차는 `docs/HAEIN_REPLACEMENT.md`.
 - 파일이 아직 없으면 그 배경·레이어만 빠지고 임시 컷이 보입니다.
 
 ### 조립 컷을 한 장으로 내보내기

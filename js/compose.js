@@ -4,7 +4,8 @@
  *   bg: 'assets/backgrounds/musicroom/night-wide.webp',   배경 (캔버스를 꽉 채움, 비율이 다르면 가운데 기준으로 잘림)
  *   canvasSize: { w: 900, h: 1200 },                       합성 캔버스 크기(px). 컷 비율이 이 값으로 고정된다
  *   layers: [                                              아래에서 위 순서로 겹침
- *     { src: 'assets/characters/seungmin/reading.png',     투명 PNG/WebP
+ *     { src: 'assets/characters/seungmin/reading.png',     투명 PNG/WebP. 인물은 '@seungmin/sit-talk' 처럼
+ *                                                          data/characters.js 의 이름으로 불러도 된다
  *       x: 20, y: 35, w: 60,                               모두 '캔버스 가로 폭'에 대한 % (왼쪽 위 모서리 기준)
  *       h: 40,            (선택) 높이도 가로 폭 기준 %. 없으면 그림 원본 비율
  *       flip: true,       (선택) 좌우 반전
@@ -28,9 +29,20 @@
     return { w: 1000, h: Math.round(1000 * rh / rw) };
   }
 
-  /* 경로: 'assets/…', './', '/', http(s) 로 시작하면 그대로, 아니면 base 기준 */
+  /* '@인물/이름' 은 data/characters.js 의 중앙 목록에서 실제 경로로 바꾼다.
+   * 목록에 없으면 '@…' 그대로 돌려준다 — 없는 주소라 불러오기에 실패하므로
+   * 뷰어·내보내기·검수 창의 '빠진 레이어' 검사에 그 이름 그대로 드러난다. */
+  function character(path) {
+    var e = (W.characters || {})[path.slice(1)];
+    if (e && e.src) return e.src;
+    if (window.console) console.warn('[compose] 인물 목록(data/characters.js)에 없음: ' + path);
+    return path;
+  }
+
+  /* 경로: 'assets/…', './', '/', http(s) 로 시작하면 그대로, '@…' 는 인물 목록, 아니면 base 기준 */
   function resolve(path, base) {
     if (!path) return '';
+    if (path.charAt(0) === '@') return character(path);
     return /^(assets\/|\.|\/|https?:|data:|blob:)/.test(path) ? path : (base || '') + path;
   }
 
