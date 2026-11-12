@@ -345,7 +345,7 @@ WEBTOON.registerEpisode({
       },
       datetime: { date: '10월 31일', time: '09:00' },
       desc: '09:00 리허설 시작' },
-    { no: 33, mood: 'morning', type: 'panel', kind: 'key', image: '33.webp', imageSize: { w: 1664, h: 936 }, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
+    { no: 33, mood: 'morning', type: 'panel', kind: 'key', image: '33-choir-realistic.webp', imageSize: { w: 1664, h: 936 }, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
       desc: '합창 장면' },
     { no: 34, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:5', tone: 'auditorium', datetime: { date: '10월 31일' },
       compose: {
@@ -401,7 +401,7 @@ WEBTOON.registerEpisode({
       desc: '승민이 알림을 열지 않고 화면을 끔' },
     { no: 40, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '4:3', tone: 'auditorium', datetime: { date: '10월 31일' },
       compose: {
-        bg: 'assets/cuts/ep01/40-rehearsal.webp',
+        bg: 'assets/cuts/ep01/40-choir-realistic.webp',
         canvasSize: { w: 1440, h: 1080 },
         layers: [
           { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 75 }
@@ -410,7 +410,7 @@ WEBTOON.registerEpisode({
       desc: '연습 장면과 시간 경과', spacing: { after: 160 } },
     { no: 41, mood: 'morning', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium',
       compose: {
-        bg: 'assets/cuts/ep01/41-dismissal.webp',
+        bg: 'assets/cuts/ep01/41-choir-realistic.webp',
         canvasSize: { w: 1664, h: 936 },
         layers: [
           { src: 'assets/overlays/auditorium-morning-grade.svg', x: 0, y: 0, w: 100, h: 56.25 }
