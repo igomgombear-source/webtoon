@@ -154,7 +154,7 @@ WEBTOON.registerEpisode({
           { src: 'assets/props/brown-envelope.webp', x: -4, y: 11, w: 99 },
           { src: 'assets/overlays/contact-shadow.svg', x: 44, y: 45, w: 65, h: 76, opacity: 0.42 },
           { src: '@haein/hand-phone-camera', x: 48.5, y: 40, w: 54.5 },
-          { src: 'assets/overlays/haein-phone-camera.svg', x: 48.5, y: 40, w: 54.5 },
+          { src: 'assets/overlays/haein-phone-camera.webp', x: 48.5, y: 40, w: 54.5 },
           { src: 'assets/props/brown-envelope.webp', x: 55.65, y: 61, w: 25.3 },
           { src: 'assets/overlays/musicroom-night-grade.svg', x: 0, y: 0, w: 100, h: 125 }
         ]

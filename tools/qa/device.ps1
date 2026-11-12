@@ -17,6 +17,7 @@ param(
   [int]$Speed = 1200,
   [switch]$Shots,
   [string]$ShotProfile = 'iphone-se',
+  [string]$PreJs = '',          # 측정 직전에 페이지에서 실행할 JS (원인 실험용: 특정 레이어 빼기 등)
   [switch]$NoHas,
   [string]$Ep = 'ep01',
   [string]$Browser = ''
@@ -172,6 +173,7 @@ try {
     Write-Output "측정: $($d.label) · CPU ×$($d.cpu) · $($n.label)"
     Set-Device $d $n
     Open-Page $url
+    if ($PreJs) { $null = Eval-Js $PreJs }
     $res = Eval-Js ($probe.Trim() + "({ speed: $Speed })") | ConvertFrom-Json
     $pm = @{}; (Cdp 'Performance.getMetrics').metrics | ForEach-Object { $pm[$_.name] = $_.value }
     $res | Add-Member profile $p; $res | Add-Member label $d.label; $res | Add-Member cpu $d.cpu; $res | Add-Member net $n.label
