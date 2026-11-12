@@ -76,6 +76,7 @@ powershell -ExecutionPolicy Bypass -File tools\qa\run.ps1 -UpdateBaseline
 | `run.ps1` | 한 번에 실행: git 파일 목록·main 데이터 꺼내기 → 서버 → 헤드리스 브라우저 → 결과 정리 |
 | `device.ps1`, `device-probe.js` | 모바일 측정: 휴대폰 화면·CPU 감속·통신 속도 흉내 → 로딩·스크롤·메모리·잘림 (6절) |
 | `known-issues.json` | 원인 확인된 알파 문제 목록 |
+| `optimize.ps1`, `optimize.html` | 그림 용량 최적화: 무손실 WebP → 고품질 손실 WebP, 필요 폭 2배 넘는 그림 줄이기 (7절) |
 | `serve.ps1` | 로컬 서버 (저장소 루트, 결과 받기) |
 | `qa.html`, `qa.js` | 검사 본체 (브라우저에서 실행) |
 | `ep01.baseline.json` | 이야기 필드 기준 |
@@ -114,3 +115,21 @@ Edge(또는 Chrome)를 개발자 도구 프로토콜로 직접 조종해 휴대�
 - 엔진은 Chromium 하나다. iOS Safari(WebKit) 결과가 아니고, 실제 휴대폰 결과도 아니다. User-Agent 만 iPhone 이다.
 - 헤드리스 브라우저는 화면 주사율(60/120Hz)에 맞춰 그리지 않아 프레임 간격이 실제보다 짧다. "느린 프레임 개수·위치" 를 기기 간·수정 전후 비교에 쓴다.
 - CPU 감속은 이 PC 기준 배수라 PC 가 바뀌면 숫자도 바뀐다. 같은 PC 에서 비교한다.
+
+`-PreJs "…"`: 측정 직전에 뷰어 안에서 실행할 JS. 원인을 찾을 때 특정 레이어를 빼고 다시 재는 데 쓴다.
+예) 13컷 SVG 레이어 빼고 재기 — `-PreJs "Array.prototype.forEach.call(document.querySelectorAll('#cut-13 .cmp-layer'), function (e) { if (/\.svg/.test(e.src)) e.remove(); }); 1"`
+
+## 7. 그림 용량 최적화 (`optimize.ps1`)
+
+```
+powershell -ExecutionPolicy Bypass -File tools\qa\optimize.ps1          # 후보를 찾아 out\optimized\ 에 만들고 표로 보여 줌 (원본 그대로)
+powershell -ExecutionPolicy Bypass -File tools\qa\optimize.ps1 -Apply   # 기준을 통과한 것만 원본 자리에 덮어씀
+```
+
+- 후보: 컷에서 쓰는 **무손실 WebP(VP8L)**, 그리고 **필요한 최대 폭의 2배보다 큰 그림**.
+  필요 폭 = 레이어 가로 % × 본문 최대 720px × 픽셀 밀도 2. 휴대폰 최대(430px × 3 = 1290px)보다 크게 잡아 어떤 기기에서도 화면 해상도보다 낮아지지 않는다.
+- 기준: 원본과의 차이 **PSNR 42dB 이상**(품질 0.92 → 0.95 → 0.98 순서로 시도), **알파 오차 0**. 통과 못 하면 원본 유지.
+- 기본으로 학생 그림·학생 완성 컷(33·40·41)은 제외 (`-Exclude` 로 바꿈).
+- 크기가 바뀐 인물 그림은 `data/characters.js` 의 `size` 를 고친 뒤 `run.ps1` 로 검수한다.
+- 새 원화를 받으면: `optimize.ps1` → 표 확인 → `-Apply` → `run.ps1` → `device.ps1`.
+- 무손실 WebP 는 완전히 투명한 픽셀에도 원래 색(RGB)을 그대로 저장해, 투명도를 무시하는 미리보기에서 얼룩처럼 보일 수 있다. 손실 WebP 로 다시 저장하면 투명 픽셀의 색이 0 이 되어 사라진다.

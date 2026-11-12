@@ -17,6 +17,7 @@ param(
   [int]$Speed = 1200,
   [switch]$Shots,
   [string]$ShotProfile = 'iphone-se',
+  [string]$PreJs = '',          # 측정 직전에 페이지에서 실행할 JS (원인 실험용: 특정 레이어 빼기 등)
   [switch]$NoHas,
   [string]$Ep = 'ep01',
   [string]$Browser = ''
@@ -44,6 +45,8 @@ $nets = @{
   '4g' = @{ label = '4G (9Mbps, 지연 60ms)';    down = 9.0; up = 1.5; lat = 60 }
   '3g' = @{ label = '3G (1.6Mbps, 지연 300ms)'; down = 1.6; up = 0.75; lat = 300 }
 }
+# powershell -File 로 부르면 '-Profiles a,b' 가 문자열 하나로 들어오므로 쉼표로 나눈다
+$Profiles = @($Profiles | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 if (-not $Profiles.Count) { $Profiles = @($all.Keys | Where-Object { $_ -ne 'narrow-320' }) }   # narrow-320 은 -Profiles 로 따로
 foreach ($p in $Profiles) { if (-not $all.Contains($p)) { Write-Output "알 수 없는 기기: $p (가능: $($all.Keys -join ', '))"; exit 2 } }
 
@@ -170,6 +173,7 @@ try {
     Write-Output "측정: $($d.label) · CPU ×$($d.cpu) · $($n.label)"
     Set-Device $d $n
     Open-Page $url
+    if ($PreJs) { $null = Eval-Js $PreJs }
     $res = Eval-Js ($probe.Trim() + "({ speed: $Speed })") | ConvertFrom-Json
     $pm = @{}; (Cdp 'Performance.getMetrics').metrics | ForEach-Object { $pm[$_.name] = $_.value }
     $res | Add-Member profile $p; $res | Add-Member label $d.label; $res | Add-Member cpu $d.cpu; $res | Add-Member net $n.label
