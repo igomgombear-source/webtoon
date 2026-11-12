@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <!-- 밤 음악실 조립 컷용 조명 보정 레이어: 형광등 아래 따뜻한 빛 + 가장자리 어둠. 인물·배경 위에 맨 마지막으로 얹는다 -->
+  <defs>
+    <radialGradient id="warm" cx="0.62" cy="0.18" r="0.75">
+      <stop offset="0" stop-color="#ffcf96" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#ffcf96" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vig" cx="0.55" cy="0.45" r="0.78">
+      <stop offset="0.55" stop-color="#0b0806" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0b0806" stop-opacity="0.55"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.72" stop-color="#140f0b" stop-opacity="0"/>
+      <stop offset="1" stop-color="#140f0b" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="#3a2a1c" fill-opacity="0.10"/>
+  <rect width="1000" height="1000" fill="url(#warm)"/>
+  <rect width="1000" height="1000" fill="url(#vig)"/>
+  <rect width="1000" height="1000" fill="url(#floor)"/>
+</svg>

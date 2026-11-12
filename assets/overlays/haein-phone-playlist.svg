@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720">
+  <defs>
+    <linearGradient id="cover" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#615a78"/>
+      <stop offset="1" stop-color="#9c879a"/>
+    </linearGradient>
+  </defs>
+  <g font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif" fill="#282534">
+    <text x="24" y="70" font-size="40" font-weight="700">재생목록</text>
+    <rect x="24" y="99" width="312" height="192" rx="18" fill="url(#cover)"/>
+    <g fill="none" stroke="#f4eaf1" stroke-linecap="round" stroke-width="5" opacity=".65">
+      <path d="M75 199v-12m21 25v-38m21 48v-58m21 48v-38m21 28v-18m21 58v-98m21 72v-46m21 62v-78m21 59v-40m21 29v-18m21 15v-12"/>
+    </g>
+    <rect x="24" y="319" width="312" height="74" rx="12" fill="#ded8ea"/>
+    <g font-size="27" font-weight="600">
+      <text x="43" y="367">01</text>
+      <text x="43" y="453">02</text>
+      <text x="43" y="539">03</text>
+    </g>
+    <g stroke="#8b839b" stroke-width="7" stroke-linecap="round" opacity=".75">
+      <path d="M105 356h137m-137 86h116m-116 86h151"/>
+    </g>
+    <g stroke="#b9b2c4" stroke-width="1.4">
+      <path d="M24 402h312M24 488h312M24 574h312"/>
+    </g>
+    <path d="M292 345l17 11-17 11z" fill="#5d4c79"/>
+    <circle cx="180" cy="630" r="32" fill="#5d4c79"/>
+    <path d="M172 616l22 14-22 14z" fill="#fff"/>
+    <path d="M136 700h88" stroke="#282534" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+  </g>
+</svg>

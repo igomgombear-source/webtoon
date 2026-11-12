@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="window" cx=".32" cy=".28" r=".8">
+      <stop stop-color="#c1d5ee" stop-opacity=".1"/>
+      <stop offset=".65" stop-color="#617897" stop-opacity=".09"/>
+      <stop offset="1" stop-color="#24334e" stop-opacity=".32"/>
+    </radialGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="url(#window)"/>
+</svg>
