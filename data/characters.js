@@ -42,12 +42,12 @@ WEBTOON.characters = {
   'student/choir-sing': { src: 'assets/characters/student/choir-sing.webp', size: { w: 1231, h: 1024 }, status: 'production', note: '주인공들과 화풍 차이(굵은 선·셀 채색) — 교체 후보' },
   'student/choir-question': { src: 'assets/characters/student/choir-question.webp', size: { w: 1024, h: 1536 }, status: 'production', note: '주인공들과 화풍 차이(굵은 선·셀 채색) — 교체 후보' },
 
-  /* ---------- 권해인 (임시 디자인 — 공식 참고 사진을 받으면 교체) ---------- */
-  'haein/sit-talk':          { src: 'assets/characters/haein/sit-talk.webp',      size: { w: 1656, h: 1220 }, status: 'temporary', note: '대화 표정, 손·휴대폰 없음' },
-  'haein/sit-phone':         { src: 'assets/characters/haein/sit-phone.webp',     size: { w: 1122, h: 1402 }, status: 'temporary', note: '해인 폰을 내려다봄 (폰이 그림에 포함)' },
-  'haein/sit-point':         { src: 'assets/characters/haein/sit-point.webp',     size: { w: 1254, h: 1254 }, status: 'temporary', note: '폰을 들고 검지로 가리킴 (폰·의자 포함)' },
-  'haein/sit-explain':       { src: 'assets/characters/haein/sit-explain.webp',   size: { w: 1536, h: 1024 }, status: 'temporary', note: '한 손을 펴서 설명' },
-  'haein/over-shoulder':     { src: 'assets/characters/haein/over-shoulder.webp', size: { w: 1312, h: 1199 }, status: 'temporary', note: '뒷모습 (머리·니트만 보임)' },
+  /* ---------- 권해인 (사진 기반 원화와 기존 손 소품) ---------- */
+  'haein/sit-talk': { src: 'assets/characters/haein/sit-talk-photo.webp', size: { w: 1656, h: 1220 }, status: 'official', glasses: false, note: '사진 기반 원화. 대화 표정, 손·휴대폰 없음' },
+  'haein/sit-phone': { src: 'assets/characters/haein/sit-phone-photo.webp', size: { w: 1122, h: 1402 }, status: 'official', glasses: false, note: '사진 기반 원화. 기존 휴대폰을 양손으로 들고 내려다봄' },
+  'haein/sit-point': { src: 'assets/characters/haein/sit-point-photo.webp', size: { w: 1254, h: 1254 }, status: 'official', glasses: false, note: '사진 기반 원화. 폰·의자와 검지로 화면을 가리키는 자세' },
+  'haein/sit-explain': { src: 'assets/characters/haein/sit-explain-photo.webp', size: { w: 1536, h: 1024 }, status: 'official', glasses: false, note: '사진 기반 원화. 빈손으로 설명하는 자세' },
+  'haein/over-shoulder': { src: 'assets/characters/haein/over-shoulder-photo.webp', size: { w: 1312, h: 1199 }, status: 'official', glasses: false, note: '사진 기반 원화. 승민을 향한 뒷모습과 긴 생머리' },
   /* 해인의 손·소매만 보이는 소품. 의상(아이보리 니트)이 바뀌면 함께 교체 */
   'haein/hand-sheet-music':  { src: 'assets/props/sheet-music-turn.webp',         size: { w: 1536, h: 1024 }, status: 'temporary', note: '악보 넘기는 손 + 니트 소매' },
   'haein/hand-phone-camera': { src: 'assets/props/haein-phone-camera-hand.webp',  size: { w: 972,  h: 1619 }, status: 'temporary', note: '폰으로 촬영하는 손 + 니트 소매' }

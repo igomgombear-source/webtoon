@@ -41,6 +41,8 @@ WEBTOON.cast = {
   haein: {
     name: '권해인', id: 'haein',
     height: 168, glasses: false,
-    confirmed: '2026-11-11 사용자 확정 (외형은 실제 참고 사진을 받을 때까지 임시 디자인)'
+    build: '살집이 조금 있는 자연스러운 체형',
+    hair: '앞머리가 있는 긴 검은 생머리',
+    confirmed: '2026-11-12 사용자 확정 및 실제 사진 참고'
   }
 };
