@@ -44,6 +44,8 @@ $nets = @{
   '4g' = @{ label = '4G (9Mbps, 지연 60ms)';    down = 9.0; up = 1.5; lat = 60 }
   '3g' = @{ label = '3G (1.6Mbps, 지연 300ms)'; down = 1.6; up = 0.75; lat = 300 }
 }
+# powershell -File 로 부르면 '-Profiles a,b' 가 문자열 하나로 들어오므로 쉼표로 나눈다
+$Profiles = @($Profiles | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 if (-not $Profiles.Count) { $Profiles = @($all.Keys | Where-Object { $_ -ne 'narrow-320' }) }   # narrow-320 은 -Profiles 로 따로
 foreach ($p in $Profiles) { if (-not $all.Contains($p)) { Write-Output "알 수 없는 기기: $p (가능: $($all.Keys -join ', '))"; exit 2 } }
 

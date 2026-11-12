@@ -21,6 +21,9 @@ param(
   [int]$TimeoutSec = 900
 )
 $ErrorActionPreference = 'Stop'
+# powershell -File 로 부르면 '-Widths 360,375' 가 문자열 하나로 들어오므로 쉼표로 나눈다
+$Widths = @($Widths | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$Skip = @($Skip | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch {}
 $Repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $Out = Join-Path $PSScriptRoot 'out'
