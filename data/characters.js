@@ -38,7 +38,7 @@ WEBTOON.characters = {
   'hyoeun/stand-gesture': { src: 'assets/characters/hyoeun/stand-gesture-photo.webp', size: { w: 1122, h: 1402 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 58컷 오른쪽으로 내민 빈손과 명찰' },
   'hyoeun/stand-listen': { src: 'assets/characters/hyoeun/stand-listen-photo.webp', size: { w: 1024, h: 1536 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 59컷 승민의 질문을 듣는 투샷' },
   'hyoeun/stand-look-aside': { src: 'assets/characters/hyoeun/stand-look-aside-photo.webp', size: { w: 1122, h: 1402 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 60컷 시선을 내리는 클로즈업' },
-  'student/choir-enter': { src: 'assets/characters/student/choir-enter-realistic.webp', size: { w: 1140, h: 1005 }, status: 'production', note: '가상의 합창부 학생 원화. 기존 포즈와 교복을 유지한 사실형 채색' },
+  'student/choir-enter': { src: 'assets/characters/student/choir-enter-realistic.webp', size: { w: 577, h: 509 }, status: 'production', note: '가상의 합창부 학생 원화. 기존 포즈와 교복을 유지한 사실형 채색' },
   'student/choir-sing': { src: 'assets/characters/student/choir-sing-realistic.webp', size: { w: 1231, h: 1024 }, status: 'production', note: '가상의 합창부 학생 원화. 기존 포즈와 교복을 유지한 사실형 채색' },
   'student/choir-question': { src: 'assets/characters/student/choir-question-realistic.webp', size: { w: 1024, h: 1536 }, status: 'production', note: '가상의 합창부 학생 원화. 기존 포즈와 교복을 유지한 사실형 채색' },
 

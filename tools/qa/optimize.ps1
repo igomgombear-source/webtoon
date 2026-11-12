@@ -57,7 +57,7 @@ try {
       $m = [IO.File]::ReadAllText((Join-Path $Out 'baseline.json'), $utf8) | ConvertFrom-Json
       if ($m.psnr -ge $MinPsnr -and $m.alphaMaxErr -eq 0) { $done = $m; break }
     }
-    $name = $f.path -replace '[\\/]', '__'
+    $name = ('{0:D3}' -f $rows.Count) + [IO.Path]::GetExtension($f.path)   # Windows 경로 길이 제한(260자) 때문에 짧은 번호 이름
     if ($done) { Copy-Item (Join-Path $Out 'result.json') (Join-Path $Opt $name) -Force }
     $rows += [pscustomobject]@{ path = $f.path; before = $f.bytes; after = $(if ($done) { $done.bytes } else { $f.bytes }); from = "$($f.w)x$($f.h)"; to = $(if ($done) { $done.to } else { '-' }); q = $(if ($done) { $done.q } else { '-' }); psnr = $(if ($done) { $done.psnr } else { '실패' }); file = $name; ok = [bool]$done }
   }
