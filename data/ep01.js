@@ -573,7 +573,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -75.6, y: -1, w: 180 },
-          { src: '@hyoeun/stand-listen', x: 0.1, y: 21.3, w: 68 },
+          { src: '@hyoeun/stand-listen', x: 0.4, y: 19.5, w: 54.4 },
           { src: '@seungmin/stand-question-phone', x: 47, y: 22.3, w: 58 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
@@ -584,12 +584,12 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -100.5, y: -6.5, w: 203 },
-          { src: '@hyoeun/stand-look-aside', x: -15, y: 1.5, w: 116 },
+          { src: '@hyoeun/stand-look-aside', x: -4, y: 1.7, w: 104 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
       lines: [{ who: '효은', text: '지금은 쉬셔야 한대요. 제가 바로 갖다 드릴게요.' }] },
-    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: '61.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'auditorium',
+    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: '61-handoff.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'auditorium',
       datetime: { date: '10월 31일', time: '10:52' },
       desc: '10:52 승민이 효은에게 휴대폰 전달' },
     { no: 62, mood: 'cold-deep', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
