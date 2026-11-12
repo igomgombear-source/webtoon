@@ -22,17 +22,17 @@ window.WEBTOON = window.WEBTOON || { episodeData: {} };
 
 WEBTOON.characters = {
   /* ---------- 이승민 (공식) ---------- */
-  'seungmin/sit-talk':       { src: 'assets/characters/seungmin/sit-talk.webp',       size: { w: 1313, h: 1342 }, status: 'official' },
-  'seungmin/sit-hold-phone': { src: 'assets/characters/seungmin/sit-hold-phone.webp', size: { w: 1241, h: 1268 }, status: 'official' },
-  'seungmin/stand-leave':    { src: 'assets/characters/seungmin/stand-leave.webp',    size: { w: 573,  h: 1769 }, status: 'official' },
+  'seungmin/sit-talk':       { src: 'assets/characters/seungmin/sit-talk-likeness.webp',       size: { w: 1313, h: 1342 }, status: 'official' },
+  'seungmin/sit-hold-phone': { src: 'assets/characters/seungmin/sit-hold-phone-likeness.webp', size: { w: 1241, h: 1268 }, status: 'official' },
+  'seungmin/stand-leave':    { src: 'assets/characters/seungmin/stand-leave-likeness.webp',    size: { w: 573,  h: 1769 }, status: 'official' },
 
   /* ---------- 제작 원화 ---------- */
-  'seungmin/sit-check-score': { src: 'assets/characters/seungmin/sit-check-score.webp', size: { w: 1241, h: 1268 }, status: 'production' },
-  'seungmin/sit-glance-phone': { src: 'assets/characters/seungmin/sit-glance-phone.webp', size: { w: 1241, h: 1268 }, status: 'production' },
-  'seungmin/stand-wait-phone': { src: 'assets/characters/seungmin/stand-wait-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
-  'seungmin/stand-question-phone': { src: 'assets/characters/seungmin/stand-question-phone.webp', size: { w: 1066, h: 1476 }, status: 'production' },
-  'seungmin/stand-alone': { src: 'assets/characters/seungmin/stand-alone.webp', size: { w: 495, h: 1832 }, status: 'production' },
-  'seungmin/phone-call': { src: 'assets/characters/seungmin/phone-call.webp', size: { w: 1241, h: 1268 }, status: 'production' },
+  'seungmin/sit-check-score': { src: 'assets/characters/seungmin/sit-check-score-likeness.webp', size: { w: 1241, h: 1268 }, status: 'production' },
+  'seungmin/sit-glance-phone': { src: 'assets/characters/seungmin/sit-glance-phone-likeness.webp', size: { w: 1241, h: 1268 }, status: 'production' },
+  'seungmin/stand-wait-phone': { src: 'assets/characters/seungmin/stand-wait-phone-likeness.webp', size: { w: 1066, h: 1476 }, status: 'production' },
+  'seungmin/stand-question-phone': { src: 'assets/characters/seungmin/stand-question-phone-likeness.webp', size: { w: 1066, h: 1476 }, status: 'production' },
+  'seungmin/stand-alone': { src: 'assets/characters/seungmin/stand-alone-likeness.webp', size: { w: 495, h: 1832 }, status: 'production' },
+  'seungmin/phone-call': { src: 'assets/characters/seungmin/phone-call-likeness.webp', size: { w: 1241, h: 1268 }, status: 'production' },
   'hyoeun/stand-enter': { src: 'assets/characters/hyoeun/stand-enter-photo.webp', size: { w: 724, h: 2172 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 56컷 입구 전신과 바닥 위치' },
   'hyoeun/stand-talk': { src: 'assets/characters/hyoeun/stand-talk-photo.webp', size: { w: 1086, h: 1448 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 57컷 대화 자세와 흰 셔츠·명찰' },
   'hyoeun/stand-gesture': { src: 'assets/characters/hyoeun/stand-gesture-photo.webp', size: { w: 1122, h: 1402 }, status: 'production', glasses: true, note: '사진 기반 공식 원화. 58컷 오른쪽으로 내민 빈손과 명찰' },

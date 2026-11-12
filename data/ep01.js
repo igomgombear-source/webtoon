@@ -666,7 +666,7 @@ WEBTOON.registerEpisode({
         { who: '문상윤', style: 'phone', text: '사고로 보고 있습니다.' },
         { who: '문상윤', style: 'phone', text: '최근 건강 상태에 대해 들으신 게 있습니까?' }
       ], spacing: { after: 260 } },
-    { no: 70, mood: 'void', type: 'panel', kind: 'key', image: '70.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'dawn', datetime: { date: '11월 2일' },
+    { no: 70, mood: 'void', type: 'panel', kind: 'key', image: '70-seungmin-likeness.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'dawn', datetime: { date: '11월 2일' },
       lines: [{ who: '승민', text: '그저께… 몸이 안 좋다는 문자를 받았습니다.' }],
       transition: 'slow', spacing: { after: 0 } }
   ]
