@@ -542,7 +542,7 @@ WEBTOON.registerEpisode({
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-entrance.webp', x: -10.4, y: 0, w: 237.04 },
           { src: 'assets/overlays/contact-shadow.svg', x: 37.7, y: 95.7, w: 20, h: 5.1, opacity: 0.68 },
-          { src: '@hyoeun/stand-enter', x: 36, y: 25.1, w: 23.04 },
+          { src: '@hyoeun/stand-enter', x: 35.32, y: 27.9, w: 23.72 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 133.3333 }
         ]
       },
@@ -553,7 +553,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -86.5, y: -5, w: 190 },
-          { src: '@hyoeun/stand-talk', x: 6.5, y: 5.7, w: 87.8 },
+          { src: '@hyoeun/stand-talk', x: -4, y: 4.6, w: 82 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -563,7 +563,7 @@ WEBTOON.registerEpisode({
         canvasSize: { w: 1000, h: 1000 },
         layers: [
           { src: 'assets/backgrounds/auditorium/morning-booth.webp', x: -104, y: -7, w: 215 },
-          { src: '@hyoeun/stand-gesture', x: -21, y: -31, w: 122 },
+          { src: '@hyoeun/stand-gesture', x: -10, y: -34.5, w: 108 },
           { src: 'assets/overlays/auditorium-cold-grade.svg', x: 0, y: 0, w: 100, h: 100 }
         ]
       },
@@ -589,7 +589,7 @@ WEBTOON.registerEpisode({
         ]
       },
       lines: [{ who: '효은', text: '지금은 쉬셔야 한대요. 제가 바로 갖다 드릴게요.' }] },
-    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: '61-handoff.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'auditorium',
+    { no: 61, mood: 'cold-deep', transition: 'slow', spacing: { after: 120 }, type: 'panel', kind: 'key', image: '61-handoff-sleeve.webp', imageSize: { w: 1120, h: 1400 }, ratio: '4:5', tone: 'auditorium',
       datetime: { date: '10월 31일', time: '10:52' },
       desc: '10:52 승민이 효은에게 휴대폰 전달' },
     { no: 62, mood: 'cold-deep', type: 'panel', kind: 'compose', image: null, ratio: '16:9', tone: 'auditorium', datetime: { date: '10월 31일' },
