@@ -1,0 +1,11 @@
+{
+  "assets/props/auditorium-clock-frame.webp": {
+    "checks": ["몸이 비침", "떨어진 점"],
+    "reason": "반투명 구멍과 떨어진 점 36개가 모두 시계 문자판 SVG(반지름 416/1000) 아래에 있어 화면에는 안 보임. SVG 가 빠지면 드러남 (2026-11-12 분석, docs/EP01_DEVICE_QA.md 5절)"
+  },
+  "__textClip": {
+    "cuts": [11, 51, 65],
+    "classes": ["notif-body"],
+    "reason": "2026-11-12 총괄 판단: 실제 휴대폰처럼 알림 미리보기 말줄임 유지 (12컷 확대 알림만 전문 표시)"
+  }
+}

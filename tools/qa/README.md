@@ -37,7 +37,8 @@ powershell -ExecutionPolicy Bypass -File tools\qa\run.ps1
 | | 인물 목록 `data/characters.js` | 쓰는 항목의 파일이 없음 | 안 쓰는 항목의 파일 없음·크기 불일치 |
 | **alpha** | 인물·소품 투명 그림 (`assets/characters`, `assets/props` 레이어) | 투명한 곳이 1% 미만 (배경이 붙음), 인물 몸 안쪽 2% 넘게 불투명도 90% 미만 (비침) | 소품 반투명, 외곽 청록·빨강 테두리, 외곽 밝은 테두리(흰 배경 잔여), 떨어진 점 20개 초과 |
 | | 자체 점검 | 일부러 망가뜨린 가짜 그림 7종을 예상대로 못 잡음 | |
-| **viewer** | 실제 `index.html` 을 폭별로 띄워 끝까지 스크롤 | 그려진 컷 수가 데이터와 다름, 가로 스크롤, 화면 밖으로 넘친 요소, 깨진 그림, 빠진 조립 레이어 | `loading="lazy"` 없음, 첫 화면에서 화면 3개 아래 그림을 미리 받음, 그림 밖으로 나간 대사 상자, 15초 안에 못 불러온 그림 |
+| **viewer** | 실제 `index.html` 을 폭별로 띄워 끝까지 스크롤 | 그려진 컷 수가 데이터와 다름, 가로 스크롤, 화면 밖으로 넘친 요소, 깨진 그림, 빠진 조립 레이어 | `loading="lazy"` 없음, 첫 화면에서 화면 3개 아래 그림을 미리 받음, 그림 밖으로 나간 대사 상자, 15초 안에 못 불러온 그림, **글자 잘림**(줄 수 제한·overflow 로 안 보이는 대사·문자, 안 보이는 부분 추정 표시) |
+| **compat** | 뷰어 CSS·HTML·JS 정적 검사 (iOS Safari·Android Chrome) | | 대체 없는 기능(aspect-ratio·inset·WebP)의 최소 버전, 최신 JS 문법, `-webkit-` 접두어 누락 |
 
 참고(info) 항목: 분류 집계, 임시·교체 필요 그림을 쓰는 컷, 그림 가장자리에 닿은 몸(잘린 원본 의심), 불투명도 6% 이하 색 픽셀, 안 쓰는 인물 목록 항목, "그림 준비 중" 컷.
 
@@ -73,9 +74,43 @@ powershell -ExecutionPolicy Bypass -File tools\qa\run.ps1 -UpdateBaseline
 | 파일 | 역할 |
 |---|---|
 | `run.ps1` | 한 번에 실행: git 파일 목록·main 데이터 꺼내기 → 서버 → 헤드리스 브라우저 → 결과 정리 |
+| `device.ps1`, `device-probe.js` | 모바일 측정: 휴대폰 화면·CPU 감속·통신 속도 흉내 → 로딩·스크롤·메모리·잘림 (6절) |
+| `known-issues.json` | 원인 확인된 알파 문제 목록 |
 | `serve.ps1` | 로컬 서버 (저장소 루트, 결과 받기) |
 | `qa.html`, `qa.js` | 검사 본체 (브라우저에서 실행) |
 | `ep01.baseline.json` | 이야기 필드 기준 |
 | `out/` | 실행 결과 (git 제외) |
 
 헤드리스 브라우저는 실제 시간으로 돌아서 지연 로딩도 휴대폰과 같은 방식으로 확인한다. 실제 iOS Safari·안드로이드 화면은 이 도구로 확인되지 않는다.
+
+## 6. 모바일 측정 (`device.ps1`)
+
+```
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1                  # 기기 5종, 약 4분
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Profiles iphone-se,galaxy-a
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Shots            # + 375px 컷별 캡처 70장 (out/shots/iphone-se)
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -NoHas            # + :has() 미지원 흉내 경계 비교 (out/shots/no-has)
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Profiles narrow-320 -Shots -ShotProfile narrow-320   # 320px 측정·캡처
+```
+
+Edge(또는 Chrome)를 개발자 도구 프로토콜로 직접 조종해 휴대폰 화면 크기·픽셀 밀도·터치·User-Agent·CPU 감속·통신 속도를 흉내 낸다. 설치할 것 없음.
+
+| 기기 프로필 | 화면 | CPU 감속 | 통신 |
+|---|---|---:|---|
+| `iphone-se` | 375×667 @2x | ×2 | 4G (9Mbps, 60ms) |
+| `iphone-15` | 393×852 @3x | ×1 | 4G |
+| `galaxy-a` | 360×800 @3x | ×4 | 4G |
+| `pixel-7` | 412×915 @2.625x | ×2 | 4G |
+| `slow-3g` | 375×667 @2x | ×4 | 3G (1.6Mbps, 300ms) |
+| `narrow-320` (기본 실행에서 빠짐, `-Profiles` 로 지정) | 320×568 @2x | ×2 | 4G |
+
+재는 것 (`out/device-report.txt`)
+- **첫 화면**: DOM 준비, 가장 큰 그림 표시(LCP), 첫 화면에서 받은 그림 수·용량, 화면 3개 아래 그림을 미리 받았는지
+- **스크롤**: 1200px/s 로 끝까지 내리며 프레임 간격(중앙·95%·최대), 50ms 넘는 프레임과 그 위치(컷), 긴 작업, 레이아웃 밀림(CLS), **빈 그림 대기**(컷이 화면에 들어왔는데 그림이 아직 없던 시간)
+- **메모리**: JS 힙, 그림 디코딩 추정(파일별 가로×세로×4 바이트 — 전체 / 화면 주변 최대), DOM 수, 총 그림 용량
+- **검사**: 가로 넘침, 글자 잘림, 그림 밖 말풍선, 깨진 그림, lazy 없는 그림, 12px 미만 글자
+
+한계 — **반드시 함께 적을 것**
+- 엔진은 Chromium 하나다. iOS Safari(WebKit) 결과가 아니고, 실제 휴대폰 결과도 아니다. User-Agent 만 iPhone 이다.
+- 헤드리스 브라우저는 화면 주사율(60/120Hz)에 맞춰 그리지 않아 프레임 간격이 실제보다 짧다. "느린 프레임 개수·위치" 를 기기 간·수정 전후 비교에 쓴다.
+- CPU 감속은 이 PC 기준 배수라 PC 가 바뀌면 숫자도 바뀐다. 같은 PC 에서 비교한다.

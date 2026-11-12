@@ -31,6 +31,8 @@
   var cur = null;
   function section(name) { cur = { name: name, items: [] }; report.sections.push(cur); }
   function add(level, where, msg) { cur.items.push({ level: level, where: where, msg: msg }); }
+  var addItem = add;
+  var KNOWN = {};   /* known-issues.json: { 경로: { checks: [검사 이름], reason } } */
   function status(t) { document.getElementById('status').textContent = t; }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -330,16 +332,23 @@
       if (!f.img) continue;   /* refs 에서 이미 fail */
       var a = analyzeAlpha(f.img); a.path = p; a.cuts = cuts; rows.push(a);
       var tag = where + ' (컷 ' + cuts + ')';
-      if (a.transparentPct < 1) { add('fail', '투명 없음', tag + ' — 투명한 부분이 ' + a.transparentPct.toFixed(2) + '% 뿐 (배경이 붙은 그림)'); continue; }
+      /* known-issues.json 에 원인이 확인된 문제는 확인 → 참고 로 낮춘다 (실패는 낮추지 않음) */
+      var addA = (function (known) {
+        return function (level, check, msg) {
+          if (known && level === 'warn' && known.checks.indexOf(check) >= 0) { level = 'info'; msg += ' — 알려진 문제: ' + known.reason; }
+          addItem(level, check, msg);
+        };
+      })(KNOWN[p]);
+      if (a.transparentPct < 1) { addA('fail', '투명 없음', tag + ' — 투명한 부분이 ' + a.transparentPct.toFixed(2) + '% 뿐 (배경이 붙은 그림)'); continue; }
       var isChar = /^assets\/characters\//.test(p);
       /* 인물 몸이 비치면 실패. 소품은 유리·그림자처럼 일부러 반투명일 수 있어 확인으로 */
-      if (a.seeThroughPct > 2) add(isChar ? 'fail' : 'warn', '몸이 비침', tag + ' — 안쪽 ' + a.seeThroughPct.toFixed(1) + '% 가 불투명도 90% 미만 (뒤 배경이 비쳐 보임' + (isChar ? ')' : ' — 유리·그림자처럼 의도한 반투명이면 정상)'));
-      if (a.colorEdge > 40) add('warn', '색 테두리', tag + ' — 외곽에 주변과 다른 청록·빨강 픽셀 ' + a.colorEdge + '개');
-      if (a.brightEdge > 200 && a.brightEdge > a.edge * 0.02) add('warn', '밝은 테두리', tag + ' — 외곽 반투명 픽셀의 ' + (a.brightEdge / a.edge * 100).toFixed(1) + '% (' + a.brightEdge + '개)가 안쪽보다 훨씬 밝음 (흰 배경 잔여 의심)');
-      if (a.specks > 20) add('warn', '떨어진 점', tag + ' — 몸에서 떨어진 작은 점 ' + a.specks + '개 (' + a.speckPx + 'px)');
-      if (a.parts > 1) add('info', '덩어리', tag + ' — 큰 덩어리가 ' + a.parts + '개로 나뉨 (여러 인물·소품이면 정상)');
-      if (a.edgeTouch.length) add('info', '잘린 몸', tag + ' — 그림 ' + a.edgeTouch.join('·') + ' 가장자리에 몸이 닿음 (상반신·손 클로즈업이면 정상, 아니면 원본이 잘림)');
-      if (a.hazeColor > 1500) add('info', '옅은 색 픽셀', tag + ' — 불투명도 6% 이하 청록·빨강 픽셀 ' + a.hazeColor + '개 (화면에서는 거의 안 보임)');
+      if (a.seeThroughPct > 2) addA(isChar ? 'fail' : 'warn', '몸이 비침', tag + ' — 안쪽 ' + a.seeThroughPct.toFixed(1) + '% 가 불투명도 90% 미만 (뒤 배경이 비쳐 보임' + (isChar ? ')' : ' — 유리·그림자처럼 의도한 반투명이면 정상)'));
+      if (a.colorEdge > 40) addA('warn', '색 테두리', tag + ' — 외곽에 주변과 다른 청록·빨강 픽셀 ' + a.colorEdge + '개');
+      if (a.brightEdge > 200 && a.brightEdge > a.edge * 0.02) addA('warn', '밝은 테두리', tag + ' — 외곽 반투명 픽셀의 ' + (a.brightEdge / a.edge * 100).toFixed(1) + '% (' + a.brightEdge + '개)가 안쪽보다 훨씬 밝음 (흰 배경 잔여 의심)');
+      if (a.specks > 20) addA('warn', '떨어진 점', tag + ' — 몸에서 떨어진 작은 점 ' + a.specks + '개 (' + a.speckPx + 'px)');
+      if (a.parts > 1) addA('info', '덩어리', tag + ' — 큰 덩어리가 ' + a.parts + '개로 나뉨 (여러 인물·소품이면 정상)');
+      if (a.edgeTouch.length) addA('info', '잘린 몸', tag + ' — 그림 ' + a.edgeTouch.join('·') + ' 가장자리에 몸이 닿음 (상반신·손 클로즈업이면 정상, 아니면 원본이 잘림)');
+      if (a.hazeColor > 1500) addA('info', '옅은 색 픽셀', tag + ' — 불투명도 6% 이하 청록·빨강 픽셀 ' + a.hazeColor + '개 (화면에서는 거의 안 보임)');
     }
     var problems = cur.items.filter(function (it) { return it.level === 'fail' || it.level === 'warn'; }).length;
     if (!problems) add('ok', '알파', '투명 그림 ' + rows.length + '개 — 투명 없음·비침·색 테두리·밝은 테두리·떨어진 점 문제 없음');
@@ -434,6 +443,23 @@
         var a = e.closest('.art').getBoundingClientRect(), b = e.getBoundingClientRect();
         return b.width && (b.left < a.left - 0.5 || b.right > a.right + 0.5);
       }).map(function (e) { return (e.closest('section[id^=cut-]') || {}).id; });
+      /* 글자 잘림(줄 수 제한·overflow 숨김으로 안 보이는 글자)과 12px 미만 글자. 화면 낭독기 전용(1×1)은 제외 */
+      r.clipped = []; r.smallText = {};
+      Array.prototype.forEach.call(d.querySelectorAll('#app *'), function (el) {
+        if (el.clientWidth <= 1 && el.clientHeight <= 1) return;
+        var cs = f.contentWindow.getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('.art .cmp-visual')) return;
+        var no = (el.closest('section[id^=cut-]') || { id: 'cut-0' }).id.slice(4);
+        if (!el.classList.contains('art') && (/hidden|clip/.test(cs.overflowX + cs.overflowY) || (cs.webkitLineClamp && cs.webkitLineClamp !== 'none')) &&
+            (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) && (el.textContent || '').trim()) {
+          /* 안 보이는 부분 추정: 상자 높이 비율만큼 앞부분이 보인다 */
+          var txt = el.textContent.trim(), seen = Math.floor(txt.length * el.clientHeight / el.scrollHeight);
+          r.clipped.push({ cut: +no, cls: String(el.className).split(' ')[0], msg: pad(+no) + '컷 "…' + txt.slice(Math.max(0, seen - 2)).slice(0, 40) + '" 부분이 잘림 (상자 ' + el.clientHeight + 'px / 글자 ' + el.scrollHeight + 'px)' });
+        }
+        var own = Array.prototype.some.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
+        var fs = parseFloat(cs.fontSize);
+        if (own && fs < 12) (r.smallText[fs] = r.smallText[fs] || []).indexOf(pad(+no)) < 0 && r.smallText[fs].push(pad(+no));
+      });
       report.viewer.push(r);
       f.remove();
 
@@ -446,10 +472,64 @@
       if (r.notLazy.length) add('warn', tag, 'loading="lazy" 가 없는 그림 ' + r.notLazy.length + '개: ' + r.notLazy.slice(0, 3).join(', '));
       if (r.farRequestedAtTop) add('warn', tag, '첫 화면에서 화면 3개 이상 아래 그림 ' + r.farRequestedAtTop + '개를 미리 받음 (지연 로딩 확인)');
       if (r.lineOverflow.length) add('warn', tag, '그림 밖으로 나간 대사 상자: ' + r.lineOverflow.join(', '));
+      /* known-issues.json 의 __textClip: 총괄이 '의도된 말줄임'으로 판단한 컷은 참고로 */
+      var ok = KNOWN.__textClip || { cuts: [], classes: [] };
+      r.clipped.forEach(function (c) {
+        if (ok.cuts.indexOf(c.cut) >= 0 && ok.classes.indexOf(c.cls) >= 0) add('info', tag, '의도된 말줄임: ' + c.msg + ' — ' + ok.reason);
+        else add('warn', tag, '글자 잘림: ' + c.msg);
+      });
+      Object.keys(r.smallText).sort(function (a, b) { return a - b; }).forEach(function (px) {
+        add('info', tag, px + 'px 글자 (12px 미만, 휴대폰에서 작음): 컷 ' + r.smallText[px].join(','));
+      });
       if (r.placeholder.length) add('info', tag, '"그림 준비 중" 컷 ' + r.placeholder.length + '개: ' + r.placeholder.map(pad).join(','));
       if (!r.overflow.length && r.docScrollWidth <= r.innerWidth && !r.broken.length && !r.missingLayers.length && r.cuts === ep.cuts.length)
         add('ok', tag, r.cuts + '컷, 그림 ' + r.images + '개 — 넘침·깨짐·빠진 레이어 없음');
     }
+  }
+
+  /* ---------- compat: iOS Safari·Android Chrome 호환성 (뷰어 코드 정적 검사) ----------
+   * 뷰어가 쓰는 CSS·HTML·JS 기능을 찾아 최소 지원 버전과 미지원 시 증상을 알려 준다.
+   * 버전은 iOS Safari(=iOS 안 모든 브라우저·카카오톡 등 인앱 브라우저의 WebKit) / Android Chrome 기준. */
+  var FEATURES = [
+    { name: ':has() 선택자', re: /:has\(/, ios: '15.4', and: '105', level: 'info', fallback: '분위기가 바뀌는 컷 경계가 그라데이션 없이 한 번에 바뀐다 (device.ps1 -NoHas 로 비교)' },
+    { name: 'aspect-ratio', re: /aspect-ratio/, ios: '15.0', and: '88', level: 'warn', fallback: '대체 없음 — 그림 영역 높이가 0 이 되어 그림이 안 보인다' },
+    { name: 'svh 단위', re: /\d+svh/, ios: '15.4', and: '108', level: 'info', fallback: '앞에 쓴 100vh 로 대체 (주소창 높이만큼 차이)' },
+    { name: 'loading="lazy"', re: /loading="lazy"/, ios: '15.4', and: '77', level: 'info', fallback: '지연 로딩 없이 그림을 처음부터 모두 받는다 (1화 약 10MB)' },
+    { name: 'inset 속성', re: /\binset:\s*0/, ios: '14.1', and: '87', level: 'warn', fallback: '대체 없음 — 그림·임시 컷 위치가 어긋난다' },
+    { name: 'flex gap', re: /display:\s*(inline-)?flex[^}]*\bgap:|\bgap:[^}]*display:\s*(inline-)?flex/, ios: '14.1', and: '84', level: 'info', fallback: '대사 말풍선 사이 간격이 붙는다' },
+    { name: 'WebP 그림', re: /\.webp/, ios: '14.0', and: '32', level: 'warn', fallback: '대체 없음 — 그림이 모두 깨진다' },
+    { name: 'backdrop-filter', re: /backdrop-filter/, ios: '9 (-webkit-)', and: '76', level: 'info', fallback: '상단 바 흐림 없이 표시', needPrefix: /-webkit-backdrop-filter/ },
+    { name: 'IntersectionObserver', re: /IntersectionObserver/, ios: '12.2', and: '51', level: 'info', fallback: '등장 효과 없이 모두 보인다 (코드에 대체 있음)' },
+    { name: 'CSS min()', re: /\bmin\(/, ios: '11.3', and: '79', level: 'info', fallback: '작품 메인 크기 계산 무시' }
+  ];
+  var SYNTAX = [
+    { name: '화살표 함수', re: /=>/ }, { name: 'let/const', re: /\b(let|const)\s/ }, { name: '템플릿 문자열', re: /`/ },
+    { name: 'async/await', re: /\basync\s+function|\bawait\s/ }, { name: '?. / ??', re: /\?\.[a-zA-Z(]|\?\?/ }
+  ];
+  async function checkCompat() {
+    section('compat · iOS Safari·Android Chrome 호환성 (코드 검사)');
+    var files = ['index.html', 'css/style.css', 'js/app.js', 'js/compose.js', 'data/episodes.js', 'data/characters.js'];
+    var text = {};
+    for (var i = 0; i < files.length; i++) { try { text[files[i]] = await (await fetch(ROOT + files[i], { cache: 'no-store' })).text(); } catch (e) { text[files[i]] = ''; } }
+    var all = Object.keys(text).map(function (k) { return text[k]; }).join('\n') + '\n' + JSON.stringify(W.episodeData[EP] || {});
+    var minIos = '0', used = [];
+    function ver(v) { return parseFloat(v) || 0; }
+    FEATURES.forEach(function (ft) {
+      if (!ft.re.test(all)) return;
+      used.push(ft.name);
+      var lv = ft.level;
+      if (ft.needPrefix && !ft.needPrefix.test(all)) { lv = 'warn'; ft.fallback = 'iOS 17 이하는 -webkit- 접두어가 있어야 함 — 접두어 없음'; }
+      add(lv, ft.name, 'iOS Safari ' + ft.ios + '+ · Android Chrome ' + ft.and + '+ · 미지원 시: ' + ft.fallback);
+      if (/대체 없음/.test(ft.fallback) && ver(ft.ios) > ver(minIos)) minIos = ft.ios;
+    });
+    /* 뷰어 JS 문법: 옛 iOS 에서 문법 오류가 나면 화면 전체가 안 뜬다 */
+    var js = text['js/app.js'] + '\n' + text['js/compose.js'] + '\n' + text['data/episodes.js'];
+    var syn = SYNTAX.filter(function (s) { return s.re.test(js.replace(/\/\*[\s\S]*?\*\//g, '').replace(/'(?:[^'\\\n]|\\.)*'/g, "''")); });
+    if (syn.length) add('warn', '뷰어 JS 문법', '최신 문법 사용: ' + syn.map(function (s) { return s.name; }).join(', ') + ' — 오래된 브라우저에서 화면 전체가 안 뜰 수 있음');
+    else add('ok', '뷰어 JS 문법', 'ES5 문법만 사용 (화살표 함수·let/const·템플릿 문자열·async 없음)');
+    var full = FEATURES.filter(function (ft) { return used.indexOf(ft.name) >= 0; }).reduce(function (m, ft) { var v = ver(ft.ios); return v > m ? v : m; }, 0);
+    add('info', '요약', '모든 기능 정상: iOS ' + full + '+ · 그림이 보이려면 최소 iOS ' + minIos + '+ (그 아래는 그림 영역이 깨짐). 실제 iOS 기기·WebKit 엔진으로는 시험하지 않음 — 이 판정은 코드 검사 결과');
+    report.compat = { used: used, minIosForArt: minIos, fullIos: full };
   }
 
   /* ---------- 결과 ---------- */
@@ -479,11 +559,13 @@
       await fetch('/__qa/baseline', { method: 'POST', body: JSON.stringify(snap, null, 1) });
       status('기준 파일 내용을 보냈습니다.'); document.title = 'qa baseline done'; return;
     }
+    KNOWN = (await getJSON('known-issues.json')) || {};
     var manifest = await getJSON('out/manifest.json');
     if (manifest && manifest.commit) report.commit = manifest.commit;
     if (SKIP.indexOf('data') < 0) await checkData(ep);
     if (SKIP.indexOf('refs') < 0) await checkRefs(ep, manifest);
     if (SKIP.indexOf('alpha') < 0) { await checkSelf(); await checkAlpha(ep); }
+    if (SKIP.indexOf('compat') < 0) await checkCompat();
     if (SKIP.indexOf('viewer') < 0) await checkViewer(ep);
   }
 
