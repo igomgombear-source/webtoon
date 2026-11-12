@@ -257,7 +257,9 @@ img { display: block; max-width: 100%; }
 .phone.is-focus .notif-stack { padding-top: 40px; }
 .phone.is-focus .notif { font-size: 16px; padding: 14px 16px 15px; }
 .phone.is-focus .notif-from { font-size: 17px; }
-.phone.is-focus .notif-body { -webkit-line-clamp: 6; }
+/* 확대 알림은 말줄임 없이 전문을 보여 준다 (좁은 화면 320px 에서도). 일반 알림 미리보기는 위의 4줄 말줄임 유지
+ * — 2026-11-12 총괄 판단: 11·51·65컷은 실제 휴대폰처럼 말줄임 유지, 12컷(확대 알림)만 전문 표시 */
+.phone.is-focus .notif-body { display: block; -webkit-line-clamp: unset; overflow: visible; }
 
 /* 음악 재생 화면 위 알림 */
 .player { margin: 6px 18px 4px; padding: 16px; border-radius: 18px; background: rgba(0,0,0,.06); }

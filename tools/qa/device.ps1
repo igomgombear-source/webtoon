@@ -16,6 +16,7 @@ param(
   [int]$DebugPort = 9333,
   [int]$Speed = 1200,
   [switch]$Shots,
+  [string]$ShotProfile = 'iphone-se',
   [switch]$NoHas,
   [string]$Ep = 'ep01',
   [string]$Browser = ''
@@ -37,12 +38,13 @@ $all = [ordered]@{
   'galaxy-a'   = @{ label = '갤럭시 A 보급형 급 (360×800 @3x)'; w = 360; h = 800; dpr = 3;     ua = $andUA; cpu = 4; net = '4g' }
   'pixel-7'    = @{ label = 'Pixel 7 급 (412×915 @2.625x)';     w = 412; h = 915; dpr = 2.625; ua = $andUA; cpu = 2; net = '4g' }
   'slow-3g'    = @{ label = '느린 통신 시험 (375×667 @2x, 3G)'; w = 375; h = 667; dpr = 2;     ua = $andUA; cpu = 4; net = '3g' }
+  'narrow-320' = @{ label = '좁은 화면 (320×568 @2x)';           w = 320; h = 568; dpr = 2;     ua = $andUA; cpu = 2; net = '4g' }
 }
 $nets = @{
   '4g' = @{ label = '4G (9Mbps, 지연 60ms)';    down = 9.0; up = 1.5; lat = 60 }
   '3g' = @{ label = '3G (1.6Mbps, 지연 300ms)'; down = 1.6; up = 0.75; lat = 300 }
 }
-if (-not $Profiles.Count) { $Profiles = @($all.Keys) }
+if (-not $Profiles.Count) { $Profiles = @($all.Keys | Where-Object { $_ -ne 'narrow-320' }) }   # narrow-320 은 -Profiles 로 따로
 foreach ($p in $Profiles) { if (-not $all.Contains($p)) { Write-Output "알 수 없는 기기: $p (가능: $($all.Keys -join ', '))"; exit 2 } }
 
 # ---------- 브라우저 ----------
@@ -177,17 +179,17 @@ try {
   }
 
   if ($Shots -or $NoHas) {
-    $d = $all['iphone-se']; Set-Device $d @{ down = 1000; up = 1000; lat = 0 }; $null = Cdp 'Emulation.setCPUThrottlingRate' @{ rate = 1 }
+    $d = $all[$ShotProfile]; Set-Device $d @{ down = 1000; up = 1000; lat = 0 }; $null = Cdp 'Emulation.setCPUThrottlingRate' @{ rate = 1 }
   }
   if ($Shots) {
-    $dir = Join-Path $Out 'shots\iphone-se'; New-Item -ItemType Directory -Force $dir | Out-Null
-    Write-Output '시각 검수 캡처: iPhone SE 급 375px, 컷 70개'
+    $dir = Join-Path $Out ('shots\' + $ShotProfile); New-Item -ItemType Directory -Force $dir | Out-Null
+    Write-Output "시각 검수 캡처: $($d.label), 컷 70개"
     Open-Page $url
     $cuts = Eval-Js $prepJs | ConvertFrom-Json
     foreach ($c in $cuts) {
       Save-Shot @{ x = 0; y = $c.y; width = $d.w; height = $c.h; scale = 1 } (Join-Path $dir ('cut-{0:D2}.png' -f $c.no))
     }
-    $report.shots = "out/shots/iphone-se ($($cuts.Count)장)"
+    $report.shots = "out/shots/$ShotProfile ($($cuts.Count)장)"
   }
   if ($NoHas) {
     $dir = Join-Path $Out 'shots\no-has'; New-Item -ItemType Directory -Force $dir | Out-Null
@@ -215,6 +217,8 @@ try {
 # ---------- 결과 ----------
 $json = $report | ConvertTo-Json -Depth 12
 [IO.File]::WriteAllText((Join-Path $Out 'device-report.json'), $json, $utf8)
+$clipOk = $null
+try { $clipOk = ([IO.File]::ReadAllText((Join-Path $PSScriptRoot 'known-issues.json'), $utf8) | ConvertFrom-Json).__textClip } catch {}
 $L = New-Object System.Collections.Generic.List[string]
 $L.Add("1화 모바일 측정  $($report.engine)  $($report.startedAt)")
 $L.Add('※ Chromium 흉내 측정 — iOS Safari·실제 휴대폰 결과가 아님')
@@ -230,7 +234,11 @@ foreach ($r in $report.profiles) {
   $L.Add(("  작업 시간  스크립트 {0}ms · 레이아웃 {1}ms({2}회) · 스타일 {3}ms({4}회)" -f $r.cdp.ScriptMs, $r.cdp.LayoutMs, $r.cdp.LayoutCount, $r.cdp.StyleMs, $r.cdp.RecalcStyleCount))
   $c = $r.checks
   $L.Add(("  검사     가로 넘침 {0}개 · 글자 잘림 {1}개 · 그림 밖 말풍선 {2}개 (겹친 대사 {3}개 중) · 깨진 그림 {4}개 · lazy 없는 그림 {5}개 · 문서 폭 {6}/{7}" -f $c.overflow.Count, $c.clipped.Count, $c.bubbleOutside.Count, $c.overlayLines, $c.broken.Count, $c.notLazy, $c.docScrollWidth, $c.clientWidth))
-  foreach ($x in $c.clipped) { $L.Add("             글자 잘림: $($x.cut)컷 <$($x.el)> '$($x.text)' (내용 $($x.sw)×$($x.sh) / 상자 $($x.cw)×$($x.ch))") }
+  foreach ($x in $c.clipped) {
+    $intended = $clipOk -and ($clipOk.cuts -contains [int]$x.cut) -and ($clipOk.classes -contains ($x.el -replace '^[a-z0-9]+\.', ''))
+    $label = if ($intended) { '의도된 말줄임' } else { '글자 잘림' }
+    $L.Add("             ${label}: $($x.cut)컷 <$($x.el)> '$($x.text)' (내용 $($x.sw)×$($x.sh) / 상자 $($x.cw)×$($x.ch))")
+  }
   foreach ($x in $c.bubbleOutside) { $L.Add("             그림 밖 말풍선: $($x.cut)컷 '$($x.text)'") }
   foreach ($x in $c.overflow) { $L.Add("             가로 넘침: $($x.cut)컷 <$($x.el)> $($x.left)~$($x.right)") }
   if ($c.smallText.Count) {

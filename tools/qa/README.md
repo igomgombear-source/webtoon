@@ -90,6 +90,7 @@ powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1                  # 
 powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Profiles iphone-se,galaxy-a
 powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Shots            # + 375px 컷별 캡처 70장 (out/shots/iphone-se)
 powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -NoHas            # + :has() 미지원 흉내 경계 비교 (out/shots/no-has)
+powershell -ExecutionPolicy Bypass -File tools\qa\device.ps1 -Profiles narrow-320 -Shots -ShotProfile narrow-320   # 320px 측정·캡처
 ```
 
 Edge(또는 Chrome)를 개발자 도구 프로토콜로 직접 조종해 휴대폰 화면 크기·픽셀 밀도·터치·User-Agent·CPU 감속·통신 속도를 흉내 낸다. 설치할 것 없음.
@@ -101,6 +102,7 @@ Edge(또는 Chrome)를 개발자 도구 프로토콜로 직접 조종해 휴대�
 | `galaxy-a` | 360×800 @3x | ×4 | 4G |
 | `pixel-7` | 412×915 @2.625x | ×2 | 4G |
 | `slow-3g` | 375×667 @2x | ×4 | 3G (1.6Mbps, 300ms) |
+| `narrow-320` (기본 실행에서 빠짐, `-Profiles` 로 지정) | 320×568 @2x | ×2 | 4G |
 
 재는 것 (`out/device-report.txt`)
 - **첫 화면**: DOM 준비, 가장 큰 그림 표시(LCP), 첫 화면에서 받은 그림 수·용량, 화면 3개 아래 그림을 미리 받았는지

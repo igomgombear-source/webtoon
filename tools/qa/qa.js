@@ -454,7 +454,7 @@
             (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) && (el.textContent || '').trim()) {
           /* 안 보이는 부분 추정: 상자 높이 비율만큼 앞부분이 보인다 */
           var txt = el.textContent.trim(), seen = Math.floor(txt.length * el.clientHeight / el.scrollHeight);
-          r.clipped.push(pad(+no) + '컷 "…' + txt.slice(Math.max(0, seen - 2)).slice(0, 40) + '" 부분이 잘림 (상자 ' + el.clientHeight + 'px / 글자 ' + el.scrollHeight + 'px)');
+          r.clipped.push({ cut: +no, cls: String(el.className).split(' ')[0], msg: pad(+no) + '컷 "…' + txt.slice(Math.max(0, seen - 2)).slice(0, 40) + '" 부분이 잘림 (상자 ' + el.clientHeight + 'px / 글자 ' + el.scrollHeight + 'px)' });
         }
         var own = Array.prototype.some.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
         var fs = parseFloat(cs.fontSize);
@@ -472,7 +472,12 @@
       if (r.notLazy.length) add('warn', tag, 'loading="lazy" 가 없는 그림 ' + r.notLazy.length + '개: ' + r.notLazy.slice(0, 3).join(', '));
       if (r.farRequestedAtTop) add('warn', tag, '첫 화면에서 화면 3개 이상 아래 그림 ' + r.farRequestedAtTop + '개를 미리 받음 (지연 로딩 확인)');
       if (r.lineOverflow.length) add('warn', tag, '그림 밖으로 나간 대사 상자: ' + r.lineOverflow.join(', '));
-      r.clipped.forEach(function (t) { add('warn', tag, '글자 잘림: ' + t); });
+      /* known-issues.json 의 __textClip: 총괄이 '의도된 말줄임'으로 판단한 컷은 참고로 */
+      var ok = KNOWN.__textClip || { cuts: [], classes: [] };
+      r.clipped.forEach(function (c) {
+        if (ok.cuts.indexOf(c.cut) >= 0 && ok.classes.indexOf(c.cls) >= 0) add('info', tag, '의도된 말줄임: ' + c.msg + ' — ' + ok.reason);
+        else add('warn', tag, '글자 잘림: ' + c.msg);
+      });
       Object.keys(r.smallText).sort(function (a, b) { return a - b; }).forEach(function (px) {
         add('info', tag, px + 'px 글자 (12px 미만, 휴대폰에서 작음): 컷 ' + r.smallText[px].join(','));
       });
