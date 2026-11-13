@@ -110,10 +110,10 @@
 },
 {
 "no": 7,
-"type": "panel",
+"type": "black",
 "width": 100,
-"ratio": "4:3",
-"shape": "box",
+"ratio": null,
+"shape": null,
 "after": 320,
 "before": 0,
 "time": null,
@@ -2216,14 +2216,17 @@
 "type": "panel",
 "width": 100,
 "ratio": "3:1",
-"shape": "box",
+"shape": "strip",
 "after": 96,
 "before": 0,
 "time": null,
 "scene": {
 "date": "11월 1일 일요일"
 },
-"rows": null,
+"rows": [
+1,
+1
+],
 "lines": [],
 "at": [],
 "inset": null,

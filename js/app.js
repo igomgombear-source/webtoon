@@ -394,7 +394,7 @@
 
     var body = '';
     if (cut.type === 'black') {
-      body = '<div class="black-cut"><p>' + esc(cut.text) + '</p></div>';
+      body = '<div class="black-cut' + (ep.layout === 'v3' ? ' is-serif' : '') + '"><p>' + esc(cut.text) + '</p></div>';   /* is-serif: 제작기준 v2 의 Noto Serif KR (v3 판만, 70컷 화면은 그대로) */
     } else if (cut.type === 'phone') {
       body = renderPhone(cut) + renderLines(ep, cut).below;
     } else if (ep.layout === 'v3') {

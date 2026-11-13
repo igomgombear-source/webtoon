@@ -46,7 +46,8 @@
       if (c.no !== i + 1) add(res, 'fail', 'data.order', 0, i + 1, '번호 순서 ' + c.no);
       if (!s) return;
       function eq(id, a, b) { if (JSON.stringify(a) !== JSON.stringify(b)) add(res, 'fail', id, 0, c.no, '기준 ' + JSON.stringify(b) + ' ≠ 데이터 ' + JSON.stringify(a)); }
-      eq('spec.width', c.width || 100, s.width); eq('spec.ratio', c.ratio, s.ratio); eq('spec.shape', c.shape, s.shape);
+      eq('spec.type', c.type, s.type);
+      eq('spec.width', c.width || 100, s.width); eq('spec.ratio', c.ratio || null, s.ratio); eq('spec.shape', c.shape || null, s.shape);
       eq('spec.after', c.spacing.after, s.after); eq('spec.before', c.spacing.before || 0, s.before);
       eq('spec.time', (c.datetime && c.datetime.time) || null, s.time);
       eq('spec.lines', (c.lines || []).map(function (l) { return [l.who || '', l.style, l.text]; }), s.lines);
@@ -71,6 +72,11 @@
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
     var c74 = cuts.filter(function (c) { return c.no === 74; })[0];
     if (!c74 || (c74.lines || []).length !== 1 || c74.lines[0].who || c74.lines[0].style !== 'silence') add(res, 'fail', 'data.silence', 0, 74, '74컷은 화자 없는 침묵(silence) 1줄이어야 함');
+    /* 7컷: 정본상 그림 없는 텍스트 컷 ‘이틀 전’ / 88컷: 3:1 띠 2장(각 1080×360, 사이 8) */
+    var c7 = cuts[6], c88 = cuts[87];
+    if (!c7 || c7.type !== 'black' || c7.text !== '이틀 전' || c7.image || c7.rows) add(res, 'fail', 'data.text7', 0, 7, '7컷은 type black · text ‘이틀 전’ · 그림 없음이어야 함');
+    var r88 = c88 && c88.rows;
+    if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
     f.remove();
   }
 
@@ -124,6 +130,39 @@
         if (!wrapEl || !wrapEl.classList.contains('has-ovf-' + data.overflow.edge) || !mk.classList.contains('is-overflow')) add(res, 'fail', 'overflow.reserve', w, no, '틀 밖 예약 여백이 없음');
       }
     });
+    /* 7컷 텍스트 컷 — 검은 화면 가운데 ‘이틀 전’ (Noto Serif KR 22px, 높이 520·뒤 320 @360), 임시 컷 표시 없음 */
+    var u = col / 360, t7 = d.getElementById('cut-07');
+    if (!t7 || !t7.classList.contains('cut-black')) add(res, 'fail', 'text7.type', w, 7, '7컷이 텍스트 컷으로 그려지지 않음');
+    else {
+      var tb = t7.querySelector('.black-cut'), tp = t7.querySelector('.black-cut p');
+      if (!tp || tp.textContent.trim() !== '이틀 전') add(res, 'fail', 'text7.text', w, 7, '글자가 ‘이틀 전’이 아님');
+      else {
+        var tcs = win.getComputedStyle(tp), tr = rect(tp), br = rect(tb);
+        if (parseFloat(tcs.fontSize) !== 22) add(res, 'fail', 'text7.font', w, 7, '글자 크기 ' + tcs.fontSize + ' ≠ 22px');
+        if (tcs.fontFamily.replace(/"/g, '').indexOf('Noto Serif KR') !== 0) add(res, 'fail', 'text7.family', w, 7, '글꼴 ' + tcs.fontFamily + ' (Noto Serif KR 이어야 함)');
+        if (Math.abs((tr.left + tr.right) / 2 - (br.left + br.right) / 2) > 3 || Math.abs((tr.top + tr.bottom) / 2 - (br.top + br.bottom) / 2) > 3) add(res, 'fail', 'text7.center', w, 7, '글자가 가운데가 아님');
+        if (Math.abs(br.height - 520 * u) > 2) add(res, 'fail', 'text7.height', w, 7, '검은 화면 높이 ' + br.height.toFixed(1) + ' ≠ ' + (520 * u).toFixed(1));
+        if (Math.abs(rect(t7).height - 840 * u) > 2) add(res, 'fail', 'text7.after', w, 7, '컷 전체 높이(검은 화면 520 + 뒤 정지 320) ' + rect(t7).height.toFixed(1) + ' ≠ ' + (840 * u).toFixed(1));
+        if (tcs.color === 'rgba(0, 0, 0, 0)' || /^rgb\((0|1?\d), (0|1?\d), (0|1?\d)\)$/.test(tcs.color)) add(res, 'fail', 'text7.color', w, 7, '글자색이 회백색이 아님 ' + tcs.color);
+      }
+      if (t7.querySelector('.placeholder,.art,.cut-wrap')) add(res, 'fail', 'text7.placeholder', w, 7, '7컷에 임시 컷·그림 영역이 남아 있음');
+    }
+    /* 88컷 띠 2장 — 3:1, 폭 100%, 사이 8px(360 기준) */
+    var t88 = d.getElementById('cut-88');
+    if (t88) {
+      var rows88 = [].slice.call(t88.querySelectorAll('.panel-row')), cw88 = t88.querySelector('.cut-wrap');
+      if (rows88.length !== 2 || !cw88 || !cw88.classList.contains('is-strip')) add(res, 'fail', 'strip88.count', w, 88, '띠 ' + rows88.length + '장 (2장이어야 함)');
+      else {
+        rows88.forEach(function (r, i) {
+          var rr = rect(r);
+          if (Math.abs(rr.width / rr.height - 3) > 0.03) add(res, 'fail', 'strip88.ratio', w, 88, (i + 1) + '번째 띠 비율 ' + (rr.width / rr.height).toFixed(3) + ' ≠ 3:1');
+          if (Math.abs(rr.width - col) > 1.5) add(res, 'fail', 'strip88.width', w, 88, (i + 1) + '번째 띠 폭 ' + rr.width.toFixed(1) + ' ≠ ' + col.toFixed(1));
+        });
+        var gap88 = rect(rows88[1]).top - rect(rows88[0]).bottom;
+        if (Math.abs(gap88 - 8 * u) > 1.5) add(res, 'fail', 'strip88.gap', w, 88, '띠 사이 ' + gap88.toFixed(1) + 'px ≠ ' + (8 * u).toFixed(1));
+        if (rect(t88.querySelector('.panel-row')).height < 1) add(res, 'fail', 'strip88.empty', w, 88, '띠 높이가 0');
+      }
+    }
     engineChecks(res, w, d, win, cuts);
     /* 휴대폰 */
     function phoneText(no) { var c = d.getElementById('cut-' + String(no).padStart(2, '0')); return c ? (c.querySelector('.lock-time') || {}).textContent : null; }

@@ -66,3 +66,6 @@ html.bv4-pending .cut .panel-bubbles, html.bv4-pending .cut .lines { visibility:
 
 .bv4-join path { fill: #fff; stroke: none; }
 .bv4-join .bv4-join-line { fill: none; stroke: #23262c; stroke-width: 1.5; }
+
+/* 7컷 텍스트 컷 ‘이틀 전’ (104컷 제작판만): 제작기준 v2 — Noto Serif KR 22px, 회백색. 크기·간격·색은 style.css 의 void 규칙 */
+.black-cut.is-serif p { font-family: "Noto Serif KR", "Noto Serif CJK KR", "AppleMyungjo", "Nanum Myeongjo", serif; font-weight: 500; }
