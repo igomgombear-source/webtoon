@@ -453,29 +453,91 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
   .reveal[data-mood] > * { opacity: 1 !important; transition: none !important; }
 }
 
-
-/* ===== 104컷 제작판: 컷 폭·정렬·모양, 경계 말풍선, 휴대폰 배경 사진 ===== */
+/* ===== 104컷 제작판 (ep.layout === 'v3') ===== */
 .cut-wrap { position: relative; width: var(--cw, 100%); }
 .cut-wrap.w-center { margin-left: auto; margin-right: auto; }
 .cut-wrap.w-left { margin-left: 0; margin-right: auto; }
 .cut-wrap.w-right { margin-left: auto; margin-right: 0; }
-.cut-frame { width: 100%; }
-.cut-frame.shape-slant-r { clip-path: polygon(0 0, 100% 7%, 100% 100%, 0 100%); }
-.cut-frame.shape-slant-l { clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 100%); }
-.cut-frame.shape-bleed { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); }
-.edge-line { position: absolute; z-index: 4; max-width: 86%; }
-.edge-line.edge-top { top: 0; transform: translateY(-50%); }
-.edge-line.edge-bottom { bottom: 0; transform: translateY(50%); }
-.cut-wrap.has-edge-top { margin-top: 28px; }
-.cut-wrap.has-edge-bottom { margin-bottom: 28px; }
-.draft-badge { position: absolute; right: 8px; bottom: 8px; z-index: 5; padding: 2px 6px; font-size: 10px; letter-spacing: .08em; color: #fff; background: rgba(0,0,0,.55); border-radius: 3px; pointer-events: none; }
-.phone-screen.has-wall { background-size: cover; background-position: center; }
-.phone-screen.has-wall.view-notification, .phone.view-notification .phone-screen.has-wall { color: #111; }
-.phone-screen.has-wall .ph-status { visibility: hidden; }
-.phone-screen.has-wall .notif-stack { position: absolute; left: 0; right: 0; bottom: 14%; padding-top: 0; }
-.phone-screen.has-wall { aspect-ratio: 1080 / 2400; min-height: 0; padding: 0; }
+.cut-wrap.has-edge-top { margin-top: 30px; }
+.cut-wrap.has-edge-bottom { margin-bottom: 30px; }
+.cut-wrap.has-ovf-top { margin-top: var(--ovf, 32px); }
+.cut-wrap.has-ovf-bottom { margin-bottom: var(--ovf, 32px); }
 
-/* 그림 위 겹침 말풍선: pos.anchor 'tl' 은 (x,y)를 말풍선의 왼쪽 위 모서리로 쓴다 */
-.line.is-overlay.anchor-tl { transform: none; max-width: 92%; }
-.line.is-overlay.line-thought .bubble { background: rgba(10,12,16,.84); color: #f2f4f6; }
-.is-narrow .line.is-overlay .bubble { font-size: 14px; padding: 8px 11px; }
+.panel-row { display: flex; width: 100%; position: relative; }
+.panel { position: relative; min-width: 0; }
+.panel-row > .panel + .panel { box-shadow: -2px 0 0 0 rgba(8,10,15,.9); }
+.panel-row > .panel .panel-mask, .panel-row > .panel .art { height: 100%; }
+.panel-row > .panel .art { aspect-ratio: auto; }
+.panel-mask { width: 100%; height: 100%; position: relative; }
+.panel-mask.shape-slant-r { clip-path: polygon(0 0, 100% 7%, 100% 100%, 0 100%); }
+.panel-mask.shape-slant-l { clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 100%); }
+.panel-mask.shape-bleed { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); }
+/* 분할: 가운데 경계를 완만한 사선으로 (두 컷이 맞물림) */
+.panel-row.is-diagonal > .panel.diag-first .panel-mask { clip-path: polygon(0 0, 100% 0, 94% 100%, 0 100%); }
+.panel-row.is-diagonal > .panel.diag-last { margin-left: -6%; }
+.panel-row.is-diagonal > .panel.diag-last .panel-mask { clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%); }
+/* 틀 밖: 마스크·잘림 없이 그림이 경계를 넘는다 */
+.panel-mask.is-overflow, .panel-mask.is-overflow .art { overflow: visible; }
+.ovf-chip { position: absolute; z-index: 3; left: 18%; padding: 2px 8px; font-size: 11px; color: #cfd6df; background: rgba(60,70,84,.9); border: 1px dashed #8c96a3; border-radius: 10px; pointer-events: none; }
+.ovf-chip.ovf-top { top: calc(-1 * var(--ovf, 32px) * .6); }
+.ovf-chip.ovf-bottom { bottom: calc(-1 * var(--ovf, 32px) * .6); }
+/* 이어짐 / 인셋 */
+.cut[data-link="prev"] { margin-top: 0 !important; }
+.cut[data-link="prev"] .panel-mask .art { box-shadow: none; border-top: 0; }
+.cut[data-inset="prev"] { z-index: 2; }
+.cut[data-inset="prev"] .panel-mask { box-shadow: 0 4px 18px rgba(0,0,0,.55), 0 0 0 2px rgba(230,232,235,.85); }
+.inset { position: absolute; z-index: 3; aspect-ratio: 1 / 1; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.6), 0 0 0 2px rgba(230,232,235,.8); background: #11151b; }
+.inset-tr { top: 4%; right: 4%; } .inset-tl { top: 4%; left: 4%; }
+.inset-br { bottom: 4%; right: 4%; } .inset-bl { bottom: 4%; left: 4%; }
+.inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.inset-recall img { filter: saturate(.35) brightness(.9); }
+.inset-crack { aspect-ratio: auto; background: rgba(210,225,240,.14); -webkit-backdrop-filter: blur(1.5px); backdrop-filter: blur(1.5px); clip-path: polygon(0 0, 100% 4%, 94% 100%, 6% 96%); box-shadow: none; padding: 8px 10px; }
+.inset-text { margin: 0; font-size: 13px; line-height: 1.45; color: rgba(238,244,250,.82); text-shadow: 0 0 6px rgba(190,210,235,.55); filter: blur(.35px); }
+.draft-badge { position: absolute; right: 8px; bottom: 8px; z-index: 5; padding: 2px 6px; font-size: 10px; letter-spacing: .08em; color: #fff; background: rgba(0,0,0,.55); border-radius: 3px; pointer-events: none; }
+
+/* 말풍선 레이어 (마스크 밖) */
+.panel-bubbles { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.bgrp { position: absolute; display: flex; flex-direction: column; gap: 6px; max-width: 94%; }
+.bgrp .line { max-width: 100%; }
+.at-in-tl { top: 3%; left: 3%; align-items: flex-start; }
+.at-in-tr { top: 3%; right: 3%; align-items: flex-end; max-width: 62%; }
+.at-in-bl { bottom: 3%; left: 3%; align-items: flex-start; }
+.at-in-br { bottom: 3%; right: 3%; align-items: flex-end; }
+.at-edge-top-l { top: 0; left: 4%; transform: translateY(-50%); align-items: flex-start; }
+.at-edge-top-r { top: 0; right: 4%; transform: translateY(-50%); align-items: flex-end; }
+.at-edge-bottom-l { bottom: 0; left: 4%; transform: translateY(50%); align-items: flex-start; }
+.at-edge-bottom-r { bottom: 0; right: 4%; transform: translateY(50%); align-items: flex-end; }
+.bgrp .line-thought .bubble { background: rgba(10,12,16,.86); color: #f2f4f6; }
+.bgrp .line-speech .bubble, .bgrp .line-phone .bubble { box-shadow: 0 1px 6px rgba(0,0,0,.35); }
+.line.is-small .bubble { font-size: 15px; padding: 7px 12px; }
+.line.is-small.line-speech .bubble { font-size: 16px; }
+.gap-lines { padding-top: 12px; }
+
+/* 휴대폰: 배경 사진(wall) + 시계·날짜·알림 UI 분리 */
+.phone-screen.has-wall { background-size: cover; background-position: center; aspect-ratio: 1080 / 2400; min-height: 0; padding: 0; container-type: inline-size; }
+.phone-screen.has-wall .ph-status { visibility: hidden; }
+.phone-screen.has-wall .lock-clock { position: absolute; left: 0; right: 0; top: 10.6%; padding: 0; text-align: center; color: #fffaf4; }
+.phone-screen.has-wall .lock-date { font-size: 5.4cqw; font-weight: 700; opacity: 1; text-shadow: 0 0 .5cqw rgba(20,30,45,.85), 0 .3cqw 1.2cqw rgba(20,30,45,.45); }
+.phone-screen.has-wall .lock-time { margin: 0; font-size: 24cqw; line-height: .98; font-weight: 800; letter-spacing: -.02em; text-shadow: 0 0 .8cqw rgba(30,35,50,.55), 0 .6cqw 2cqw rgba(20,30,45,.35); }
+.phone-screen.has-wall .notif-stack { position: absolute; left: 0; right: 0; bottom: 14%; padding: 0 3cqw; }
+.phone-seungmin .phone-screen.has-wall .lock-clock { color: #1b1612; }
+.phone-seungmin .phone-screen.has-wall .lock-date, .phone-seungmin .phone-screen.has-wall .lock-time { text-shadow: none; }
+.phone-preview { padding: 8px 0 0; }
+.pp-note { margin: 0 0 6px; text-align: center; font-size: 12px; color: var(--text-dim); }
+
+/* --- 보정 --- */
+/* 인셋(앞 컷에 걸침): mood 컷은 간격이 padding 이라 음수가 안 먹히므로, 앞 컷 쪽으로 끌어올린다 */
+.cut[data-inset="prev"] { margin-top: calc(var(--before, 0) * var(--u)); padding-top: 0; }
+/* 이어짐: 경계 말풍선이 있어도 앞 컷과 면이 끊기지 않게 위 여백을 만들지 않는다 */
+.cut[data-link="prev"] .cut-wrap { margin-top: 0; }
+.cut[data-link="prev"][data-mood] { padding-top: 0; }
+.at-in-tr { max-width: 94%; }
+.gap-lines .line { max-width: 94%; }
+.is-narrow .line-speech .bubble, .is-narrow .line-thought .bubble { padding: 8px 11px; }
+.at-edge-bottom-l, .at-edge-bottom-r, .at-edge-top-l, .at-edge-top-r { max-width: 74%; }
+.panel { container-type: inline-size; }
+@container (max-width: 250px) { .at-edge-bottom-l, .at-edge-bottom-r, .at-edge-top-l, .at-edge-top-r { max-width: 94%; } }
+.panel-row.is-diagonal .bgrp { max-width: 80%; }
+.at-in-br2 { bottom: 17%; right: 3%; align-items: flex-end; }
+/* 잠금화면 배경 사진: 기본 view-lock 그라데이션(shorthand)보다 우선 */
+.phone .phone-screen.has-wall { background-size: cover !important; background-position: center top !important; background-repeat: no-repeat !important; background-color: #1d2530; }

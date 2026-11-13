@@ -1,0 +1,2638 @@
+{
+"cuts": [
+{
+"no": 1,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "bleed",
+"after": 320,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 2,
+"type": "panel",
+"width": 100,
+"ratio": "3:4",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 3,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 4,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "slant-r",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 5,
+"type": "panel",
+"width": 55,
+"ratio": "1:1",
+"shape": "box",
+"after": 200,
+"before": -90,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": "prev",
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 6,
+"type": "panel",
+"width": 100,
+"ratio": "9:20",
+"shape": "bleed",
+"after": 360,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 7,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 320,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 8,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": {
+"date": "10월 30일 금요일",
+"place": "양평중학교"
+},
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 9,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 10,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"세 사람이 ‘저기 호랑이 있다’고 하면, 없던 호랑이도 있는 게 돼."
+],
+[
+"승민",
+"speech",
+"말이 여러 번 돌면 사실처럼 들린다는 거지."
+]
+],
+"at": [
+"in-tl",
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 11,
+"type": "panel",
+"width": 85,
+"ratio": "4:3",
+"shape": "slant-l",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"학생",
+"speech",
+"쌤, 그럼 ‘내일 리허설 없다’고 세 명이 말하면 리허설 없어져요?"
+],
+[
+"학생",
+"speech",
+"없다!"
+],
+[
+"학생",
+"speech",
+"없다!"
+]
+],
+"at": [
+"in-tr",
+"edge-bottom-r",
+"edge-bottom-r"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 12,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"호랑이는 생겨도 리허설은 안 없어져. 합창부, 내일 아홉 시 강당."
+],
+[
+"승민",
+"speech",
+"그러니까 들은 말은 꼭 직접 확인하고."
+]
+],
+"at": [
+"edge-top-l",
+"in-br"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 13,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "slant-r",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"학생",
+"speech",
+"쌤 안녕히 계세요!"
+]
+],
+"at": [
+"in-tl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 14,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 160,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 15,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": {
+"time": "16:40",
+"place": "교무실"
+},
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 16,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 17,
+"type": "panel",
+"width": 80,
+"ratio": "4:3",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"최기훈",
+"speech",
+"내일 리허설은 예정대로 아홉 시, 강당입니다. 토요일인데 다들 고생 많으십니다."
+],
+[
+"교사",
+"speech",
+"네에, 기훈쌤."
+]
+],
+"at": [
+"in-tr",
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 18,
+"type": "panel",
+"width": 100,
+"ratio": "3:4",
+"shape": "split2",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [
+[
+"효은",
+"speech",
+"승민쌤도 내일 나오세요?"
+],
+[
+"승민",
+"speech",
+"네, 음향석 맡았잖아요. 큐시트도 오늘 마무리해야 하고요."
+],
+[
+"효은",
+"speech",
+"토요일 아침부터… 고생하시겠다."
+]
+],
+"at": [
+"in-tl",
+"gap",
+"edge-bottom-r"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 19,
+"type": "panel",
+"width": 100,
+"ratio": "3:1",
+"shape": "strip",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+1,
+1,
+1
+],
+"lines": [
+[
+"효은",
+"speech",
+"먼저 들어갈게요. 내일 파이팅!"
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 20,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": "20:31",
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"작년 자료…? 나중에 봐야지."
+]
+],
+"at": [
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 21,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "bleed",
+"after": 0,
+"before": 0,
+"time": "21:20",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 22,
+"type": "panel",
+"width": 55,
+"ratio": "4:5",
+"shape": "box",
+"after": 120,
+"before": -90,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…통화 중이시네."
+]
+],
+"at": [
+"in-bl"
+],
+"inset": "prev",
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 23,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "split2",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 24,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "slant-r",
+"after": 0,
+"before": 0,
+"time": "21:37",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 25,
+"type": "panel",
+"width": 70,
+"ratio": "1:1",
+"shape": "box",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"승민쌤."
+]
+],
+"at": [
+"edge-top-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 26,
+"type": "panel",
+"width": 100,
+"ratio": "3:4",
+"shape": "split2",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [
+[
+"승민",
+"speech",
+"해인쌤? 아직 계셨어요?"
+]
+],
+"at": [
+"in-tl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 27,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"퇴근하시는데 죄송해요. 내일 리허설 말인데요."
+]
+],
+"at": [
+"in-tl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 28,
+"type": "panel",
+"width": 80,
+"ratio": "3:4",
+"shape": "overflow",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"내일 아침에 행사 준비 맡으신 직원분이 합창제 준비로 잠깐 나오신대요."
+],
+[
+"해인",
+"speech",
+"평일엔 수업 때문에 시간이 안 맞아서,"
+],
+[
+"해인",
+"speech",
+"그때 작년 행사 서류를 같이 보기로 했어요."
+],
+[
+"해인",
+"speech",
+"리허설 앞부분만 대신 진행해 주실 수 있어요?"
+]
+],
+"at": [
+"in-tr",
+"in-tr",
+"in-tr",
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": "top",
+"phoneClock": null
+},
+{
+"no": 29,
+"type": "panel",
+"width": 70,
+"ratio": "1:1",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"네. 아홉 시에 강당에서 시작하면 되죠?"
+]
+],
+"at": [
+"in-bl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 30,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "strip",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 31,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"음원은 이 휴대폰에 순서대로 넣어 놨어요."
+],
+[
+"해인",
+"speech",
+"강당 장비에 맞춰서 시작 부분이랑 음량도 다 맞춰 놨고요."
+]
+],
+"at": [
+"edge-top-l",
+"in-br"
+],
+"inset": null,
+"link": "prev",
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 32,
+"type": "panel",
+"width": 60,
+"ratio": "1:1",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"휴대폰을 맡기시게요? 파일만 보내 주셔도 되는데."
+]
+],
+"at": [
+"in-tl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 33,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+1,
+2
+],
+"lines": [
+[
+"해인",
+"speech",
+"옮기면 다시 다 맞춰야 해서요."
+],
+[
+"해인",
+"speech",
+"첫 곡은 그대로 틀기만 하면 돼요."
+],
+[
+"승민",
+"speech",
+"그 뒤에 반복할 곡은요?"
+],
+[
+"해인",
+"speech",
+"그건 컴퓨터로 옮겨도 돼요."
+],
+[
+"해인",
+"speech",
+"시작이랑 음량만 맞춰 주세요."
+]
+],
+"at": [
+"in-tl",
+"in-tl",
+"in-tl",
+"in-tl",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 34,
+"type": "panel",
+"width": 70,
+"ratio": "4:5",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"근데 해인쌤, 괜찮으세요? 얼굴이 좀…"
+]
+],
+"at": [
+"in-br"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 35,
+"type": "panel",
+"width": 60,
+"ratio": "3:4",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"피곤해서 그래요. 합창제 끝나면 좀 쉬어야죠."
+]
+],
+"at": [
+"in-tl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 36,
+"type": "panel",
+"width": 60,
+"ratio": "4:3",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"아, 그리고 아까 공유폴더 보내셨던데요."
+]
+],
+"at": [
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 37,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "strip",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"아…"
+],
+[
+"해인",
+"speech",
+"그건 천천히 보셔도 돼요. 아직 확인 중인 거라서요."
+]
+],
+"at": [
+"in-tl",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 38,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"휴대폰은 언제 돌려드리면 될까요?"
+],
+[
+"해인",
+"speech",
+"열 시 반쯤 제가 강당으로 찾으러 갈게요. 잠금은 풀어 둘게요."
+]
+],
+"at": [
+"in-tr",
+"in-bl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 39,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "bleed",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 40,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"고마워요."
+],
+[
+"해인",
+"speech",
+"승민쌤은 확인하고 말하는 사람이라 좋아요."
+],
+[
+"승민",
+"speech",
+"…네?"
+]
+],
+"at": [
+"in-tl",
+"edge-bottom-l",
+"in-br2"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 41,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "box",
+"after": 200,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"해인",
+"speech",
+"내일 열 시 반에 봬요."
+]
+],
+"at": [
+"in-tr"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 42,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "bleed",
+"after": 360,
+"before": 0,
+"time": "21:49",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 43,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": {
+"date": "10월 31일 토요일",
+"time": "08:52",
+"place": "양평중학교 강당"
+},
+"rows": null,
+"lines": [
+[
+"부장",
+"speech",
+"1학년 앞줄! 핸드폰 무음!"
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 44,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "box",
+"after": 40,
+"before": 0,
+"time": "08:58",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 45,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": "09:00",
+"scene": null,
+"rows": null,
+"lines": [
+[
+"부장",
+"speech",
+"쌤, 1번 곡이요!"
+]
+],
+"at": [
+"edge-top-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 46,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "overflow",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": "bottom",
+"phoneClock": null
+},
+{
+"no": 47,
+"type": "panel",
+"width": 60,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"잘 되네."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 48,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "slant-r",
+"after": 0,
+"before": 0,
+"time": "09:17",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 49,
+"type": "phone",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": "09:17",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": "09:17"
+},
+{
+"no": 50,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"홍온유…? 어디서 들어 본 이름인데."
+],
+[
+"",
+"thought",
+"‘이번에도’…? 무슨 일이지."
+]
+],
+"at": [
+"in-tr",
+"in-tr"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 51,
+"type": "panel",
+"width": 70,
+"ratio": "3:2",
+"shape": "slant-l",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"부장",
+"speech",
+"쌤! 2번 곡 넘어가도 돼요?"
+]
+],
+"at": [
+"edge-top-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 52,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "split2",
+"after": 160,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [
+[
+"",
+"thought",
+"…남의 문자야."
+],
+[
+"승민",
+"speech",
+"응! 넘어갈게!"
+]
+],
+"at": [
+"in-tl",
+"in-tr"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 53,
+"type": "panel",
+"width": 80,
+"ratio": "4:3",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": "09:40",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 54,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": "10:15",
+"scene": null,
+"rows": null,
+"lines": [
+[
+"부장",
+"speech",
+"쌤, 해인쌤 오늘 안 오세요? 2부 곡은 해인쌤이랑 맞춰 봐야 하는데."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 55,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "overflow",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"열 시 반에 오신댔어. 2부는 다음에 해인쌤이랑 맞추자."
+],
+[
+"학생들",
+"speech",
+"네에~ 안녕히 계세요!"
+]
+],
+"at": [
+"in-tl",
+"edge-bottom-r"
+],
+"inset": null,
+"link": null,
+"overflow": "bottom",
+"phoneClock": null
+},
+{
+"no": 56,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "bleed",
+"after": 200,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 57,
+"type": "panel",
+"width": 60,
+"ratio": "3:4",
+"shape": "box",
+"after": 160,
+"before": 0,
+"time": "10:30",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 58,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 59,
+"type": "panel",
+"width": 80,
+"ratio": "4:3",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": "10:33",
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"전화해 볼까…."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 60,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…걸어 봤자 이 폰이 울리겠지."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 61,
+"type": "panel",
+"width": 60,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…연락할 방법이 없잖아."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 62,
+"type": "panel",
+"width": 100,
+"ratio": "3:1",
+"shape": "strip",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"교무실이면 해인쌤 다른 연락처를 알지도."
+],
+[
+"",
+"phone",
+"뚜르르… 뚜르르…"
+],
+[
+"",
+"thought",
+"토요일이라 아무도 없겠지."
+]
+],
+"at": [
+"gap",
+"in-tr",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 63,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": "10:36"
+},
+{
+"no": 64,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "slant-r",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"행사 준비 맡으신 직원분이랑 서류 보신다고 하셨지."
+],
+[
+"",
+"thought",
+"…가 보자."
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 65,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": "10:45",
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"효은쌤이…? 토요일에?"
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 66,
+"type": "panel",
+"width": 100,
+"ratio": "3:4",
+"shape": "box",
+"after": 48,
+"before": 0,
+"time": "10:50",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 67,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "box",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"효은",
+"speech",
+"승민쌤, 계셨네요."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 68,
+"type": "panel",
+"width": 80,
+"ratio": "3:4",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"효은",
+"speech",
+"해인쌤이 몸이 좀 안 좋으셔서, 오늘 못 오신대요."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 69,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "box",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"네? …어제 저녁에도 좀 피곤해 보이시긴 했는데."
+]
+],
+"at": [
+"gap"
+],
+"inset": "self",
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 70,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"효은",
+"speech",
+"해인쌤 휴대폰, 승민쌤이 갖고 계시죠?"
+],
+[
+"효은",
+"speech",
+"제가 전해 드리기로 했어요."
+]
+],
+"at": [
+"edge-top-l",
+"in-bl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 71,
+"type": "panel",
+"width": 100,
+"ratio": "4:1",
+"shape": "strip",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…그것까지 아시네."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 72,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"그럼… 해인쌤이랑 직접 통화해 볼 수 있을까요?"
+],
+[
+"승민",
+"speech",
+"괜찮으신지 여쭤보고 싶어서요."
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 73,
+"type": "panel",
+"width": 70,
+"ratio": "1:1",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"효은",
+"speech",
+"지금은 쉬셔야 한대요. 제가 바로 갖다 드릴게요."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 74,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "bleed",
+"after": 120,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"speech",
+"……"
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 75,
+"type": "panel",
+"width": 100,
+"ratio": "3:4",
+"shape": "split2",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [
+[
+"승민",
+"speech",
+"…음원은 학교 컴퓨터에 옮겨 놨다고 전해 주세요."
+],
+[
+"승민",
+"speech",
+"첫 곡은 해인쌤이 맞춰 두신 그대로 틀었고요."
+],
+[
+"효은",
+"speech",
+"네, 전할게요."
+]
+],
+"at": [
+"gap",
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 76,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "bleed",
+"after": 120,
+"before": 0,
+"time": "10:52",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 77,
+"type": "panel",
+"width": 70,
+"ratio": "3:4",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"효은",
+"speech",
+"고생하셨어요."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 78,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "bleed",
+"after": 180,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 79,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…근데."
+],
+[
+"",
+"thought",
+"해인쌤 폰은 어제부터 계속 나한테 있었는데."
+],
+[
+"",
+"thought",
+"어떻게 연락하셨지?"
+]
+],
+"at": [
+"in-tl",
+"in-br",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 80,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "slant-l",
+"after": 360,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"…학교 전화로 하셨겠지."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 81,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": {
+"date": "10월 31일 토요일",
+"time": "19:20",
+"place": "승민의 집"
+},
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 82,
+"type": "panel",
+"width": 70,
+"ratio": "1:1",
+"shape": "slant-r",
+"after": 0,
+"before": 0,
+"time": "19:36",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 83,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 84,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "bleed",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"다행이다."
+],
+[
+"",
+"thought",
+"무사하셨구나."
+]
+],
+"at": [
+"in-tl",
+"edge-bottom-l"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 85,
+"type": "panel",
+"width": 80,
+"ratio": "4:3",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"휴대폰도 잘 받으셨구나."
+],
+[
+"",
+"thought",
+"효은쌤이 잘 전해 주셨네."
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 86,
+"type": "panel",
+"width": 60,
+"ratio": "1:1",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": "19:40",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 87,
+"type": "panel",
+"width": 100,
+"ratio": "16:9",
+"shape": "bleed",
+"after": 240,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 88,
+"type": "panel",
+"width": 100,
+"ratio": "3:1",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": {
+"date": "11월 1일 일요일"
+},
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 89,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 200,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 90,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "split2",
+"after": 400,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [
+[
+"",
+"thought",
+"쉬신다는데."
+],
+[
+"",
+"thought",
+"월요일에 학교에서 뵙지 뭐."
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 91,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": {
+"date": "11월 2일 월요일",
+"time": "07:48"
+},
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 92,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 0,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 93,
+"type": "panel",
+"width": 80,
+"ratio": "1:1",
+"shape": "box",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"",
+"thought",
+"경찰서…?"
+],
+[
+"",
+"thought",
+"나한테 왜…"
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 94,
+"type": "panel",
+"width": 100,
+"ratio": "1:1",
+"shape": "split2",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": [
+2
+],
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 95,
+"type": "panel",
+"width": 100,
+"ratio": "4:3",
+"shape": "box",
+"after": 32,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"문상윤",
+"phone",
+"이승민 선생님 되십니까? 양평경찰서 문상윤 순경입니다."
+]
+],
+"at": [
+"in-tr"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 96,
+"type": "panel",
+"width": 70,
+"ratio": "4:5",
+"shape": "box",
+"after": 8,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"네… 맞는데요."
+],
+[
+"문상윤",
+"phone",
+"양평중학교 권해인 선생님과 같이 근무하시죠?"
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 97,
+"type": "panel",
+"width": 60,
+"ratio": "1:1",
+"shape": "box",
+"after": 200,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"네. …해인쌤한테 무슨 일 있어요?"
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 98,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "bleed",
+"after": 320,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"문상윤",
+"phone",
+"권해인 선생님께서 어제 저녁, 양평문화회관 계단에서 숨진 채 발견되셨습니다."
+]
+],
+"at": [
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 99,
+"type": "panel",
+"width": 100,
+"ratio": "3:1",
+"shape": "strip",
+"after": 200,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 100,
+"type": "panel",
+"width": 100,
+"ratio": "2:1",
+"shape": "slant-l",
+"after": 48,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 101,
+"type": "panel",
+"width": 80,
+"ratio": "4:5",
+"shape": "box",
+"after": 72,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"문상윤",
+"phone",
+"…선생님? 듣고 계십니까?"
+],
+[
+"승민",
+"speech",
+"…네."
+]
+],
+"at": [
+"gap",
+"gap"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 102,
+"type": "panel",
+"width": 100,
+"ratio": "9:16",
+"shape": "box",
+"after": 96,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"문상윤",
+"phone",
+"정확한 경위는 확인하고 있습니다."
+],
+[
+"문상윤",
+"phone",
+"몇 가지 여쭤볼 게 있어서 연락드렸습니다."
+],
+[
+"문상윤",
+"phone",
+"최근에 권 선생님 건강 상태에 대해 들으신 게 있으십니까?"
+]
+],
+"at": [
+"in-tl",
+"in-tl",
+"in-bl"
+],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 103,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "box",
+"after": 260,
+"before": 0,
+"time": null,
+"scene": null,
+"rows": null,
+"lines": [
+[
+"승민",
+"speech",
+"그저께… 몸이 안 좋다는 문자를 받았습니다."
+]
+],
+"at": [
+"gap"
+],
+"inset": "self",
+"link": null,
+"overflow": null,
+"phoneClock": null
+},
+{
+"no": 104,
+"type": "panel",
+"width": 100,
+"ratio": "4:5",
+"shape": "bleed",
+"after": 48,
+"before": 0,
+"time": "07:56",
+"scene": null,
+"rows": null,
+"lines": [],
+"at": [],
+"inset": null,
+"link": null,
+"overflow": null,
+"phoneClock": null
+}
+]
+}

@@ -87,26 +87,21 @@
     var style = line.style || 'speech';
     var sp = (ep.speakers && ep.speakers[line.who]) || {};
     var side = line.side || sp.side || 'left';
-    var name = (ep.showSpeakerNames && line.who && style !== 'caption')
+    var name = (ep.showSpeakerNames && line.who && style !== 'caption' && !line.hideName)
       ? '<span class="who">' + esc(line.who) + (style === 'phone' ? ' · 전화' : '') + '</span>' : '';
     var pos = '';
     if (overlay && line.pos) {
       pos = ' style="left:' + Number(line.pos.x) + '%;top:' + Number(line.pos.y) + '%;"';
     }
-    return '<div class="line line-' + style + ' side-' + side + (overlay && line.pos ? ' is-overlay' : '') + (overlay && line.pos && line.pos.anchor === 'tl' ? ' anchor-tl' : '') + '"' + pos + '>' +
+    return '<div class="line line-' + style + ' side-' + side + (line.small ? ' is-small' : '') + (overlay && line.pos ? ' is-overlay' : '') + '"' + pos + '>' +
       name + '<p class="bubble">' + esc(line.text) + '</p></div>';
   }
 
   function renderLines(ep, cut) {
     var lines = cut.lines || [];
-    var edge = lines.filter(function (l) { return l.pos && l.pos.edge; });
-    var over = lines.filter(function (l) { return l.pos && !l.pos.edge; });
+    var over = lines.filter(function (l) { return l.pos; });
     var below = lines.filter(function (l) { return !l.pos; });
     return {
-      edge: edge.map(function (l) {
-        return '<div class="edge-line edge-' + (l.pos.edge === 'bottom' ? 'bottom' : 'top') + '" style="left:' + Number(l.pos.x) + '%;">' +
-          renderLine(ep, l, false) + '</div>';
-      }).join(''),
       overlay: over.map(function (l) { return renderLine(ep, l, true); }).join(''),
       below: below.length ? '<div class="lines">' + below.map(function (l) { return renderLine(ep, l, false); }).join('') + '</div>' : ''
     };
@@ -289,22 +284,88 @@
     '</div>';
   }
 
-  /* ---------- 컷 폭·정렬·모양 ----------
-   * cut.width  컷 가로폭 % (기본 100, 360px 기준 55~100)
-   * cut.align  'left' | 'center' | 'right' (width 가 100 미만일 때)
-   * cut.shape  'box' 기본 | 'slant-r' 위 경계가 오른쪽으로 내려감 | 'slant-l' 반대 | 'bleed' 위아래가 배경색으로 번짐
-   *            ('split2','strip','link','inset','overflow' 는 아직 단일 컷으로 그린다 — 데이터에는 기록만)
-   * line.pos { x, y, edge:'top'|'bottom' } edge 가 있으면 컷 위·아래 경계에 걸쳐 놓는다 (x 는 컷 폭 기준 %) */
-  var SHAPES = { 'slant-r': 1, 'slant-l': 1, bleed: 1 };
-  function renderWrap(cut, artHtml, edgeHtml) {
+  /* ---------- 104컷 제작판 레이아웃 (ep.layout === 'v3') ----------
+   * 컷 필드
+   *   width/align  컷 가로폭 %, 'left'|'right'|(가운데)
+   *   shape        'box' | 'slant-r' | 'slant-l' | 'bleed' (단일 컷의 그림 마스크)
+   *   rows         [[panel, panel], [panel]] 한 줄에 2~3컷(split2), 얇은 띠 여러 개(strip), 위1+아래2(stack)
+   *                panel { ratio:'3:4', image?, imageSize?, imageStatus?, time?, tone?, desc? }
+   *   rowGap       줄 사이 간격(px, 360 기준)
+   *   diagonal     true 면 줄 안의 컷 경계를 완만한 사선으로
+   *   inset        { to:'prev' } 앞 컷 모서리에 걸쳐 겹침(spacing.before 를 음수로)
+   *                { to:'self', corner:'tr', width:30, image?, text?, kind?:'recall'|'crack' } 이 컷 안의 작은 인셋
+   *   link         'prev' 앞 컷과 면이 이어짐(위 간격 0)
+   *   overflow     { edge:'top'|'bottom', size:px, note } 그림이 틀 밖으로 나감(틀 밖 예약 여백)
+   * 대사 필드
+   *   at     'in-tl' 'in-tr' 'in-bl' 'in-br' 컷 안쪽 | 'edge-top-l' 'edge-top-r' 'edge-bottom-l' 'edge-bottom-r' 경계에 걸침 | 'gap' 컷 아래 여백(기본)
+   *   panel  몇 번째 컷에 둘지(줄 순서대로 0부터)   small  작게
+   * 말풍선은 그림 마스크 밖 레이어(.panel-bubbles)에 그려 clip-path·overflow 에 잘리지 않는다. */
+  function ratioVal(r) { var p = String(r || '4:3').split(':'); return (parseFloat(p[0]) || 4) / (parseFloat(p[1]) || 3); }
+  var SHAPE_OK = { 'slant-r': 1, 'slant-l': 1, bleed: 1 };
+
+  function bubbleGroups(ep, lines, panelIdx) {
+    var groups = {}, order = [];
+    lines.forEach(function (l) {
+      if ((l.panel || 0) !== panelIdx) return;
+      var at = l.at || 'gap';
+      if (at === 'gap') return;
+      if (!groups[at]) { groups[at] = []; order.push(at); }
+      var prev = groups[at].length ? groups[at][groups[at].length - 1].who : null;
+      groups[at].push({ who: l.who, html: renderLine(ep, prev !== null && prev === l.who ? Object.assign({}, l, { hideName: true }) : l, false) });
+    });
+    return order.map(function (at) {
+      return '<div class="bgrp at-' + at + '">' + groups[at].map(function (g) { return g.html; }).join('') + '</div>';
+    }).join('');
+  }
+
+  function renderInsetSelf(ep, cut) {
+    var i = cut.inset;
+    if (!i || i.to !== 'self') return '';
+    var inner = i.image
+      ? '<img src="' + esc(/^(\.|\/|https?:|assets\/)/.test(i.image) ? i.image : (ep.imageBase || '') + i.image) + '" alt="" loading="lazy" decoding="async">'
+      : '<p class="inset-text">' + esc(i.text || '') + '</p>';
+    return '<div class="inset inset-' + esc(i.corner || 'tr') + ' inset-' + esc(i.kind || 'plain') + '" style="width:' + Number(i.width || 30) + '%;">' + inner + '</div>';
+  }
+
+  function renderPanelsV3(ep, cut, lines) {
+    var rows = cut.rows || [[{ ratio: cut.ratio, image: cut.image, imageSize: cut.imageSize, imageStatus: cut.imageStatus }]];
     var w = Math.max(40, Math.min(100, Number(cut.width) || 100));
     var al = cut.align === 'left' || cut.align === 'right' ? cut.align : 'center';
-    var shape = SHAPES[cut.shape] ? ' shape-' + cut.shape : '';
-    var hasTop = /edge-top/.test(edgeHtml || ''), hasBottom = /edge-bottom/.test(edgeHtml || '');
-    return '<div class="cut-wrap w-' + al + (w < 100 ? ' is-narrow' : '') + (hasTop ? ' has-edge-top' : '') + (hasBottom ? ' has-edge-bottom' : '') +
-      '" style="--cw:' + w + '%;">' +
-      '<div class="cut-frame' + shape + '">' + artHtml + '</div>' + (edgeHtml || '') + '</div>';
+    var shape = SHAPE_OK[cut.shape] ? ' shape-' + cut.shape : '';
+    var ov = cut.overflow || null;
+    var idx = 0, first = true;
+    var hasEdgeTop = lines.some(function (l) { return /^edge-top/.test(l.at || ''); });
+    var hasEdgeBottom = lines.some(function (l) { return /^edge-bottom/.test(l.at || ''); });
+    var html = rows.map(function (row, ri) {
+      var sum = row.reduce(function (a, p) { return a + ratioVal(p.ratio || cut.ratio); }, 0);
+      var panels = row.map(function (p, pi) {
+        var dt = p.time ? { time: p.time } : (first && cut.datetime ? cut.datetime : null);
+        first = false;
+        var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus,
+          ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt };
+        var diag = cut.diagonal && row.length > 1 ? ' diag-' + (pi === 0 ? 'first' : 'last') : '';
+        var me = idx++;
+        return '<div class="panel' + diag + '" data-panel="' + me + '" style="flex:' + Math.round(ratioVal(p.ratio || cut.ratio) * 1000) + ' 1 0%;">' +
+          '<div class="panel-mask' + (rows.length === 1 && row.length === 1 ? shape : '') + (ov ? ' is-overflow' : '') + '">' + renderArt(ep, pc, '') +
+            (ov && me === 0 ? '<span class="ovf-chip ovf-' + esc(ov.edge) + '" aria-hidden="true">' + esc(ov.note || '틀 밖') + '</span>' : '') +
+          '</div>' +
+          (me === 0 ? renderInsetSelf(ep, cut) : '') +
+          '<div class="panel-bubbles">' + bubbleGroups(ep, lines, me) + '</div>' +
+        '</div>';
+      }).join('');
+      return '<div class="panel-row' + (cut.diagonal && row.length > 1 ? ' is-diagonal' : '') + '" style="aspect-ratio:' + sum + ' / 1;' +
+        (ri > 0 && cut.rowGap ? 'margin-top:calc(' + Number(cut.rowGap) + ' * var(--u));' : '') + '">' + panels + '</div>';
+    }).join('');
+    var cls = 'cut-wrap w-' + al + (w < 100 ? ' is-narrow' : '') + (hasEdgeTop ? ' has-edge-top' : '') + (hasEdgeBottom ? ' has-edge-bottom' : '') +
+      (ov ? ' has-ovf-' + esc(ov.edge) : '');
+    return '<div class="' + cls + '" style="--cw:' + w + '%;' + (ov ? '--ovf:' + Number(ov.size || 32) + 'px;' : '') + '">' + html + '</div>';
   }
+
+  function renderGapLines(ep, lines) {
+    var g = lines.filter(function (l) { return (l.at || 'gap') === 'gap'; });
+    return g.length ? '<div class="lines gap-lines">' + g.map(function (l) { return renderLine(ep, l, false); }).join('') + '</div>' : '';
+  }
+
 
   /* ---------- 컷 ---------- */
   function renderCut(ep, cut) {
@@ -319,13 +380,21 @@
       body = '<div class="black-cut"><p>' + esc(cut.text) + '</p></div>';
     } else if (cut.type === 'phone') {
       body = renderPhone(cut) + renderLines(ep, cut).below;
+    } else if (ep.layout === 'v3') {
+      var ls = cut.lines || [];
+      if (cut.phonePreview && cut.phone) {
+        body = '<div class="phone-preview"><p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기</p>' + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
+      } else {
+        body = renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
+      }
     } else {
       var L = renderLines(ep, cut);
-      body = renderWrap(cut, renderArt(ep, cut, L.overlay), L.edge) + L.below;
+      body = renderArt(ep, cut, L.overlay) + L.below;
     }
 
     html += '<section class="cut cut-' + esc(cut.type) + ' reveal" id="cut-' + pad2(cut.no) + '" data-no="' + cut.no +
       '" data-transition="' + esc(cut.transition || 'fade') + '"' + moodAttr(cut.mood) +
+      (cut.link ? ' data-link="' + esc(cut.link) + '"' : '') + (cut.inset && cut.inset.to === 'prev' ? ' data-inset="prev"' : '') +
       ' style="--before:' + Number(before) + ';--after:' + Number(after) + ';">' + body + '</section>';
     return html;
   }

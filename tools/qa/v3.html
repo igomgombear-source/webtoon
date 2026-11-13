@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>104컷 제작판 자동 검수</title>
+<style>body{font:14px system-ui;margin:16px}pre{white-space:pre-wrap}.f{color:#b00}.w{color:#a60}.i{color:#555}</style></head>
+<body><p>저장소 루트에서 <code>python -m http.server 8765</code> 후 <code>http://localhost:8765/tools/qa/v3.html</code></p>
+<button id="go">검수 실행</button><pre id="out"></pre>
+<script>
+/* 알려진 한계(정본 문구를 바꾸지 않고는 해결 불가) — 숨기지 않고 '정보'로 따로 보고 */
+window.V3_KNOWN = {};
+</script>
+<script src="v3.js"></script>
+<script>
+document.getElementById('go').onclick = async function () {
+  var out = document.getElementById('out'); out.textContent = '실행 중…\n';
+  var r; try { r = await runV3QA(function (m) { out.textContent += m + '\n'; }); } catch (e) { out.textContent += '검수 중 오류: ' + e + '\n'; window.__v3err = String(e && e.stack || e); window.__v3done = true; return; }
+  window.__v3 = r;
+  function show(label, cls, list) { out.innerHTML += '\n<b class="' + cls + '">' + label + ' ' + list.length + '건</b>\n' + list.map(function (x) { return '  [' + x.id + '] ' + (x.w ? x.w + 'px ' : '') + (x.no ? '#' + x.no + ' ' : '') + x.msg; }).join('\n'); }
+  show('FAIL', 'f', r.fail); show('WARN', 'w', r.warn); show('INFO', 'i', r.info);
+  out.innerHTML += '\n\n완료';
+  window.__v3done = true;
+};
+if (location.search.indexOf('auto') >= 0) document.getElementById('go').click();
+</script></body></html>
