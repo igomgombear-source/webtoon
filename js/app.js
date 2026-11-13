@@ -93,15 +93,20 @@
     if (overlay && line.pos) {
       pos = ' style="left:' + Number(line.pos.x) + '%;top:' + Number(line.pos.y) + '%;"';
     }
-    return '<div class="line line-' + style + ' side-' + side + (overlay && line.pos ? ' is-overlay' : '') + '"' + pos + '>' +
+    return '<div class="line line-' + style + ' side-' + side + (overlay && line.pos ? ' is-overlay' : '') + (overlay && line.pos && line.pos.anchor === 'tl' ? ' anchor-tl' : '') + '"' + pos + '>' +
       name + '<p class="bubble">' + esc(line.text) + '</p></div>';
   }
 
   function renderLines(ep, cut) {
     var lines = cut.lines || [];
-    var over = lines.filter(function (l) { return l.pos; });
+    var edge = lines.filter(function (l) { return l.pos && l.pos.edge; });
+    var over = lines.filter(function (l) { return l.pos && !l.pos.edge; });
     var below = lines.filter(function (l) { return !l.pos; });
     return {
+      edge: edge.map(function (l) {
+        return '<div class="edge-line edge-' + (l.pos.edge === 'bottom' ? 'bottom' : 'top') + '" style="left:' + Number(l.pos.x) + '%;">' +
+          renderLine(ep, l, false) + '</div>';
+      }).join(''),
       overlay: over.map(function (l) { return renderLine(ep, l, true); }).join(''),
       below: below.length ? '<div class="lines">' + below.map(function (l) { return renderLine(ep, l, false); }).join('') + '</div>' : ''
     };
@@ -149,6 +154,7 @@
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
           ' loading="lazy" decoding="async">' +
+        (cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
         time + overlayHtml + '</div>';
     }
 
@@ -266,7 +272,8 @@
     var label = owner === 'haein' ? '해인의 휴대폰' : '승민의 휴대폰';
     /* 화면 속 문자·메일 글자를 화면 읽기 프로그램이 읽을 수 있도록 role="img" 를 쓰지 않는다 */
     return '<figure class="phone-wrap"><div class="phone phone-' + owner + ' view-' + esc(p.view || 'none') + (p.focus ? ' is-focus' : '') + '">' +
-      '<div class="phone-screen">' + inner + '</div></div>' +
+      '<div class="phone-screen' + (p.wall ? ' has-wall' : '') + '"' +
+        (p.wall ? ' style="background-image:url(' + esc(p.wall) + ')"' : '') + '>' + inner + '</div></div>' +
       '<figcaption class="phone-owner">' + label + '</figcaption></figure>';
   }
 
@@ -280,6 +287,23 @@
       '<p class="scene-when">' + parts + '</p>' +
       (sc.place ? '<p class="scene-place">' + esc(sc.place) + '</p>' : '') +
     '</div>';
+  }
+
+  /* ---------- 컷 폭·정렬·모양 ----------
+   * cut.width  컷 가로폭 % (기본 100, 360px 기준 55~100)
+   * cut.align  'left' | 'center' | 'right' (width 가 100 미만일 때)
+   * cut.shape  'box' 기본 | 'slant-r' 위 경계가 오른쪽으로 내려감 | 'slant-l' 반대 | 'bleed' 위아래가 배경색으로 번짐
+   *            ('split2','strip','link','inset','overflow' 는 아직 단일 컷으로 그린다 — 데이터에는 기록만)
+   * line.pos { x, y, edge:'top'|'bottom' } edge 가 있으면 컷 위·아래 경계에 걸쳐 놓는다 (x 는 컷 폭 기준 %) */
+  var SHAPES = { 'slant-r': 1, 'slant-l': 1, bleed: 1 };
+  function renderWrap(cut, artHtml, edgeHtml) {
+    var w = Math.max(40, Math.min(100, Number(cut.width) || 100));
+    var al = cut.align === 'left' || cut.align === 'right' ? cut.align : 'center';
+    var shape = SHAPES[cut.shape] ? ' shape-' + cut.shape : '';
+    var hasTop = /edge-top/.test(edgeHtml || ''), hasBottom = /edge-bottom/.test(edgeHtml || '');
+    return '<div class="cut-wrap w-' + al + (w < 100 ? ' is-narrow' : '') + (hasTop ? ' has-edge-top' : '') + (hasBottom ? ' has-edge-bottom' : '') +
+      '" style="--cw:' + w + '%;">' +
+      '<div class="cut-frame' + shape + '">' + artHtml + '</div>' + (edgeHtml || '') + '</div>';
   }
 
   /* ---------- 컷 ---------- */
@@ -297,7 +321,7 @@
       body = renderPhone(cut) + renderLines(ep, cut).below;
     } else {
       var L = renderLines(ep, cut);
-      body = renderArt(ep, cut, L.overlay) + L.below;
+      body = renderWrap(cut, renderArt(ep, cut, L.overlay), L.edge) + L.below;
     }
 
     html += '<section class="cut cut-' + esc(cut.type) + ' reveal" id="cut-' + pad2(cut.no) + '" data-no="' + cut.no +

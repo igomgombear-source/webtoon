@@ -17,6 +17,7 @@ WEBTOON.series = {
   status: '6화 완결 예정',
   episodes: [
     { id: 'ep01', no: 1, title: '마지막 부탁', ready: true, file: 'data/ep01.js' },
+    { id: 'ep01v3', no: 1, title: '마지막 부탁 · 104컷 제작판(개발 중)', ready: true, file: 'data/ep01v3.js' },
     { id: 'ep02', no: 2, title: '', ready: false },
     { id: 'ep03', no: 3, title: '', ready: false },
     { id: 'ep04', no: 4, title: '', ready: false },

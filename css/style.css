@@ -452,3 +452,30 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
 @media (prefers-reduced-motion: reduce) {
   .reveal[data-mood] > * { opacity: 1 !important; transition: none !important; }
 }
+
+
+/* ===== 104컷 제작판: 컷 폭·정렬·모양, 경계 말풍선, 휴대폰 배경 사진 ===== */
+.cut-wrap { position: relative; width: var(--cw, 100%); }
+.cut-wrap.w-center { margin-left: auto; margin-right: auto; }
+.cut-wrap.w-left { margin-left: 0; margin-right: auto; }
+.cut-wrap.w-right { margin-left: auto; margin-right: 0; }
+.cut-frame { width: 100%; }
+.cut-frame.shape-slant-r { clip-path: polygon(0 0, 100% 7%, 100% 100%, 0 100%); }
+.cut-frame.shape-slant-l { clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 100%); }
+.cut-frame.shape-bleed { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 93%, transparent 100%); }
+.edge-line { position: absolute; z-index: 4; max-width: 86%; }
+.edge-line.edge-top { top: 0; transform: translateY(-50%); }
+.edge-line.edge-bottom { bottom: 0; transform: translateY(50%); }
+.cut-wrap.has-edge-top { margin-top: 28px; }
+.cut-wrap.has-edge-bottom { margin-bottom: 28px; }
+.draft-badge { position: absolute; right: 8px; bottom: 8px; z-index: 5; padding: 2px 6px; font-size: 10px; letter-spacing: .08em; color: #fff; background: rgba(0,0,0,.55); border-radius: 3px; pointer-events: none; }
+.phone-screen.has-wall { background-size: cover; background-position: center; }
+.phone-screen.has-wall.view-notification, .phone.view-notification .phone-screen.has-wall { color: #111; }
+.phone-screen.has-wall .ph-status { visibility: hidden; }
+.phone-screen.has-wall .notif-stack { position: absolute; left: 0; right: 0; bottom: 14%; padding-top: 0; }
+.phone-screen.has-wall { aspect-ratio: 1080 / 2400; min-height: 0; padding: 0; }
+
+/* 그림 위 겹침 말풍선: pos.anchor 'tl' 은 (x,y)를 말풍선의 왼쪽 위 모서리로 쓴다 */
+.line.is-overlay.anchor-tl { transform: none; max-width: 92%; }
+.line.is-overlay.line-thought .bubble { background: rgba(10,12,16,.84); color: #f2f4f6; }
+.is-narrow .line.is-overlay .bubble { font-size: 14px; padding: 8px 11px; }
