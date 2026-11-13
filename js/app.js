@@ -308,7 +308,7 @@
     lines.forEach(function (l) {
       if ((l.panel || 0) !== panelIdx) return;
       var at = l.at || 'gap';
-      if (at === 'gap') return;
+      if (at === 'gap' || at === 'above') return;
       if (!groups[at]) { groups[at] = []; order.push(at); }
       var prev = groups[at].length ? groups[at][groups[at].length - 1].who : null;
       groups[at].push({ who: l.who, html: renderLine(ep, prev !== null && prev === l.who ? Object.assign({}, l, { hideName: true }) : l, false) });
@@ -361,6 +361,12 @@
     return '<div class="' + cls + '" style="--cw:' + w + '%;' + (ov ? '--ovf:' + Number(ov.size || 32) + 'px;' : '') + '">' + html + '</div>';
   }
 
+  /* 컷 위 여백 띠: 그림 위가 아니라 그림 앞(흐름 안)에 놓는다 — 얼굴을 가리지 않는 말풍선 자리 */
+  function renderAboveLines(ep, lines) {
+    var g = lines.filter(function (l) { return l.at === 'above'; });
+    return g.length ? '<div class="lines above-lines">' + g.map(function (l) { return renderLine(ep, l, false); }).join('') + '</div>' : '';
+  }
+
   function renderGapLines(ep, lines) {
     var g = lines.filter(function (l) { return (l.at || 'gap') === 'gap'; });
     return g.length ? '<div class="lines gap-lines">' + g.map(function (l) { return renderLine(ep, l, false); }).join('') + '</div>' : '';
@@ -385,7 +391,7 @@
       if (cut.phonePreview && cut.phone) {
         body = '<div class="phone-preview"><p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기</p>' + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
       } else {
-        body = renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
+        body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
       }
     } else {
       var L = renderLines(ep, cut);

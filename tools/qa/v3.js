@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   var WIDTHS = [320, 360, 390, 430, 768];
-  var AT_OK = { 'in-tl': 1, 'in-tr': 1, 'in-bl': 1, 'in-br': 1, 'in-br2': 1, 'edge-top-l': 1, 'edge-top-r': 1, 'edge-bottom-l': 1, 'edge-bottom-r': 1, gap: 1 };
+  var AT_OK = { 'in-tl': 1, 'in-tr': 1, 'in-bl': 1, 'in-br': 1, 'in-br2': 1, 'edge-top-l': 1, 'edge-top-r': 1, 'edge-bottom-l': 1, 'edge-bottom-r': 1, gap: 1, above: 1 };
   /* 알려진 한계: 정본 문구를 바꾸지 않고는 지킬 수 없는 항목. 숨기지 않고 info 로 따로 보고한다 */
   var KNOWN = window.V3_KNOWN || {};
 
