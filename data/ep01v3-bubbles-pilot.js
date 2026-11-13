@@ -13,7 +13,7 @@
  */
 window.EP01V3_BUBBLE_PILOT = {
   18: {
-    note: '분할2 · 일반 대화(효은→승민→효은)',
+    note: '분할2 · 일반 대화(효은→승민→효은). 아래 여백에서는 화자 쪽으로 좌우 지그재그',
     zones: [
       { panel: 0, x: 30, y: 12, w: 42, h: 42, label: '효은 얼굴', approved: false },
       { panel: 1, x: 16, y: 46, w: 68, h: 40, label: '귤 받는 손', approved: false }
@@ -21,7 +21,7 @@ window.EP01V3_BUBBLE_PILOT = {
     lines: [
       { type: 'speech', pref: { panel: 0, at: 'in-tl' }, region: 'panel', tail: { panel: 0, x: 52, y: 44 } },
       { type: 'speech', pref: { panel: 1, x: 0, y: 30 }, region: 'row', tail: { panel: 1, x: 96, y: 22 } },
-      { type: 'speech', pref: { panel: 1, at: 'edge-bottom-r' }, region: 'panel', edge: true, tail: { panel: 0, x: 52, y: 44 } }
+      { type: 'speech', pref: { panel: 1, at: 'edge-bottom-r' }, bandPref: { panel: 0, x: 55, y: 100 }, region: 'panel', edge: true, tail: { panel: 0, x: 52, y: 44 } }
     ]
   },
   33: {
@@ -43,27 +43,27 @@ window.EP01V3_BUBBLE_PILOT = {
     ]
   },
   50: {
-    note: '승인 원화 · 인물 중심 독백 2개',
+    note: '승인 원화 · 인물 중심 독백 2개 (제작기준 좌상·우하 → 얼굴을 피해 우상 벽·우하 믹서로, 오른쪽 끝선 맞춤)',
     zones: [
-      { panel: 0, x: 24, y: 8, w: 34, h: 45, label: '얼굴·눈·앞머리·표정', approved: true },
+      { panel: 0, x: 24, y: 8, w: 32, h: 45, label: '얼굴·눈·앞머리·표정', approved: true },
       { panel: 0, x: 17, y: 70, w: 50, h: 22, label: '손·멈춘 검지', approved: true },
       { panel: 0, x: 55, y: 78, w: 42, h: 19, label: '휴대폰 화면', approved: true }
     ],
     lines: [
-      { type: 'mono', pref: { panel: 0, at: 'in-tl' }, region: 'panel' },
-      { type: 'mono', pref: { panel: 0, at: 'in-br' }, region: 'panel' }
+      { type: 'mono', pref: { panel: 0, x: 82, y: 12 }, region: 'panel' },
+      { type: 'mono', pref: { panel: 0, x: 82, y: 60 }, region: 'panel' }
     ]
   },
   62: {
-    note: '3:1 띠 · 독백 → 전화 음성 → 독백',
+    note: '3:1 띠 · 독백(띠 위 여백) → 전화 음성(띠 안 폰 옆) → 독백(띠 아래 여백) — 폭과 관계없이 같은 구성',
     zones: [
       { panel: 0, x: 44, y: 4, w: 22, h: 80, label: '승민 옆얼굴·귀의 폰', approved: false },
       { panel: 0, x: 42, y: 66, w: 22, h: 34, label: '가슴에 댄 해인의 폰', approved: false }
     ],
     lines: [
-      { type: 'mono', pref: { panel: 0, at: 'in-bl' }, region: 'panel' },
+      { type: 'mono', pref: { panel: 0, x: 22, y: 0 }, region: 'panel', place: 'above' },
       { type: 'phone', pref: { panel: 0, x: 86, y: 30 }, region: 'panel', tail: { panel: 0, x: 63, y: 36 } },
-      { type: 'mono', pref: { panel: 0, at: 'in-bl' }, region: 'panel' }
+      { type: 'mono', pref: { panel: 0, x: 22, y: 100 }, region: 'panel', place: 'below' }
     ]
   },
   83: {
@@ -76,7 +76,7 @@ window.EP01V3_BUBBLE_PILOT = {
       title: '권해인 쌤',
       messages: [
         { me: true, time: '19:20', text: '해인쌤, 몸은 좀 괜찮으세요? 휴대폰은 효은쌤께 드렸어요.' },
-        { me: false, time: '19:36', text: '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 휴직도 생각 중이에요. 걱정해 주셔서 감사해요.' }
+        { me: false, keepFirst: true, time: '19:36', text: '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 휴직도 생각 중이에요. 걱정해 주셔서 감사해요.' }
       ]
     },
     lines: []
