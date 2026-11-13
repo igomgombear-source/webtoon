@@ -1,4 +1,16 @@
-/* 말풍선 v4 (시범) — body.bv4-on 일 때만 적용. 기본 화면에는 영향 없음 */
+/* 말풍선 v4 — 104컷 제작판(ep01v3)에 적용. 70컷판(ep01)에는 영향 없음 */
+/* ---------- 글꼴 (제작기준 9-6: Pretendard 말·자막·폰 UI, Noto Serif KR 독백) — 직접 호스팅, font-display: swap, OFL ---------- */
+@font-face { font-family: "Pretendard"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/Pretendard-Medium.subset.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 600; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/Pretendard-SemiBold.subset.woff2") format("woff2"); }
+@font-face { font-family: "Noto Serif KR"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("../assets/fonts/NotoSerifKR-Medium.subset.woff") format("woff"); }
+
+/* 배치가 끝나기 전에는 예전 렌더러의 말풍선을 보이지 않게 (js/bubbles.js 가 켜고 끈다) */
+html.bv4-pending .cut .panel-bubbles, html.bv4-pending .cut .lines { visibility: hidden; }
+
+
 .bv4-measure { position: absolute; left: -9999px; top: 0; visibility: hidden; pointer-events: none; }
 
 .bv4-text {

@@ -9,11 +9,11 @@
 
   function add(res, level, id, w, no, msg) { res[level].push({ id: id, w: w, no: no, msg: msg }); }
 
-  function loadFrame(w) {
+  function loadFrame(w, query) {
     return new Promise(function (ok) {
       var f = document.createElement('iframe');
       f.style.cssText = 'width:' + w + 'px;height:800px;border:0;position:absolute;left:0;top:0;visibility:hidden';
-      f.src = '../../index.html#ep01v3';
+      f.src = '../../index.html' + (query || '') + '#ep01v3';
       f.onload = function () { ok(f); };
       document.body.appendChild(f);
     });
@@ -22,6 +22,8 @@
   async function settle(f) {
     var d = f.contentDocument, win = f.contentWindow;
     for (var i = 0; i < 60 && !d.querySelector('.cut'); i++) await wait(100);
+    /* 말풍선 엔진이 글꼴을 불러온 뒤 배치를 끝낼 때까지 기다린다 (bubbles=off 는 제외) */
+    if (!/bubbles=off/.test(f.src)) for (var j = 0; j < 100 && !d.body.classList.contains('bv4-done'); j++) await wait(100);
     var H = d.documentElement.scrollHeight;
     for (var y = 0; y < H; y += 500) { win.scrollTo(0, y); await wait(18); }
     win.scrollTo(0, 0);
@@ -66,6 +68,7 @@
     if (JSON.stringify(withImg) !== '[1,16,35,50,66,76]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (현재 승인: 1·16·35·50·66·76)');
     var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
     if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
+    if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
     var c74 = cuts.filter(function (c) { return c.no === 74; })[0];
     if (!c74 || (c74.lines || []).length !== 1 || c74.lines[0].who || c74.lines[0].style !== 'silence') add(res, 'fail', 'data.silence', 0, 74, '74컷은 화자 없는 침묵(silence) 1줄이어야 함');
     f.remove();
@@ -80,23 +83,6 @@
     var spec = {}; /* 폭 기준값 */
     cuts.forEach(function (cut) {
       var no = +cut.dataset.no;
-      var bubbles = [].slice.call(cut.querySelectorAll('.line'));
-      bubbles.forEach(function (ln) {
-        var b = ln.querySelector('.bubble'), r = rect(b), cs = win.getComputedStyle(b), fs = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || fs * 1.55;
-        if (no === 33) { var pn = ln.closest('.panel'); if (pn) { var pr = rect(pn); if (r.left < pr.left - 1 || r.right > pr.right + 1 || r.top < pr.top - 1 || r.bottom > pr.bottom + 1) add(res, 'fail', 'bubble.inpanel', w, no, '33컷 말풍선이 조각 밖: ' + b.textContent.slice(0, 12)); } }
-        if (no === 74 && (ln.querySelector('.who') || /none|rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) === false)) add(res, 'fail', 'silence.form', w, no, '74컷에 화자/말풍선 배경이 있음');
-        if (r.left < -1 || r.right > vw + 1) add(res, 'fail', 'bubble.offscreen', w, no, '말풍선이 화면 밖 ' + Math.round(r.left) + '~' + Math.round(r.right));
-        if (b.scrollHeight > b.clientHeight + 2 || b.scrollWidth > b.clientWidth + 2) add(res, 'fail', 'bubble.clipped', w, no, '글자 잘림');
-        var style = /line-thought/.test(ln.className) ? 'thought' : /line-caption/.test(ln.className) ? 'caption' : 'speech';
-        var min = style === 'thought' ? 15 : style === 'caption' ? 13 : 16;
-        if (fs < min) add(res, 'fail', 'bubble.font', w, no, style + ' 글자 ' + fs + 'px < ' + min);
-        var lines = Math.round((r.height - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) / lh);
-        var maxLines = no === 33 ? 2 : 3;
-        if (lines > maxLines) add(res, KNOWN['lines' + no] ? 'info' : 'fail', 'bubble.lines', w, no, '말풍선 ' + lines + '줄 > ' + maxLines + '줄 (' + b.textContent.slice(0, 14) + '…)');
-      });
-      /* 같은 컷 안 말풍선끼리 겹침 */
-      var rs = bubbles.map(function (l) { return rect(l.querySelector('.bubble')); });
-      for (var i = 0; i < rs.length; i++) for (var j = i + 1; j < rs.length; j++) if (hit(rs[i], rs[j])) add(res, 'fail', 'bubble.overlap', w, no, '말풍선 겹침 ' + i + '·' + j);
       /* 컷 폭·정렬 */
       var wrap = cut.querySelector('.cut-wrap');
       if (wrap) {
@@ -133,24 +119,12 @@
       }
       /* 틀 밖 */
       if (data.overflow) {
-        var chip = cut.querySelector('.ovf-chip'), mk = cut.querySelector('.panel-mask');
-        if (!chip) add(res, 'fail', 'overflow.chip', w, no, '틀 밖 요소가 없음');
-        else { var c2 = rect(chip), m2 = rect(mk); var out = data.overflow.edge === 'top' ? c2.top < m2.top - 2 : c2.bottom > m2.bottom + 2; if (!out) add(res, 'fail', 'overflow.out', w, no, '틀 밖으로 나가지 않음'); }
-      }
-      /* 경계 말풍선은 경계 위에 걸친다 */
-      [].forEach.call(cut.querySelectorAll('.bgrp'), function (g) {
-        var cls = g.className, p = g.closest('.panel'), pr = rect(p), gr = rect(g);
-        if (/at-edge-top/.test(cls) && !(gr.top < pr.top - 2 && gr.bottom > pr.top + 2)) add(res, 'fail', 'edge.top', w, no, '위 경계에 걸치지 않음');
-        if (/at-edge-bottom/.test(cls) && !(gr.top < pr.bottom - 2 && gr.bottom > pr.bottom + 2)) add(res, 'fail', 'edge.bottom', w, no, '아래 경계에 걸치지 않음');
-        if (/at-in-/.test(cls) && (gr.left < pr.left - 1 || gr.right > pr.right + 1 || gr.top < pr.top - 1 || gr.bottom > pr.bottom + 1)) add(res, 'warn', 'bubble.inside', w, no, '컷 안쪽 말풍선이 칸을 넘음(칸 ' + Math.round(pr.width) + 'x' + Math.round(pr.height) + ')');
-      });
-      /* 칸 안쪽 말풍선이 마스크(사선·분할) 경계를 넘는지: 분할 경계 침범 */
-      if (data.rows && data.rows.length && data.diagonal) {
-        [].forEach.call(cut.querySelectorAll('.panel'), function (p) {
-          [].forEach.call(p.querySelectorAll('.bgrp'), function (g) { if (/at-in-/.test(g.className)) { var gr = rect(g), pr = rect(p); if (gr.right > pr.right + 1 || gr.left < pr.left - 1) add(res, 'fail', 'bubble.diagonal', w, no, '사선 경계 침범'); } });
-        });
+        /* 독자 화면에는 '틀 밖' 표시(칩)가 없고, 틀 밖으로 나갈 예약 여백만 있다. 칩은 검수 모드에서 확인(reviewCheck) */
+        var wrapEl = cut.querySelector('.cut-wrap'), mk = cut.querySelector('.panel-mask');
+        if (!wrapEl || !wrapEl.classList.contains('has-ovf-' + data.overflow.edge) || !mk.classList.contains('is-overflow')) add(res, 'fail', 'overflow.reserve', w, no, '틀 밖 예약 여백이 없음');
       }
     });
+    engineChecks(res, w, d, win, cuts);
     /* 휴대폰 */
     function phoneText(no) { var c = d.getElementById('cut-' + String(no).padStart(2, '0')); return c ? (c.querySelector('.lock-time') || {}).textContent : null; }
     if (phoneText(49) !== '09:17') add(res, 'fail', 'phone.49', w, 49, '시계 ' + phoneText(49));
@@ -161,6 +135,79 @@
       var sr = rect(s), tr = rect(t); if (tr.left < sr.left || tr.right > sr.right) add(res, 'fail', 'phone.clock', w, n, '시계가 화면 밖');
       var nr = c.querySelector('.notif'); if (nr) { var nrr = rect(nr); if (nrr.top < tr.bottom) add(res, 'fail', 'phone.overlap', w, n, '알림이 시계를 가림'); if (nrr.bottom > sr.bottom) add(res, 'fail', 'phone.notif', w, n, '알림이 화면 밖'); }
     });
+    f.remove();
+  }
+
+
+  /* ---------- 말풍선 엔진(v4) 검수 — 독자 화면 그대로(?review 없음) ---------- */
+  var MINFONT = { speech: 16, offscreen: 16, phone: 16, mono: 15, caption: 13 };
+  function engineChecks(res, w, d, win, cuts) {
+    var R = win.__bv4, vw = win.innerWidth, ep = win.WEBTOON.episodeData.ep01v3;
+    if (!R || !d.body.classList.contains('bv4-done')) { add(res, 'fail', 'engine.notrun', w, 0, '말풍선 엔진이 끝나지 않음'); return; }
+    /* 글꼴: 실제로 불러왔는지 */
+    var faces = {}; d.fonts.forEach(function (ff) { faces[ff.family.replace(/"/g, '') + ' ' + ff.weight] = ff.status; });
+    ['Pretendard 500', 'Pretendard 600', 'Noto Serif KR 500'].forEach(function (k) { if (faces[k] !== 'loaded') add(res, 'fail', 'font.loaded', w, 0, k + ' 상태: ' + faces[k]); });
+    var withLines = ep.cuts.filter(function (c) { return c.lines && c.lines.length; }).map(function (c) { return c.no; });
+    var got = R.cuts.map(function (c) { return c.no; });
+    withLines.forEach(function (n) { if (got.indexOf(n) < 0) add(res, 'fail', 'engine.missing', w, n, '대사가 있는데 배치되지 않음'); });
+    var nProv = 0;
+    R.cuts.forEach(function (c) {
+      var no = c.no, maxLines = no === 33 ? 2 : 3;
+      if (c.textIntact === false) add(res, 'fail', 'bubble.text', w, no, '나눈 말풍선을 이으면 원래 대사와 다름');
+      if (c.status !== 'monologue-approved') nProv++;
+      c.bubbles.forEach(function (b) {
+        var tag = '[' + b.i + '] ' + (b.text || '').slice(0, 12);
+        if (b.fail) return add(res, 'fail', 'bubble.nospot', w, no, tag + ' 자리 없음');
+        if (b.textOutside) add(res, 'fail', 'bubble.text-outside', w, no, tag + ' 글자가 말풍선 밖 ' + b.textOutside + '점');
+        if (b.zoneHits && b.zoneHits.length) add(res, 'fail', 'bubble.zone', w, no, tag + ' 보호영역 침범: ' + b.zoneHits.join(','));
+        if (b.offscreen || b.tailOff) add(res, 'fail', 'bubble.offscreen', w, no, tag + ' 화면 밖');
+        if (b.font < MINFONT[b.type]) add(res, 'fail', 'bubble.font', w, no, tag + ' ' + b.type + ' 글자 ' + b.font + 'px < ' + MINFONT[b.type]);
+        if (b.lines > maxLines) add(res, 'fail', 'bubble.lines', w, no, tag + ' ' + b.lines + '줄 > ' + maxLines);
+      });
+      if (c.screen) {
+        if (c.screen.overflow || c.screen.topCut) add(res, 'fail', 'screen.overflow', w, no, '문자 화면에서 글자가 잘림');
+        c.screen.msgs.forEach(function (m) { if (m.clipped) add(res, 'fail', 'screen.clipped', w, no, '문자 말풍선 글자 잘림'); if (m.font < 13) add(res, 'fail', 'screen.font', w, no, '문자 글자 ' + m.font + 'px < 13'); });
+        var last = c.screen.msgs[c.screen.msgs.length - 1];
+        if (no === 83 && last && last.firstLine.indexOf('승민쌤, 저 해인이에요.') !== 0) add(res, 'fail', 'screen.firstline', w, no, '83컷 첫 문장이 첫 줄에 온전히 있지 않음: ' + last.firstLine);
+      }
+    });
+    if (w === 360) add(res, 'info', 'bubble.provisional', 0, 0, '말풍선 배치 미승인(임시) 컷 ' + nProv + '개 — 50컷만 독백 배치 승인, 나머지는 원화·사용자 검수 전');
+    /* 페이지 전체: 말풍선끼리 겹침, 다른 컷 그림 침범, 읽는 순서 */
+    var sy = win.scrollY, B = [].map.call(d.querySelectorAll('.bv4-b'), function (e) { var r = rect(e); return { no: +e.closest('.cut').dataset.no, i: +e.dataset.i, x: r.left, y: r.top + sy, w: r.width, h: r.height }; });
+    var P = [].map.call(d.querySelectorAll('.panel-mask'), function (e) { var r = rect(e); return { no: +e.closest('.cut').dataset.no, x: r.left, y: r.top + sy, w: r.width, h: r.height }; });
+    function H(a, b, p) { return a.x < b.x + b.w - p && a.x + a.w > b.x + p && a.y < b.y + b.h - p && a.y + a.h > b.y + p; }
+    for (var a = 0; a < B.length; a++) for (var b = a + 1; b < B.length; b++) if (H(B[a], B[b], 1)) add(res, 'fail', 'bubble.overlap', w, B[a].no, '말풍선 겹침 #' + B[a].no + '.' + B[a].i + ' ↔ #' + B[b].no + '.' + B[b].i);
+    B.forEach(function (bb) { P.forEach(function (p) { if (p.no !== bb.no && H(bb, p, 2)) add(res, 'fail', 'bubble.cross', w, bb.no, '말풍선이 #' + p.no + ' 컷 그림을 덮음'); }); });
+    var by = {}; B.forEach(function (bb) { (by[bb.no] = by[bb.no] || []).push(bb); });
+    Object.keys(by).forEach(function (k) { var arr = by[k].sort(function (p, q) { return p.i - q.i; }); for (var m = 1; m < arr.length; m++) if (arr[m].y + arr[m].h < arr[m - 1].y + 4) add(res, 'fail', 'bubble.order', w, +k, '읽는 순서 어긋남 ' + arr[m - 1].i + '→' + arr[m].i); });
+    /* 독자 화면에는 제작용 표시가 없어야 한다 */
+    var leak = ['.draft-badge', '.ph-no', '.ph-desc', '.ph-note', '.ovf-chip', '.pp-note', '.bv4-zone', '.bv4-screen-note', '.who', '.bubble-note'];
+    leak.forEach(function (q) { var n = d.querySelectorAll(q).length; if (n) add(res, 'fail', 'reader.leak', w, 0, '독자 화면에 제작용 요소 ' + q + ' ' + n + '개'); });
+    var vis = d.body.innerText || '';
+    ['DRAFT', '그림 준비 중', '원화 합성 전', '임시 컷', '(가정)'].forEach(function (t) { if (vis.indexOf(t) >= 0) add(res, 'fail', 'reader.text', w, 0, '독자 화면 글자에 "' + t + '"'); });
+    if (ep.showSpeakerNames !== false) add(res, 'fail', 'reader.names', w, 0, '화자 이름표가 켜져 있음(제작기준 9-6: false)');
+    /* 74컷: 침묵 — 화자·이름 없음 */
+    var s74 = d.getElementById('cut-74');
+    if (s74 && (s74.querySelector('.bv4-sr') || s74.querySelectorAll('.bv4-b').length !== 1)) add(res, 'fail', 'silence.form', w, 74, '74컷은 화자 없는 침묵 한 줄이어야 함');
+    /* 단독 휴대폰 화면은 49컷만 */
+    var phones = [].filter.call(d.querySelectorAll('.cut-phone'), function (c) { return true; }).map(function (c) { return +c.dataset.no; });
+    if (JSON.stringify(phones) !== '[49]') add(res, 'fail', 'phone.standalone', w, 0, '단독 휴대폰 컷 ' + JSON.stringify(phones) + ' (제작기준: 49컷만)');
+    if (w === 360) {
+      var prev = [].map.call(d.querySelectorAll('.phone-preview'), function (e) { return +e.closest('.cut').dataset.no; });
+      add(res, 'info', 'phone.preview', 0, 0, '원화 합성 전 휴대폰 UI 미리보기 컷 ' + JSON.stringify(prev) + ' + 83컷 문자 화면(말풍선 엔진) — 최종은 원화에 합성(83컷은 두 손에 쥔 휴대폰)');
+      /* 33컷: 조각 안쪽 비율 */
+      var c33 = d.getElementById('cut-33'), ins = 0, tot = 0;
+      if (c33) { var pr33 = [].map.call(c33.querySelectorAll('.panel'), rect); [].forEach.call(c33.querySelectorAll('.bv4-b'), function (e) { var r = rect(e); tot++; if (pr33.some(function (q) { return r.left >= q.left - 1 && r.right <= q.right + 1 && r.top >= q.top - 1 && r.bottom <= q.bottom + 1; })) ins++; }); add(res, 'info', 'cut33.inpiece', 0, 33, '33컷 말풍선 ' + tot + '개 중 조각 안쪽 ' + ins + '개(나머지는 자리가 없어 조각 바로 아래 여백)'); }
+    }
+  }
+
+  /* 검수 모드(?review=1)에서는 제작용 표시가 켜지는지 */
+  async function reviewCheck(res, w) {
+    var f = await loadFrame(w, '?review=1&zones=1'), d = await settle(f);
+    var n = d.querySelectorAll('.draft-badge').length, z = d.querySelectorAll('.bv4-zone').length, ph = d.querySelectorAll('.ph-desc').length;
+    var oc = d.querySelectorAll('.ovf-chip').length;
+    if (!oc) add(res, 'fail', 'review.chip', w, 0, '검수 모드에서 틀 밖 표시가 보이지 않음');
+    if (!n || !z || !ph) add(res, 'fail', 'review.off', w, 0, '검수 모드에서 제작용 표시가 보이지 않음 (DRAFT ' + n + ', 보호영역 ' + z + ', 안내 ' + ph + ')');
     f.remove();
   }
 
@@ -179,7 +226,7 @@
     var res = { fail: [], warn: [], info: [], widths: WIDTHS, passed: {} };
     var spec = await (await fetch('ep01v3.spec.json')).json();
     await dataChecks(res, spec);
-    for (var i = 0; i < WIDTHS.length; i++) { if (log) log('width ' + WIDTHS[i]); await widthChecks(res, WIDTHS[i]); await legacyCheck(res, WIDTHS[i]); }
+    for (var i = 0; i < WIDTHS.length; i++) { if (log) log('width ' + WIDTHS[i]); await widthChecks(res, WIDTHS[i]); if (WIDTHS[i] === 360) await reviewCheck(res, 360); await legacyCheck(res, WIDTHS[i]); }
     return res;
   };
   window.V3_KNOWN = window.V3_KNOWN || {};

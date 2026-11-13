@@ -1,5 +1,6 @@
-/* 말풍선 v4 (시범) — index.html?bubbles=v4 에서만 동작한다. 기본 렌더러(app.js)의 말풍선은 건드리지 않고,
- * 시범 설정(window.EP01V3_BUBBLE_PILOT)에 있는 컷만 렌더 후에 다시 배치한다.
+/* 말풍선 v4 — 104컷 제작판(ep01v3)의 기본 말풍선 렌더러. app.js 가 그린 대사 말풍선을 지우고 다시 배치한다.
+ * 1화 70컷판(ep01)에는 관여하지 않는다. index.html?bubbles=off 로 예전 렌더러(app.js)를 볼 수 있다.
+ * 컷별 예외 설정은 data/ep01v3-bubbles.js (window.EP01V3_BUBBLES), 설정이 없는 컷은 대사 데이터에서 임시 설정을 만든다.
  *
  * 1) 유형별 모양 (제작기준 v2 1-3)
  *    speech    흰 타원 + 화자 쪽 꼬리, 이름표 없음 (스크린리더용 이름만)
@@ -15,8 +16,12 @@
 (function () {
   'use strict';
   var Q = location.search;
-  if (!/[?&]bubbles=v4\b/.test(Q)) return;
-  var SHOW_ZONES = /[?&]zones=1\b/.test(Q);
+  if (/[?&]bubbles=(off|legacy)\b/.test(Q)) return;
+  var REVIEW = /[?&]review=1\b/.test(Q);
+  var SHOW_ZONES = REVIEW && /[?&]zones=1\b/.test(Q);
+  /* 글꼴·배치가 끝나기 전에는 예전 말풍선이 잠깐 보이지 않게 가린다 (4초 뒤에는 어떤 경우든 푼다) */
+  var root = document.documentElement;
+  if (/ep01v3/.test(location.hash)) { root.classList.add('bv4-pending'); setTimeout(function () { root.classList.remove('bv4-pending'); }, 4000); }
 
   var AT = { 'in-tl': [22, 14], 'in-tr': [78, 14], 'in-bl': [22, 86], 'in-br': [78, 86], 'in-br2': [78, 70],
     'edge-top-l': [25, 0], 'edge-top-r': [75, 0], 'edge-bottom-l': [25, 100], 'edge-bottom-r': [75, 100], gap: [50, 112] };
@@ -70,7 +75,10 @@
       return seg.replace(/([^\s.?!…])\s+(?=[가-힣]['’”]?(?:[\s.,?!…]|$))/g, '$1\u00a0');
     }).join('\n');
   }
+  var MCACHE = {};
   function measure(text, type, fs, W) {
+    var ck = type + '|' + fs + '|' + W + '|' + text;
+    if (MCACHE[ck]) return MCACHE[ck];
     var m = measurer();
     m.innerHTML = '';
     var t = document.createElement('div');
@@ -81,7 +89,7 @@
     if (text.indexOf('\n') >= 0) t.style.whiteSpace = 'pre-line';
     m.appendChild(t);
     var rows = lineBoxes(t), H = t.getBoundingClientRect().height;
-    return { rows: rows, H: H, W: W, maxW: rows.reduce(function (a, r) { return Math.max(a, r.r - r.l); }, 0) };
+    return (MCACHE[ck] = { rows: rows, H: H, W: W, maxW: rows.reduce(function (a, r) { return Math.max(a, r.r - r.l); }, 0) });
   }
 
   /* 줄들을 모두 품는 최소 면적 초타원 |x/a|^N + |y/b|^N = 1 (가운데 정렬 기준).
@@ -114,7 +122,7 @@
       var em = v[0], wi = v[1], txt = v[2];
       var W = Math.round(em * fs);
       txt = glue(txt);
-      var ms = measure(txt, type, fs, W); ms.text = txt;
+      var ms = Object.assign({}, measure(txt, type, fs, W)); ms.text = txt;
       var n = ms.rows.length;
       if (!n || n > maxLines) return;
       var key = n + ':' + Math.round(ms.maxW) + ':' + (v[3] < 0 ? 1 : 0);
@@ -161,12 +169,16 @@
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  var STYLE_TYPE = { thought: 'mono', phone: 'phone', caption: 'caption', silence: 'mono' };
+  function typeOf(ln, cfg) { return (cfg && cfg.type) || STYLE_TYPE[ln.style] || 'speech'; }
+
   /* ---------- 컷 하나 배치 ---------- */
   function layoutCut(sec, cut, P, ep) {
     /* 이전 결과·기존 말풍선 정리 */
     Array.prototype.forEach.call(sec.querySelectorAll('.bv4-layer, .bv4-band, .gap-lines, .above-lines, .panel-bubbles > *'), function (n) { n.remove(); });
     var wrap = sec.querySelector('.cut-wrap');
     if (!wrap) return null;
+    wrap.classList.remove('has-edge-top', 'has-edge-bottom');   /* 경계 걸침 여백은 아래에서 필요한 만큼만 직접 만든다 */
     var vw = document.documentElement.clientWidth, fsBoost = vw >= 400;
     var secR = sec.getBoundingClientRect(), wrapR = rel(wrap, secR);
     var panels = Array.prototype.map.call(wrap.querySelectorAll('.panel'), function (p) {
@@ -229,14 +241,16 @@
         L = need <= 56 ? Math.max(L, need) : Math.min(26, Math.max(10, d - 6));   /* 조각까지 닿지 못하면 짧게 방향만 */
       }
       var tip = { x: mid.x + ux / d * L, y: mid.y + uy / d * L };
-      while (L > 8 && inZone(tip, ri)) { L -= 2; tip = { x: mid.x + ux / d * L, y: mid.y + uy / d * L }; }
+      var XL = 6, XR = secR.width - 6;   /* 꼬리 끝이 화면 밖으로 나가지 않게 */
+      tip.x = Math.max(XL, Math.min(XR, tip.x));
+      while (L > 8 && inZone(tip, ri)) { L -= 2; tip = { x: Math.max(XL, Math.min(XR, mid.x + ux / d * L)), y: mid.y + uy / d * L }; }
       return { mid: mid, tip: tip, bad: inZone(tip, ri) };
     }
 
     /* 한 말풍선이 무거워지는 긴 다문장 대사는 문장 끝에서 나눠 이어 붙인다 (대사 문자는 그대로) */
     var units = [];
     lines.forEach(function (ln, i) {
-      var cfg = (P.lines || [])[i] || {}, typ = cfg.type || ({ thought: 'mono', phone: 'phone', caption: 'caption' })[ln.style] || 'speech';
+      var cfg = (P.lines || [])[i] || {}, typ = typeOf(ln, cfg);
       var parts = ln.text.split(/(?<=[.?!])\s+/);
       if ((typ === 'speech' || typ === 'offscreen') && parts.length > 1 && ln.text.replace(/\s/g, '').length > 18 && !cfg.noSplit) {
         parts.forEach(function (t, k) { units.push({ ln: Object.assign({}, ln, { text: t }), cfg: cfg, src: i, part: k }); });
@@ -244,7 +258,7 @@
     });
     units.forEach(function (u, i) {
       var ln = u.ln, cfg = u.cfg;
-      var type = cfg.type || ({ thought: 'mono', phone: 'phone', caption: 'caption' })[ln.style] || 'speech';
+      var type = typeOf(ln, cfg);
       var T0 = TYPE[type], fs = fsBoost ? T0.fontWide : T0.font;
       var pref = cfg.pref || { panel: ln.panel || 0, at: ln.at || 'gap' };
       var pan = panels[pref.panel || 0], ri = pan.ri, nRows = rowEls.length;
@@ -261,7 +275,7 @@
       var T = null, outTail = type === 'offscreen';
       var lastP = placed[placed.length - 1];
       /* 같은 화자의 연속 대사: 꼬리 대신 앞 말풍선과 이어 붙인다 */
-      var joinTo = (talks && lastP && !lastP.fail && ((lastP.ln.who && lastP.ln.who === ln.who) || lastP.src === u.src) && lastP.type === type) ? lastP : null;
+      var joinTo = (talks && cfg.join !== false && lastP && !lastP.fail && ((lastP.ln.who && lastP.ln.who === ln.who) || lastP.src === u.src) && lastP.type === type) ? lastP : null;
       var Tcfg = null;
       if (talks && cfg.tail) {
         T = pPt(cfg.tail);
@@ -280,13 +294,20 @@
         if (!prev || prev.fail) return true;
         if (c.phase !== prev.phase) return c.phase > prev.phase;
         if (c.phase === 0) return true;
-        if (c.x >= prev.x + prev.w - 6 && c.y >= prev.y - 48) return true;   /* 오른쪽 옆 */
+        if (c.x >= prev.x + prev.w - 6 && c.y >= prev.y - 14) return true;   /* 오른쪽 옆(높이가 거의 같을 때만) */
         if (c.x + c.w <= prev.x + prev.w * 0.5) return c.y >= prev.y + prev.h - 12;   /* 왼쪽: 앞 말풍선보다 거의 아래일 때만 */
         return c.y >= prev.y + 2;
       }
       function consider(c, base) {
         if (c.phase < curPhase || !orderOk(c)) return;
-        var T = (joinTo && c.phase !== joinTo.phase) ? Tcfg : TT;
+        /* 같은 화자의 앞 말풍선(컷 안)과 바로 아래 여백 띠의 말풍선은 목으로 이어 붙인다 — 이때는 꼬리를 따로 내지 않는다 */
+        var adj = false;
+        if (joinTo && c.phase !== joinTo.phase && c.ri === joinTo.ri && c.phase === joinTo.phase + 1 && joinTo.phase % 2 === 1) {
+          var gy0 = c.y - (joinTo.y + joinTo.h), ov0 = Math.min(c.x + c.w, joinTo.x + joinTo.w) - Math.max(c.x, joinTo.x);
+          adj = gy0 <= 30 && gy0 > -6 && ov0 >= 24;
+        }
+        c.adj = adj;
+        var T = (joinTo && c.phase !== joinTo.phase && !adj) ? Tcfg : TT;
         for (var k = 0; k < same.length; k++) {
           if (boxHit(c, same[k], GAP)) return;
           if (same[k].tl && segHitsBox(same[k].tl.mid, same[k].tl.tip, c, 3)) return;
@@ -296,7 +317,7 @@
         var tl = T ? tailFor(c, T, mode, ri) : null;
         if (crosses(tl)) {
           /* 다른 말풍선을 가로지르면 화자 쪽 옆으로 짧게 꺾는다 */
-          var cy0 = c.y + c.h / 2, side = T.x < c.x + c.w / 2 ? c.x - 40 : c.x + c.w + 40;
+          var cy0 = c.y + c.h / 2, side = T.x < c.x + c.w / 2 ? c.x - 40 : c.x + c.w + 40; side = Math.max(14, Math.min(secR.width - 14, side));
           tl = tailFor(c, { x: side, y: cy0 + (T.y < cy0 ? -14 : 14) }, 'in', ri); tPen = 35;
           if (crosses(tl)) return;
         }
@@ -304,7 +325,7 @@
         if (joinTo) {
           var gx = Math.max(0, joinTo.x - (c.x + c.w), c.x - (joinTo.x + joinTo.w)), gy = Math.max(0, c.y - (joinTo.y + joinTo.h), joinTo.y - (c.y + c.h));
           var ov = Math.min(c.x + c.w, joinTo.x + joinTo.w) - Math.max(c.x, joinTo.x);
-          jp = (c.phase === joinTo.phase ? 0 : 140) + gy * 2 + gx * 2 + (ov < 24 ? 60 : 0);
+          jp = (c.phase === joinTo.phase || adj ? 0 : 140) + gy * 2 + gx * 2 + (ov < 24 ? 60 : 0);
         }
         var tidy = 0;
         if (c.phase % 2 === 1 && c.where === 'in') {
@@ -312,6 +333,8 @@
           if (Math.abs(c.y - region.y) < 2 || Math.abs(c.y + c.h - (region.y + region.h)) < 2) tidy -= 8;
           for (var q2 = 0; q2 < same.length; q2++) if (same[q2].phase === c.phase && (Math.abs(same[q2].x + same[q2].w - c.x - c.w) < 2 || Math.abs(same[q2].x - c.x) < 2)) tidy -= 10;
         }
+        /* 콘티가 경계-상·하(edge-*)로 정한 대사는 컷 안쪽 자리보다 경계 걸침을 먼저 쓴다 */
+        if (c.where === 'in' && /^edge-/.test(pref.at || '')) base += 60;
         var s = base + jp + tidy + c.pen + Math.hypot(cx - prefPt.x, (cy - prefPt.y) * (c.phase % 2 === 1 ? 1 : 0.2)) * 0.7;
         if (T) s += Math.max(0, rectDist(c, T) - 70) * 0.8 + (tl && tl.bad ? 120 : 0) + tPen + (!tl ? 60 : 0);
         if (!best || s < best.s) { best = c; best.s = s; best.tl = tl; }
@@ -348,7 +371,7 @@
               var over = Math.max(0, pan.r.x - x3) + Math.max(0, x3 + o.w - (pan.r.x + pan.r.w));
               var cb = mk(x3, y3, bandPh, 'band');
               if (bpPt) { var bcx = x3 + o.w / 2; cb.pen += Math.abs(bcx - bpPt.x) * 0.7 - Math.abs(bcx - prefPt.x) * 0.7; }
-              consider(cb, 230 + grow * 0.9 + over * (bpPt ? 0 : (rowEls.length > 1 || panels.length > 1 ? 1.6 : 0.3)));
+              consider(cb, 230 + (P.bandBase || 0) + grow * 0.9 + over * (bpPt ? 0 : (rowEls.length > 1 || panels.length > 1 ? 1.6 : 0.3)));
             }
         }
         /* (라) 컷 위 여백 띠: 첫 줄에서, 앞 말풍선이 모두 위 띠일 때만 */
@@ -359,7 +382,7 @@
 
       if (!best) { placed.push({ fail: true, i: i, text: ln.text, ri: ri }); return; }
       best.i = i; best.type = type; best.fs = fs; best.ln = ln; best.src = u.src; best.Tc = Tcfg; best.outT = outTail;
-      if (joinTo && best.phase === joinTo.phase) {
+      if (joinTo && (best.phase === joinTo.phase || best.adj)) {
         var ox0 = Math.max(best.x, joinTo.x), ox1 = Math.min(best.x + best.w, joinTo.x + joinTo.w);
         var top = joinTo.y + joinTo.h <= best.y ? joinTo : best, bot = top === joinTo ? best : joinTo;
         if (ox1 - ox0 >= 24 && bot.y - (top.y + top.h) <= 30) {
@@ -377,8 +400,15 @@
       placed.push(best);
     });
 
+    /* 경계에 걸친 말풍선이 앞뒤 컷을 가리지 않도록, 걸친 만큼 여백을 흐름에 넣는다 */
+    var topPad = 0, botPad = 0;
+    placed.forEach(function (c) {
+      if (c.fail) return;
+      if (c.where === 'edge-top') topPad = Math.max(topPad, c.pr.y - c.y + 8);
+      if (c.where === 'edge-bottom') botPad = Math.max(botPad, c.y + c.h - (c.pr.y + c.pr.h) + 8);
+    });
     /* 위 띠는 아래에서 위로 쌓았으니 위에서부터 다시 정렬 */
-    var aboveShift = aboveH ? aboveH + 8 : 0, yy = wrapR.y + GAP;
+    var aboveShift = (aboveH ? aboveH + 8 : 0) + Math.ceil(topPad), yy = wrapR.y + GAP;
     placed.forEach(function (c) {
       if (c.fail || c.phase !== 0) return;
       var dy = yy - c.y; c.y = yy; yy += c.h + GAP;
@@ -387,6 +417,10 @@
     /* 띠를 실제 흐름에 넣고, 줄마다 내려간 만큼 좌표를 옮긴다 */
     var shift = rowEls.map(function (r, k) { var s = aboveShift; for (var j = 0; j < k; j++) s += bandH[j] ? bandH[j] + 4 : 0; return s; });
     if (aboveShift) { var ba = document.createElement('div'); ba.className = 'bv4-band bv4-above'; ba.style.height = aboveShift + 'px'; wrap.parentNode.insertBefore(ba, wrap); }
+    if (botPad) {
+      var lastK = rowEls.length - 1, have = bandH[lastK] ? bandH[lastK] + 4 : 0;
+      if (botPad > have) { var bb = document.createElement('div'); bb.className = 'bv4-band bv4-below-pad'; bb.style.height = Math.ceil(botPad - have) + 'px'; rowEls[lastK].parentNode.insertBefore(bb, rowEls[lastK].nextSibling && rowEls[lastK].nextSibling.classList && rowEls[lastK].nextSibling.classList.contains('bv4-rowband') ? rowEls[lastK].nextSibling.nextSibling : rowEls[lastK].nextSibling); }
+    }
     rowEls.forEach(function (r, k) {
       if (!bandH[k]) return;
       var bd = document.createElement('div'); bd.className = 'bv4-band bv4-rowband'; bd.style.height = (bandH[k] + 4) + 'px';
@@ -530,7 +564,7 @@
       '<div class="bv4-th-body">' + S.messages.map(function (m) {
         var txt = m.keepFirst ? m.text.replace(/^([^.?!]+[.?!])/, function (f) { return f.replace(/ /g, '\u00a0'); }) : m.text;
         return '<div class="bv4-msg ' + (m.me ? 'is-me' : 'is-them') + '"><p>' + txt + '</p><span class="bv4-msg-t">' + m.time + '</span></div>';
-      }).join('') + '</div>' + (S.approved ? '' : '<span class="bv4-screen-note">원화 합성 전 화면 UI</span>');
+      }).join('') + '</div>' + (S.approved || !REVIEW ? '' : '<span class="bv4-screen-note">원화 합성 전 화면 UI</span>');
     function place(dy) { el.style.cssText = 'left:' + box.x + 'px;top:' + (box.y + dy) + 'px;width:' + box.w + 'px;height:' + box.h + 'px;'; }
     place(0);
     layer.appendChild(el);
@@ -562,7 +596,7 @@
       var zoneHits = res.zones.filter(function (z) { return shapeHitsZone({ x: R.x, y: R.y, w: R.w, h: R.h, kind: c.kind }, z, 0); }).map(function (z) { return z.label; });
       var pageR = el.getBoundingClientRect();
       out.bubbles.push({ i: c.i, type: c.type, kind: c.kind, where: c.where, lines: rows.length, font: parseFloat(getComputedStyle(t).fontSize),
-        textOutside: outside, zoneHits: zoneHits, offscreen: pageR.left < 0 || pageR.right > vw, w: Math.round(R.w), h: Math.round(R.h), text: c.ln.text });
+        textOutside: outside, zoneHits: zoneHits, offscreen: pageR.left < 0 || pageR.right > vw, tailOff: !!(c.tl && (c.tl.tip.x < 0 || c.tl.tip.x > secR.width)), w: Math.round(R.w), h: Math.round(R.h), text: c.ln.text });
     });
     if (res.screen) {
       var body = res.screen.el.querySelector('.bv4-th-body');
@@ -579,33 +613,106 @@
     return out;
   }
 
+  /* ---------- 설정이 없는 컷의 임시 설정 ----------
+   * 대사 데이터(at·panel·style·who)에서 유형·선호 위치를 만들고, 원화가 없는 컷의 보호 영역은 컷 모양(비율)으로 가정한다.
+   * 이 값은 모두 임시(approved:false)이며 원화가 들어오면 data/ep01v3-bubbles.js 에서 실측값으로 덮어쓴다. */
+  var GENERIC_WHO = { '학생': 1, '학생들': 1, '교사': 1 };
+  var ZONE_KIND = {
+    face:  [{ x: 28, y: 14, w: 44, h: 44, label: '얼굴' }],
+    face2: [{ x: 6,  y: 14, w: 34, h: 44, label: '왼쪽 인물 얼굴' }, { x: 60, y: 14, w: 34, h: 44, label: '오른쪽 인물 얼굴' }],
+    wide:  [{ x: 36, y: 8,  w: 28, h: 84, label: '인물' }],
+    phone: [{ x: 26, y: 20, w: 48, h: 60, label: '휴대폰·손' }],
+    hands: [{ x: 22, y: 28, w: 56, h: 50, label: '손·소품' }],
+    none:  []
+  };
+  function ratioOf(r) { var q = String(r || '4:3').split(':'); return (parseFloat(q[0]) || 4) / (parseFloat(q[1]) || 3); }
+
+  function autoConfig(cut, ep, over) {
+    var B = window.EP01V3_BUBBLES || {}, kinds = B.zoneKind || {}, off = B.offscreen || {};
+    var rows = cut.rows || [[{ ratio: cut.ratio }]], panelsMeta = [];
+    rows.forEach(function (row) { row.forEach(function (p) { panelsMeta.push({ ratio: ratioOf(p.ratio || cut.ratio), rowLen: row.length }); }); });
+    var lines = cut.lines || [];
+    /* 컷 아래 여백(gap) 대사는 패널이 정해지지 않았으면 맨 아래 조각에 붙는다 (띠·여러 줄 컷에서 컷 전체 아래) */
+    function panelOf(l) { return l.panel != null ? l.panel : ((l.at || 'gap') === 'gap' ? panelsMeta.length - 1 : 0); }
+    /* 패널마다 말하는 사람(일반 호칭 제외) 수 */
+    var people = panelsMeta.map(function () { return []; });
+    lines.forEach(function (l) { var pi = panelOf(l); if (l.who && !GENERIC_WHO[l.who] && people[pi] && people[pi].indexOf(l.who) < 0) people[pi].push(l.who); });
+    var zones = [], tailAt = [];
+    panelsMeta.forEach(function (pm, pi) {
+      var kind = kinds[cut.no] || (pm.ratio >= 1.6 ? 'wide' : 'face');
+      if (kind === 'face' && people[pi].length >= 2) kind = 'face2';
+      var zs = ZONE_KIND[kind] || [];
+      tailAt[pi] = zs.length ? zs.map(function (z) { return { x: z.x + z.w / 2, y: z.y + z.h * 0.8 }; }) : [{ x: 50, y: 60 }];
+      zs.forEach(function (z) { zones.push({ panel: pi, x: z.x, y: z.y, w: z.w, h: z.h, label: z.label, approved: false }); });
+    });
+    var out = { zones: zones, lines: [], status: 'provisional', auto: true };
+    var prev = null;
+    lines.forEach(function (l, i) {
+      var pi = panelOf(l), typ = typeOf(l, null);
+      if (off[cut.no] && l.style !== 'thought') typ = 'offscreen';
+      var cfg = { type: typ, pref: { panel: pi, at: l.at === 'above' ? 'gap' : (l.at || 'gap') }, region: (panelsMeta[pi] && panelsMeta[pi].rowLen > 1 && cut.no !== 33) ? 'row' : 'panel', edge: true };
+      if (l.at === 'above') cfg.place = 'above';
+      if (typ !== 'mono' && typ !== 'caption') {
+        var ts = tailAt[pi] || [{ x: 50, y: 60 }], slot = Math.max(0, people[pi] ? people[pi].indexOf(l.who) : 0);
+        var t = ts[Math.min(slot, ts.length - 1)];
+        cfg.tail = { panel: pi, x: t.x, y: t.y };
+      }
+      /* 같은 화자의 연속 말풍선은 (바로 붙어 놓일 때) 이어 붙인다. 서로 다른 사람일 수 있는 일반 호칭(학생)이나 다른 조각의 대사는 이어 붙이지 않는다 */
+      if (!(prev && l.who && prev.who === l.who && !GENERIC_WHO[l.who] && panelOf(prev) === pi)) cfg.join = false;
+      out.lines[i] = cfg; prev = l;
+    });
+    if (over) Object.keys(over).forEach(function (k) { out[k] = over[k]; });
+    if (over && over.lines) out.auto = false;
+    return out;
+  }
+
   /* ---------- 진입 ---------- */
-  var current = null, lastW = 0, last = [];
+  var current = null, lastW = 0, last = [], fontsOk = false;
+  function fontState() {
+    var f = document.fonts;
+    return { pretendard500: !!(f && f.check('500 16px Pretendard', '가')), pretendard600: !!(f && f.check('600 16px Pretendard', '가')), notoSerif: !!(f && f.check('500 15px "Noto Serif KR"', '가')) };
+  }
   function run() {
     if (!current) return;
-    var ep = current.ep, P = window.EP01V3_BUBBLE_PILOT || {}, report = [];
+    var ep = current.ep, B = window.EP01V3_BUBBLES || {}, ov = B.cuts || {}, report = [];
     last = [];
     if (!ep || current.id !== 'ep01v3') return;
     document.body.classList.add('bv4-on');
-    Object.keys(P).forEach(function (no) {
+    var t0 = performance.now();
+    ep.cuts.forEach(function (cut) {
+      var no = cut.no, o = ov[no];
+      if (!(cut.lines && cut.lines.length) && !(o && o.screen)) return;
       var sec = document.getElementById('cut-' + (no < 10 ? '0' : '') + no);
-      var cut = ep.cuts.filter(function (c) { return String(c.no) === String(no); })[0];
-      if (!sec || !cut) return;
+      if (!sec) return;
       sec.classList.add('bv4-cut');
-      var res = layoutCut(sec, cut, P[no], ep);
-      last.push([sec, res]);
-      report.push(verify(sec, res));
+      var P = autoConfig(cut, ep, o);
+      var res = layoutCut(sec, cut, P, ep);
+      last.push([sec, res, P]);
+      var v = verify(sec, res); v.status = P.status; v.auto = !!P.auto; v.hasArt = !!(cut.image || (cut.rows && cut.rows[0] && cut.rows[0][0] && cut.rows[0][0].image));
+      report.push(v);
     });
-    window.__bv4 = { width: document.documentElement.clientWidth, cuts: report };
+    fontsOk = fontState();
+    window.__bv4 = { width: document.documentElement.clientWidth, cuts: report, fonts: fontsOk, ms: Math.round(performance.now() - t0) };
     lastW = document.documentElement.clientWidth;
+    root.classList.remove('bv4-pending');
+    document.body.classList.add('bv4-done');
   }
   window.BubblesV4 = {
     /* 검수용: 다시 배치하지 않고 지금 화면 그대로 검증만 */
     verifyNow: function () { return last.map(function (x) { return verify(x[0], x[1]); }); },
-    apply: function (root, ep, meta) {
+    rerun: function () { run(); return window.__bv4; },
+    apply: function (rootEl, ep, meta) {
       current = { ep: ep, id: meta && meta.id };
+      if (!meta || meta.id !== 'ep01v3') { root.classList.remove('bv4-pending'); document.body.classList.remove('bv4-on', 'bv4-done'); return; }
+      document.body.classList.remove('bv4-done');
       var go = function () { requestAnimationFrame(run); };
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+      /* 글꼴을 실제로 불러온 뒤에 줄바꿈을 잰다 (3.5초 안에 못 불러오면 대체 글꼴로 진행하고, 불러온 뒤 한 번 더 배치한다) */
+      var F = document.fonts;
+      if (F && F.load) {
+        var wait = Promise.all([F.load('500 16px Pretendard', '가나다'), F.load('600 16px Pretendard', '가나다'), F.load('500 15px "Noto Serif KR"', '가나다')]);
+        Promise.race([wait, new Promise(function (r) { setTimeout(r, 3500); })]).then(function () { return F.ready; }).then(go, go);
+        wait.then(function () { if (document.body.classList.contains('bv4-done') && !fontsOk.pretendard500) go(); });
+      } else go();
     }
   };
   var tmr = null;
@@ -613,4 +720,5 @@
     if (document.documentElement.clientWidth === lastW) return;
     clearTimeout(tmr); tmr = setTimeout(run, 120);
   });
+  window.addEventListener('hashchange', function () { if (!/ep01v3/.test(location.hash)) root.classList.remove('bv4-pending'); else root.classList.add('bv4-pending'); });
 })();

@@ -82,13 +82,20 @@
     window.scrollTo(0, 0);
   }
 
+  /* ---------- 검수 모드 ----------
+   * index.html?review=1#ep01v3 에서만 제작용 표시(DRAFT 배지, 컷 번호, '그림 준비 중', 조립 메모, 틀 밖 표시, 보호영역)를 보인다.
+   * 기본(독자) 화면에는 DOM 에도 넣지 않는다. */
+  var REVIEW = /[?&]review=1\b/.test(location.search);
+  if (REVIEW) document.documentElement.classList.add('is-review');
+
   /* ---------- 대사 ---------- */
   function renderLine(ep, line, overlay) {
     var style = line.style || 'speech';
     var sp = (ep.speakers && ep.speakers[line.who]) || {};
     var side = line.side || sp.side || 'left';
     var name = (ep.showSpeakerNames && line.who && style !== 'caption' && style !== 'silence' && !line.hideName)
-      ? '<span class="who">' + esc(line.who) + (style === 'phone' ? ' · 전화' : '') + '</span>' : '';
+      ? '<span class="who">' + esc(line.who) + (style === 'phone' ? ' · 전화' : '') + '</span>'
+      : (line.who && !ep.showSpeakerNames && style !== 'caption' && style !== 'silence' ? '<span class="sr-only">' + esc(line.who) + (style === 'phone' ? '(전화)' : '') + ': </span>' : '');
     var pos = '';
     if (overlay && line.pos) {
       pos = ' style="left:' + Number(line.pos.x) + '%;top:' + Number(line.pos.y) + '%;"';
@@ -132,12 +139,14 @@
     var time = cut.datetime && cut.datetime.time
       ? '<span class="time-chip">' + esc(cut.datetime.time) + '</span>' : '';
     var note = (KIND_NOTE[cut.kind] ? KIND_NOTE[cut.kind] + ' · ' : '') + '그림 준비 중';
-    var ph =
-      '<div class="placeholder tone-' + esc(cut.tone || 'default') + '">' +
-        '<span class="ph-no" aria-hidden="true">#' + pad2(cut.no) + '</span>' +
-        '<span class="ph-desc">' + esc(placeholderLabel(cut)) + '</span>' +
-        '<span class="ph-note" aria-hidden="true">' + note + '</span>' +
-      '</div>';
+    var ph = REVIEW
+      ? '<div class="placeholder tone-' + esc(cut.tone || 'default') + '">' +
+          '<span class="ph-no" aria-hidden="true">#' + pad2(cut.no) + '</span>' +
+          '<span class="ph-desc">' + esc(placeholderLabel(cut)) + '</span>' +
+          '<span class="ph-note" aria-hidden="true">' + note + '</span>' +
+        '</div>'
+      /* 독자 화면: 그림이 아직 없는 컷은 분위기 색 면만 보이고, 설명은 읽기 프로그램용으로만 둔다 */
+      : '<div class="placeholder tone-' + esc(cut.tone || 'default') + '"' + (placeholderLabel(cut) ? ' role="img" aria-label="' + esc(placeholderLabel(cut)) + '"' : ' aria-hidden="true"') + '></div>';
     var alt = esc(cut.alt || cut.desc || '');
 
     if (cut.image) {
@@ -149,7 +158,7 @@
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
           ' loading="lazy" decoding="async">' +
-        (cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
+        (REVIEW && cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
         time + overlayHtml + '</div>';
     }
 
@@ -347,7 +356,7 @@
         var me = idx++;
         return '<div class="panel' + diag + '" data-panel="' + me + '" style="flex:' + Math.round(ratioVal(p.ratio || cut.ratio) * 1000) + ' 1 0%;">' +
           '<div class="panel-mask' + (rows.length === 1 && row.length === 1 ? shape : '') + (ov ? ' is-overflow' : '') + '">' + renderArt(ep, pc, '') +
-            (ov && me === 0 ? '<span class="ovf-chip ovf-' + esc(ov.edge) + '" aria-hidden="true">' + esc(ov.note || '틀 밖') + '</span>' : '') +
+            (REVIEW && ov && me === 0 ? '<span class="ovf-chip ovf-' + esc(ov.edge) + '" aria-hidden="true">' + esc(ov.note || '틀 밖') + '</span>' : '') +
           '</div>' +
           (me === 0 ? renderInsetSelf(ep, cut) : '') +
           '<div class="panel-bubbles">' + bubbleGroups(ep, lines, me) + '</div>' +
@@ -389,7 +398,7 @@
     } else if (ep.layout === 'v3') {
       var ls = cut.lines || [];
       if (cut.phonePreview && cut.phone) {
-        body = '<div class="phone-preview"><p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기</p>' + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
+        body = '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기</p>' : '') + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
       } else {
         body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
       }
