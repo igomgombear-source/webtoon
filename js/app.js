@@ -87,7 +87,7 @@
     var style = line.style || 'speech';
     var sp = (ep.speakers && ep.speakers[line.who]) || {};
     var side = line.side || sp.side || 'left';
-    var name = (ep.showSpeakerNames && line.who && style !== 'caption' && !line.hideName)
+    var name = (ep.showSpeakerNames && line.who && style !== 'caption' && style !== 'silence' && !line.hideName)
       ? '<span class="who">' + esc(line.who) + (style === 'phone' ? ' · 전화' : '') + '</span>' : '';
     var pos = '';
     if (overlay && line.pos) {
@@ -356,7 +356,7 @@
       return '<div class="panel-row' + (cut.diagonal && row.length > 1 ? ' is-diagonal' : '') + '" style="aspect-ratio:' + sum + ' / 1;' +
         (ri > 0 && cut.rowGap ? 'margin-top:calc(' + Number(cut.rowGap) + ' * var(--u));' : '') + '">' + panels + '</div>';
     }).join('');
-    var cls = 'cut-wrap w-' + al + (w < 100 ? ' is-narrow' : '') + (hasEdgeTop ? ' has-edge-top' : '') + (hasEdgeBottom ? ' has-edge-bottom' : '') +
+    var cls = 'cut-wrap w-' + al + (w < 100 ? ' is-narrow' : '') + (hasEdgeTop ? ' has-edge-top' : '') + (hasEdgeBottom ? ' has-edge-bottom' : '') + (cut.shape === 'strip' ? ' is-strip' : '') +
       (ov ? ' has-ovf-' + esc(ov.edge) : '');
     return '<div class="' + cls + '" style="--cw:' + w + '%;' + (ov ? '--ovf:' + Number(ov.size || 32) + 'px;' : '') + '">' + html + '</div>';
   }

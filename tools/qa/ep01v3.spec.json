@@ -832,7 +832,7 @@
 "in-tl",
 "in-tl",
 "in-tl",
-"gap"
+"in-br"
 ],
 "inset": null,
 "link": null,
@@ -1259,8 +1259,8 @@
 ]
 ],
 "at": [
-"in-tr",
-"in-tr"
+"in-tl",
+"edge-bottom-r"
 ],
 "inset": null,
 "link": null,
@@ -1564,7 +1564,7 @@
 ]
 ],
 "at": [
-"gap",
+"in-bl",
 "in-tr",
 "gap"
 ],
@@ -1875,7 +1875,7 @@
 "lines": [
 [
 "",
-"speech",
+"silence",
 "……"
 ]
 ],

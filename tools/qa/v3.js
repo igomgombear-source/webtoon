@@ -47,7 +47,7 @@
       eq('spec.width', c.width || 100, s.width); eq('spec.ratio', c.ratio, s.ratio); eq('spec.shape', c.shape, s.shape);
       eq('spec.after', c.spacing.after, s.after); eq('spec.before', c.spacing.before || 0, s.before);
       eq('spec.time', (c.datetime && c.datetime.time) || null, s.time);
-      eq('spec.lines', (c.lines || []).map(function (l) { return [l.who, l.style, l.text]; }), s.lines);
+      eq('spec.lines', (c.lines || []).map(function (l) { return [l.who || '', l.style, l.text]; }), s.lines);
       eq('spec.at', (c.lines || []).map(function (l) { return l.at || 'gap'; }), s.at);
       eq('spec.rows', c.rows ? c.rows.map(function (r) { return r.length; }) : null, s.rows);
       eq('spec.inset', c.inset ? c.inset.to : null, s.inset); eq('spec.link', c.link || null, s.link);
@@ -59,11 +59,15 @@
         if (!l.text) add(res, 'fail', 'data.empty', 0, c.no, '빈 대사 ' + j);
         if (l.style !== 'thought' && l.style !== 'phone' && l.style !== 'caption' && !l.who && !/^…+$|^……$/.test(l.text)) add(res, 'warn', 'data.speaker', 0, c.no, '화자 없는 말풍선: ' + l.text.slice(0, 16));
       });
-      if (c.image && !/^ep01v3-0(35|50|66)-webtoon-style-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
+      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff)-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
       if (c.image && c.imageStatus !== 'draft') add(res, 'fail', 'data.draft', 0, c.no, 'DRAFT 표시 없는 임시 원화');
     });
     var withImg = cuts.filter(function (c) { return c.image; }).map(function (c) { return c.no; });
-    if (JSON.stringify(withImg) !== '[35,50,66]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (현재 승인: 35·50·66)');
+    if (JSON.stringify(withImg) !== '[1,16,35,50,66,76]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (현재 승인: 1·16·35·50·66·76)');
+    var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
+    if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
+    var c74 = cuts.filter(function (c) { return c.no === 74; })[0];
+    if (!c74 || (c74.lines || []).length !== 1 || c74.lines[0].who || c74.lines[0].style !== 'silence') add(res, 'fail', 'data.silence', 0, 74, '74컷은 화자 없는 침묵(silence) 1줄이어야 함');
     f.remove();
   }
 
@@ -79,6 +83,8 @@
       var bubbles = [].slice.call(cut.querySelectorAll('.line'));
       bubbles.forEach(function (ln) {
         var b = ln.querySelector('.bubble'), r = rect(b), cs = win.getComputedStyle(b), fs = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || fs * 1.55;
+        if (no === 33) { var pn = ln.closest('.panel'); if (pn) { var pr = rect(pn); if (r.left < pr.left - 1 || r.right > pr.right + 1 || r.top < pr.top - 1 || r.bottom > pr.bottom + 1) add(res, 'fail', 'bubble.inpanel', w, no, '33컷 말풍선이 조각 밖: ' + b.textContent.slice(0, 12)); } }
+        if (no === 74 && (ln.querySelector('.who') || /none|rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) === false)) add(res, 'fail', 'silence.form', w, no, '74컷에 화자/말풍선 배경이 있음');
         if (r.left < -1 || r.right > vw + 1) add(res, 'fail', 'bubble.offscreen', w, no, '말풍선이 화면 밖 ' + Math.round(r.left) + '~' + Math.round(r.right));
         if (b.scrollHeight > b.clientHeight + 2 || b.scrollWidth > b.clientWidth + 2) add(res, 'fail', 'bubble.clipped', w, no, '글자 잘림');
         var style = /line-thought/.test(ln.className) ? 'thought' : /line-caption/.test(ln.className) ? 'caption' : 'speech';

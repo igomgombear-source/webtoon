@@ -541,3 +541,28 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
 .at-in-br2 { bottom: 17%; right: 3%; align-items: flex-end; }
 /* 잠금화면 배경 사진: 기본 view-lock 그라데이션(shorthand)보다 우선 */
 .phone .phone-screen.has-wall { background-size: cover !important; background-position: center top !important; background-repeat: no-repeat !important; background-color: #1d2530; }
+
+/* 침묵 연출: 화자·말풍선 없이 말줄임표만 (컷 74) */
+.line.line-silence { align-self: center; align-items: center; max-width: 100%; }
+.line-silence .bubble { background: none; color: #3e4856; font-size: 22px; letter-spacing: .35em; padding: 6px 0 0; text-indent: .35em; }
+/* 좁은 조각(320px 폭 분할2 등): 사선 컷도 말풍선 폭을 조각 안에서 최대한 쓴다 — 33컷 조각 안쪽 배치 유지용 */
+@container (max-width: 200px) {
+  .panel-row.is-diagonal .bgrp { max-width: 90%; }
+  .panel.diag-first .bgrp { max-width: 84%; }
+  .panel.diag-last .bgrp { max-width: 86%; }
+  .panel-row.is-diagonal .bgrp .line-speech .bubble { padding: 5px 8px; }
+}
+/* 사선 경계를 말풍선이 넘지 않게: 뒤 조각의 왼쪽·앞 조각의 오른쪽은 사선 폭만큼 안으로 */
+.panel.diag-last .bgrp.at-in-tl, .panel.diag-last .bgrp.at-in-bl { left: 9%; }
+.panel.diag-first .bgrp.at-in-tr, .panel.diag-first .bgrp.at-in-br { right: 9%; }
+/* 띠(62컷): 낮은 컷이라 320px 폭에서 말풍선 안쪽 여백을 줄여 전화 음성과 독백이 겹치지 않게 */
+@container (max-width: 345px) {
+  .cut-wrap.is-strip .bgrp .line-thought .bubble { padding: 5px 10px; }
+  .cut-wrap.is-strip .bgrp .line-phone .bubble { padding: 4px 12px; }
+  .cut-wrap.is-strip .bgrp.at-in-tr { top: 2%; }
+  .cut-wrap.is-strip .bgrp.at-in-bl { bottom: 2%; }
+}
+/* 컷 50(승민 얼굴 3/4): 독백 2개를 얼굴·눈에서 떨어진 모서리(좌상·우하)에 한 줄씩. 눈높이(컷 높이의 약 30~36%)보다 위·아래에 둔다 */
+#cut-50 .bgrp { max-width: 98%; }
+#cut-50 .bgrp .line-thought .bubble { font-size: 15px; padding: 6px 10px; line-height: 1.4; }
+#cut-50 .draft-badge { right: auto; left: 8px; }
