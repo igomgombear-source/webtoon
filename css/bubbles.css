@@ -1,0 +1,56 @@
+/* 말풍선 v4 (시범) — body.bv4-on 일 때만 적용. 기본 화면에는 영향 없음 */
+.bv4-measure { position: absolute; left: -9999px; top: 0; visibility: hidden; pointer-events: none; }
+
+.bv4-text {
+  margin: 0; text-align: center; word-break: keep-all; overflow-wrap: break-word; line-break: strict;
+  text-wrap: balance; -webkit-font-smoothing: antialiased;
+}
+.bv4-speech { font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 500; line-height: 1.42; color: #15171b; letter-spacing: -.01em; }
+.bv4-phone  { font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 600; line-height: 1.42; color: #15171b; letter-spacing: .02em; }
+.bv4-mono   { font-family: "Noto Serif KR", "Noto Serif CJK KR", "AppleMyungjo", "Nanum Myeongjo", serif; font-weight: 500; line-height: 1.55; color: #22252a; }
+.bv4-caption{ font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 600; line-height: 1.35; color: #1b1d21; letter-spacing: .02em; }
+
+.bv4-on .cut.bv4-cut { position: relative; }
+.bv4-layer { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
+.bv4-band { width: 100%; }
+.bv4-b { position: absolute; }
+.bv4-b .bv4-text { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.bv4-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+
+/* 말: 흰 타원, 가는 먹선 */
+.bv4-t-speech .bv4-svg path, .bv4-t-offscreen .bv4-svg path { fill: #fff; stroke: #23262c; stroke-width: 1.5; stroke-linejoin: round; }
+.bv4-svg .bv4-cover { fill: none; stroke: #fff; stroke-width: 2.6; }
+/* 전화 음성: 톱니 테두리 */
+.bv4-t-phone .bv4-svg path { fill: #f6f7f9; stroke: #23262c; stroke-width: 1.4; stroke-linejoin: miter; }
+.bv4-t-phone.is-jag .bv4-svg path { stroke-dasharray: 3 2; }
+/* 독백: 테두리 없는 반투명 사각 (검은 상자 대신 밝은 종이색, 원화가 비치도록) */
+.bv4-k-rect.bv4-t-mono { background: rgba(250, 248, 243, .86); border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+/* 자막: 각진 캡션 */
+.bv4-k-rect.bv4-t-caption { background: #f1ece2; border-radius: 0; }
+/* 컷 밖 여백 띠에 놓인 말풍선은 배경과 구분되게 그림자만 아주 약하게 */
+.bv4-w-above.bv4-t-mono, .bv4-w-below.bv4-t-mono { background: rgba(250, 248, 243, .94); }
+
+.bv4-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 휴대폰 메시지 화면 (어두운 UI) */
+.bv4-screen { position: absolute; display: flex; flex-direction: column; background: #101216; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 0 0 2px #2b2f36; font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; }
+.bv4-th-head { flex: none; padding: 12px 14px 10px; font-size: 14px; font-weight: 700; color: #e9ebee; border-bottom: 1px solid #23262c; }
+.bv4-th-back { margin-right: 8px; color: #8d96a3; }
+.bv4-th-body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding: 12px 8px 14px; overflow: hidden; }
+.bv4-msg { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; max-width: 97%; }
+.bv4-msg p { margin: 0; padding: 9px 12px; font-size: 14.5px; line-height: 1.5; text-wrap: pretty; border-radius: 16px; word-break: keep-all; overflow-wrap: break-word; }
+.bv4-msg.is-me { align-self: flex-end; align-items: flex-end; }
+.bv4-msg.is-me p { background: #3a6fd0; color: #fff; border-bottom-right-radius: 5px; }
+.bv4-msg.is-them { align-self: flex-start; }
+.bv4-msg.is-them p { background: #2a2e35; color: #eef0f3; border-bottom-left-radius: 5px; }
+.bv4-msg-t { flex: none; font-size: 12px; color: #8d96a3; padding: 0 4px; }
+.bv4-screen-note { position: absolute; right: 10px; top: 13px; font-size: 11px; color: #6f7884; }
+
+/* 보호 영역 표시 (?zones=1 검수용) */
+.bv4-zone { position: absolute; border: 1.5px dashed rgba(255, 90, 90, .95); background: rgba(255, 60, 60, .10); }
+.bv4-zone.is-approved { border-color: rgba(60, 220, 120, .95); background: rgba(60, 220, 120, .10); }
+.bv4-zone span { position: absolute; left: 2px; top: 1px; font: 600 10px/1.2 sans-serif; color: #fff; background: rgba(0,0,0,.6); padding: 1px 3px; }
+
+.bv4-join path { fill: #fff; stroke: none; }
+.bv4-join .bv4-join-line { fill: none; stroke: #23262c; stroke-width: 1.5; }

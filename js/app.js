@@ -436,6 +436,8 @@
     bindImages();
     bindReveal();
     bindProgress(ep);
+    /* 말풍선 v4 시범(?bubbles=v4 일 때만 동작) */
+    if (window.BubblesV4) window.BubblesV4.apply(app, ep, meta);
   }
 
   /* 그림 파일이 없거나 깨지면 임시 컷을 그대로 둔다 */
