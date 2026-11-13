@@ -141,9 +141,11 @@ img { display: block; max-width: 100%; }
 
 /* 그림 영역 */
 .art { position: relative; width: 100%; overflow: hidden; background: #0d1015; }
-.art .art-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .4s; }
+.art .art-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .3s; }
 .art.is-loaded .art-img { opacity: 1; }
 .art.is-loaded .placeholder { display: none; }
+.art.has-lqip { background-size: cover; background-position: center; }
+.art.has-lqip .placeholder { display: none; }   /* 축소 미리보기가 있으면 어두운 임시 면을 깔지 않는다 */
 
 /* 조립 컷: 비율은 canvasSize 로 고정, 레이어는 가로 폭 기준 % */
 .art.is-compose .cmp-visual { position: absolute; inset: 0; }

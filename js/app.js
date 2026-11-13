@@ -153,7 +153,9 @@
       var src = /^(\.|\/|https?:)/.test(cut.image) ? cut.image : (ep.imageBase || '') + cut.image;
       var z = cut.imageSize || {};
       var sized = +z.w > 0 && +z.h > 0;
-      return '<div class="art has-image' + (sized ? ' is-sized' : '') + '" style="' + artBoxStyle(cut) + '">' +
+      /* 그림이 뜨기 전에는 원화의 축소 미리보기를 바탕에 깔아, 검은 바탕에서 서서히 밝아지는 구간이 없게 한다 */
+      var lq = cut.imageLqip && /^data:image\/webp;base64,[A-Za-z0-9+\/=]+$/.test(cut.imageLqip) ? ' has-lqip' : '';
+      return '<div class="art has-image' + (sized ? ' is-sized' : '') + lq + '" style="' + artBoxStyle(cut) + (lq ? 'background-image:url(' + cut.imageLqip + ');' : '') + '">' +
         ph +
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
@@ -337,7 +339,7 @@
   }
 
   function renderPanelsV3(ep, cut, lines) {
-    var rows = cut.rows || [[{ ratio: cut.ratio, image: cut.image, imageSize: cut.imageSize, imageStatus: cut.imageStatus }]];
+    var rows = cut.rows || [[{ ratio: cut.ratio, image: cut.image, imageSize: cut.imageSize, imageStatus: cut.imageStatus, imageLqip: cut.imageLqip }]];
     var w = Math.max(40, Math.min(100, Number(cut.width) || 100));
     var al = cut.align === 'left' || cut.align === 'right' ? cut.align : 'center';
     var shape = SHAPE_OK[cut.shape] ? ' shape-' + cut.shape : '';
@@ -350,7 +352,7 @@
       var panels = row.map(function (p, pi) {
         var dt = p.time ? { time: p.time } : (first && cut.datetime ? cut.datetime : null);
         first = false;
-        var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus,
+        var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus, imageLqip: p.imageLqip,
           ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt };
         var diag = cut.diagonal && row.length > 1 ? ' diag-' + (pi === 0 ? 'first' : 'last') : '';
         var me = idx++;

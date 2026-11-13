@@ -186,6 +186,16 @@
     var vis = d.body.innerText || '';
     ['DRAFT', '그림 준비 중', '원화 합성 전', '임시 컷', '(가정)'].forEach(function (t) { if (vis.indexOf(t) >= 0) add(res, 'fail', 'reader.text', w, 0, '독자 화면 글자에 "' + t + '"'); });
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'reader.names', w, 0, '화자 이름표가 켜져 있음(제작기준 9-6: false)');
+    /* 연결된 원화: 필터·오버레이·투명도로 어둡게 보이지 않아야 하고, 로드 전에는 축소 미리보기가 바탕에 있어야 한다 */
+    ep.cuts.filter(function (c) { return c.image; }).forEach(function (c) {
+      var art = d.querySelector('#cut-' + (c.no < 10 ? '0' : '') + c.no + ' .art-img');
+      if (!art) return add(res, 'fail', 'art.missing', w, c.no, '원화 이미지 요소 없음');
+      var x = art, bad = [];
+      while (x && x !== d.body) { var cs = win.getComputedStyle(x); if (cs.filter !== 'none') bad.push('filter ' + x.className); if (cs.mixBlendMode !== 'normal') bad.push('blend ' + x.className); x = x.parentElement; }
+      if (art.complete && win.getComputedStyle(art).opacity !== '1') bad.push('img opacity ' + win.getComputedStyle(art).opacity);
+      if (bad.length) add(res, 'fail', 'art.dim', w, c.no, '원화가 어둡게 보일 수 있음: ' + bad.join(', '));
+      var box = art.closest('.art'); if (!box.classList.contains('has-lqip') || !/data:image\/webp/.test(box.style.backgroundImage)) add(res, 'fail', 'art.lqip', w, c.no, '로드 전 바탕(축소 미리보기)이 없음 — 검은 바탕에서 서서히 나타남');
+    });
     /* 74컷: 침묵 — 화자·이름 없음 */
     var s74 = d.getElementById('cut-74');
     if (s74 && (s74.querySelector('.bv4-sr') || s74.querySelectorAll('.bv4-b').length !== 1)) add(res, 'fail', 'silence.form', w, 74, '74컷은 화자 없는 침묵 한 줄이어야 함');
