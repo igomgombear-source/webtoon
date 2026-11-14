@@ -59,6 +59,16 @@ window.EP01V3_BUBBLES = {
       { type: 'speech', pref: { panel: 0, at: 'in-tl' }, region: 'panel', edge: true, tail: { panel: 0, x: 52, y: 52 } }
     ]
   },
+  45: {
+    note: '승인 원화 REV1(DRAFT) — 발화자는 무대 중앙 앞줄의 손을 든 학생(손끝 원화 약 (527,312)). 말풍선은 그 학생 바로 아래(객석 빈 곳, 믹서 위)에 두고 꼬리가 위로 그 학생을 가리킴 — 위쪽은 뒷줄 얼굴 때문에 다른 학생을 가리키게 되고, 꼬리 길이는 엔진 상한이라 폭에 따라 위치가 달라지지 않는 아래쪽을 택함',
+    status: 'provisional',
+    zones: [
+      { panel: 0, x: 30, y: 21, w: 42, h: 52, label: '합창부 학생들(얼굴·몸·발)', approved: true }
+    ],
+    lines: [
+      { type: 'offscreen', pref: { panel: 0, x: 51.8, y: 82 }, region: 'panel', tail: { panel: 0, x: 51.8, y: 66 } }
+    ]
+  },
   50: {
     status: 'monologue-approved',
     note: '승인 원화 · 인물 중심 독백 2개 (제작기준 좌상·우하 → 얼굴을 피해 우상 벽·우하 믹서로, 오른쪽 끝선 맞춤)',
