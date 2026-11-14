@@ -34,6 +34,7 @@
       '<p class="su-b-l1">' + esc(n.from) + '</p><p class="su-b-l2 wrap">' + esc(n.body) + '</p></div>';
   }
 
+  var POWER_ITEMS = '<span class="pi"><i class="ic sl"></i>절전</span><span class="pi on"><i class="ic off"></i>시스템 종료</span><span class="pi"><i class="ic rs"></i>다시 시작</span>';
   var VIEWS = {
     /* U01 — 메일 알림 배너 2줄 (두 번째 줄 말줄임) */
     banner: function (s) {
@@ -84,9 +85,17 @@
     /* 23-a — 모니터 바탕화면(spec.photo: 승인 원화 16컷 속 모니터 화면을 같은 파일에서 잘라 비춤 — 별도 사진 파일 없음) + 종료 직전 메뉴.
      * menu:{x,y,w,h} 는 가상 화면에 대한 %. 화면은 켜져 있고 메뉴만 열린 상태(꺼진 화면 아님) */
     desktop: function (s) {
-      var m = s.menu; if (!m) return '';
-      return '<div class="su-pwr" style="left:' + m.x + '%;top:' + m.y + '%;width:' + m.w + '%;height:' + m.h + '%;">' +
-        '<span class="pi"><i class="ic sl"></i>절전</span><span class="pi on"><i class="ic off"></i>시스템 종료</span><span class="pi"><i class="ic rs"></i>다시 시작</span></div>';
+      var m = s.menu, out = '';
+      var ph = s.photo;
+      if (ph && ph.sh) {   /* 높이 기준 맞춤: 사진이 가로 300 보다 좁으면 오른쪽 남는 폭을 같은 원화의 가장 오른쪽 열(어두운 면)을 가로로 늘려 채운다 */
+        var k = (BW * s.aspect) / ph.sh, used = ph.sw * k, gap = BW - used;
+        if (gap > 0.2) {
+          var cw = ph.edgeCols * k;
+          out += '<div class="su-gapfill" style="left:' + (used - 0.6).toFixed(2) + 'px;width:' + (gap + 0.6).toFixed(2) + 'px;"><i style="width:' + cw.toFixed(2) + 'px;background-image:url(' + esc(ph.src) + ');background-size:' +
+            (ph.w * k).toFixed(2) + 'px ' + (ph.h * k).toFixed(2) + 'px;background-position:' + (-(ph.x + ph.sw - ph.edgeCols) * k).toFixed(2) + 'px ' + (-ph.y * k).toFixed(2) + 'px;transform:scaleX(' + ((gap + 0.6) / cw).toFixed(3) + ');"></i></div>';
+        }
+      }
+      return out + (m ? '<div class="su-pwr" style="left:' + m.x + '%;top:' + m.y + '%;width:' + m.w + '%;height:' + m.h + '%;">' + POWER_ITEMS + '</div>' : '');
     },
     /* 52 — 화면 꺼짐(옆 버튼을 누른 뒤): 검은 유리 */
     off: function () { return '<div class="su-offglass"></div>'; },
@@ -119,7 +128,7 @@
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');
     var wall = spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
     if (spec.photo) {   /* 원화 속 영역(sx 폭)을 가상 화면 가로 300 에 맞춰 균일 확대(비율 유지) */
-      var ph = spec.photo, k = BW / ph.sw;
+      var ph = spec.photo, k = ph.sh ? (BW * spec.aspect) / ph.sh : BW / ph.sw;
       wall = 'background-image:url(' + esc(ph.src) + ');background-repeat:no-repeat;background-size:' + (ph.w * k).toFixed(2) + 'px ' + (ph.h * k).toFixed(2) + 'px;background-position:' + (-ph.x * k).toFixed(2) + 'px ' + (-ph.y * k).toFixed(2) + 'px;';
     }
     return '<div class="scr" role="img" aria-label="' + esc(label(spec)) + '" data-quad="' + q + '" data-aspect="' + spec.aspect + '" style="clip-path:polygon(' + poly + ');">' +
@@ -182,6 +191,8 @@
     contacts: function (s) {
       return '<div class="su-zc"><p class="su-cname">' + esc(s.name) + '</p><div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
     },
+    /* 23-a 종료 메뉴 확대 (360px 에서 글자가 읽히도록 같은 메뉴를 평면으로 크게) */
+    power: function () { return '<div class="su-pwr">' + POWER_ITEMS + '</div>'; },
     thread: function (s) {
       var st = (s.zoom && s.zoom.start) || 0;
       var m = (s.messages || []).slice(st, st + ((s.zoom && s.zoom.count) || 1));

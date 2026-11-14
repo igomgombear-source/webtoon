@@ -172,11 +172,19 @@
 .su-v-desktop { background-color: #3a2f2a; }
 .su-pwr { position: absolute; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-evenly; padding: 3px 4px; border-radius: 5px;
   background: rgba(30, 30, 36, .94); box-shadow: 0 2px 7px rgba(0, 0, 0, .45); border: .6px solid rgba(255, 255, 255, .18); color: #eceef3; }
-.su-pwr .pi { display: flex; align-items: center; gap: 4px; padding: 0 4px; height: 24%; border-radius: 3px; font-size: 8.4px; font-weight: 600; white-space: nowrap; }
+.su-pwr .pi { display: flex; align-items: center; gap: 4px; padding: 0 5px; height: 26%; border-radius: 3px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .su-pwr .pi.on { background: rgba(255, 255, 255, .17); }
-.su-pwr .ic { display: block; flex: none; width: 8px; height: 8px; border: 1.1px solid currentColor; border-radius: 50%; box-sizing: border-box; position: relative; }
+.su-pwr .ic { display: block; flex: none; width: 11px; height: 11px; border: 1.1px solid currentColor; border-radius: 50%; box-sizing: border-box; position: relative; }
 .su-pwr .ic.sl { border-radius: 50% 50% 50% 0; transform: rotate(-30deg); }
-.su-pwr .ic.off::after { content: ""; position: absolute; left: 50%; top: -2px; width: 1.1px; height: 4.5px; background: currentColor; transform: translateX(-50%); }
+.su-pwr .ic.off::after { content: ""; position: absolute; left: 50%; top: -2.5px; width: 1.4px; height: 6px; background: currentColor; transform: translateX(-50%); }
 .su-pwr .ic.rs { border-right-color: transparent; }
 /* 벽시계 바늘 층: 원화 캔버스 전체를 덮는 SVG */
 .scr-clock { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.su-gapfill { position: absolute; top: 0; bottom: 0; overflow: hidden; }
+.su-gapfill i { position: absolute; left: 0; top: 0; bottom: 0; background-repeat: no-repeat; transform-origin: 0 0; }
+/* 종료 메뉴 확대 인셋 (zoom parts: power) — 상자 안에서는 em 단위 */
+.zoom-box.su-v-desktop { background: #1e1e24; }
+.zoom-box .su-pwr { position: static; width: auto; height: auto; padding: .12em .2em; background: transparent; box-shadow: none; border: 0; display: block; }
+.zoom-box .su-pwr .pi { height: auto; font-size: 1em; line-height: 1.2; padding: .12em .4em; gap: .45em; }
+.zoom-box .su-pwr .ic { width: .95em; height: .95em; border-width: .1em; }
+.zoom-box .su-pwr .ic.off::after { top: -.25em; width: .12em; height: .55em; }
