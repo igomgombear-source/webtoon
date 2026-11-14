@@ -168,23 +168,43 @@
 .su-slide.is-abs .su-fill { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--sp, 0px) + 1.4em); border-radius: 1.3em; background: rgba(61, 187, 106, .32); }
 .su-slide.is-abs .su-knob { position: absolute; left: calc(var(--sx) - 1.1em); top: calc(var(--sy) - 1.1em); margin: 0; box-shadow: 0 .1em .4em rgba(0, 0, 0, .35); }
 
-/* 23-a 모니터 종료 메뉴 (js/screenui.js desktop) — 가상 화면(가로 300) 기준 px. 화면은 켜져 있고 메뉴만 열려 있다 */
-.su-v-desktop { background-color: #3a2f2a; }
-.su-pwr { position: absolute; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-evenly; padding: 3px 4px; border-radius: 5px;
-  background: rgba(30, 30, 36, .94); box-shadow: 0 2px 7px rgba(0, 0, 0, .45); border: .6px solid rgba(255, 255, 255, .18); color: #eceef3; }
-.su-pwr .pi { display: flex; align-items: center; gap: 4px; padding: 0 5px; height: 26%; border-radius: 3px; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.su-pwr .pi.on { background: rgba(255, 255, 255, .17); }
-.su-pwr .ic { display: block; flex: none; width: 11px; height: 11px; border: 1.1px solid currentColor; border-radius: 50%; box-sizing: border-box; position: relative; }
-.su-pwr .ic.sl { border-radius: 50% 50% 50% 0; transform: rotate(-30deg); }
-.su-pwr .ic.off::after { content: ""; position: absolute; left: 50%; top: -2.5px; width: 1.4px; height: 6px; background: currentColor; transform: translateX(-50%); }
-.su-pwr .ic.rs { border-right-color: transparent; }
-/* 벽시계 바늘 층: 원화 캔버스 전체를 덮는 SVG */
-.scr-clock { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+/* 23-a Windows 10 데스크톱 (js/screenui.js desktop) — 가상 화면(가로 300) px. 작업 표시줄 높이 8 ≈ 화면의 5% */
+.su-v-desktop { background-color: #3a2f2a; font-family: "Segoe UI", Pretendard, system-ui, sans-serif; color: #fff; }
+.su-v-desktop svg { display: block; width: 100%; height: 100%; }
+.dk-ic { position: absolute; width: 14px; display: flex; flex-direction: column; align-items: center; gap: .6px; }
+.dk-ic svg { width: 9.5px; height: 9.5px; }
+.dk-ic b { font-weight: 500; font-size: 3.7px; line-height: 1.15; text-align: center; color: #fff; text-shadow: 0 0 1.2px rgba(0,0,0,.95), 0 .3px 1px rgba(0,0,0,.8); white-space: nowrap; }
+.dk-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; display: flex; align-items: center; background: rgba(22, 23, 27, .96); border-top: .3px solid rgba(255,255,255,.12); }
+.dk-bar > span { height: 100%; display: flex; align-items: center; justify-content: center; position: relative; flex: none; }
+.b-start { width: 9px; padding: 2.3px; box-sizing: border-box; } .b-start.on { background: rgba(255,255,255,.2); }
+.b-srch, .b-task { width: 8px; } .b-srch i { width: 3.2px; height: 3.2px; border: .6px solid #e8e8ec; border-radius: 50%; box-sizing: border-box; } .b-task i { width: 3.4px; height: 2.6px; border: .6px solid #e8e8ec; box-sizing: border-box; }
+.b-app { width: 8px; } .b-app i { width: 4px; height: 4px; border-radius: .8px; display: block; }
+.b-app:nth-of-type(5)::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: .3px; height: .5px; background: #9bc3ff; }
+.b-sp { flex: 1 1 auto; }
+.b-tray { gap: 1.8px; padding: 0 2px; } .b-tray i { display: block; width: 2.6px; height: 2.6px; border: .5px solid #e8e8ec; border-radius: .5px; box-sizing: border-box; opacity: .85; }
+.b-tray .t-up { border-width: 0 .6px .6px 0; transform: rotate(-135deg) scale(.8); } .b-tray .t-vol { border-radius: 50% 0 0 50%; }
+.b-clock { font-size: 4.1px; font-weight: 500; padding: 0 2.2px; letter-spacing: .1px; }
+.b-show { width: .8px; border-left: .3px solid rgba(255,255,255,.3); }
+/* 시작 메뉴 */
+.dk-start { position: absolute; left: 0; bottom: 8px; width: 74px; height: 84px; display: flex; background: rgba(28, 29, 33, .97); box-shadow: 0 0 4px rgba(0,0,0,.5); }
+.dk-rail { width: 9px; display: flex; flex-direction: column; align-items: center; padding: 2px 0 1px; box-sizing: border-box; gap: 1.2px; }
+.dk-rail i { display: block; width: 9px; height: 8.4px; position: relative; flex: none; }
+.dk-rail i::before { content: ""; position: absolute; left: 50%; top: 50%; width: 3.2px; height: 3.2px; transform: translate(-50%,-50%); border: .6px solid #e8e8ec; border-radius: 50%; box-sizing: border-box; }
+.dk-rail .r-menu::before { display: none; } .dk-rail .r-menu u { position: absolute; left: 2.6px; right: 2.6px; height: .6px; background: #e8e8ec; } .dk-rail .r-menu u:nth-child(1) { top: 2.6px; } .dk-rail .r-menu u:nth-child(2) { top: 4.1px; } .dk-rail .r-menu u:nth-child(3) { top: 5.6px; }
+.dk-rail .r-sp { flex: 1; }
+.dk-rail .r-doc::before, .dk-rail .r-pic::before { border-radius: .4px; width: 2.8px; height: 3.4px; }
+.dk-rail .r-pwr.on { background: rgba(255,255,255,.2); } .dk-rail .r-pwr::before { border-radius: 50%; width: 3px; height: 3px; border-top-color: transparent; }
+.dk-apps { flex: 1; padding: 2px 3px 0; box-sizing: border-box; min-width: 0; }
+.dk-apps .h { font-size: 3.3px; color: #b8bcc6; margin: 0 0 1.4px; font-weight: 600; }
+.dk-apps .ap { display: flex; align-items: center; gap: 2px; height: 6.6px; font-size: 4px; } .dk-apps .ap i { width: 3.8px; height: 3.8px; border-radius: .7px; display: block; }
+/* 작은 전원 선택 메뉴 — 시작 메뉴의 전원 버튼 바로 위, 화면 너비의 약 20% */
+.dk-pwr { position: absolute; left: 3px; bottom: 9.5px; width: 56px; padding: 1px; box-sizing: border-box; background: #2c2d33; border: .4px solid rgba(255,255,255,.22); box-shadow: 0 1px 4px rgba(0,0,0,.55); }
+.dk-pwr .pi { display: flex; align-items: center; gap: 2.4px; height: 9px; padding: 0 3px; font-size: 5.2px; font-weight: 500; white-space: nowrap; }
+.dk-pwr .pi.on { background: #4a4c55; }
+.dk-pwr .ic { display: block; flex: none; width: 3.6px; height: 3.6px; border: .5px solid #fff; border-radius: 50%; box-sizing: border-box; position: relative; }
+.dk-pwr .ic.sl { border-radius: 50% 50% 50% 0; transform: rotate(-30deg); } .dk-pwr .ic.rs { border-right-color: transparent; }
+.dk-pwr .ic.off::after { content: ""; position: absolute; left: 50%; top: -1px; width: .55px; height: 2.2px; background: #fff; transform: translateX(-50%); }
 .su-gapfill { position: absolute; top: 0; bottom: 0; overflow: hidden; }
 .su-gapfill i { position: absolute; left: 0; top: 0; bottom: 0; background-repeat: no-repeat; transform-origin: 0 0; }
-/* 종료 메뉴 확대 인셋 (zoom parts: power) — 상자 안에서는 em 단위 */
-.zoom-box.su-v-desktop { background: #1e1e24; }
-.zoom-box .su-pwr { position: static; width: auto; height: auto; padding: .12em .2em; background: transparent; box-shadow: none; border: 0; display: block; }
-.zoom-box .su-pwr .pi { height: auto; font-size: 1em; line-height: 1.2; padding: .12em .4em; gap: .45em; }
-.zoom-box .su-pwr .ic { width: .95em; height: .95em; border-width: .1em; }
-.zoom-box .su-pwr .ic.off::after { top: -.25em; width: .12em; height: .55em; }
+/* 벽시계 바늘 층: 원화 캔버스 전체를 덮는 SVG */
+.scr-clock { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }

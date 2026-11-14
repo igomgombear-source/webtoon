@@ -34,7 +34,16 @@
       '<p class="su-b-l1">' + esc(n.from) + '</p><p class="su-b-l2 wrap">' + esc(n.body) + '</p></div>';
   }
 
-  var POWER_ITEMS = '<span class="pi"><i class="ic sl"></i>절전</span><span class="pi on"><i class="ic off"></i>시스템 종료</span><span class="pi"><i class="ic rs"></i>다시 시작</span>';
+  /* 바탕화면 아이콘·시작 버튼 도형(가상 화면 px 기준 작은 SVG) */
+  var DK_GLYPH = {
+    pc: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1" fill="#4aa3e8" stroke="#dbe8f5" stroke-width="1.2"/><rect x="9" y="17" width="6" height="2" fill="#cfd6df"/><rect x="6" y="19" width="12" height="1.6" fill="#cfd6df"/></svg>',
+    bin: '<svg viewBox="0 0 24 24"><path d="M6 7h12l-1.2 13H7.2z" fill="#dfe6ee" stroke="#9fb0c2" stroke-width="1"/><rect x="5" y="5" width="14" height="2" rx=".6" fill="#b9c6d4"/><rect x="10" y="3" width="4" height="2" fill="#b9c6d4"/></svg>',
+    folder: '<svg viewBox="0 0 24 24"><path d="M2.5 6.5h7l2 2.2h10v10.8h-19z" fill="#f2c14e"/><path d="M2.5 10h19v9.5h-19z" fill="#f7d36e"/></svg>',
+    doc: '<svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z" fill="#f4f6f9" stroke="#aab4c0" stroke-width="1"/><path d="M14 3v4h4" fill="#d7dde5"/><rect x="8" y="11" width="8" height="1.2" fill="#8794a3"/><rect x="8" y="14" width="8" height="1.2" fill="#8794a3"/><rect x="8" y="17" width="5" height="1.2" fill="#8794a3"/></svg>',
+    app: '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="#2b6fd6"/><path d="M8 16V8h2.2l2 5 2-5H16v8" fill="none" stroke="#fff" stroke-width="1.5"/></svg>',
+    web: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="#3a86e0"/><path d="M3.8 12h16.4M12 3.5c3 3.2 3 13.8 0 17M12 3.5c-3 3.2-3 13.8 0 17" fill="none" stroke="#dbeafe" stroke-width="1.1"/></svg>',
+    win: '<svg viewBox="0 0 24 24"><path d="M3 5.2l7.6-1v7.2H3zM11.8 4.1L21 2.8v8.6h-9.2zM3 12.6h7.6v7.2L3 18.8zM11.8 12.6H21v8.6l-9.2-1.3z" fill="#fff"/></svg>'
+  };
   var VIEWS = {
     /* U01 — 메일 알림 배너 2줄 (두 번째 줄 말줄임) */
     banner: function (s) {
@@ -82,12 +91,12 @@
       return status(s.clock) + head(s.contact) + '<div class="su-thread">' + thread + '</div>' +
         '<div class="su-input"><div class="su-field' + (s.erasing ? ' is-erasing' : '') + '">' + txt + '</div><span class="su-send' + (s.erasing ? ' off' : '') + '" aria-hidden="true"></span></div>';
     },
-    /* 23-a — 모니터 바탕화면(spec.photo: 승인 원화 16컷 속 모니터 화면을 같은 파일에서 잘라 비춤 — 별도 사진 파일 없음) + 종료 직전 메뉴.
-     * menu:{x,y,w,h} 는 가상 화면에 대한 %. 화면은 켜져 있고 메뉴만 열린 상태(꺼진 화면 아님) */
+    /* 23-a — Windows 10 데스크톱: 바탕화면 사진(승인 16컷 원화 속 모니터 화면을 같은 파일에서 잘라 비춤) + 왼쪽 위 바탕화면 아이콘 +
+     * 얇은 작업 표시줄 + 열려 있는 시작 메뉴(시작 버튼 눌림, 전원 버튼 눌림) + 작은 전원 선택 메뉴(‘시스템 종료’ 선택).
+     * 화면은 켜져 있고 종료 직전이다. 크기·배치는 1920×1080 Windows 10 비율을 줄여 참고(작업 표시줄 높이 ≈ 화면의 5%) */
     desktop: function (s) {
-      var m = s.menu, out = '';
-      var ph = s.photo;
-      if (ph && ph.sh) {   /* 높이 기준 맞춤: 사진이 가로 300 보다 좁으면 오른쪽 남는 폭을 같은 원화의 가장 오른쪽 열(어두운 면)을 가로로 늘려 채운다 */
+      var out = '', ph = s.photo;
+      if (ph && ph.sh) {   /* 높이 기준 맞춤: 사진이 가로 300 보다 좁으면 오른쪽 남는 폭을 같은 원화의 가장 오른쪽 어두운 열을 늘려 채운다 */
         var k = (BW * s.aspect) / ph.sh, used = ph.sw * k, gap = BW - used;
         if (gap > 0.2) {
           var cw = ph.edgeCols * k;
@@ -95,7 +104,22 @@
             (ph.w * k).toFixed(2) + 'px ' + (ph.h * k).toFixed(2) + 'px;background-position:' + (-(ph.x + ph.sw - ph.edgeCols) * k).toFixed(2) + 'px ' + (-ph.y * k).toFixed(2) + 'px;transform:scaleX(' + ((gap + 0.6) / cw).toFixed(3) + ');"></i></div>';
         }
       }
-      return out + (m ? '<div class="su-pwr" style="left:' + m.x + '%;top:' + m.y + '%;width:' + m.w + '%;height:' + m.h + '%;">' + POWER_ITEMS + '</div>' : '');
+      var G = DK_GLYPH;
+      function ico(col, row, g, name) { return '<span class="dk-ic" style="left:' + (1.5 + col * 14.5) + 'px;top:' + (1.5 + row * 15) + 'px;">' + G[g] + '<b>' + name + '</b></span>'; }
+      out += ico(0, 0, 'pc', '내 PC') + ico(0, 1, 'bin', '휴지통') + ico(0, 2, 'folder', '새 폴더') + ico(0, 3, 'doc', '합창제 계획') +
+             ico(1, 0, 'app', '한글') + ico(1, 1, 'web', '인터넷') + ico(1, 2, 'folder', '성적 자료');
+      /* 시작 메뉴 */
+      out += '<div class="dk-start">' +
+        '<div class="dk-rail"><i class="r-menu"><u></u><u></u><u></u></i><span class="r-sp"></span><i class="r-user"></i><i class="r-doc"></i><i class="r-pic"></i><i class="r-set"></i><i class="r-pwr on"></i></div>' +
+        '<div class="dk-apps"><p class="h">최근 추가한 앱</p><span class="ap"><i style="background:#2b6fd6"></i>한글</span><span class="ap"><i style="background:#8a8f98"></i>메모장</span><span class="ap"><i style="background:#3c9b6a"></i>계산기</span><span class="ap"><i style="background:#c9822b"></i>설정</span></div>' +
+        '<div class="dk-pwr"><span class="pi"><i class="ic sl"></i>절전</span><span class="pi on"><i class="ic off"></i>시스템 종료</span><span class="pi"><i class="ic rs"></i>다시 시작</span></div>' +
+        '</div>';
+      /* 작업 표시줄 */
+      out += '<div class="dk-bar">' +
+        '<span class="b-start on">' + G.win + '</span><span class="b-srch"><i></i></span><span class="b-task"><i></i></span>' +
+        '<span class="b-app"><i style="background:#e0b040"></i></span><span class="b-app"><i style="background:#3a86e0"></i></span><span class="b-app"><i style="background:#2b6fd6"></i></span><span class="b-app"><i style="background:#9aa0aa"></i></span>' +
+        '<span class="b-sp"></span><span class="b-tray"><i class="t-up"></i><i class="t-net"></i><i class="t-vol"></i></span><span class="b-clock">' + esc((s.taskbar && s.taskbar.time) || '') + '</span><span class="b-show"></span></div>';
+      return out;
     },
     /* 52 — 화면 꺼짐(옆 버튼을 누른 뒤): 검은 유리 */
     off: function () { return '<div class="su-offglass"></div>'; },
@@ -191,8 +215,6 @@
     contacts: function (s) {
       return '<div class="su-zc"><p class="su-cname">' + esc(s.name) + '</p><div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
     },
-    /* 23-a 종료 메뉴 확대 (360px 에서 글자가 읽히도록 같은 메뉴를 평면으로 크게) */
-    power: function () { return '<div class="su-pwr">' + POWER_ITEMS + '</div>'; },
     thread: function (s) {
       var st = (s.zoom && s.zoom.start) || 0;
       var m = (s.messages || []).slice(st, st + ((s.zoom && s.zoom.count) || 1));
