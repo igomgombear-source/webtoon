@@ -81,6 +81,13 @@
       return status(s.clock) + head(s.contact) + '<div class="su-thread">' + thread + '</div>' +
         '<div class="su-input"><div class="su-field' + (s.erasing ? ' is-erasing' : '') + '">' + txt + '</div><span class="su-send' + (s.erasing ? ' off' : '') + '" aria-hidden="true"></span></div>';
     },
+    /* 23-a — 모니터 바탕화면(spec.photo: 승인 원화 16컷 속 모니터 화면을 같은 파일에서 잘라 비춤 — 별도 사진 파일 없음) + 종료 직전 메뉴.
+     * menu:{x,y,w,h} 는 가상 화면에 대한 %. 화면은 켜져 있고 메뉴만 열린 상태(꺼진 화면 아님) */
+    desktop: function (s) {
+      var m = s.menu; if (!m) return '';
+      return '<div class="su-pwr" style="left:' + m.x + '%;top:' + m.y + '%;width:' + m.w + '%;height:' + m.h + '%;">' +
+        '<span class="pi"><i class="ic sl"></i>절전</span><span class="pi on"><i class="ic off"></i>시스템 종료</span><span class="pi"><i class="ic rs"></i>다시 시작</span></div>';
+    },
     /* 52 — 화면 꺼짐(옆 버튼을 누른 뒤): 검은 유리 */
     off: function () { return '<div class="su-offglass"></div>'; },
     /* U13 — 수신: 미저장 번호 + 발신자 정보 */
@@ -111,9 +118,25 @@
     var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');
     var wall = spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
+    if (spec.photo) {   /* 원화 속 영역(sx 폭)을 가상 화면 가로 300 에 맞춰 균일 확대(비율 유지) */
+      var ph = spec.photo, k = BW / ph.sw;
+      wall = 'background-image:url(' + esc(ph.src) + ');background-repeat:no-repeat;background-size:' + (ph.w * k).toFixed(2) + 'px ' + (ph.h * k).toFixed(2) + 'px;background-position:' + (-ph.x * k).toFixed(2) + 'px ' + (-ph.y * k).toFixed(2) + 'px;';
+    }
     return '<div class="scr" role="img" aria-label="' + esc(label(spec)) + '" data-quad="' + q + '" data-aspect="' + spec.aspect + '" style="clip-path:polygon(' + poly + ');">' +
       '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>' +
-      buildFg(spec, poly);
+      buildFg(spec, poly) + buildClock(spec);
+  }
+
+  /* 벽시계 바늘(SVG, 원화 위 별도 층) — spec.clock = { w, h (원화 px), cx, cy, hh, mm, hl, ml, ry }. 원화의 시계 테두리·면은 건드리지 않는다 */
+  function buildClock(spec) {
+    var c = spec.clock; if (!c) return '';
+    var ha = ((c.hh % 12) + c.mm / 60) * 30, ma = c.mm * 6;
+    function hand(a, len, wd) {
+      var r = a * Math.PI / 180;
+      return '<line x1="0" y1="0" x2="' + (Math.sin(r) * len).toFixed(1) + '" y2="' + (-Math.cos(r) * len).toFixed(1) + '" stroke="#2a2a31" stroke-width="' + wd + '" stroke-linecap="round"/>';
+    }
+    return '<svg class="scr-clock" viewBox="0 0 ' + c.w + ' ' + c.h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<g transform="translate(' + c.cx + ' ' + c.cy + ') scale(1 ' + (c.ry || 1) + ')">' + hand(ha, c.hl, 7) + hand(ma, c.ml, 4.5) + '<circle r="6" fill="#2a2a31"/></g></svg>';
   }
 
   /* 손가락 전경(fg) — UI 앞에 놓이는 손가락 픽셀(원화와 같은 캔버스에서 잘라낸 투명 WebP). 원화는 수정하지 않는다.

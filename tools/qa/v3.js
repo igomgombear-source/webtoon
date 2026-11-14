@@ -78,7 +78,7 @@
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
     var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', w, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
-    if (scrs.length !== 19) add(res, 'warn', 'screen.count', w, 0, '합성된 휴대폰 화면 ' + scrs.length + '개 (기대 19)');
+    if (scrs.length !== 20) add(res, 'warn', 'screen.count', w, 0, '합성된 화면 ' + scrs.length + '개 (기대 20: 휴대폰 19 + 23-a 모니터 1)');
     f.remove();
   }
 
