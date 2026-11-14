@@ -135,3 +135,14 @@
 .zoom-box .su-field { font-size: 1em; padding: .5em .65em; }
 .zoom-box .su-send { width: 1.7em; height: 1.7em; }
 .zoom-box .su-head { padding: .45em .6em .45em; }
+/* 확대 인셋 추가분 (20 메일 배너 · 59 연락처 · 85 문자 강조) — 63·65·48·60·81 과 같은 상자·글자 규칙 */
+.zoom-box.zp-banner .su-notifs { padding: .2em 0 .3em; }
+.zoom-box.zp-banner .su-notif { margin: .25em .3em; padding: .45em .6em; }
+.zoom-box.zp-banner .su-b-l1 { font-size: 1em; }
+.zoom-box.zp-banner .su-b-l2 { white-space: normal; overflow: visible; text-overflow: clip; font-size: .92em; }
+.zoom-box .su-dim { filter: none; opacity: .62; }
+.zoom-box.zp-banner .su-b-top .su-app { display: block; flex: none; width: 1.2em !important; min-width: 1.2em; max-width: 1.2em; height: 1.2em !important; aspect-ratio: 1 / 1; border-radius: .28em; padding: 0 !important; box-sizing: border-box; }
+.su-app.mail { padding: 0; }
+.zoom-box.zf .su-head { padding: .3em .5em; }
+.zoom-box.zf .su-thread { padding: .3em .5em .35em; }
+.zoom-box.zf .su-time { display: none; }

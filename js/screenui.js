@@ -116,8 +116,20 @@
     compose: function (s) {
       return head(s.contact) + '<div class="su-input"><div class="su-field"><span class="t">' + esc(s.input) + '</span></div><span class="su-send" aria-hidden="true"></span></div>';
     },
+    /* 메일 배너 (20컷, U01): 앱·보낸이·시간 + 제목 + 본문 첫 줄 */
+    banner: function (s) {
+      return '<div class="su-notifs"><div class="su-notif"><div class="su-b-top"><span class="su-app mail" aria-hidden="true"></span><span class="su-b-app">' + esc(s.app) + ' · ' + esc(s.from) + '</span><span class="su-b-time">' + esc(s.time) + '</span></div>' +
+        '<p class="su-b-l1">' + esc(s.line1) + '</p><p class="su-b-l2">' + esc(s.line2) + '</p></div></div>';
+    },
+    /* 연락처 (59컷, U05): 이름 + 통화·문자 (60컷과 같은 카드) */
+    contacts: function (s) {
+      return '<div class="su-zc"><p class="su-cname">' + esc(s.name) + '</p><div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
+    },
     thread: function (s) {
-      var m = (s.messages || []).slice(0, (s.zoom && s.zoom.count) || 1);
+      var st = (s.zoom && s.zoom.start) || 0;
+      var m = (s.messages || []).slice(st, st + ((s.zoom && s.zoom.count) || 1));
+      /* focusOnly: 강조 문구(85컷 '휴대폰 잘 받았어요.')만 확대 — 나머지 문장은 폰 속 원래 UI 에 그대로 있다 */
+      if (s.zoom && s.zoom.focusOnly) m = m.map(function (x) { return x.parts ? { from: x.from, time: x.time, parts: x.parts.filter(function (p) { return p.focus; }) } : x; });
       return head(s.contact) + '<div class="su-thread">' + m.map(function (x) { return bubble(x, s); }).join('') + '</div>';
     }
   };
@@ -128,7 +140,7 @@
     var wall = z.parts === 'notif' && spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
     return '<div class="scr-zoom" aria-hidden="true" data-quad="' + q + '" style="--zx:' + (+z.x) + ';--zy:' + (+z.y) + ';--zw:' + (+z.w) + ';--zfs:' + (+z.fs || 14) + ';">' +
       '<svg class="scr-zoom-ln" aria-hidden="true"></svg>' +
-      '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
+      '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + (z.focusOnly ? ' zf' : '') + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
   }
 
   /* 4점 대응 호모그래피 (src → dst), 8x8 가우스 소거 */

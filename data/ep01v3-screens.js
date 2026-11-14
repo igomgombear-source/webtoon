@@ -121,6 +121,7 @@
   "line1": "공유폴더 초대 · 작년 자료 검토",
   "line2": "승민쌤, 합창제 자료에 확인이 필요한…",
   "aria": "승민의 휴대폰 화면, 메일 알림",
+  "zoom": { "x": 30, "y": 3, "w": 68, "fs": 14, "parts": "banner" },
   "from": "권해인"
  },
  "31": {
@@ -507,6 +508,7 @@
   "view": "contacts",
   "theme": "dark",
   "fs": 20,
+  "zoom": { "x": 0.5, "y": 3, "w": 33, "fs": 14, "parts": "contacts" },
   "clock": "10:33",
   "name": "권해인 쌤",
   "aria": "승민의 휴대폰 화면, 연락처 권해인 쌤"
@@ -932,6 +934,7 @@
   "clock": "19:36",
   "contact": "권해인 쌤",
   "aria": "승민의 휴대폰 화면, 문자 스레드(휴대폰 잘 받았어요 강조)",
+  "zoom": { "x": 1, "y": 0.8, "w": 46, "fs": 14, "parts": "thread", "start": 1, "count": 1, "focusOnly": true },
   "messages": [
    {
     "from": "me",

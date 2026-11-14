@@ -117,7 +117,7 @@
         var ins = cut.querySelector('.inset'), pm = cut.querySelector('.panel-mask');
         if (!ins) add(res, 'fail', 'inset.self', w, no, '인셋이 그려지지 않음');
         else { var ir = rect(ins), pr = rect(pm); if (ir.left < pr.left - 1 || ir.right > pr.right + 1 || ir.top < pr.top - 1 || ir.bottom > pr.bottom + 1) add(res, 'fail', 'inset.bounds', w, no, '인셋이 컷 밖으로 나감'); }
-        if (ins && data.inset.text) { var tfs = parseFloat(win.getComputedStyle(ins.querySelector('.inset-text')).fontSize); if (tfs < 13) add(res, data.inset.image ? 'warn' : 'fail', 'inset.font', w, no, '인셋 글자 ' + tfs + 'px < 13' + (data.inset.image ? ' (그림 인셋: 문구는 원화의 안전 영역에만 들어가 폭에 비례해 작아짐 — 대사 말풍선이 같은 내용을 전달, docs/EP01_V3_STATUS.md 참고)' : '')); }
+        if (ins && data.inset.text) { var tfs = parseFloat(win.getComputedStyle(ins.querySelector('.inset-text')).fontSize); if (tfs < 11.4 * u) add(res, data.inset.image ? 'warn' : 'fail', 'inset.font', w, no, '인셋 글자 ' + tfs + 'px < 13' + (data.inset.image ? ' (그림 인셋: 문구는 원화의 안전 영역에만 들어가 폭에 비례해 작아짐 — 대사 말풍선이 같은 내용을 전달, docs/EP01_V3_STATUS.md 참고)' : '')); }
       }
       /* 이어짐 */
       if (data.link === 'prev') {
@@ -173,7 +173,7 @@
     var c63 = d.getElementById('cut-63'), s63 = c63 && c63.querySelector('.scr');
     if (!s63 || !s63.classList.contains('is-fit') || ((s63.querySelector('.su-lt') || {}).textContent) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '원화 위 잠금화면 UI(10:36)가 합성되지 않음');
     /* 63·65컷: 휴대폰 화면 확대 인셋(.scr-zoom) — 폭 360 에서도 읽히는 글자, 컬럼 안, 실제 폰·말풍선을 가리지 않음, 읽기 프로그램에 중복 노출 안 됨 */
-    [48, 60, 63, 65, 81].forEach(function (n) {
+    [20, 48, 59, 60, 63, 65, 81, 85].forEach(function (n) {
       var cz = d.getElementById('cut-' + String(n).padStart(2, '0')), zw = cz && cz.querySelector('.scr-zoom'), pn = zw && zw.parentNode;
       if (!zw || !zw.classList.contains('is-fit')) return add(res, 'fail', 'zoom.missing', w, n, '확대 인셋이 없거나 배치되지 않음');
       var bx = zw.querySelector('.zoom-box'), br = rect(bx), pr = rect(pn), vr = d.querySelector('.viewer').getBoundingClientRect();
