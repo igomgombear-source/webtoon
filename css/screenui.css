@@ -146,3 +146,24 @@
 .zoom-box.zf .su-head { padding: .3em .5em; }
 .zoom-box.zf .su-thread { padding: .3em .5em .35em; }
 .zoom-box.zf .su-time { display: none; }
+
+/* 손가락 전경(fg)·그림자 (js/screenui.js buildFg) — UI 앞에 손가락만 다시 놓는다. 둘 다 .art 안, 말풍선·확대 인셋 아래 */
+.scr-fg { position: absolute; height: auto; max-width: none; pointer-events: none; user-select: none; }
+.scr-sh { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.scr-sh-img { position: absolute; height: auto; max-width: none; opacity: var(--so, .3); pointer-events: none;
+  transform: translate(var(--sdx, 0%), var(--sdy, 0%)); filter: brightness(0) blur(calc(var(--sb, 2) * var(--u))); }
+
+/* 통화·문자 버튼 절대 배치 (59컷, callAt) — 중심 기준 */
+.su-contact.is-pos { padding-top: 1.6em; }
+.su-acts.is-abs { position: absolute; inset: 0; margin: 0; gap: 0; display: block; }
+.su-acts.is-abs .act { position: absolute; transform: translate(-50%, -50%); min-width: 5em; box-sizing: border-box; flex-direction: row; justify-content: center; gap: .4em; padding: .75em .6em; font-size: .86em; }
+.su-acts.is-abs .act i { width: 1.5em; height: 1.5em; }
+.su-acts.is-abs .act.a-call { background: rgba(61, 187, 106, .30); }
+
+/* 수신 슬라이더 절대 배치 (94컷, slide) — 손잡이 중심 (--sx, --sy) = 가상 화면 px */
+.su-slide.is-abs { position: absolute; inset: 0; display: block; padding: 0; }
+.su-slide.is-abs .su-decl { position: absolute; left: .35em; top: calc(var(--sy) - 1.1em); width: 2.2em; height: 2.2em; }
+.su-slide.is-abs .su-track { position: absolute; left: calc(var(--st) - 1.1em - .3em); right: .5em; top: calc(var(--sy) - 1.3em); height: 2.6em; flex: none; }
+.su-slide.is-abs .su-acc { padding-left: 3.4em; }
+.su-slide.is-abs .su-fill { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--sp, 0px) + 1.4em); border-radius: 1.3em; background: rgba(61, 187, 106, .32); }
+.su-slide.is-abs .su-knob { position: absolute; left: calc(var(--sx) - 1.1em); top: calc(var(--sy) - 1.1em); margin: 0; box-shadow: 0 .1em .4em rgba(0, 0, 0, .35); }

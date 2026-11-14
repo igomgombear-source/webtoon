@@ -52,8 +52,14 @@
         '<span class="su-prog"><i></i></span><span class="su-ctl"><i class="pv"></i><i class="pp"></i><i class="nx"></i></span></div>' +
         '<div class="su-drop">' + notifCard(s.item) + '</div>';
     },
-    /* U05 — 연락처 '권해인 쌤' (통화 버튼 누르기 전) */
+    /* U05 — 연락처 '권해인 쌤' (통화 버튼 누르기 전)
+     * callAt:[x,y] (가상 화면 폭·높이에 대한 %) 가 있으면 통화·문자 버튼을 하단 동작 줄에 절대 배치한다(59컷: 엄지가 통화 버튼 위에서 멈춤). 없으면 기존 배치(60컷). */
     contacts: function (s) {
+      if (s.callAt) {
+        var cx = +s.callAt[0], cy = +s.callAt[1], mx = cx + (+s.msgDx || 31);
+        return status(s.clock) + '<div class="su-contact is-pos"><span class="su-bigav" aria-hidden="true"></span><p class="su-cname">' + esc(s.name) + '</p></div>' +
+          '<div class="su-acts is-abs"><span class="act a-call" style="left:' + cx + '%;top:' + cy + '%"><i></i>통화</span><span class="act a-msg" style="left:' + mx + '%;top:' + cy + '%"><i></i>문자</span></div>';
+      }
       return status(s.clock) + '<div class="su-contact"><span class="su-bigav" aria-hidden="true"></span><p class="su-cname">' + esc(s.name) + '</p>' +
         '<div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
     },
@@ -79,7 +85,15 @@
     off: function () { return '<div class="su-offglass"></div>'; },
     /* U13 — 수신: 미저장 번호 + 발신자 정보 */
     incoming: function (s) {
-      return status(s.clock) + '<div class="su-call"><p class="su-cl">' + esc(s.label) + '</p><p class="su-num">' + esc(s.number).replace(/○/g, '<i class="m"></i>') + '</p><p class="su-info">' + esc(s.info) + '</p></div>' +
+      var head = status(s.clock) + '<div class="su-call"><p class="su-cl">' + esc(s.label) + '</p><p class="su-num">' + esc(s.number).replace(/○/g, '<i class="m"></i>') + '</p><p class="su-info">' + esc(s.info) + '</p></div>';
+      /* slide:{cx,cy} — 손잡이 중심(가상 화면 가로 300 기준 px). 94컷: 받기 전(a)·밀어서 받는 중(b)의 엄지 끝 위치에 손잡이를 맞춘다 */
+      if (s.slide) {
+        var cx = +s.slide.cx, cy = +s.slide.cy;
+        var sp = Math.max(0, cx - (s.slide.start == null ? cx : +s.slide.start));   /* 시작 위치에서 밀린 거리(px) → 지나온 길을 옅은 초록으로 채움 */
+        return head + '<div class="su-slide is-abs" style="--sx:' + cx + 'px;--sy:' + cy + 'px;--st:' + (s.slide.start == null ? cx : +s.slide.start) + 'px;--sp:' + sp + 'px;">' +
+          '<span class="su-decl" aria-hidden="true"></span><div class="su-track"><span class="su-fill"></span><span class="su-acc">' + esc(s.accept) + '</span></div><span class="su-knob" aria-hidden="true"></span></div>';
+      }
+      return head +
         '<div class="su-slide"><span class="su-decl" aria-hidden="true"></span><div class="su-track"><span class="su-knob" style="left:' + (s.knob || 0) + '%"></span><span class="su-acc">' + esc(s.accept) + '</span></div></div>';
     }
   };
@@ -98,7 +112,27 @@
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');
     var wall = spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
     return '<div class="scr" role="img" aria-label="' + esc(label(spec)) + '" data-quad="' + q + '" data-aspect="' + spec.aspect + '" style="clip-path:polygon(' + poly + ');">' +
-      '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>';
+      '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>' +
+      buildFg(spec, poly);
+  }
+
+  /* 손가락 전경(fg) — UI 앞에 놓이는 손가락 픽셀(원화와 같은 캔버스에서 잘라낸 투명 WebP). 원화는 수정하지 않는다.
+   *   spec.fg = { src, x, y, w (원화 캔버스에 대한 %), shadow: 'hover'(떠 있는 이격 그림자) | 'touch'(닿은 짧은 그림자) }
+   *   그림자는 같은 전경을 어둡게·흐리게 만든 별도 층이며 화면 윤곽(clip) 안에서만 UI 위에 드리운다(UI 에 가려진 원화 그림자의 대용).
+   *   --sdx·--sdy 는 전경 크기에 대한 %, --sb 는 blur(--u 단위), --so 는 투명도. */
+  var SHADOW = {
+    hover: { dx: 5, dy: 9, b: 3.2, o: .5 },
+    touch: { dx: 1.5, dy: 3.2, b: 1.4, o: .6 }
+  };
+  function buildFg(spec, poly) {
+    var f = spec.fg; if (!f || !f.src) return '';
+    var pos = 'left:' + (+f.x) + '%;top:' + (+f.y) + '%;width:' + (+f.w) + '%;';
+    var sh = f.shadow && SHADOW[f.shadow];
+    return (sh
+      ? '<div class="scr-sh" aria-hidden="true" style="clip-path:polygon(' + poly + ');"><img class="scr-sh-img" src="' + esc(f.src) + '" alt="" style="' + pos +
+          '--sdx:' + sh.dx + '%;--sdy:' + sh.dy + '%;--sb:' + sh.b + ';--so:' + sh.o + ';" decoding="async"></div>'
+      : '') +
+      '<img class="scr-fg" src="' + esc(f.src) + '" alt="" aria-hidden="true" style="' + pos + '" decoding="async">';
   }
 
   /* 확대 인셋(zoom) — 원화 속 작은 휴대폰 화면의 글자를 읽을 수 있게, 같은 UI 를 평면(원근 없이)으로 크게 다시 그려
