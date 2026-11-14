@@ -400,7 +400,9 @@
     } else if (ep.layout === 'v3') {
       var ls = cut.lines || [];
       if (cut.phonePreview && cut.phone) {
-        body = '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기</p>' : '') + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
+        /* 원화가 연결된 컷(63): 원화 아래에 임시 휴대폰 UI 를 둔다. 원화 속 휴대폰 화면에 최종 합성하기 전까지의 임시 상태 */
+        var artAbove = cut.image ? renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, []) : '';
+        body = artAbove + '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기(임시)</p>' : '') + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
       } else {
         body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
       }

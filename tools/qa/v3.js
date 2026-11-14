@@ -62,11 +62,11 @@
         if (!l.text) add(res, 'fail', 'data.empty', 0, c.no, '빈 대사 ' + j);
         if (l.style !== 'thought' && l.style !== 'phone' && l.style !== 'caption' && !l.who && !/^…+$|^……$/.test(l.text)) add(res, 'warn', 'data.speaker', 0, c.no, '화자 없는 말풍선: ' + l.text.slice(0, 16));
       });
-      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff)-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
+      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff|(003|005|022|025|028|029|030|032|034|036|037|040|044|047|051|056|057|058|061|063|064|067|068|070|071|072|073|074|077|080))-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
       if (c.image && c.imageStatus !== 'draft') add(res, 'fail', 'data.draft', 0, c.no, 'DRAFT 표시 없는 임시 원화');
     });
     var withImg = cuts.filter(function (c) { return c.image; }).map(function (c) { return c.no; });
-    if (JSON.stringify(withImg) !== '[1,16,35,50,66,76]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (현재 승인: 1·16·35·50·66·76)');
+    if (JSON.stringify(withImg) !== '[1,3,5,16,22,25,28,29,30,32,34,35,36,37,40,44,47,50,51,56,57,58,61,63,64,66,67,68,70,71,72,73,74,76,77,80]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (현재 승인: 36컷 — 1·16·35·50·66·76 + 신규 30)');
     var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
     if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
