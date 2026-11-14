@@ -29,6 +29,10 @@
   function head(name) {
     return '<div class="su-head"><span class="su-back" aria-hidden="true">‹</span><span class="su-av" aria-hidden="true"></span><span class="su-name">' + esc(name) + '</span></div>';
   }
+  function notifCard(n) {
+    return '<div class="su-notif"><div class="su-b-top"><span class="su-app msg" aria-hidden="true"></span><span class="su-b-app">' + esc(n.app) + '</span><span class="su-b-time">' + esc(n.time) + '</span></div>' +
+      '<p class="su-b-l1">' + esc(n.from) + '</p><p class="su-b-l2 wrap">' + esc(n.body) + '</p></div>';
+  }
 
   var VIEWS = {
     /* U01 — 메일 알림 배너 2줄 (두 번째 줄 말줄임) */
@@ -50,10 +54,7 @@
     /* U07 — 잠금화면 + 알림 목록 */
     lock: function (s) {
       return status('') + '<div class="su-lock"><p class="su-date">' + esc(s.date) + '</p><p class="su-lt">' + esc(s.clock) + '</p></div>' +
-        '<div class="su-notifs">' + (s.items || []).map(function (n) {
-          return '<div class="su-notif"><div class="su-b-top"><span class="su-app msg" aria-hidden="true"></span><span class="su-b-app">' + esc(n.app) + '</span><span class="su-b-time">' + esc(n.time) + '</span></div>' +
-            '<p class="su-b-l1">' + esc(n.from) + '</p><p class="su-b-l2 wrap">' + esc(n.body) + '</p></div>';
-        }).join('') + '</div>';
+        '<div class="su-notifs">' + (s.items || []).map(notifCard).join('') + '</div>';
     },
     /* U08·U10·U14 — 문자 스레드 */
     sms: function (s) {
@@ -90,6 +91,27 @@
     var wall = spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
     return '<div class="scr" role="img" aria-label="' + esc(label(spec)) + '" data-quad="' + q + '" data-aspect="' + spec.aspect + '" style="clip-path:polygon(' + poly + ');">' +
       '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>';
+  }
+
+  /* 확대 인셋(zoom) — 원화 속 작은 휴대폰 화면의 글자를 읽을 수 있게, 같은 UI 를 평면(원근 없이)으로 크게 다시 그려
+   * 컷 위(마스크 밖 층, .panel 직속)에 얹는다. 원화는 수정하지 않고, 실제 폰 화면 테두리와 가는 선으로 이어 '확대'임을 보인다.
+   *   spec.zoom = { x, y, w (패널 폭·높이에 대한 %, x 가 음수면 왼쪽 여백으로 나옴), fs (인셋 기준 글자 크기, 폭 360 기준 px),
+   *                 parts: 'notif'(알림 카드) | 'thread'(문자 스레드, count 개 말풍선) }
+   *   글자 크기·테두리는 --u(폭/360) 단위라 폭이 달라져도 비율이 같다. 읽기 프로그램에는 .scr 의 aria-label 이 있으므로 인셋은 aria-hidden. */
+  var ZOOM = {
+    notif: function (s) { return '<div class="su-notifs">' + (s.items || []).map(notifCard).join('') + '</div>'; },
+    thread: function (s) {
+      var m = (s.messages || []).slice(0, (s.zoom && s.zoom.count) || 1);
+      return head(s.contact) + '<div class="su-thread">' + m.map(function (x) { return bubble(x, s); }).join('') + '</div>';
+    }
+  };
+  function buildZoom(spec) {
+    var z = spec && spec.zoom; if (!z || !ZOOM[z.parts]) return '';
+    var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
+    var wall = z.parts === 'notif' && spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
+    return '<div class="scr-zoom" aria-hidden="true" data-quad="' + q + '" style="--zx:' + (+z.x) + ';--zy:' + (+z.y) + ';--zw:' + (+z.w) + ';--zfs:' + (+z.fs || 14) + ';">' +
+      '<svg class="scr-zoom-ln" aria-hidden="true"></svg>' +
+      '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
   }
 
   /* 4점 대응 호모그래피 (src → dst), 8x8 가우스 소거 */
@@ -131,14 +153,37 @@
     scr.classList.add('is-fit');
   }
 
+  /* 확대 인셋의 연결선: 실제 폰 화면 테두리(quad)를 두르고, 인셋 상자에서 가장 가까운 모서리로 가는 선을 긋는다 */
+  function fitZoom(zw) {
+    var panel = zw.parentNode, w = panel.clientWidth, h = panel.clientHeight;
+    if (!w || !h) return;
+    var box = zw.querySelector('.zoom-box'), svg = zw.querySelector('svg');
+    var q = zw.getAttribute('data-quad').split(' ').map(function (s) { var a = s.split(','); return [parseFloat(a[0]) * w, parseFloat(a[1]) * h]; });
+    var bx = box.offsetLeft, by = box.offsetTop, bw = box.offsetWidth, bh = box.offsetHeight, best = null;
+    q.forEach(function (v) {
+      var px = Math.max(bx, Math.min(bx + bw, v[0])), py = Math.max(by, Math.min(by + bh, v[1])), d = Math.hypot(v[0] - px, v[1] - py);
+      if (!best || d < best.d) best = { d: d, v: v, p: [px, py] };
+    });
+    var u = Math.max(1, w / 360), pts = q.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.innerHTML = '<polygon points="' + pts + '" fill="none" stroke="rgba(246,248,252,.88)" stroke-width="' + (1.4 * u).toFixed(2) + '" stroke-linejoin="round"/>' +
+      '<line x1="' + best.p[0].toFixed(1) + '" y1="' + best.p[1].toFixed(1) + '" x2="' + best.v[0].toFixed(1) + '" y2="' + best.v[1].toFixed(1) + '" stroke="rgba(246,248,252,.8)" stroke-width="' + (1.1 * u).toFixed(2) + '" stroke-linecap="round"/>' +
+      '<circle cx="' + best.v[0].toFixed(1) + '" cy="' + best.v[1].toFixed(1) + '" r="' + (2.2 * u).toFixed(2) + '" fill="rgba(246,248,252,.95)"/>';
+    zw.classList.add('is-fit');
+  }
+
   var ro = null;
   function fitAll(root) {
-    var list = (root || document).querySelectorAll('.scr');
-    if (!list.length) return;
-    if (window.ResizeObserver && !ro) ro = new ResizeObserver(function (es) { es.forEach(function (e) { var s = e.target.querySelector('.scr'); if (s) fit(s); }); });
+    var r = root || document, list = r.querySelectorAll('.scr'), zl = r.querySelectorAll('.scr-zoom');
+    if (!list.length && !zl.length) return;
+    if (window.ResizeObserver && !ro) ro = new ResizeObserver(function (es) { es.forEach(function (e) {
+      var s = e.target.querySelector('.scr'); if (s) fit(s);
+      var z = e.target.querySelector('.scr-zoom'); if (z) fitZoom(z);
+    }); });
     Array.prototype.forEach.call(list, function (scr) { fit(scr); if (ro) ro.observe(scr.parentNode); });
+    Array.prototype.forEach.call(zl, function (z) { fitZoom(z); if (ro) ro.observe(z.parentNode); });
   }
   if (!window.ResizeObserver) window.addEventListener('resize', function () { fitAll(document); });
 
-  W.screenUi = { build: build, fitAll: fitAll, _homography: homography };
+  W.screenUi = { build: build, buildZoom: buildZoom, fitAll: fitAll, _homography: homography };
 })();

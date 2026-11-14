@@ -172,6 +172,25 @@
     /* 63컷: 원화 위 휴대폰 UI 합성 레이어(.scr) — 잠금화면 시계 10:36, 화면 윤곽에 맞춰짐 */
     var c63 = d.getElementById('cut-63'), s63 = c63 && c63.querySelector('.scr');
     if (!s63 || !s63.classList.contains('is-fit') || ((s63.querySelector('.su-lt') || {}).textContent) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '원화 위 잠금화면 UI(10:36)가 합성되지 않음');
+    /* 63·65컷: 휴대폰 화면 확대 인셋(.scr-zoom) — 폭 360 에서도 읽히는 글자, 컬럼 안, 실제 폰·말풍선을 가리지 않음, 읽기 프로그램에 중복 노출 안 됨 */
+    [63, 65].forEach(function (n) {
+      var cz = d.getElementById('cut-' + String(n).padStart(2, '0')), zw = cz && cz.querySelector('.scr-zoom'), pn = zw && zw.parentNode;
+      if (!zw || !zw.classList.contains('is-fit')) return add(res, 'fail', 'zoom.missing', w, n, '확대 인셋이 없거나 배치되지 않음');
+      var bx = zw.querySelector('.zoom-box'), br = rect(bx), pr = rect(pn), vr = d.querySelector('.viewer').getBoundingClientRect();
+      if (zw.getAttribute('aria-hidden') !== 'true') add(res, 'fail', 'zoom.aria', w, n, '확대 인셋이 읽기 프로그램에 중복 노출됨(aria-hidden 아님)');
+      if (br.left < vr.left - 0.5 || br.right > vr.right + 0.5) add(res, 'fail', 'zoom.offscreen', w, n, '확대 인셋이 화면(컬럼) 밖으로 나감');
+      if (br.top < pr.top - 1 || br.bottom > pr.bottom + 1) add(res, 'fail', 'zoom.vertical', w, n, '확대 인셋이 컷 위아래 밖으로 나감');
+      /* 글자: 본문 12.5·u px 이상(폭 360 기준), 보조(시각·앱 이름) 9·u px 이상 */
+      [['.su-b-l1, .su-b-l2, .su-b p, .su-name', 12.5], ['.su-b-top, .su-time', 9]].forEach(function (g) {
+        [].forEach.call(bx.querySelectorAll(g[0]), function (el) { var fs = parseFloat(win.getComputedStyle(el).fontSize); if (fs < g[1] * u - 0.3) add(res, 'fail', 'zoom.font', w, n, '확대 인셋 글자 ' + fs.toFixed(1) + 'px < ' + (g[1] * u).toFixed(1)); });
+      });
+      /* 실제 폰 화면(quad)을 가리지 않고, 말풍선과 겹치지 않는다 */
+      var qd = zw.getAttribute('data-quad').split(' ').map(function (s) { var a = s.split(','); return [pr.left + parseFloat(a[0]) * pr.width, pr.top + parseFloat(a[1]) * pr.height]; });
+      var qx = qd.map(function (p) { return p[0]; }), qy = qd.map(function (p) { return p[1]; });
+      var ox = Math.min(br.right, Math.max.apply(0, qx)) - Math.max(br.left, Math.min.apply(0, qx)), oy = Math.min(br.bottom, Math.max.apply(0, qy)) - Math.max(br.top, Math.min.apply(0, qy));
+      if (ox > 1 && oy > 1) add(res, 'fail', 'zoom.phone', w, n, '확대 인셋이 실제 폰 화면을 가림');
+      [].forEach.call(cz.querySelectorAll('.bv4-b'), function (b) { if (hit(br, rect(b))) add(res, 'fail', 'zoom.bubble', w, n, '확대 인셋과 말풍선이 겹침'); });
+    });
     [49].forEach(function (n) {
       var c = d.getElementById('cut-' + n), s = c.querySelector('.phone-screen'), t = c.querySelector('.lock-time');
       if (!s.classList.contains('has-wall')) add(res, 'fail', 'phone.wall', w, n, '배경 없음');

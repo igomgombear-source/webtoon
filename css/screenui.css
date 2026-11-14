@@ -86,3 +86,21 @@
 .su-num .m { display: inline-block; width: .5em; height: .5em; border: .09em solid currentColor; border-radius: 50%; margin: 0 .09em; vertical-align: .05em; opacity: .85; }
 .su-v-off { background: #07080b; }
 .su-offglass { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.03) 70%, rgba(255,255,255,0) 100%); }
+
+/* 확대 인셋 (js/screenui.js buildZoom): 원화 속 작은 폰 화면을 평면으로 크게 다시 그린 것. 마스크 밖 층(.panel 직속)이라 컷 가장자리에 걸쳐도 잘리지 않는다.
+ * 크기·글자·테두리는 --u(폭/360) 단위 → 360px 에서 768px 까지 비율이 같다. 말풍선 층(z 4) 아래, 원화 위. */
+.scr-zoom { position: absolute; inset: 0; z-index: 3; pointer-events: none; visibility: hidden; }
+.scr-zoom.is-fit { visibility: visible; }
+.scr-zoom-ln { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, .65)); }
+.zoom-box { position: absolute; left: calc(var(--zx) * 1%); top: calc(var(--zy) * 1%); width: calc(var(--zw) * 1%); box-sizing: border-box; overflow: hidden;
+  font-size: calc(var(--zfs, 14) * var(--u)); line-height: 1.35; word-break: keep-all; overflow-wrap: break-word;
+  border-radius: calc(10 * var(--u)); border: calc(1.5 * var(--u)) solid rgba(246, 248, 252, .92); box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(0, 0, 0, .55); }
+.zoom-box p { margin: 0; }
+.zoom-box.su-v-lock { background-size: cover; background-position: center; }
+.zoom-box .su-notifs { padding: .15em 0 .3em; }
+.zoom-box .su-b-top { font-size: .72em; }
+.zoom-box .su-time { font-size: .72em; }
+.zoom-box .su-thread { padding: .55em .55em .6em; }
+.zoom-box .su-b { max-width: 100%; padding: .5em .55em; }
+.zoom-box.su-v-lock { background-position: center 22%; }
+.zoom-box .su-name { font-size: .95em; }
