@@ -372,7 +372,7 @@
           '<div class="panel-mask' + (rows.length === 1 && row.length === 1 ? shape : '') + (ov ? ' is-overflow' : '') + '">' + renderArt(ep, pc, '') +
             (REVIEW && ov && me === 0 ? '<span class="ovf-chip ovf-' + esc(ov.edge) + '" aria-hidden="true">' + esc(ov.note || '틀 밖') + '</span>' : '') +
           '</div>' +
-          (pc.screen && pc.screen.zoom && W.screenUi && W.screenUi.buildZoom ? W.screenUi.buildZoom(pc.screen) : '') +   /* 휴대폰 화면 확대 인셋 (63·65컷) */
+          (pc.screen && W.screenUi && W.screenUi.buildZoom ? W.screenUi.buildZoom(pc.screen) : '') +   /* 휴대폰 화면 확대 인셋 (48·60·63·65·81컷; spec 에 zoom 이 없으면 빈 문자열) */
           (me === 0 ? renderInsetSelf(ep, cut) : '') +
           '<div class="panel-bubbles">' + bubbleGroups(ep, lines, me) + '</div>' +
         '</div>';

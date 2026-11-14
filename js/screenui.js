@@ -55,7 +55,7 @@
     /* U05 — 연락처 '권해인 쌤' (통화 버튼 누르기 전) */
     contacts: function (s) {
       return status(s.clock) + '<div class="su-contact"><span class="su-bigav" aria-hidden="true"></span><p class="su-cname">' + esc(s.name) + '</p>' +
-        '<div class="su-acts"><span class="act call"><i></i>통화</span><span class="act msg"><i></i>문자</span></div></div>';
+        '<div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
     },
     /* U07 — 잠금화면 + 알림 목록 */
     lock: function (s) {
@@ -107,13 +107,22 @@
    *                 parts: 'notif'(알림 카드) | 'thread'(문자 스레드, count 개 말풍선) }
    *   글자 크기·테두리는 --u(폭/360) 단위라 폭이 달라져도 비율이 같다. 읽기 프로그램에는 .scr 의 aria-label 이 있으므로 인셋은 aria-hidden. */
   var ZOOM = {
-    notif: function (s) { return '<div class="su-notifs">' + (s.items || []).map(notifCard).join('') + '</div>'; },
+    notif: function (s) { return '<div class="su-notifs">' + (s.items || (s.item ? [s.item] : [])).map(notifCard).join('') + '</div>'; },
+    /* 연락처 카드 (60컷): 이름 + 통화·문자 */
+    contact: function (s) {
+      return '<div class="su-zc"><p class="su-cname">' + esc(s.name) + '</p><div class="su-acts"><span class="act a-call"><i></i>통화</span><span class="act a-msg"><i></i>문자</span></div></div>';
+    },
+    /* 입력창 (81컷): 대화 상대 + 입력 중인 문장 + 전송 */
+    compose: function (s) {
+      return head(s.contact) + '<div class="su-input"><div class="su-field"><span class="t">' + esc(s.input) + '</span></div><span class="su-send" aria-hidden="true"></span></div>';
+    },
     thread: function (s) {
       var m = (s.messages || []).slice(0, (s.zoom && s.zoom.count) || 1);
       return head(s.contact) + '<div class="su-thread">' + m.map(function (x) { return bubble(x, s); }).join('') + '</div>';
     }
   };
   function buildZoom(spec) {
+    if (Array.isArray(spec)) { spec = spec.filter(function (x) { return x && x.zoom; })[0]; }   /* 폰이 둘인 컷: zoom 이 있는 쪽만 */
     var z = spec && spec.zoom; if (!z || !ZOOM[z.parts]) return '';
     var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
     var wall = z.parts === 'notif' && spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';

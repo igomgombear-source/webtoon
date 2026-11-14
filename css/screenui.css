@@ -57,7 +57,7 @@
 .su-acts { display: flex; gap: 1em; margin-top: 1.2em; }
 .su-acts .act { display: flex; flex-direction: column; align-items: center; gap: .3em; font-size: .72em; min-width: 4em; padding: .8em .5em; border-radius: .9em; background: rgba(255,255,255,.1); }
 .su-acts .act i { width: 1.4em; height: 1.4em; border-radius: 50%; background: #3dbb6a; }
-.su-acts .act.msg i { background: #4a90e2; }
+.su-acts .act.a-msg i { background: #4a90e2; }
 
 /* 잠금화면 (U07) */
 .su-v-lock { background-size: cover; background-position: center; }
@@ -120,3 +120,18 @@
 .zoom-box .su-b { max-width: 100%; padding: .5em .55em; }
 .zoom-box.su-v-lock { background-position: center 22%; }
 .zoom-box .su-name { font-size: .95em; }
+
+/* 확대 인셋 — 48(배너)·60(연락처 카드)·81(입력창) */
+.zoom-box.su-v-playing { background: #eef0f6; }
+.zoom-box.su-v-playing .su-notifs { padding: 0; }
+.zoom-box.su-v-playing .su-notif { margin: .25em .3em; padding: .4em .6em; }
+.zoom-box.su-v-playing .su-b-top { margin-bottom: .1em; }
+.zoom-box .su-zc { display: flex; flex-direction: column; align-items: center; gap: .35em; padding: .55em .5em .6em; }
+.zoom-box .su-zc .su-cname { margin: 0 !important; font-size: 1em; font-weight: 700; }
+.zoom-box .su-zc .su-acts { margin-top: 0; gap: .4em; }
+.zoom-box .su-zc .su-acts .act { flex-direction: row; gap: .3em; min-width: 0; padding: .35em .5em; font-size: .78em; }
+.zoom-box .su-zc .su-acts .act i { width: 1em; height: 1em; }
+.zoom-box .su-input { position: static; padding: .55em .55em .6em; }
+.zoom-box .su-field { font-size: 1em; padding: .5em .65em; }
+.zoom-box .su-send { width: 1.7em; height: 1.7em; }
+.zoom-box .su-head { padding: .45em .6em .45em; }

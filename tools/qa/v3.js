@@ -173,7 +173,7 @@
     var c63 = d.getElementById('cut-63'), s63 = c63 && c63.querySelector('.scr');
     if (!s63 || !s63.classList.contains('is-fit') || ((s63.querySelector('.su-lt') || {}).textContent) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '원화 위 잠금화면 UI(10:36)가 합성되지 않음');
     /* 63·65컷: 휴대폰 화면 확대 인셋(.scr-zoom) — 폭 360 에서도 읽히는 글자, 컬럼 안, 실제 폰·말풍선을 가리지 않음, 읽기 프로그램에 중복 노출 안 됨 */
-    [63, 65].forEach(function (n) {
+    [48, 60, 63, 65, 81].forEach(function (n) {
       var cz = d.getElementById('cut-' + String(n).padStart(2, '0')), zw = cz && cz.querySelector('.scr-zoom'), pn = zw && zw.parentNode;
       if (!zw || !zw.classList.contains('is-fit')) return add(res, 'fail', 'zoom.missing', w, n, '확대 인셋이 없거나 배치되지 않음');
       var bx = zw.querySelector('.zoom-box'), br = rect(bx), pr = rect(pn), vr = d.querySelector('.viewer').getBoundingClientRect();
@@ -181,7 +181,7 @@
       if (br.left < vr.left - 0.5 || br.right > vr.right + 0.5) add(res, 'fail', 'zoom.offscreen', w, n, '확대 인셋이 화면(컬럼) 밖으로 나감');
       if (br.top < pr.top - 1 || br.bottom > pr.bottom + 1) add(res, 'fail', 'zoom.vertical', w, n, '확대 인셋이 컷 위아래 밖으로 나감');
       /* 글자: 본문 12.5·u px 이상(폭 360 기준), 보조(시각·앱 이름) 9·u px 이상 */
-      [['.su-b-l1, .su-b-l2, .su-b p, .su-name', 12.5], ['.su-b-top, .su-time', 9]].forEach(function (g) {
+      [['.su-b-l1, .su-b-l2, .su-b p, .su-name, .su-cname, .su-field', 12.5], ['.su-b-top, .su-time', 9]].forEach(function (g) {
         [].forEach.call(bx.querySelectorAll(g[0]), function (el) { var fs = parseFloat(win.getComputedStyle(el).fontSize); if (fs < g[1] * u - 0.3) add(res, 'fail', 'zoom.font', w, n, '확대 인셋 글자 ' + fs.toFixed(1) + 'px < ' + (g[1] * u).toFixed(1)); });
       });
       /* 실제 폰 화면(quad)을 가리지 않고, 말풍선과 겹치지 않는다 */
