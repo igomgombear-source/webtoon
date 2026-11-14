@@ -46,6 +46,12 @@
       for (var i = 1; i <= s.rows; i++) rows += '<li><span class="no">' + i + '</span><span class="bar" style="width:' + (46 + (i * 17) % 34) + '%"></span><span class="pl" aria-hidden="true"></span></li>';
       return status(s.clock) + '<p class="su-title">' + esc(s.title) + '</p><ol class="su-list">' + rows + '</ol>';
     },
+    /* U03 — 해인 폰: 재생 중 화면(곡명·시간 없이 모양만) 위로 메시지 배너가 내려옴 */
+    playing: function (s) {
+      return status(s.clock) + '<div class="su-np" aria-hidden="true"><span class="su-cover"></span><span class="su-npbar w1"></span><span class="su-npbar w2"></span>' +
+        '<span class="su-prog"><i></i></span><span class="su-ctl"><i class="pv"></i><i class="pp"></i><i class="nx"></i></span></div>' +
+        '<div class="su-drop">' + notifCard(s.item) + '</div>';
+    },
     /* U05 — 연락처 '권해인 쌤' (통화 버튼 누르기 전) */
     contacts: function (s) {
       return status(s.clock) + '<div class="su-contact"><span class="su-bigav" aria-hidden="true"></span><p class="su-cname">' + esc(s.name) + '</p>' +
@@ -84,7 +90,9 @@
     return (s.aria || '휴대폰 화면') + (out.length ? ': ' + out.join(' / ') : '');
   }
 
+  /* spec 은 하나 또는 배열(한 원화에 폰이 둘인 60컷: 승민 폰 + 꺼진 해인 폰) */
   function build(spec) {
+    if (Array.isArray(spec)) return spec.map(build).join('');
     var fn = VIEWS[spec.view]; if (!fn) return '';
     var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');
@@ -177,7 +185,7 @@
     var r = root || document, list = r.querySelectorAll('.scr'), zl = r.querySelectorAll('.scr-zoom');
     if (!list.length && !zl.length) return;
     if (window.ResizeObserver && !ro) ro = new ResizeObserver(function (es) { es.forEach(function (e) {
-      var s = e.target.querySelector('.scr'); if (s) fit(s);
+      Array.prototype.forEach.call(e.target.querySelectorAll(':scope > .scr'), fit);
       var z = e.target.querySelector('.scr-zoom'); if (z) fitZoom(z);
     }); });
     Array.prototype.forEach.call(list, function (scr) { fit(scr); if (ro) ro.observe(scr.parentNode); });

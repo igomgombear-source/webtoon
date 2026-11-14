@@ -333,8 +333,12 @@
   function renderInsetSelf(ep, cut) {
     var i = cut.inset;
     if (!i || i.to !== 'self') return '';
+    /* 그림 인셋(투명 WebP)이면 문구는 그림 위에 겹쳐 쓴다 — 103컷: 문구는 인셋 안 안전 영역에만 */
+    var sz = i.imageSize || {};
     var inner = i.image
-      ? '<img src="' + esc(/^(\.|\/|https?:|assets\/)/.test(i.image) ? i.image : (ep.imageBase || '') + i.image) + '" alt="" loading="lazy" decoding="async">'
+      ? '<img src="' + esc(/^(\.|\/|https?:|assets\/)/.test(i.image) ? i.image : (ep.imageBase || '') + i.image) + '" alt=""' +
+          (+sz.w > 0 && +sz.h > 0 ? ' width="' + (+sz.w) + '" height="' + (+sz.h) + '"' : '') + ' loading="lazy" decoding="async">' +
+          (i.text ? '<p class="inset-text inset-over">' + esc(i.text) + '</p>' : '')
       : '<p class="inset-text">' + esc(i.text || '') + '</p>';
     return '<div class="inset inset-' + esc(i.corner || 'tr') + ' inset-' + esc(i.kind || 'plain') + '" style="width:' + Number(i.width || 30) + '%;">' + inner + '</div>';
   }

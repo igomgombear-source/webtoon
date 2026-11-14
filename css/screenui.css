@@ -34,6 +34,22 @@
 .su-list .bar { height: .5em; border-radius: .25em; background: rgba(0,0,0,.16); }
 .su-list .pl { margin-left: auto; width: 0; height: 0; border-left: .6em solid rgba(0,0,0,.4); border-top: .35em solid transparent; border-bottom: .35em solid transparent; }
 
+/* 재생 중 화면 + 위에서 내려온 메시지 배너 (U03) — 곡명·시간은 쓰지 않고 모양만 */
+.su-v-playing { background: linear-gradient(180deg, #e9ecf4 0%, #d9deec 100%); }
+.su-np { display: flex; flex-direction: column; align-items: center; gap: .55em; padding: 7.6em 1.6em 0; }
+.su-cover { width: 7.4em; height: 7.4em; border-radius: .9em; background: linear-gradient(135deg, #8d98b8, #5a6486); box-shadow: 0 .3em .9em rgba(30, 36, 60, .28); }
+.su-npbar { display: block; height: .55em; border-radius: .3em; background: rgba(22, 24, 29, .22); }
+.su-npbar.w1 { width: 62%; margin-top: .5em; } .su-npbar.w2 { width: 38%; opacity: .7; }
+.su-prog { display: block; width: 100%; height: .3em; border-radius: .2em; background: rgba(22, 24, 29, .14); margin-top: .5em; }
+.su-prog i { display: block; width: 34%; height: 100%; border-radius: .2em; background: rgba(22, 24, 29, .5); }
+.su-ctl { display: flex; align-items: center; justify-content: center; gap: 1.6em; margin-top: .3em; }
+.su-ctl i { display: block; width: 0; height: 0; border-top: .7em solid transparent; border-bottom: .7em solid transparent; }
+.su-ctl .pv { border-right: 1em solid rgba(22, 24, 29, .5); }
+.su-ctl .nx { border-left: 1em solid rgba(22, 24, 29, .5); }
+.su-ctl .pp { width: 2.6em; height: 2.6em; border: 0; border-radius: 50%; background: rgba(22, 24, 29, .72); }
+.su-drop { position: absolute; left: 0; right: 0; top: 1.9em; }
+.su-drop .su-notif { margin: .25em .5em; box-shadow: 0 .15em .7em rgba(20, 24, 40, .28); }
+
 /* 연락처 (U05) */
 .su-contact { display: flex; flex-direction: column; align-items: center; padding-top: 2.2em; }
 .su-bigav { width: 4.6em; height: 4.6em; border-radius: 50%; background: linear-gradient(135deg, #6b7488, #3c4252); }

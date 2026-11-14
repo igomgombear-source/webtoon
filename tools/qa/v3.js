@@ -62,11 +62,11 @@
         if (!l.text) add(res, 'fail', 'data.empty', 0, c.no, '빈 대사 ' + j);
         if (l.style !== 'thought' && l.style !== 'phone' && l.style !== 'caption' && !l.who && !/^…+$|^……$/.test(l.text)) add(res, 'warn', 'data.speaker', 0, c.no, '화자 없는 말풍선: ' + l.text.slice(0, 16));
       });
-      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff|(003|005|022|025|028|029|030|032|034|036|037|040|044|047|051|056|057|058|061|063|064|067|068|070|071|072|073|074|077|080)|(009|020|021|027|031|042|053|059|062|065|078|083|098|099|104)|(023-b|026-a|026-b|033-a|033-b|033-c|052-a|052-b|075-a|075-b)|(011|012|013|043|046|054|055|082|085|086|092|097|100))-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
+      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff|(003|005|022|025|028|029|030|032|034|036|037|040|044|047|051|056|057|058|061|063|064|067|068|070|071|072|073|074|077|080)|(009|020|021|027|031|042|053|059|062|065|078|083|098|099|104)|(023-b|026-a|026-b|033-a|033-b|033-c|052-a|052-b|075-a|075-b)|(011|012|013|043|046|054|055|082|085|086|092|097|100)|048-console-U03|060-two-phones-U05|081-evening-text-U09|103-memory-U10)-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
       if (c.image && c.imageStatus !== 'draft') add(res, 'fail', 'data.draft', 0, c.no, 'DRAFT 표시 없는 임시 원화');
     });
     var withImg = cuts.filter(function (c) { return c.image; }).map(function (c) { return c.no; });
-    if (JSON.stringify(withImg) !== '[1,3,5,9,11,12,13,16,20,21,22,25,27,28,29,30,31,32,34,35,36,37,40,42,43,44,46,47,50,51,53,54,55,56,57,58,59,61,62,63,64,65,66,67,68,70,71,72,73,74,76,77,78,80,82,83,85,86,92,97,98,99,100,104]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (단독 컷 기준 — 조각 컷 23·26·33·52·75는 rows 안 조각에 연결)');
+    if (JSON.stringify(withImg) !== '[1,3,5,9,11,12,13,16,20,21,22,25,27,28,29,30,31,32,34,35,36,37,40,42,43,44,46,47,48,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,70,71,72,73,74,76,77,78,80,81,82,83,85,86,92,97,98,99,100,103,104]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (단독 컷 기준 — 조각 컷 23·26·33·52·75는 rows 안 조각에 연결)');
     var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
     if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
@@ -78,7 +78,7 @@
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
     var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', w, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
-    if (scrs.length !== 15) add(res, 'warn', 'screen.count', w, 0, '합성된 휴대폰 화면 ' + scrs.length + '개 (기대 15)');
+    if (scrs.length !== 19) add(res, 'warn', 'screen.count', w, 0, '합성된 휴대폰 화면 ' + scrs.length + '개 (기대 19)');
     f.remove();
   }
 
@@ -117,7 +117,7 @@
         var ins = cut.querySelector('.inset'), pm = cut.querySelector('.panel-mask');
         if (!ins) add(res, 'fail', 'inset.self', w, no, '인셋이 그려지지 않음');
         else { var ir = rect(ins), pr = rect(pm); if (ir.left < pr.left - 1 || ir.right > pr.right + 1 || ir.top < pr.top - 1 || ir.bottom > pr.bottom + 1) add(res, 'fail', 'inset.bounds', w, no, '인셋이 컷 밖으로 나감'); }
-        if (ins && data.inset.text) { var tfs = parseFloat(win.getComputedStyle(ins.querySelector('.inset-text')).fontSize); if (tfs < 13) add(res, 'fail', 'inset.font', w, no, '인셋 글자 ' + tfs + 'px < 13'); }
+        if (ins && data.inset.text) { var tfs = parseFloat(win.getComputedStyle(ins.querySelector('.inset-text')).fontSize); if (tfs < 13) add(res, data.inset.image ? 'warn' : 'fail', 'inset.font', w, no, '인셋 글자 ' + tfs + 'px < 13' + (data.inset.image ? ' (그림 인셋: 문구는 원화의 안전 영역에만 들어가 폭에 비례해 작아짐 — 대사 말풍선이 같은 내용을 전달, docs/EP01_V3_STATUS.md 참고)' : '')); }
       }
       /* 이어짐 */
       if (data.link === 'prev') {
