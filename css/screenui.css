@@ -1,0 +1,88 @@
+/* 휴대폰 화면 UI 합성 레이어 — js/screenui.js
+ * .scr 는 원화(.art) 위를 덮는 투명 상자이고, clip-path 가 원화의 '빈 화면' 영역만 남긴다.
+ * .scr-ui 는 가로 300 의 가상 화면이며 JS 가 matrix3d 로 원화 속 화면 모서리에 맞춘다. 단위(px)는 가상 화면 기준. */
+.scr { position: absolute; inset: 0; pointer-events: none; overflow: hidden; visibility: hidden; }
+.scr.is-fit { visibility: visible; }
+.scr-ui { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: hidden; box-sizing: border-box;
+  font-family: inherit; line-height: 1.35; word-break: keep-all; overflow-wrap: break-word; }
+.su-dark { background: #12141a; color: #eceef3; }
+.su-light { background: #f3f4f8; color: #16181d; }
+.su-dark.is-tint { background: rgba(14, 16, 24, .80); }   /* 104컷: 어두워지는 유리에 비친 얼굴이 비치도록 불투명하지 않게 */
+.scr-ui p { margin: 0; }
+
+.su-status { display: flex; justify-content: space-between; align-items: center; padding: .55em .9em .25em; font-size: .7em; font-weight: 600; opacity: .85; min-height: 1.6em; }
+.su-ic { display: inline-flex; gap: .3em; align-items: center; }
+.su-ic i { display: block; width: .7em; height: .7em; border-radius: 50%; background: currentColor; opacity: .7; }
+.su-ic i.bat { width: 1.2em; height: .6em; border-radius: .18em; }
+
+/* 알림 배너·카드 (U01, U07) */
+.su-banner, .su-notif { margin: .5em .6em; padding: .6em .7em; border-radius: .8em; background: rgba(255,255,255,.14); backdrop-filter: none; }
+.su-light .su-banner, .su-light .su-notif { background: rgba(255,255,255,.82); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.su-b-top { display: flex; align-items: center; gap: .4em; font-size: .62em; opacity: .85; margin-bottom: .25em; }
+.su-b-app { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.su-app { width: 1.2em; height: 1.2em; border-radius: .3em; background: #4a90e2; flex: none; }
+.su-app.msg { background: #3dbb6a; }
+.su-b-l1 { font-weight: 700; font-size: .9em; }
+.su-b-l2 { font-size: .85em; opacity: .9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.su-b-l2.wrap { white-space: normal; overflow: visible; }
+
+/* 재생목록 (U02) */
+.su-title { font-size: 1.15em; font-weight: 700; padding: .5em .8em .3em; }
+.su-list { list-style: none; margin: 0; padding: .2em .6em; }
+.su-list li { display: flex; align-items: center; gap: .6em; padding: .55em .3em; border-bottom: 1px solid rgba(0,0,0,.08); }
+.su-list .no { width: 1.4em; text-align: center; font-weight: 700; font-size: .85em; opacity: .55; }
+.su-list .bar { height: .5em; border-radius: .25em; background: rgba(0,0,0,.16); }
+.su-list .pl { margin-left: auto; width: 0; height: 0; border-left: .6em solid rgba(0,0,0,.4); border-top: .35em solid transparent; border-bottom: .35em solid transparent; }
+
+/* 연락처 (U05) */
+.su-contact { display: flex; flex-direction: column; align-items: center; padding-top: 2.2em; }
+.su-bigav { width: 4.6em; height: 4.6em; border-radius: 50%; background: linear-gradient(135deg, #6b7488, #3c4252); }
+.su-cname { margin-top: .6em !important; font-size: 1.25em; font-weight: 700; }
+.su-acts { display: flex; gap: 1em; margin-top: 1.2em; }
+.su-acts .act { display: flex; flex-direction: column; align-items: center; gap: .3em; font-size: .72em; min-width: 4em; padding: .8em .5em; border-radius: .9em; background: rgba(255,255,255,.1); }
+.su-acts .act i { width: 1.4em; height: 1.4em; border-radius: 50%; background: #3dbb6a; }
+.su-acts .act.msg i { background: #4a90e2; }
+
+/* 잠금화면 (U07) */
+.su-v-lock { background-size: cover; background-position: center; }
+.su-lock { text-align: center; padding-top: 1.4em; }
+.su-date { font-size: .8em; font-weight: 600; opacity: .9; }
+.su-lt { font-size: 3.2em; font-weight: 300; line-height: 1.1; letter-spacing: -.02em; }
+.su-notifs { padding-top: 1.2em; }
+
+/* 문자 스레드 (U08·U10·U14) / 입력창 (U11·U12) */
+.su-head { display: flex; align-items: center; gap: .5em; padding: .3em .7em .5em; border-bottom: 1px solid rgba(255,255,255,.1); }
+.su-back { font-size: 1.4em; line-height: 1; opacity: .8; }
+.su-av { width: 1.5em; height: 1.5em; border-radius: 50%; background: linear-gradient(135deg, #6b7488, #3c4252); flex: none; }
+.su-name { font-weight: 700; font-size: .85em; }
+.su-thread { padding: .7em .6em; display: flex; flex-direction: column; gap: .5em; }
+.su-brow { display: flex; flex-direction: column; max-width: 100%; }
+.su-brow.me { align-items: flex-end; }
+.su-brow.them { align-items: flex-start; }
+.su-b { max-width: 88%; padding: .55em .7em; border-radius: 1em; font-size: .92em; }
+.su-b.them { background: #2a2e38; border-bottom-left-radius: .3em; }
+.su-b.me { background: #3b6fd4; color: #fff; border-bottom-right-radius: .3em; }
+.su-time { font-size: .6em; opacity: .55; margin: .2em .4em 0; }
+.su-b.is-blur p, .su-dim { filter: blur(.1em); opacity: .55; }
+.su-b mark { background: rgba(255,226,120,.28); color: #fff; padding: .05em .15em; border-radius: .2em; font-weight: 700; }
+.su-v-sms.is-tint .su-b.me { opacity: .8; }
+.su-input { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: .5em; padding: .6em .7em .9em; background: #181b22; border-top: 1px solid rgba(255,255,255,.08); }
+.su-field { flex: 1; min-width: 0; padding: .55em .8em; border-radius: 1.2em; background: #262a33; font-size: .9em; }
+.su-field .caret { display: inline-block; width: .08em; height: 1em; background: #fff; vertical-align: text-bottom; margin-left: .05em; }
+.su-field .fade1 { opacity: .55; } .su-field .fade2 { opacity: .25; }
+.su-send { flex: none; width: 1.9em; height: 1.9em; border-radius: 50%; background: #3b6fd4; }
+.su-send.off { background: #3a3f4b; }
+
+/* 수신 (U13) */
+.su-call { text-align: center; padding-top: 2.4em; }
+.su-cl { font-size: .72em; opacity: .65; }
+.su-num { font-size: 1.35em; font-weight: 700; margin-top: .4em !important; letter-spacing: .02em; }
+.su-info { font-size: .72em; opacity: .6; margin-top: .5em !important; }
+.su-slide { position: absolute; left: 0; right: 0; bottom: 3em; display: flex; align-items: center; gap: .7em; padding: 0 .9em; }
+.su-decl { flex: none; width: 2.4em; height: 2.4em; border-radius: 50%; background: #d94a4a; }
+.su-track { position: relative; flex: 1; height: 2.6em; border-radius: 1.3em; background: rgba(255,255,255,.14); overflow: hidden; }
+.su-knob { position: absolute; top: .2em; width: 2.2em; height: 2.2em; border-radius: 50%; background: #3dbb6a; margin-left: .2em; }
+.su-acc { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .72em; opacity: .75; padding-left: 2em; }
+.su-num .m { display: inline-block; width: .5em; height: .5em; border: .09em solid currentColor; border-radius: 50%; margin: 0 .09em; vertical-align: .05em; opacity: .85; }
+.su-v-off { background: #07080b; }
+.su-offglass { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.03) 70%, rgba(255,255,255,0) 100%); }

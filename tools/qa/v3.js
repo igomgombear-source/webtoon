@@ -77,6 +77,8 @@
     if (!c7 || c7.type !== 'black' || c7.text !== '이틀 전' || c7.image || c7.rows) add(res, 'fail', 'data.text7', 0, 7, '7컷은 type black · text ‘이틀 전’ · 그림 없음이어야 함');
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
+    var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', w, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
+    if (scrs.length !== 15) add(res, 'warn', 'screen.count', w, 0, '합성된 휴대폰 화면 ' + scrs.length + '개 (기대 15)');
     f.remove();
   }
 
@@ -167,8 +169,10 @@
     /* 휴대폰 */
     function phoneText(no) { var c = d.getElementById('cut-' + String(no).padStart(2, '0')); return c ? (c.querySelector('.lock-time') || {}).textContent : null; }
     if (phoneText(49) !== '09:17') add(res, 'fail', 'phone.49', w, 49, '시계 ' + phoneText(49));
-    if (phoneText(63) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '시계 ' + phoneText(63));
-    [49, 63].forEach(function (n) {
+    /* 63컷: 원화 위 휴대폰 UI 합성 레이어(.scr) — 잠금화면 시계 10:36, 화면 윤곽에 맞춰짐 */
+    var c63 = d.getElementById('cut-63'), s63 = c63 && c63.querySelector('.scr');
+    if (!s63 || !s63.classList.contains('is-fit') || ((s63.querySelector('.su-lt') || {}).textContent) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '원화 위 잠금화면 UI(10:36)가 합성되지 않음');
+    [49].forEach(function (n) {
       var c = d.getElementById('cut-' + n), s = c.querySelector('.phone-screen'), t = c.querySelector('.lock-time');
       if (!s.classList.contains('has-wall')) add(res, 'fail', 'phone.wall', w, n, '배경 없음');
       var sr = rect(s), tr = rect(t); if (tr.left < sr.left || tr.right > sr.right) add(res, 'fail', 'phone.clock', w, n, '시계가 화면 밖');

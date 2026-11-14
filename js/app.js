@@ -160,6 +160,7 @@
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
           ' loading="lazy" decoding="async">' +
+        (cut.screen && W.screenUi ? W.screenUi.build(cut.screen) : '') +
         (REVIEW && cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
         time + overlayHtml + '</div>';
     }
@@ -338,6 +339,12 @@
     return '<div class="inset inset-' + esc(i.corner || 'tr') + ' inset-' + esc(i.kind || 'plain') + '" style="width:' + Number(i.width || 30) + '%;">' + inner + '</div>';
   }
 
+  /* 휴대폰 화면 UI 합성 설정 (data/ep01v3-screens.js): 단독 컷은 '번호', 조각 컷은 '번호:조각순서' */
+  function screenFor(ep, cut, pieceIdx) {
+    var S = W.screens && W.screens[ep.id];
+    return S ? (S[cut.rows ? cut.no + ':' + pieceIdx : String(cut.no)] || null) : null;
+  }
+
   function renderPanelsV3(ep, cut, lines) {
     var rows = cut.rows || [[{ ratio: cut.ratio, image: cut.image, imageSize: cut.imageSize, imageStatus: cut.imageStatus, imageLqip: cut.imageLqip }]];
     var w = Math.max(40, Math.min(100, Number(cut.width) || 100));
@@ -353,7 +360,8 @@
         var dt = p.time ? { time: p.time } : (first && cut.datetime ? cut.datetime : null);
         first = false;
         var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus, imageLqip: p.imageLqip,
-          ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt };
+          ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt,
+          screen: screenFor(ep, cut, idx) };
         var diag = cut.diagonal && row.length > 1 ? ' diag-' + (pi === 0 ? 'first' : 'last') : '';
         var me = idx++;
         return '<div class="panel' + diag + '" data-panel="' + me + '" style="flex:' + Math.round(ratioVal(p.ratio || cut.ratio) * 1000) + ' 1 0%;">' +
@@ -583,6 +591,7 @@
       if (err) { renderError(err.message); return focusHeading(); }
       if ((location.hash || '').replace('#', '') !== meta.id) return;
       renderEpisode(meta, ep);
+      if (W.screenUi) W.screenUi.fitAll(app);
       focusHeading();
     });
   }
