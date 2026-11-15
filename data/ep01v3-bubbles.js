@@ -11,7 +11,7 @@
  *   zones   말풍선이 덮으면 안 되는 영역 (패널 기준 %, x·y·w·h, approved 는 원화에서 잰 값인지)
  *   lines   데이터의 대사 순서와 1:1. type speech|offscreen|mono|phone|caption · pref {panel, at|x,y} · region 'panel'|'row'
  *           tail {panel,x,y} · edge · place 'above'|'below' · bandPref · join:false
- *   screen  83컷 문자 화면(원화 합성 전 임시 UI. 최종은 두 손으로 쥔 휴대폰에 표시)
+ *   screen  (예전) 83컷 임시 문자 화면 — 원화 합성 UI(js/screenui.js)로 대체되어 지금은 쓰지 않는다(겹침 방지)
  *   bandBase 큰 값이면 여백 띠를 마지막 수단으로만 쓴다 (33컷: 제작기준의 '각 조각 안쪽' 우선)
  */
 window.EP01V3_BUBBLES = {
@@ -20,15 +20,16 @@ window.EP01V3_BUBBLES = {
   cuts: {
 
   18: {
-    note: '분할2 · 일반 대화(효은→승민→효은). 아래 여백에서는 화자 쪽으로 좌우 지그재그',
+    note: '분할2 · 효은(왼쪽 a)→승민(오른쪽 b)→효은. 승민 말풍선 꼬리는 b의 승민 얼굴로, 마지막 효은 말풍선은 b 아래 경계의 왼쪽(조각 사이 쪽)에 두고 꼬리를 a의 효은 쪽으로 (2026-11-14 꼬리 방향 수정, 정본 위치 유지)',
     zones: [
-      { panel: 0, x: 30, y: 12, w: 42, h: 42, label: '효은 얼굴', approved: false },
-      { panel: 1, x: 16, y: 46, w: 68, h: 40, label: '귤 받는 손', approved: false }
+      { panel: 0, x: 26, y: 4, w: 40, h: 42, label: '효은 얼굴', approved: true },
+      { panel: 1, x: 44, y: 3, w: 40, h: 40, label: '승민 얼굴', approved: true },
+      { panel: 1, x: 16, y: 54, w: 50, h: 28, label: '귤 받는 손', approved: true }
     ],
     lines: [
-      { type: 'speech', pref: { panel: 0, at: 'in-tl' }, region: 'panel', tail: { panel: 0, x: 52, y: 44 } },
-      { type: 'speech', pref: { panel: 1, x: 0, y: 30 }, region: 'row', tail: { panel: 1, x: 96, y: 22 } },
-      { type: 'speech', pref: { panel: 1, at: 'edge-bottom-r' }, bandPref: { panel: 0, x: 55, y: 100 }, region: 'panel', edge: true, tail: { panel: 0, x: 52, y: 44 } }
+      { type: 'speech', pref: { panel: 0, at: 'in-tl' }, region: 'panel', tail: { panel: 0, x: 45, y: 40 } },
+      { type: 'speech', pref: { panel: 1, x: 0, y: 30 }, region: 'row', tail: { panel: 1, x: 62, y: 38 } },
+      { type: 'speech', pref: { panel: 1, x: 16, y: 100 }, bandPref: { panel: 0, x: 70, y: 100 }, region: 'panel', edge: true, tail: { panel: 0, x: 78, y: 66 } }
     ]
   },
   33: {
@@ -82,32 +83,86 @@ window.EP01V3_BUBBLES = {
       { type: 'mono', pref: { panel: 0, x: 82, y: 60 }, region: 'panel' }
     ]
   },
-  62: {
-    note: '3:1 띠 · 독백(띠 위 여백) → 전화 음성(띠 안 폰 옆) → 독백(띠 아래 여백) — 폭과 관계없이 같은 구성',
+  55: {
+    note: '승민(오른쪽 믹서 앞) 말은 꼬리를 승민 얼굴로, 학생들 인사는 정본대로 경계-하-우에 두되 꼬리를 문으로 나가는 학생들 쪽(왼쪽 위)으로 (2026-11-14 꼬리 방향 수정)',
     zones: [
-      { panel: 0, x: 44, y: 4, w: 22, h: 80, label: '승민 옆얼굴·귀의 폰', approved: false },
-      { panel: 0, x: 42, y: 66, w: 22, h: 34, label: '가슴에 댄 해인의 폰', approved: false }
+      { panel: 0, x: 56, y: 0, w: 32, h: 42, label: '승민 얼굴·머리', approved: true },
+      { panel: 0, x: 70, y: 40, w: 30, h: 18, label: '믹서 위 손', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, at: 'in-tl' }, region: 'panel', tail: { panel: 0, x: 66, y: 22 } },
+      { type: 'speech', pref: { panel: 0, at: 'edge-bottom-r' }, region: 'panel', edge: true, join: false, tail: { panel: 0, x: 22, y: 34 } }
+    ]
+  },
+  62: {
+    note: '3:1 띠 · 독백(띠 위 여백) → 전화 음성(띠 안, 얼굴 왼쪽 빈 객석 쪽에서 귀의 폰을 가리킴) → 독백(띠 아래 여백). 보호 영역을 원화에서 다시 잼(2026-11-14: 이전 값이 얼굴보다 왼쪽이라 전화 음성이 얼굴을 덮었음)',
+    zones: [
+      { panel: 0, x: 62, y: 0, w: 28, h: 74, label: '승민 옆얼굴·귀의 폰', approved: true },
+      { panel: 0, x: 62, y: 55, w: 13, h: 45, label: '가슴에 댄 해인의 폰', approved: true }
     ],
     lines: [
       { type: 'mono', pref: { panel: 0, x: 22, y: 0 }, region: 'panel', place: 'above' },
-      { type: 'phone', pref: { panel: 0, x: 86, y: 30 }, region: 'panel', tail: { panel: 0, x: 63, y: 36 } },
+      { type: 'phone', pref: { panel: 0, x: 44, y: 32 }, region: 'panel', tail: { panel: 0, x: 83, y: 40 } },
       { type: 'mono', pref: { panel: 0, x: 22, y: 100 }, region: 'panel', place: 'below' }
     ]
   },
+  67: {
+    note: '효은(왼쪽, 안경·묶은 머리)의 말 — 정본대로 컷 아래 여백, 효은 밑에 두고 꼬리를 효은 쪽으로 (2026-11-14 꼬리 방향 수정)',
+    zones: [
+      { panel: 0, x: 23, y: 0, w: 22, h: 32, label: '효은 얼굴', approved: true },
+      { panel: 0, x: 72, y: 15, w: 22, h: 36, label: '승민 얼굴', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 34, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 36, y: 60 } }
+    ]
+  },
+  70: {
+    note: '효은 얼굴(안경)·폰을 내미는 손 보호 — 경계-상 말풍선은 얼굴 위를 피해 오른쪽으로, 안-좌하는 몸 위 (2026-11-14 얼굴 가림 수정)',
+    zones: [
+      { panel: 0, x: 8, y: 7, w: 46, h: 31, label: '효은 얼굴·안경(머리 윗부분 제외)', approved: true },
+      { panel: 0, x: 46, y: 22, w: 32, h: 60, label: '폰과 손', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, at: 'edge-top-l' }, region: 'panel', edge: true, tail: { panel: 0, x: 40, y: 30 } },
+      { type: 'speech', pref: { panel: 0, x: 20, y: 78 }, region: 'panel', tail: { panel: 0, x: 34, y: 34 } }
+    ]
+  },
+  71: {
+    note: '4:1 띠 전체가 눈·얼굴 — 독백은 정본(gap)대로 띠 아래 여백에만 (2026-11-14 얼굴 가림 수정)',
+    zones: [
+      { panel: 0, x: 0, y: 0, w: 100, h: 100, label: '두 사람의 눈·얼굴', approved: true }
+    ],
+    lines: [
+      { type: 'mono', pref: { panel: 0, x: 70, y: 100 }, region: 'panel', place: 'below' }
+    ]
+  },
+  75: {
+    note: '분할2 · a 승민, b 효은. 승민 두 말풍선은 a 아래 여백, 효은 말풍선은 b 아래 여백 — 꼬리는 각자 쪽으로 (2026-11-14 꼬리 방향 수정, 정본 gap 유지)',
+    zones: [
+      { panel: 0, x: 40, y: 18, w: 40, h: 34, label: '승민 얼굴', approved: true },
+      { panel: 1, x: 44, y: 18, w: 38, h: 38, label: '효은 얼굴·안경', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 45, y: 112 }, bandPref: { panel: 0, x: 45, y: 100 }, region: 'panel', place: 'below', tail: { panel: 0, x: 58, y: 60 } },
+      { type: 'speech', pref: { panel: 0, x: 45, y: 112 }, bandPref: { panel: 0, x: 45, y: 100 }, region: 'panel', place: 'below', tail: { panel: 0, x: 58, y: 60 } },
+      { type: 'speech', pref: { panel: 1, x: 55, y: 112 }, bandPref: { panel: 1, x: 60, y: 100 }, region: 'panel', place: 'below', join: false, tail: { panel: 1, x: 62, y: 62 } }
+    ]
+  },
   83: {
-    note: '휴대폰 메시지 화면(U10) · 말풍선 2개만 크게 · 첫 문장 잘림 금지',
+    note: '휴대폰 메시지 화면(U10)은 원화 위 합성 UI(data/ep01v3-screens.js "83")만 쓴다 — 예전 말풍선 엔진의 임시 문자 화면(screen)은 합성 UI와 겹쳐 두 번 보여 제거함',
     zones: [
       { panel: 0, x: 0, y: 88, w: 100, h: 12, label: '엄지 두 개', approved: false }
     ],
-    screen: {
-      panel: 0, x: 4, y: 3, w: 92, h: 85, approved: false,
-      title: '권해인 쌤',
-      messages: [
-        { me: true, time: '19:20', text: '해인쌤, 몸은 좀 괜찮으세요? 휴대폰은 효은쌤께 드렸어요.' },
-        { me: false, keepFirst: true, time: '19:36', text: '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 휴직도 생각 중이에요. 걱정해 주셔서 감사해요.' }
-      ]
-    },
     lines: []
+  },
+  97: {
+    note: '얼굴이 컷 대부분 — 승민 말은 정본(gap)대로 컷 아래 여백, 꼬리는 위로 입 쪽 (2026-11-14 얼굴 가림 수정)',
+    zones: [
+      { panel: 0, x: 20, y: 6, w: 64, h: 74, label: '승민 얼굴·전화 든 손', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 58, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 58, y: 70 } }
+    ]
   }
   }
 };

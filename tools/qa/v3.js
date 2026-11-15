@@ -77,8 +77,8 @@
     if (!c7 || c7.type !== 'black' || c7.text !== '이틀 전' || c7.image || c7.rows) add(res, 'fail', 'data.text7', 0, 7, '7컷은 type black · text ‘이틀 전’ · 그림 없음이어야 함');
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
-    var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', w, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
-    if (scrs.length !== 20) add(res, 'warn', 'screen.count', w, 0, '합성된 화면 ' + scrs.length + '개 (기대 20: 휴대폰 19 + 23-a 모니터 1)');
+    var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', 0, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
+    if (scrs.length !== 20) add(res, 'warn', 'screen.count', 0, 0, '합성된 화면 ' + scrs.length + '개 (기대 20: 휴대폰 19 + 23-a 모니터 1)');
     f.remove();
   }
 
@@ -88,6 +88,20 @@
     if (cuts.length !== 104) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length);
     if (d.documentElement.scrollWidth > vw + 1) add(res, 'fail', 'view.hscroll', w, 0, '가로 스크롤 ' + d.documentElement.scrollWidth + '>' + vw);
     [].forEach.call(d.images, function (im) { if (im.complete && !im.naturalWidth) add(res, 'fail', 'view.broken', w, 0, '깨진 이미지 ' + im.getAttribute('src')); });
+    /* 벽시계 SVG: 휴대폰 상태 표시줄 시각(문자열)이 벽시계로 그려지면 NaN·undefined 가 들어간다 — 벽시계는 23·57컷에만 있어야 함 */
+    var clk = [].map.call(d.querySelectorAll('.scr-clock'), function (e) { return { no: +e.closest('.cut').dataset.no, bad: /NaN|undefined/.test(e.outerHTML) }; });
+    clk.forEach(function (c) { if (c.bad) add(res, 'fail', 'clock.svg', w, c.no, '벽시계 SVG 에 NaN/undefined 값'); });
+    if (JSON.stringify(clk.map(function (c) { return c.no; })) !== '[23,57]') add(res, 'fail', 'clock.cuts', w, 0, '벽시계 바늘이 있는 컷 ' + JSON.stringify(clk.map(function (c) { return c.no; })) + ' (기대 [23,57])');
+    /* 같은 컷에 원화 합성 휴대폰 UI(.scr)와 말풍선 엔진의 임시 문자 화면(.bv4-screen)이 함께 있으면 두 번 보인다 */
+    [].forEach.call(d.querySelectorAll('.cut'), function (c) { if (c.querySelector('.scr') && c.querySelector('.bv4-screen')) add(res, 'fail', 'screen.dup', w, +c.dataset.no, '휴대폰 문자 UI 가 두 겹(합성 UI + 임시 화면)'); });
+    /* 83컷 합성 UI: 해인 답장 첫 문장이 첫 줄에 온전히 있어야 함 */
+    var p83 = d.querySelectorAll('.cut[data-no="83"] .scr .su-b.them p'), m83 = p83[p83.length - 1];
+    if (!m83) add(res, 'fail', 'screen.83', w, 83, '83컷 합성 문자 UI 가 없음');
+    else {
+      var tn = m83.firstChild, rg = d.createRange(), top0 = null, first = '';
+      for (var ci = 0; tn && ci < tn.length; ci++) { rg.setStart(tn, ci); rg.setEnd(tn, ci + 1); var rr = rg.getClientRects()[0]; if (!rr) continue; if (top0 !== null && Math.abs(rr.top - top0) > rr.height * 0.6) break; top0 = rr.top; first += tn.data[ci]; }   /* 원근(기울기) 때문에 한 줄 안에서도 top 이 조금씩 변하므로 바로 앞 글자와 반 줄 이상 차이 날 때만 줄바꿈 */
+      if (first.replace(/\u00a0/g, ' ').indexOf('승민쌤, 저 해인이에요.') !== 0) add(res, 'fail', 'screen.firstline', w, 83, '83컷 첫 문장이 첫 줄에 온전히 있지 않음: ' + first);
+    }
     var spec = {}; /* 폭 기준값 */
     cuts.forEach(function (cut) {
       var no = +cut.dataset.no;

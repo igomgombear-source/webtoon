@@ -147,7 +147,7 @@
   /* spec 은 하나 또는 배열(한 원화에 폰이 둘인 60컷: 승민 폰 + 꺼진 해인 폰) */
   function build(spec) {
     if (Array.isArray(spec)) return spec.map(build).join('');
-    var fn = VIEWS[spec.view]; if (!fn) return '';
+    var fn = VIEWS[spec.view]; if (!fn) return buildClock(spec);   /* 화면 UI 없이 벽시계만 있는 컷(57) */
     var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');
     var wall = spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
@@ -160,16 +160,18 @@
       buildFg(spec, poly) + buildClock(spec);
   }
 
-  /* 벽시계 바늘(SVG, 원화 위 별도 층) — spec.clock = { w, h (원화 px), cx, cy, hh, mm, hl, ml, ry }. 원화의 시계 테두리·면은 건드리지 않는다 */
+  /* 벽시계 바늘(SVG, 원화 위 별도 층) — spec.wallClock = { w, h (원화 px), cx, cy, hh, mm, hl, ml, ry, hw, mw, hub, hubFill }. 원화의 시계 테두리·면은 건드리지 않는다 */
   function buildClock(spec) {
-    var c = spec.clock; if (!c) return '';
+    /* 휴대폰 상태 표시줄 시각(spec.clock, 문자열)과 구분: 벽시계는 반드시 객체 spec.wallClock 이어야 한다 */
+    var c = spec.wallClock; if (!c || typeof c !== 'object' || !(c.w > 0 && c.h > 0)) return '';
     var ha = ((c.hh % 12) + c.mm / 60) * 30, ma = c.mm * 6;
     function hand(a, len, wd) {
       var r = a * Math.PI / 180;
       return '<line x1="0" y1="0" x2="' + (Math.sin(r) * len).toFixed(1) + '" y2="' + (-Math.cos(r) * len).toFixed(1) + '" stroke="#2a2a31" stroke-width="' + wd + '" stroke-linecap="round"/>';
     }
     return '<svg class="scr-clock" viewBox="0 0 ' + c.w + ' ' + c.h + '" preserveAspectRatio="none" aria-hidden="true">' +
-      '<g transform="translate(' + c.cx + ' ' + c.cy + ') scale(1 ' + (c.ry || 1) + ')">' + hand(ha, c.hl, 7) + hand(ma, c.ml, 4.5) + '<circle r="6" fill="#2a2a31"/></g></svg>';
+      '<g transform="translate(' + c.cx + ' ' + c.cy + ') scale(1 ' + (c.ry || 1) + ')">' + hand(ha, c.hl, c.hw || 7) + hand(ma, c.ml, c.mw || 4.5) +
+      '<circle r="' + (c.hub || 6) + '" fill="' + (c.hubFill || '#2a2a31') + '"/></g></svg>';
   }
 
   /* 손가락 전경(fg) — UI 앞에 놓이는 손가락 픽셀(원화와 같은 캔버스에서 잘라낸 투명 WebP). 원화는 수정하지 않는다.
