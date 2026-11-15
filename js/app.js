@@ -432,15 +432,75 @@
   }
 
   /* ---------- 회차 화면 ---------- */
+  function renderEpisodeStep(episode, label, icon) {
+    var attrs = ' class="ep-nav-button" aria-label="' + label + '"';
+    var content = '<span aria-hidden="true">' + icon + '</span>';
+    return episode && episode.ready
+      ? '<a href="#' + esc(episode.id) + '"' + attrs + '>' + content + '</a>'
+      : '<button type="button" disabled' + attrs + '>' + content + '</button>';
+  }
+
+  function renderEpisodeNav(meta) {
+    var episodes = new Map();
+    W.series.episodes.forEach(function (episode) {
+      var existing = episodes.get(episode.no);
+      if (!existing || episode === meta || (!existing.ready && episode.ready)) {
+        episodes.set(episode.no, episode);
+      }
+    });
+    var list = Array.from(episodes.values()).sort(function (a, b) { return b.no - a.no; })
+      .map(function (episode) {
+        var label = episode.no + '화';
+        var item = episode.ready
+          ? '<a href="#' + esc(episode.id) + '"' + (episode === meta ? ' aria-current="page"' : '') + '>' + label + '</a>'
+          : '<button type="button" disabled>' + label + '</button>';
+        return '<li>' + item + '</li>';
+      }).join('');
+    return '<nav class="ep-nav" aria-label="회차 이동">' +
+      renderEpisodeStep(episodes.get(meta.no - 1), '이전 회차', '◀') +
+      '<button type="button" class="ep-nav-button ep-nav-toggle" aria-label="회차 목록" aria-expanded="false" aria-controls="ep-nav-list">' +
+        '<span aria-hidden="true">☰</span></button>' +
+      '<ul class="ep-nav-list" id="ep-nav-list" aria-label="회차 목록" hidden>' + list + '</ul>' +
+      renderEpisodeStep(episodes.get(meta.no + 1), '다음 회차', '▶') +
+      '</nav>';
+  }
+
+  function bindEpisodeNav() {
+    var nav = app.querySelector('.ep-nav');
+    var toggle = nav.querySelector('.ep-nav-toggle');
+    var list = nav.querySelector('.ep-nav-list');
+
+    function setOpen(open) {
+      list.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    }
+    function onOutsideClick(event) {
+      if (!list.hidden && !nav.contains(event.target)) setOpen(false);
+    }
+    toggle.addEventListener('click', function () { setOpen(list.hidden); });
+    nav.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || list.hidden) return;
+      event.preventDefault();
+      setOpen(false);
+      toggle.focus();
+    });
+    list.querySelector('[aria-current="page"]').addEventListener('click', function (event) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      setOpen(false);
+      window.scrollTo(0, 0);
+      focusHeading();
+    });
+    document.addEventListener('click', onOutsideClick);
+    cleanup.push(function () { document.removeEventListener('click', onOutsideClick); });
+  }
+
   function renderEpisode(meta, ep) {
     var s = W.series;
     document.title = ep.no + '화 ' + ep.title + ' · ' + s.title;
-    var idx = s.episodes.indexOf(meta);
-    var next = s.episodes[idx + 1];
-    var nextHtml = next
-      ? (next.ready
-        ? '<a class="end-next" href="#' + next.id + '">' + next.no + '화 보기</a>'
-        : '<p class="end-next is-locked">' + next.no + '화 준비 중</p>')
+    var nextEdition = s.episodes[s.episodes.indexOf(meta) + 1];
+    var editionLink = nextEdition && nextEdition.no === meta.no && nextEdition.ready
+      ? '<a class="end-edition" href="#' + esc(nextEdition.id) + '">' + esc(nextEdition.title) + '</a>'
       : '';
 
     app.innerHTML =
@@ -454,14 +514,15 @@
         '<div class="ep-head"><p class="ep-head-no">' + ep.no + '화</p><h1 id="page-heading" tabindex="-1">' + esc(ep.title) + '</h1></div>' +
         ep.cuts.map(function (c) { return renderCut(ep, c); }).join('') +
         '<div class="ep-silence" style="--after:' + Number(ep.endSpacing || 600) + ';" aria-hidden="true"></div>' +
-        '<footer class="ep-end"><p class="end-mark">' + ep.no + '화 끝</p>' + nextHtml +
-          '<a class="end-home" href="#">작품 메인으로</a></footer>' +
+        '<footer class="ep-end"><p class="end-mark">' + ep.no + '화 끝</p>' + editionLink +
+          '<a class="end-home" href="#">작품 메인으로</a>' + renderEpisodeNav(meta) + '</footer>' +
       '</main>';
     window.scrollTo(0, 0);
 
     bindImages();
     bindReveal();
     bindProgress(ep);
+    bindEpisodeNav();
     /* 말풍선 v4 시범(?bubbles=v4 일 때만 동작) */
     if (window.BubblesV4) window.BubblesV4.apply(app, ep, meta);
   }
