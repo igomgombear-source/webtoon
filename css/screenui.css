@@ -208,3 +208,14 @@
 .su-gapfill i { position: absolute; left: 0; top: 0; bottom: 0; background-repeat: no-repeat; transform-origin: 0 0; }
 /* 벽시계 바늘 층: 원화 캔버스 전체를 덮는 SVG */
 .scr-clock { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+
+/* 확대 읽기 카드 (83컷, js/screenui.js buildReadout) — 컷 아래 흐름. 폭 360 기준 본문 14px(최소 13px), 폭에 비례 */
+.scr-read { position: relative; width: 100%; margin: calc(14 * var(--u)) auto 0; padding: 0 calc(16 * var(--u)); box-sizing: border-box; }
+.scr-read::before { content: ""; position: absolute; left: 50%; top: calc(-8 * var(--u)); width: calc(14 * var(--u)); height: calc(14 * var(--u)); transform: translateX(-50%) rotate(45deg); background: #1b1e26; border-left: 1px solid rgba(246,248,252,.35); border-top: 1px solid rgba(246,248,252,.35); }
+.read-card { position: relative; background: #1b1e26; color: #eceef3; border: 1px solid rgba(246,248,252,.35); border-radius: calc(14 * var(--u)); padding: calc(12 * var(--u)) calc(14 * var(--u)) calc(14 * var(--u)); box-shadow: 0 calc(4 * var(--u)) calc(14 * var(--u)) rgba(0,0,0,.45); }
+.read-card p { margin: 0; }
+.rc-head { display: flex; align-items: center; gap: calc(7 * var(--u)); font-size: max(12px, calc(12.5 * var(--u))); font-weight: 600; opacity: .85; margin-bottom: calc(8 * var(--u)) !important; }
+.rc-av { width: calc(18 * var(--u)); height: calc(18 * var(--u)); border-radius: 50%; background: linear-gradient(135deg, #6b7488, #3c4252); flex: none; }
+.rc-name { flex: 1; min-width: 0; }
+.rc-time { font-weight: 500; opacity: .7; }
+.rc-msg { font-size: max(13px, calc(14.5 * var(--u))); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; background: #2a2e38; border-radius: calc(12 * var(--u)) calc(12 * var(--u)) calc(12 * var(--u)) calc(4 * var(--u)); padding: calc(10 * var(--u)) calc(12 * var(--u)); }

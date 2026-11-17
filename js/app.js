@@ -417,7 +417,8 @@
         var artAbove = cut.image ? renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, []) : '';
         body = artAbove + '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기(임시)</p>' : '') + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
       } else {
-        body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + renderGapLines(ep, ls);
+        var scr0 = W.screenUi && W.screenUi.buildReadout ? screenFor(ep, cut, 0) : null;   /* 83컷: 휴대폰 문자 확대 읽기 카드(컷 아래 흐름) */
+        body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + (scr0 ? W.screenUi.buildReadout(scr0) : '') + renderGapLines(ep, ls);
       }
     } else {
       var L = renderLines(ep, cut);

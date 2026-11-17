@@ -224,7 +224,8 @@
     }
     function inZone(pt, ri) { return zones.some(function (z) { return z.ri === ri && pt.x > z.x - 2 && pt.x < z.x + z.w + 2 && pt.y > z.y - 2 && pt.y < z.y + z.h + 2; }); }
     /* 꼬리 끝 계산: 화자 쪽으로, 보호 영역 안으로는 들어가지 않게 */
-    function tailFor(c, T, mode, ri) {
+    function tailFor(c, T, mode, ri, tmax) {
+      if (tmax) tmax *= Math.max(1, secR.width / 360);   /* 360px 기준 길이 → 폭에 비례 */
       if (!T) return null;
       var cx = c.x + c.w / 2, cy = c.y + c.h / 2, dx = T.x - cx, dy = T.y - cy;
       if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return null;
@@ -233,9 +234,10 @@
       else sc = Math.min(a / Math.max(Math.abs(dx), .01), b / Math.max(Math.abs(dy), .01));
       var mid = { x: cx + dx * sc, y: cy + dy * sc }, ux = T.x - mid.x, uy = T.y - mid.y, d = Math.hypot(ux, uy) || 1;
       if (sc >= 1) return null;   /* 화자가 말풍선 안쪽에 있음 */
-      var L = mode === 'out' ? Math.min(64, d) : Math.min(mode === 'band' ? 44 : 22, Math.max(10, d - 6));
+      /* tmax: 컷 설정 tailMax — 화자가 말풍선에서 멀 때 꼬리가 화자(휴대폰·얼굴)까지 닿도록 늘린다 */
+      var L = mode === 'out' ? Math.min(tmax || 64, d) : Math.min(tmax || (mode === 'band' ? 44 : 22), Math.max(10, d - 6));
       /* 여백 띠의 꼬리는 자기 조각 테두리 안쪽 14px까지 들어가 '어느 조각의 대사인지' 보이게 */
-      if (mode === 'band' && c.pr) {
+      if (mode === 'band' && c.pr && !tmax) {
         var edgeY = uy < 0 ? c.pr.y + c.pr.h - 14 : c.pr.y + 14;
         var need = Math.abs(uy) > 0.3 * d ? Math.abs((edgeY - mid.y) / (uy / d)) : 1e9;
         L = need <= 56 ? Math.max(L, need) : Math.min(26, Math.max(10, d - 6));   /* 조각까지 닿지 못하면 짧게 방향만 */
@@ -252,7 +254,11 @@
     lines.forEach(function (ln, i) {
       var cfg = (P.lines || [])[i] || {}, typ = typeOf(ln, cfg);
       var parts = ln.text.split(/(?<=[.?!])\s+/);
-      if ((typ === 'speech' || typ === 'offscreen') && parts.length > 1 && ln.text.replace(/\s/g, '').length > 18 && !cfg.noSplit) {
+      /* splitParts: 컷 설정이 정한 나눔(55컷 학생들 ‘네에~ / 안녕히 계세요!’). 이어 붙이면 원문과 글자 하나까지 같아야만 쓴다 */
+      var sp = cfg.splitParts && cfg.splitParts.join(' ') === ln.text ? cfg.splitParts : null;
+      if (sp) {
+        sp.forEach(function (t, k) { units.push({ ln: Object.assign({}, ln, { text: t }), cfg: (cfg.partCfg && cfg.partCfg[k]) ? Object.assign({}, cfg, cfg.partCfg[k]) : cfg, src: i, part: k }); });
+      } else if ((typ === 'speech' || typ === 'offscreen') && parts.length > 1 && ln.text.replace(/\s/g, '').length > 18 && !cfg.noSplit) {
         parts.forEach(function (t, k) { units.push({ ln: Object.assign({}, ln, { text: t }), cfg: cfg, src: i, part: k }); });
       } else units.push({ ln: ln, cfg: cfg, src: i, part: 0 });
     });
@@ -314,7 +320,7 @@
         }
         var mode = outTail ? 'out' : (c.phase % 2 === 0 ? 'band' : 'in'), tPen = 0;
         var crosses = function (q) { if (!q) return false; for (var k2 = 0; k2 < same.length; k2++) if (segHitsBox(q.mid, q.tip, same[k2], 3)) return true; return false; };
-        var tl = T ? tailFor(c, T, mode, ri) : null;
+        var tl = T ? tailFor(c, T, mode, ri, cfg.tailMax) : null;
         if (crosses(tl)) {
           /* 다른 말풍선을 가로지르면 화자 쪽 옆으로 짧게 꺾는다 */
           var cy0 = c.y + c.h / 2, side = T.x < c.x + c.w / 2 ? c.x - 40 : c.x + c.w + 40; side = Math.max(14, Math.min(secR.width - 14, side));

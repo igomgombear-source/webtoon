@@ -235,6 +235,20 @@
       '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + (z.focusOnly ? ' zf' : '') + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
   }
 
+  /* 확대 읽기 카드(readout) — 83컷처럼 휴대폰이 컷을 거의 채워 위에 얹을 자리가 없을 때, 같은 문자 한 통을 컷 '아래' 흐름에 평면으로 크게 보여 준다.
+   *   spec.readout = { index (messages 의 순서), head (머리글) }. 원화·손·휴대폰은 가리지 않는다.
+   *   읽기 프로그램에는 .scr 의 aria-label 이 같은 문장을 이미 읽어 주므로 카드는 aria-hidden (중복 낭독 방지).
+   *   첫 문장은 줄바꿈 없는 공백으로 묶어 첫 줄에 온전히 오게 한다. */
+  function buildReadout(spec) {
+    if (Array.isArray(spec)) spec = spec.filter(function (x) { return x && x.readout; })[0];
+    var r = spec && spec.readout, m = r && spec.messages && spec.messages[r.index];
+    if (!m) return '';
+    var txt = esc(m.text).replace(/^([^.?!]+[.?!])/, function (f) { return f.replace(/ /g, '\u00a0'); });
+    return '<div class="scr-read" aria-hidden="true"><div class="read-card">' +
+      '<p class="rc-head"><span class="rc-av"></span><span class="rc-name">' + esc(r.head || spec.contact || '') + '</span><span class="rc-time">' + esc(m.time || '') + '</span></p>' +
+      '<p class="rc-msg">' + txt + '</p></div></div>';
+  }
+
   /* 4점 대응 호모그래피 (src → dst), 8x8 가우스 소거 */
   function homography(src, dst) {
     var A = [], b = [], i, j, k;
@@ -306,5 +320,5 @@
   }
   if (!window.ResizeObserver) window.addEventListener('resize', function () { fitAll(document); });
 
-  W.screenUi = { build: build, buildZoom: buildZoom, fitAll: fitAll, _homography: homography };
+  W.screenUi = { build: build, buildZoom: buildZoom, buildReadout: buildReadout, fitAll: fitAll, _homography: homography };
 })();
