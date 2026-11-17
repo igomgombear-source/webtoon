@@ -343,6 +343,11 @@
     return '<div class="inset inset-' + esc(i.corner || 'tr') + ' inset-' + esc(i.kind || 'plain') + '" style="width:' + Number(i.width || 30) + '%;">' + inner + '</div>';
   }
 
+  /* 장소·시간 대형 카드 (제작기준 2컷: 하늘 빈 곳 위쪽 1/3, 왼쪽 정렬, Noto Serif KR, 흰색 + 엷은 그림자). 원화에 글자를 굽지 않는다 */
+  function renderTitleCard(card) {
+    return '<div class="title-card">' + (card.lines || []).map(function (l) { return '<p class="tc-' + esc(l.kind || 'line') + '">' + esc(l.text) + '</p>'; }).join('') + '</div>';
+  }
+
   /* 휴대폰 화면 UI 합성 설정 (data/ep01v3-screens.js): 단독 컷은 '번호', 조각 컷은 '번호:조각순서' */
   function screenFor(ep, cut, pieceIdx) {
     var S = W.screens && W.screens[ep.id];
@@ -373,6 +378,7 @@
             (REVIEW && ov && me === 0 ? '<span class="ovf-chip ovf-' + esc(ov.edge) + '" aria-hidden="true">' + esc(ov.note || '틀 밖') + '</span>' : '') +
           '</div>' +
           (pc.screen && W.screenUi && W.screenUi.buildZoom ? W.screenUi.buildZoom(pc.screen) : '') +   /* 휴대폰 화면 확대 인셋 (48·60·63·65·81컷; spec 에 zoom 이 없으면 빈 문자열) */
+          (me === 0 && cut.card ? renderTitleCard(cut.card) : '') +   /* 오프닝 장소·시간 대형 카드(2컷) — 그림이 아닌 글자 층 */
           (me === 0 ? renderInsetSelf(ep, cut) : '') +
           '<div class="panel-bubbles">' + bubbleGroups(ep, lines, me) + '</div>' +
         '</div>';

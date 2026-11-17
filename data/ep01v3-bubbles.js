@@ -179,6 +179,25 @@ window.EP01V3_BUBBLES = {
     ],
     lines: []
   },
+  95: {
+    note: '합성 컷(102컷 상반신 재구도) — 얼굴·귀의 휴대폰 보호, 전화 음성은 왼쪽 위 벽 쪽에서 꼬리를 휴대폰으로 (2026-11-17)',
+    zones: [
+      { panel: 0, x: 30, y: 14, w: 52, h: 72, label: '승민 얼굴·머리·귀의 휴대폰', approved: true }
+    ],
+    lines: [
+      { type: 'phone', pref: { panel: 0, x: 16, y: 12 }, region: 'panel', tailMax: 50, tail: { panel: 0, x: 33, y: 48 } }
+    ]
+  },
+  96: {
+    note: '합성 컷(97컷 입·턱·폰 쥔 손 재구도) — 입·손·휴대폰 보호, 말과 전화 음성은 컷 아래 여백 (2026-11-17)',
+    zones: [
+      { panel: 0, x: 0, y: 0, w: 100, h: 90, label: '얼굴 아래쪽·입·폰 쥔 손', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 62, y: 100 }, region: 'panel', edge: true, tail: { panel: 0, x: 62, y: 62 } },
+      { type: 'phone', pref: { panel: 0, x: 40, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 22, y: 30 } }
+    ]
+  },
   97: {
     note: '얼굴이 컷 대부분 — 승민 말은 정본(gap)대로 컷 아래 여백, 꼬리는 위로 입 쪽 (2026-11-14 얼굴 가림 수정)',
     zones: [

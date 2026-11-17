@@ -624,3 +624,9 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
 .above-lines .line, .gap-lines .line { max-width: 94%; }
 /* 6컷(계단참 신발 코): 무테 마스크가 아래 7%를 지우면 원화 맨 아래(약 3%)의 신발 앞코가 사라진다 → 위쪽만 번지고 아래는 얇게 (원화 무수정) */
 .cut[data-no="6"] .panel-mask.shape-bleed { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 99%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 7%, #000 99%, transparent 100%); }
+/* 2컷 오프닝 장소·시간 카드 (원화 1080 기준 40·72·28px → 폭 비례, 장소는 읽을 수 있게 조금 키움) */
+.title-card { position: absolute; left: 8%; top: 9%; z-index: 3; color: #fff; font-family: "Noto Serif KR", serif; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,.55), 0 0 12px rgba(0,0,0,.35); pointer-events: none; }
+.title-card p { margin: 0; line-height: 1.15; }
+.title-card .tc-date { font-size: calc(13.3 * var(--u)); letter-spacing: .02em; }
+.title-card .tc-time { font-size: calc(24 * var(--u)); margin: calc(4 * var(--u)) 0 !important; letter-spacing: .03em; }
+.title-card .tc-place { font-size: calc(11 * var(--u)); letter-spacing: .08em; opacity: .92; }
