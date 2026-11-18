@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 tools/qa/out/
+tools/art/scenes/fonts/
+tools/art/scenes/out/
+tools/art/scenes/parts/

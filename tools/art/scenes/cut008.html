@@ -1,0 +1,65 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts/np.css"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:608px;overflow:hidden;background:#cfe0ee}
+svg{position:absolute;left:0;top:0}
+.bld{position:absolute;left:330px;top:130px;width:520px;filter:saturate(.95) brightness(1.03)}
+.haze{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,236,205,0) 30%,rgba(255,226,180,.12) 55%,rgba(255,236,205,0) 70%),linear-gradient(100deg,rgba(255,214,150,.22),rgba(255,214,150,0) 40%)}
+.plate{position:absolute;left:24px;top:318px;width:64px;height:150px;background:linear-gradient(#3a3f45,#2a2e33);border:3px solid #8e8a82;border-radius:3px;color:#f0e6c8;font-family:'Nanum Pen Script',serif;font-size:27px;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 3px 6px rgba(0,0,0,.35)}
+</style></head><body><div class="cv">
+<svg id="back" width="1080" height="608"></svg>
+<svg id="mid" width="1080" height="608"></svg>
+<svg id="front" width="1080" height="608"></svg>
+<div class="plate"><span>양</span><span>평</span><span>중</span><span>학</span><span>교</span></div>
+<div class="haze"></div>
+</div><script>
+let seed = 11; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const L = '#4a3a30';
+// 하늘·먼 산
+document.getElementById('back').innerHTML = `<defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8fb6db"/><stop offset=".55" stop-color="#d9e4ea"/><stop offset="1" stop-color="#f3dcc0"/></linearGradient>
+<linearGradient id="field" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#c9a77c"/><stop offset="1" stop-color="#b48e62"/></linearGradient>
+<filter id="b2"><feGaussianBlur stdDeviation="2"/></filter></defs>
+<rect width="1080" height="608" fill="url(#sky)"/>
+<path d="M0 230 Q120 150 260 196 Q360 130 470 186 Q600 120 760 178 Q900 128 1080 190 L1080 330 L0 330Z" fill="#9fb3c2" filter="url(#b2)"/>
+<path d="M0 262 Q160 210 330 246 Q520 200 700 240 Q880 206 1080 236 L1080 330 L0 330Z" fill="#8aa08c" filter="url(#b2)"/>
+<path d="M0 300 Q200 280 420 296 Q700 286 1080 300 L1080 340 L0 340Z" fill="#7f8f62"/>`;
+// 학교 본관(4층, 베이지 벽·창 줄) — 운동장 건너편 원경
+let bldg = `<g stroke="#5a4a3e" stroke-width="1.6"><path d="M250 150 L860 150 L860 312 L250 312Z" fill="#e3d6c2"/><path d="M240 140 L870 140 L870 152 L240 152Z" fill="#b9a993"/>
+<path d="M520 112 L590 112 L590 150 L520 150Z" fill="#d8c9b2"/><circle cx="555" cy="130" r="11" fill="#f4efe6"/><path d="M555 130v-7M555 130h5" stroke="#3a2e26" stroke-width="1.6"/></g>`;
+for (let f2 = 0; f2 < 4; f2++) for (let c = 0; c < 22; c++) { const x = 262 + c * 27, y = 162 + f2 * 37;
+  if (c === 10 || c === 11) continue;
+  bldg += `<rect x="${x}" y="${y}" width="20" height="24" fill="${R() < .15 ? '#e9e2d0' : '#7f98ab'}" stroke="#5a4a3e" stroke-width="1"/><path d="M${x} ${y + 12}h20" stroke="#5a6a78" stroke-width="1"/>`; }
+bldg += `<path d="M533 236 L577 236 L577 312 L533 312Z" fill="#6c7e8c" stroke="#5a4a3e" stroke-width="1.6"/><path d="M500 228h110" stroke="#9a8a72" stroke-width="5"/>`;
+let m = bldg + `<rect x="0" y="312" width="1080" height="296" fill="url(#field)"/>
+<g fill="none" stroke="#f4efe4" stroke-width="3" opacity=".9"><ellipse cx="470" cy="420" rx="420" ry="70"/><ellipse cx="470" cy="420" rx="370" ry="54"/><path d="M110 420H830"/></g>
+<path d="M0 318 Q540 306 1080 318" stroke="#9a7a52" stroke-width="3" fill="none"/>`;
+// 운동장 끝 은행나무 줄(노랑)
+for (let x = 14; x < 1080; x += 40) { const y = 314, h = 50 + R() * 18, col = ['#e9b93a','#efc64a','#dca72e','#e8a033'][Math.floor(R() * 4)];
+  m += `<path d="M${x} ${y} v-16" stroke="#5b4535" stroke-width="3"/>`;
+  for (let j = 0; j < 9; j++) { const cx = x + (R() - .5) * 26, cy = y - 16 - R() * (h - 16), rr = 7 + R() * 7;
+    m += `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${col}"/><circle cx="${cx - 2}" cy="${cy - 2}" r="${rr * .5}" fill="#fbe08a" opacity=".55"/>`; }
+  m += `<path d="M${x + 4} ${y - 18} q8 -14 2 -30" stroke="#b9862a" stroke-width="1.4" fill="none" opacity=".6"/>`; }
+// 체육 수업 중인 학생들(멀리, 작게): 흰 티·남색 바지
+function kid(x, y, s, run) { const k = s;
+  return `<g stroke="${L}" stroke-width="${.9}"><circle cx="${x}" cy="${y - 13 * k}" r="${2.6 * k}" fill="#2a211e"/><path d="M${x - 3 * k} ${y - 10 * k} h${6 * k} l${1 * k} ${6 * k} h${-8 * k} Z" fill="#f2f0ec"/>
+  <path d="M${x - 2.6 * k} ${y - 4 * k} l${run ? -3 * k : -1 * k} ${4 * k} M${x + 2.6 * k} ${y - 4 * k} l${run ? 3 * k : 1 * k} ${4 * k}" stroke="#2c3550" stroke-width="${2.2 * k}"/></g>`; }
+const kids = [[180, 380, 1, 1], [205, 384, 1, 1], [240, 392, 1.05, 1], [600, 360, .9, 1], [625, 362, .9, 1], [660, 366, .9, 1], [790, 400, 1, 1], [812, 408, 1, 1],
+  [430, 440, 1.15, 0], [450, 446, 1.15, 0], [470, 440, 1.15, 0], [490, 446, 1.15, 0], [510, 440, 1.15, 0], [530, 446, 1.15, 0], [455, 470, 1.25, 0]];
+kids.forEach(k => m += kid(k[0], k[1], k[2], k[3]));
+m += `<g stroke="${L}" stroke-width="1"><circle cx="560" cy="452" r="3.3" fill="#2a211e"/><path d="M556 456h8l1 9h-10Z" fill="#3d5a8c"/><path d="M557 465l-1 8M563 465l1 8" stroke="#222" stroke-width="2.6"/></g>`; // 체육 선생님
+document.getElementById('mid').innerHTML = m;
+// 앞: 교문 기둥·열린 문 레일·단풍나무
+let f = `<defs><linearGradient id="stone" x1="0" x2="1"><stop offset="0" stop-color="#b9b2a6"/><stop offset=".6" stop-color="#d8d1c4"/><stop offset="1" stop-color="#9c958a"/></linearGradient></defs>
+<path d="M0 540 L1080 520 L1080 608 L0 608Z" fill="#a98c6c"/>
+<path d="M120 528 L960 516" stroke="#7a6a58" stroke-width="5"/>
+<g stroke="${L}" stroke-width="2.2"><rect x="10" y="280" width="96" height="320" fill="url(#stone)"/><rect x="4" y="268" width="108" height="20" fill="#cfc7b9"/>
+<rect x="974" y="270" width="100" height="330" fill="url(#stone)"/><rect x="968" y="258" width="112" height="20" fill="#cfc7b9"/></g>
+<g stroke="#5e6670" stroke-width="3" fill="none"><path d="M106 470H250M106 430H250M106 510H250"/>${[120, 145, 170, 195, 220, 245].map(x => `<path d="M${x} 420V522"/>`).join('')}</g>`;
+// 단풍(빨강·주황) 앞 나무: 오른쪽 위 — 가지 위에 잎 덩어리, 덩어리마다 그늘·밝은 쪽
+f += `<path d="M1080 230 Q1030 170 980 140 M1040 200 Q1000 120 940 70 M1050 150 Q1060 90 1040 30 M990 150 Q930 130 880 120" stroke="#4a3426" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+for (let i = 0; i < 26; i++) { const x = 820 + R() * 270, y = -20 + R() * 190, r = 26 + R() * 22;
+  f += `<circle cx="${x}" cy="${y}" r="${r}" fill="#a8301e"/>`;
+  for (let j = 0; j < 9; j++) { const lx = x + (R() - .5) * r * 1.4, ly = y + (R() - .5) * r * 1.4, s2 = 6 + R() * 6, ang = R() * 6.28;
+    f += `<path d="M${lx} ${ly} l${s2 * Math.cos(ang)} ${s2 * Math.sin(ang)} l${s2 * Math.cos(ang + 1.3)} ${s2 * Math.sin(ang + 1.3)} l${s2 * Math.cos(ang + 2.6)} ${s2 * Math.sin(ang + 2.6)} l${s2 * Math.cos(ang + 3.9)} ${s2 * Math.sin(ang + 3.9)}Z" fill="${['#d9622f','#e08a33','#c8432a','#ee9a3c'][Math.floor(R() * 4)]}"/>`; } }
+for (let i = 0; i < 16; i++) { const x = 600 + R() * 460, y = 120 + R() * 420, s = 4 + R() * 4, a = R() * 6;
+  f += `<path d="M${x} ${y} l${s * Math.cos(a)} ${s * Math.sin(a)} l${s * .6} ${s} l${-s} ${s * .2}Z" fill="#d9622f" opacity=".9"/>`; }
+document.getElementById('front').innerHTML = f;
+</script></body></html>

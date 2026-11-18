@@ -32,6 +32,28 @@ window.EP01V3_BUBBLES = {
       { type: 'speech', pref: { panel: 1, x: 0, y: 100 }, bandPref: { panel: 0, x: 80, y: 100 }, region: 'panel', edge: true, tailMax: 80, tail: { panel: 0, x: 60, y: 40 } }
     ]
   },
+  10: {
+    note: '마감 원화(교실·교탁 옆 승민) — 승민 얼굴·분필 손, 칠판 글씨 보호. 첫 말은 칠판 왼쪽 위(승민 쪽 꼬리), 둘째는 경계-하 (2026-11-18)',
+    zones: [
+      { panel: 0, x: 50, y: 20, w: 22, h: 30, label: '승민 얼굴·분필 손', approved: true },
+      { panel: 0, x: 15, y: 18, w: 40, h: 16, label: '칠판 三人成虎', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 26, y: 40 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 58, y: 30 } },
+      { type: 'speech', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, join: false, tailMax: 60, tail: { panel: 0, x: 58, y: 32 } }
+    ]
+  },
+  17: {
+    note: '마감 원화(화이트보드 앞 최기훈 3/4 뒷모습, 전경 승민 뒷머리) — 공지는 보드 오른쪽 위 벽 쪽, 꼬리는 최기훈 머리. 화면 밖 교사들의 답은 작게 경계-하-좌 (2026-11-18)',
+    zones: [
+      { panel: 0, x: 22, y: 10, w: 56, h: 36, label: '화이트보드 공지', approved: true },
+      { panel: 0, x: 54, y: 24, w: 26, h: 76, label: '최기훈', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 88, y: 12 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 74, y: 34 } },
+      { type: 'offscreen', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, tail: { panel: 0, x: 30, y: 80 } }
+    ]
+  },
   33: {
     note: '위 1컷 + 아래 사선 2분할 · 제작기준 v2의 \'각 조각 안쪽\'을 우선(사용자 지시), 자리가 정말 없을 때만 여백 띠 · 최대 2줄 · 배치 미승인, 원화가 오면 원화와 말풍선 공간을 함께 조정',
     maxLines: 2,
@@ -179,23 +201,33 @@ window.EP01V3_BUBBLES = {
     ],
     lines: []
   },
-  95: {
-    note: '합성 컷(102컷 상반신 재구도) — 얼굴·귀의 휴대폰 보호, 전화 음성은 왼쪽 위 벽 쪽에서 꼬리를 휴대폰으로 (2026-11-17)',
+  93: {
+    note: '마감 원화(놀라 눈을 크게 뜬 옆얼굴, 집중선) — 얼굴 보호, 독백 두 개는 정본(gap)대로 컷 아래 (2026-11-18)',
     zones: [
-      { panel: 0, x: 30, y: 14, w: 52, h: 72, label: '승민 얼굴·머리·귀의 휴대폰', approved: true }
+      { panel: 0, x: 10, y: 10, w: 75, h: 90, label: '승민 얼굴·머리', approved: true }
     ],
     lines: [
-      { type: 'phone', pref: { panel: 0, x: 16, y: 12 }, region: 'panel', tailMax: 50, tail: { panel: 0, x: 33, y: 48 } }
+      { type: 'mono', pref: { panel: 0, x: 30, y: 100 }, region: 'panel', place: 'below' },
+      { type: 'mono', pref: { panel: 0, x: 70, y: 100 }, region: 'panel', place: 'below' }
+    ]
+  },
+  95: {
+    note: '마감 원화(유리문에 얼비친 승민, 폰은 귀) — 전화 음성은 왼쪽 위 유리 쪽, 꼬리는 휴대폰 (2026-11-18)',
+    zones: [
+      { panel: 0, x: 40, y: 8, w: 52, h: 92, label: '승민 얼굴·폰 든 손', approved: true }
+    ],
+    lines: [
+      { type: 'phone', pref: { panel: 0, x: 18, y: 14 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 50, y: 56 } }
     ]
   },
   96: {
-    note: '합성 컷(97컷 입·턱·폰 쥔 손 재구도) — 입·손·휴대폰 보호, 말과 전화 음성은 컷 아래 여백 (2026-11-17)',
+    note: '마감 원화(입·턱·폰 클로즈업 + 모서리를 쥔 손 삽입 칸) — 얼굴·손 보호, 말과 전화 음성은 컷 아래 여백 (2026-11-18)',
     zones: [
-      { panel: 0, x: 0, y: 0, w: 100, h: 90, label: '얼굴 아래쪽·입·폰 쥔 손', approved: true }
+      { panel: 0, x: 0, y: 0, w: 100, h: 100, label: '얼굴·폰·삽입 칸', approved: true }
     ],
     lines: [
-      { type: 'speech', pref: { panel: 0, x: 62, y: 100 }, region: 'panel', edge: true, tail: { panel: 0, x: 62, y: 62 } },
-      { type: 'phone', pref: { panel: 0, x: 40, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 22, y: 30 } }
+      { type: 'speech', pref: { panel: 0, x: 70, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 80, y: 50 } },
+      { type: 'phone', pref: { panel: 0, x: 30, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 22, y: 30 } }
     ]
   },
   97: {

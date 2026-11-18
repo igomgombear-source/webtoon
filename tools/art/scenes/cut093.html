@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:1080px;overflow:hidden;background:#20242c}
+.bg{position:absolute;inset:0;width:1080px;height:1080px;filter:brightness(.8) saturate(.7) hue-rotate(-8deg)}
+.fig{position:absolute;left:40px;top:150px;width:860px;filter:saturate(.85) brightness(.97)}
+svg{position:absolute;left:0;top:0}
+.cold{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 66% 42%,rgba(200,215,240,0) 40%,rgba(18,24,40,.55) 100%);}
+</style></head><body><div class="cv">
+<img class="bg" src="parts/entrance-morning-blur.png">
+<svg id="lines" width="1080" height="1080"></svg>
+<img class="fig" src="parts/seungmin-058-shock.png">
+<div class="cold"></div>
+<svg id="fx" width="1080" height="1080"></svg>
+</div><script>
+// 놀람 효과선: 눈 쪽(오른쪽 위)을 중심으로 바깥에서 안으로 들어오는 가는 선(웹툰 집중선) — 인물 뒤
+const cx = 660, cy = 660; let h = '';
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+for (let k = 0; k < 140; k++) {
+  const a = k / 140 * Math.PI * 2 + rnd() * .03, R = 900, r0 = 330 + rnd() * 160;
+  const x1 = cx + Math.cos(a) * R, y1 = cy + Math.sin(a) * R, x2 = cx + Math.cos(a) * r0, y2 = cy + Math.sin(a) * r0;
+  const w = 1 + rnd() * 3.5;
+  h += `<path d="M${x1 + Math.sin(a) * w},${y1 - Math.cos(a) * w} L${x2},${y2} L${x1 - Math.sin(a) * w},${y1 + Math.cos(a) * w} Z" fill="rgba(236,240,250,${.25 + rnd() * .35})"/>`;
+}
+document.getElementById('lines').innerHTML = h;
+// 식은땀 한 방울(관자놀이 옆)
+document.getElementById('fx').innerHTML = `<path d="M560 712 q-15 28 0 39 q15 -11 0 -39 Z" fill="#dfeaf6" stroke="#5a6f88" stroke-width="2.2"/><path d="M556 736 q2 6 6 6" stroke="#fff" stroke-width="2" fill="none"/>`;
+</script></body></html>

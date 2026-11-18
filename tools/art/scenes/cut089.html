@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:1350px;overflow:hidden;background:#2a1d17}
+svg{position:absolute;left:0;top:0}
+.fig{position:absolute;left:-130px;top:666px;width:760px;filter:brightness(.92) sepia(.18) saturate(1.1)}
+.warm{position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 50% 52%,rgba(255,190,110,.22),rgba(255,160,80,0) 70%),radial-gradient(ellipse 90% 80% at 50% 45%,rgba(0,0,0,0) 55%,rgba(30,15,8,.45) 100%),linear-gradient(rgba(255,170,90,.05),rgba(40,20,10,.30));mix-blend-mode:normal;pointer-events:none}
+</style></head><body><div class="cv">
+<svg width="1080" height="1350" viewBox="0 0 1080 1350">
+<defs>
+ <pattern id="tile" width="60" height="30" patternUnits="userSpaceOnUse"><rect width="60" height="30" fill="#e9dcc6"/><path d="M0 29.5H60M0 0V15M30 15V30" stroke="#cbb79b" stroke-width="2"/><rect x="2" y="2" width="56" height="11" fill="#f3e8d6" opacity=".55"/></pattern>
+ <linearGradient id="wood" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b98a5e"/><stop offset="1" stop-color="#946840"/></linearGradient>
+ <linearGradient id="woodLow" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a87a50"/><stop offset="1" stop-color="#6e4a2e"/></linearGradient>
+ <linearGradient id="steel" x1="0" x2="1"><stop offset="0" stop-color="#8b8f96"/><stop offset=".35" stop-color="#e6e8ea"/><stop offset=".6" stop-color="#a9adb3"/><stop offset="1" stop-color="#6f737a"/></linearGradient>
+ <linearGradient id="steelV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#c9ccd1"/><stop offset="1" stop-color="#7d8188"/></linearGradient>
+ <linearGradient id="counter" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d9cdbd"/><stop offset="1" stop-color="#b5a691"/></linearGradient>
+ <linearGradient id="night" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1c2340"/><stop offset="1" stop-color="#3a3550"/></linearGradient>
+ <radialGradient id="flame"><stop offset="0" stop-color="#9fd0ff"/><stop offset=".6" stop-color="#3a7dff"/><stop offset="1" stop-color="#3a7dff" stop-opacity="0"/></radialGradient>
+ <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter><filter id="blur14"><feGaussianBlur stdDeviation="14"/></filter><filter id="blur3"><feGaussianBlur stdDeviation="2.5"/></filter>
+</defs>
+<rect x="0" y="0" width="1080" height="1350" fill="url(#tile)"/>
+<rect x="0" y="0" width="1080" height="210" fill="#5a4030"/><rect x="0" y="196" width="1080" height="14" fill="#3e2b1f"/>
+<path d="M640 0V120" stroke="#2a1d16" stroke-width="3"/><path d="M590 170q50-70 100 0Z" fill="#e8b46a" stroke="#4a3428" stroke-width="2.4"/>
+<ellipse cx="640" cy="172" rx="52" ry="8" fill="#fff0c8"/>
+<g transform="translate(0,180)">
+<g stroke="#4a3428" stroke-width="2.4" stroke-linejoin="round">
+ <!-- 창 (18:34, 11월 = 밤) -->
+ <rect x="40" y="360" width="250" height="300" rx="4" fill="#d7c7ae"/><rect x="58" y="378" width="214" height="264" fill="url(#night)"/>
+ <path d="M165 378V642M58 510H272" stroke="#d7c7ae" stroke-width="10"/>
+ <g fill="#ffd27a" stroke="none" opacity=".85"><rect x="80" y="560" width="10" height="8"/><rect x="104" y="560" width="10" height="8"/><rect x="200" y="590" width="10" height="8"/><rect x="230" y="560" width="10" height="8"/></g>
+ <path d="M40 360q30 160 0 300" fill="#efe3cf" opacity=".9"/>
+ <!-- 위 찬장 -->
+ <rect x="0" y="40" width="1080" height="270" fill="url(#wood)"/>
+ <path d="M270 40V310M540 40V310M810 40V310" />
+ <g stroke-width="5" stroke="#5a3d26" stroke-linecap="round"><path d="M250 270v24M290 270v24M520 270v24M560 270v24M790 270v24M830 270v24"/></g>
+ <rect x="0" y="300" width="1080" height="16" fill="#7a5434"/>
+ <!-- 레인지 후드 -->
+ <path d="M400 316H740L780 420H360Z" fill="url(#steelV)"/><rect x="350" y="420" width="440" height="22" fill="#8a8e95"/>
+ <rect x="372" y="430" width="396" height="6" fill="#ffe2a8" stroke="none"/>
+ <!-- 조리대 -->
+ <rect x="0" y="790" width="1080" height="40" fill="url(#counter)"/>
+ <rect x="0" y="830" width="1080" height="520" fill="url(#woodLow)"/>
+ <path d="M270 830V1350M540 830V1350M810 830V1350M0 1090H1080"/>
+ <g stroke-width="5" stroke="#4a3020" stroke-linecap="round"><path d="M240 960h-40M580 960h40M780 960h-40M850 960h40M240 1220h-40M580 1220h40M780 1220h-40M850 1220h40"/></g>
+ <!-- 가스레인지 -->
+ <rect x="360" y="772" width="420" height="24" rx="3" fill="#2b2b30"/>
+ <ellipse cx="465" cy="784" rx="54" ry="9" fill="url(#flame)" stroke="none" opacity=".9"/>
+ <ellipse cx="680" cy="786" rx="48" ry="8" fill="#3c3c42"/>
+ <!-- 냄비 -->
+ <path d="M370 640h190v130q0 18-18 18H388q-18 0-18-18Z" fill="url(#steel)"/>
+ <ellipse cx="465" cy="640" rx="95" ry="20" fill="#5c5f66"/>
+ <ellipse cx="465" cy="642" rx="84" ry="15" fill="#a3542e" stroke="none"/>
+ <ellipse cx="458" cy="639" rx="50" ry="7" fill="#c97a46" stroke="none" opacity=".8"/>
+ <path d="M370 662h-34q-10 0-10 10v6h44M560 662h34q10 0 10 10v6h-44" fill="#3a3a40"/>
+ <!-- 국자 -->
+ <path d="M500 640L585 470" stroke="#d9dcdf" stroke-width="10" stroke-linecap="round"/><path d="M500 640L585 470" stroke="#7d8188" stroke-width="2" fill="none"/>
+ <!-- 도마·그릇 -->
+ <rect x="80" y="752" width="190" height="34" rx="6" fill="#e4c79a"/><path d="M110 752q30-36 70-10q20-30 60 0" fill="#7fae5a"/>
+ <path d="M650 738q50 50 100 0Z" fill="#f4efe6"/>
+ <!-- 전자레인지 -->
+ <rect x="808" y="560" width="250" height="210" rx="10" fill="#e7e2da"/>
+ <rect x="826" y="580" width="160" height="170" rx="6" fill="#262a30"/>
+ <path d="M836 592l60 0l-50 140" fill="#3a4048" stroke="none" opacity=".7"/>
+ <rect x="996" y="584" width="48" height="30" rx="3" fill="#0b1210"/>
+ <g id="clock" stroke="none"></g>
+ <g fill="#bdb7ad" stroke="#7a746b" stroke-width="1.5"><circle cx="1020" cy="650" r="9"/><rect x="1004" y="676" width="32" height="10" rx="3"/><rect x="1004" y="696" width="32" height="10" rx="3"/><rect x="1004" y="716" width="32" height="10" rx="3"/></g>
+</g>
+</g>
+<!-- 위 찬장 그림자 -->
+<rect x="0" y="316" width="1080" height="40" fill="#5a3a22" opacity=".18" filter="url(#blur8)"/>
+<!-- 김 -->
+<g filter="url(#blur14)" fill="none" stroke="#fff6ea" stroke-linecap="round" opacity=".55">
+ <path d="M430 615q-34-60 8-110t-6-70" stroke-width="34"/><path d="M500 615q34-62-8-112t14-60" stroke-width="26"/>
+</g>
+<g filter="url(#blur3)" fill="none" stroke="#ffffff" stroke-linecap="round" opacity=".55">
+ <path d="M440 600q-30-60 6-110" stroke-width="6"/><path d="M490 600q26-56-6-108" stroke-width="5"/>
+</g>
+<!-- 후드 아래 빛 -->
+<path d="M372 436L330 800H810L768 436Z" fill="#ffd28a" opacity=".16" filter="url(#blur8)"/>
+</g>
+<ellipse cx="640" cy="200" rx="360" ry="220" fill="#ffcf8a" opacity=".18" filter="url(#blur14)"/>
+</svg>
+<img class="fig" src="parts/seungmin-back-080.png">
+<div class="warm"></div>
+</div>
+<script>
+// 7세그먼트 18:34
+const seg={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcfgd'};
+function digit(x,y,n,s){const w=7*s,h=12*s,t=1.6*s;const P={a:[0,0,w,t],b:[w-t,0,t,h/2],c:[w-t,h/2,t,h/2],d:[0,h-t,w,t],e:[0,h/2,t,h/2],f:[0,0,t,h/2],g:[0,h/2-t/2,w,t]};
+ return seg[n].split('').map(k=>{const r=P[k];return `<rect x="${x+r[0]}" y="${y+r[1]}" width="${r[2]}" height="${r[3]}" rx="${t/3}" fill="#5dff9a"/>`}).join('');}
+const s=1.25,y0=591;let h='';const xs=[999,1009.5,1023,1033.5];[1,8,3,4].forEach((n,i)=>h+=digit(xs[i],y0,n,s));
+h+=`<rect x="1019.4" y="${y0+3.5}" width="2" height="2" fill="#5dff9a"/><rect x="1019.4" y="${y0+10}" width="2" height="2" fill="#5dff9a"/>`;
+document.getElementById('clock').innerHTML=h+`<rect x="996" y="584" width="48" height="30" fill="#5dff9a" opacity=".12" filter="url(#blur3)"/>`;
+</script></body></html>

@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="fonts/np.css"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:810px;overflow:hidden}
+.bg,.ov{position:absolute;left:0;top:0;width:1080px;height:810px}
+.t{position:absolute;left:520px;top:175px;width:240px}
+.chalk{position:absolute;color:#eeeee4;font-family:'Nanum Pen Script';white-space:nowrap;text-shadow:0 0 1.5px rgba(238,238,228,.7);opacity:.88;transform:rotate(-1deg)}
+.hz{font-family:'WenQuanYi Zen Hei',sans-serif;letter-spacing:6px}
+svg{position:absolute;left:0;top:0}
+.sun{position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,214,150,.20),rgba(255,214,150,0) 45%);pointer-events:none}
+</style></head><body><div class="cv">
+<img class="bg" src="parts/classroom-afternoon.png">
+<div class="chalk hz" style="left:190px;top:150px;font-size:62px">三人成虎</div>
+<div class="chalk" style="left:160px;top:240px;font-size:38px">세 사람이 말하면 → 호랑이도 '있다'</div>
+<div id="seats"></div>
+<img class="t" src="parts/seungmin-012-upper.png">
+<svg id="front" width="1080" height="810"></svg>
+<svg id="top" width="1080" height="810"></svg>
+<div class="sun"></div>
+</div>
+<script src="students.js"></script>
+<script>
+// 교탁(승민 옆, 보면대 자리를 덮음)
+document.getElementById('front').innerHTML = `<g stroke="#3a2a22" stroke-width="2.2" stroke-linejoin="round">
+ <path d="M556 368 L760 368 L770 386 L546 386 Z" fill="#c69a6a"/>
+ <path d="M560 386 L756 386 L750 520 L566 520 Z" fill="#a8784c"/>
+ <path d="M576 398 L740 398 L736 506 L580 506 Z" fill="none" stroke="#7a5434"/>
+ <path d="M560 386 L756 386 L754 400 L561 400 Z" fill="#5a3a22" opacity=".35" stroke="none"/><path d="M700 386 L756 386 L750 520 L712 520 Z" fill="#6e4a2e" opacity=".35" stroke="none"/>
+ <path d="M566 520 L750 520 L756 528 L560 528 Z" fill="#6e4a2e"/>
+ <path d="M600 362 L690 360 L694 372 L598 374 Z" fill="#f1ece2"/><path d="M608 365h70M608 369h52" stroke="#b9b1a4" stroke-width="1.3"/>
+</g>`;
+// 의자 등받이(배경 그림에서 잰 바깥 테두리): [x0, x1, top, 학생 옵션] — 먼 자리부터 그려 가까운 학생이 앞 의자를 가린다
+const chairs = [
+  [470, 575, 421, {pose:'write'}], [839, 952, 424, {girl:1, tail:1}], [90, 186, 418, {girl:1}],
+  [426, 552, 450, null], [868, 1003, 458, {pose:'turn'}], [0, 108, 441, {pose:'write'}],
+  [374, 522, 489, {girl:1, tail:1, hair:'#3a2a24'}], [902, 1062, 500, {girl:1, pose:'write', hair:'#2e2422'}],
+  [305, 487, 554, {pose:'cheek'}], [952, 1092, 580, {pose:'cheek', tilt:-4}],
+];
+const box = document.getElementById('seats');
+chairs.forEach(([x0, x1, top, o]) => {
+  const w = x1 - x0;
+  if (o) box.insertAdjacentHTML('beforeend', `<svg width="1080" height="810">${student((x0 + x1) / 2, top + w * .02, w * .84, o)}</svg>`);
+  const r = w * .16, y1 = top + w * .62, pts = [];
+  for (let k = 0; k <= 8; k++) { const a = Math.PI + k * Math.PI / 16; pts.push([x0 + r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
+  for (let k = 0; k <= 8; k++) { const a = 1.5 * Math.PI + k * Math.PI / 16; pts.push([x1 - r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
+  pts.push([x1, y1], [x0, y1]);
+  const im = document.createElement('img'); im.className = 'ov'; im.src = 'parts/classroom-afternoon.png';
+  im.style.clipPath = 'polygon(' + pts.map(p => p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px').join(',') + ')';
+  box.appendChild(im);
+});
+</script></body></html>

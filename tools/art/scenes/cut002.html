@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:1440px;overflow:hidden;background:#0d0f18}
+.hall{position:absolute;left:0;top:-40px;width:1080px;height:1440px;object-fit:cover;object-position:top}
+svg{position:absolute;left:0;top:0}
+</style></head><body><div class="cv">
+<img class="hall" src="../../../assets/cuts/ep01v3/ep01v3-002-composite-DRAFT.webp">
+<svg id="lot" width="1080" height="1440"></svg>
+</div><script>
+// 주차장(낮은 앙각, 앞쪽): 아스팔트·주차선·차 몇 대·가로등·멀리 작은 사람 실루엣. 글자 없음.
+let s = `<defs>
+ <linearGradient id="asph" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2b2a33"/><stop offset="1" stop-color="#121219"/></linearGradient>
+ <radialGradient id="pool" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffcc88" stop-opacity=".38"/><stop offset="1" stop-color="#ffcc88" stop-opacity="0"/></radialGradient>
+ <radialGradient id="lamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff2d0"/><stop offset=".3" stop-color="#ffd890" stop-opacity=".6"/><stop offset="1" stop-color="#ffd890" stop-opacity="0"/></radialGradient>
+ <linearGradient id="body1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#4a4f5c"/><stop offset=".45" stop-color="#2b2f39"/><stop offset="1" stop-color="#16181f"/></linearGradient>
+ <linearGradient id="body2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6a6e78"/><stop offset=".45" stop-color="#3c404a"/><stop offset="1" stop-color="#1c1e24"/></linearGradient>
+ <linearGradient id="glassc" x1="0" x2="1"><stop offset="0" stop-color="#1b2030"/><stop offset=".6" stop-color="#3b4258"/><stop offset="1" stop-color="#d9b080" stop-opacity=".6"/></linearGradient>
+ <filter id="b6"><feGaussianBlur stdDeviation="6"/></filter><filter id="b2"><feGaussianBlur stdDeviation="1.4"/></filter>
+</defs>
+<path d="M0 1190 L1080 1170 L1080 1440 L0 1440Z" fill="url(#asph)"/>
+<ellipse cx="560" cy="1210" rx="460" ry="60" fill="url(#pool)"/>
+<g stroke="#d9d6cc" stroke-width="5" opacity=".55">${[-140, 60, 260, 460, 660, 860, 1060, 1260].map(x => `<path d="M${x} 1440 L${x * .55 + 260} 1200"/>`).join('')}</g>`;
+// 멀리 로비 앞 작은 사람 실루엣 3명
+[[430, 1168, 1], [468, 1172, .95], [760, 1166, .9]].forEach(([x, y, k]) => {
+  s += `<g fill="#0b0c12"><circle cx="${x}" cy="${y - 34 * k}" r="${6 * k}"/><path d="M${x - 8 * k} ${y - 26 * k} Q${x} ${y - 30 * k} ${x + 8 * k} ${y - 26 * k} L${x + 7 * k} ${y - 4 * k} L${x + 4 * k} ${y + 8 * k} L${x - 4 * k} ${y + 8 * k} L${x - 7 * k} ${y - 4 * k}Z"/></g>`; });
+// 차: 옆모습 승용차(측면), 앞쪽 두 대는 크게
+function car(x, y, w, fill, flip) {
+  const h = w * .32, sx = flip ? -1 : 1;
+  return `<g transform="translate(${x} ${y}) scale(${sx} 1)">
+  <ellipse cx="0" cy="${h * .05}" rx="${w * .55}" ry="${h * .14}" fill="#000" opacity=".55" filter="url(#b6)"/>
+  <path d="M${-w * .5} ${-h * .1} Q${-w * .5} ${-h * .45} ${-w * .4} ${-h * .5} L${-w * .2} ${-h * .55} Q${-w * .1} ${-h * .95} ${w * .05} ${-h * .97} L${w * .22} ${-h * .95} Q${w * .32} ${-h * .9} ${w * .38} ${-h * .55} L${w * .48} ${-h * .48} Q${w * .52} ${-h * .3} ${w * .5} ${-h * .1} Z" fill="url(#${fill})" stroke="#0a0b10" stroke-width="2"/>
+  <path d="M${-w * .16} ${-h * .58} Q${-w * .07} ${-h * .88} ${w * .05} ${-h * .89} L${w * .2} ${-h * .87} Q${w * .28} ${-h * .82} ${w * .32} ${-h * .58} Z" fill="url(#glassc)"/>
+  <path d="M${w * .07} ${-h * .89} L${w * .06} ${-h * .58}" stroke="#0a0b10" stroke-width="3"/>
+  <path d="M${-w * .46} ${-h * .5} L${w * .46} ${-h * .52}" stroke="#a9a196" stroke-width="2" opacity=".5"/>
+  <circle cx="${-w * .3}" cy="${-h * .08}" r="${h * .26}" fill="#0c0d12"/><circle cx="${-w * .3}" cy="${-h * .08}" r="${h * .13}" fill="#5a5d66"/>
+  <circle cx="${w * .32}" cy="${-h * .08}" r="${h * .26}" fill="#0c0d12"/><circle cx="${w * .32}" cy="${-h * .08}" r="${h * .13}" fill="#5a5d66"/>
+  <rect x="${w * .44}" y="${-h * .42}" width="${w * .05}" height="${h * .1}" rx="2" fill="#ffe4b0" opacity=".85"/>
+  <rect x="${-w * .5}" y="${-h * .42}" width="${w * .04}" height="${h * .1}" rx="2" fill="#a8262a" opacity=".9"/></g>`; }
+s += car(170, 1250, 300, 'body2', false) + car(980, 1236, 290, 'body1', true);
+s += car(-60, 1420, 560, 'body1', false) + car(1170, 1440, 600, 'body2', true);
+// 가로등
+s += `<g><path d="M890 1440 L890 1010 Q890 990 910 988 L960 986" stroke="#1a1b22" stroke-width="10" fill="none"/><rect x="944" y="980" width="40" height="12" rx="3" fill="#2a2b33"/>
+<ellipse cx="964" cy="996" rx="70" ry="40" fill="url(#lamp)"/><ellipse cx="964" cy="1300" rx="160" ry="34" fill="url(#pool)"/></g>`;
+document.getElementById('lot').innerHTML = s;
+</script></body></html>
