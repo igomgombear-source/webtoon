@@ -162,6 +162,15 @@ window.EP01V3_BUBBLES = {
       { type: 'speech', pref: { panel: 0, x: 56, y: 14 }, region: 'panel', tailMax: 90, tail: { panel: 0, x: 37, y: 14 } }
     ]
   },
+  69: {
+    note: '마감 원화(피곤한 얼굴 클로즈업 + 우상 35컷 인셋) — 얼굴 전체 보호, 대사는 정본(gap)대로 컷 아래 (2026-11-18)',
+    zones: [
+      { panel: 0, x: 0, y: 0, w: 72, h: 100, label: '승민 얼굴·입', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 40, y: 112 }, region: 'panel', place: 'below', tail: { panel: 0, x: 52, y: 70 } }
+    ]
+  },
   70: {
     note: '효은 얼굴(안경)·폰을 내미는 손 보호 — 경계-상 말풍선은 안경·머리를 피해 오른쪽 위(창·벽) 경계로, 안-좌하는 몸 위 — 휴대폰과 안경은 어느 폭에서도 덮지 않음 (2026-11-14 얼굴 가림 수정)',
     zones: [

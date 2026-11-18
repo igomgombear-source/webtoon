@@ -10,7 +10,7 @@ import sys, math, random
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, 'tools/art')
-from finish_lib import close_eye
+from finish_lib import close_eye, tired_eye, mouth_down
 
 CUT = 'assets/cuts/ep01v3/ep01v3-%s-DRAFT.webp'
 OUT = 'assets/cuts/ep01v3/ep01v3-%s-final-DRAFT.webp'
@@ -65,7 +65,7 @@ def cut87():
     a = warm * (.78 + .32 * lamp) + lamp * np.array([.05, .03, .0])
     save(a, '087')
 
-FN = {84: cut84, 87: cut87}
+FN = {84: cut84}   # 87 은 이제 장면 HTML(cut087.html, 거실 소파 전신) — cut87() 은 이전 클로즈업 방식
 def cut101():
     """‘듣고 계십니까?’ — 102컷과 같은 자리, 귀에 대던 휴대폰을 든 팔이 얼굴에서 떨어져 내려가는 순간(팔을 팔꿈치 축으로 돌려 새로 앉힘, prep_cut101.py).
     화면은 회백으로 바래 간다(소리가 멀어지는 느낌)."""
@@ -121,8 +121,61 @@ def cut95():
     save(a, '095')
 FN[95] = cut95
 
+def cut69():
+    """승민의 기억 — 어제 밤의 피곤한 얼굴: 61컷 승민의 윗눈꺼풀을 내려 무겁게 하고(새 눈꺼풀 선), 다크서클·눈 밑 주름, 처진 입꼬리를 더함. 차가운 낮빛.
+    오른쪽 위 35컷 인셋은 데이터의 inset 으로 따로 얹힌다."""
+    im = Image.open(CUT % '061').convert('RGB')
+    im = tired_eye(im, old_top=[(604, 375), (618, 369), (634, 366), (652, 364), (668, 371)], new_top=[(604, 376), (620, 374), (638, 372), (655, 372), (669, 375)],
+                   lower=[(611, 383), (630, 386), (650, 386), (666, 380)], skin_at=(640, 352), bag_alpha=.36)
+    im = tired_eye(im, old_top=[(706, 362), (718, 359), (730, 357), (740, 360)], new_top=[(706, 364), (718, 364), (730, 363), (740, 364)],
+                   lower=[(710, 375), (724, 377), (738, 374)], skin_at=(722, 348), bag_alpha=.36)
+    im = mouth_down(im, (677, 484), (719, 474), length=5)
+    c = im.crop((440, 230, 880, 670)).resize((1080, 1080), Image.LANCZOS).filter(ImageFilter.UnsharpMask(radius=2.0, percent=60, threshold=2))   # 얼굴 클로즈업(콘티)
+    a = arr(c); L = lum(a)[..., None]
+    a = (a * .74 + L * .26) * np.array([.93, .98, 1.05])
+    H, W = a.shape[:2]; vy = np.linspace(-1, 1, H)[:, None]; vx = np.linspace(-1, 1, W)[None, :]
+    a = a * (1 - .25 * np.clip(vx ** 2 + vy ** 2 - .35, 0, 1))[..., None]
+    save(a, '069')
+FN[69] = cut69
+
+def cut19c():
+    """19컷 (다) — 늦은 밤, 교무실 창밖 운동장: 8컷의 교정 그림(교문·트랙·본관·은행나무)을 밤으로 바꾸고 운동장 조명은 꺼짐, 가로등 하나만.
+    앞쪽은 불 꺼진 교무실 창틀·창턱(19 (가)(나)와 같은 공간, 더 어두움). 3:1 띠."""
+    out = Image.open('tools/art/scenes/out/cut008-night.png').convert('RGB')    # 1080×608, 학생 없는 변형
+    view = out.crop((0, 90, 1080, 450)).resize((1080, 360), Image.LANCZOS)
+    a = arr(view); L = lum(a)[..., None]
+    night = (a * .45 + L * .55) ** 1.35 * np.array([.30, .34, .52])            # 달빛 정도의 푸른 밤
+    H, W = night.shape[:2]; yy = np.linspace(0, 1, H)[:, None, None]; xx = np.linspace(0, 1, W)[None, :, None]
+    night = night + np.array([.01, .015, .04]) * (1 - yy)
+    im = img(night); d = ImageDraw.Draw(im, 'RGBA')
+    # 본관: 한 칸만 불 켜진 창(숙직실), 나머지는 꺼짐
+    d.rectangle([700, 150, 716, 168], fill=(255, 214, 140, 210))
+    # 운동장 끝 가로등 하나(나머지 조명 꺼짐) + 바닥에 번지는 빛
+    glow = Image.new('L', (W, H), 0); gd = ImageDraw.Draw(glow); gd.ellipse([880, 220, 1000, 300], fill=150); gd.ellipse([905, 120, 945, 160], fill=255)
+    glow = glow.filter(ImageFilter.GaussianBlur(18))
+    g = np.asarray(glow).astype(np.float32)[..., None] / 255
+    a = arr(im) + g * np.array([.55, .45, .30])
+    im = img(a); d = ImageDraw.Draw(im, 'RGBA')
+    d.line([(925, 140), (925, 300)], fill=(12, 14, 22, 255), width=5); d.ellipse([915, 132, 935, 146], fill=(255, 236, 190, 255))
+    # 별 몇 개
+    rnd = random.Random(19)
+    for _ in range(40): x, y = rnd.randrange(W), rnd.randrange(0, 70); d.point((x, y), fill=(210, 215, 235, 200))
+    # 유리 반사(교무실 안의 희미한 모니터 대기등)
+    a = arr(im) + np.exp(-(((xx - .28) / .05) ** 2 + ((yy - .55) / .12) ** 2)) * np.array([.04, .06, .10])
+    im = img(a); d = ImageDraw.Draw(im, 'RGBA')
+    # 창틀(불 꺼진 실내 쪽, 거의 검정에 가까운 남회색): 세로 창살 3개, 가로대, 아래 창턱
+    for x in (0, 350, 720, 1060):
+        d.rectangle([x, 0, x + 22, H], fill=(22, 22, 30, 255)); d.line([(x + 21, 0), (x + 21, H)], fill=(60, 62, 78, 255), width=2)
+    d.rectangle([0, 0, W, 14], fill=(22, 22, 30, 255))
+    d.rectangle([0, 300, W, H], fill=(26, 25, 32, 255)); d.line([(0, 300), (W, 300)], fill=(70, 72, 88, 255), width=3)
+    # 창턱 위 소품 실루엣(19(나)의 책상 소품과 같은 계열): 화분·서류 꽂이
+    d.ellipse([90, 262, 150, 304], fill=(20, 20, 26, 255)); d.polygon([(100, 266), (120, 220), (140, 266)], fill=(18, 26, 22, 255))
+    d.rectangle([520, 250, 600, 302], fill=(30, 30, 38, 255)); d.rectangle([530, 240, 545, 252], fill=(40, 40, 50, 255)); d.rectangle([555, 236, 570, 252], fill=(36, 38, 46, 255))
+    im.save(OUT % '019-c'); print('wrote', OUT % '019-c', im.size)
+FN[19] = cut19c
+
 # 장면 HTML(tools/art/scenes/cutNNN.html)을 render.js 로 그린 PNG → 최종 WebP
-SCENES = {2: '002', 8: '008', 10: '010', 17: '017', 89: '089', 91: '091', 93: '093'}
+SCENES = {2: '002', 8: '008', 10: '010', 17: '017', 87: '087', 89: '089', 91: '091', 93: '093'}
 def scene(n):
     im = Image.open('tools/art/scenes/out/cut%s.png' % SCENES[n]).convert('RGB')
     save(im, SCENES[n])

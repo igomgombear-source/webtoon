@@ -158,3 +158,65 @@ def open_eye_profile(im, cover, upper, lower, iris, iris_r, lash=(44, 30, 28), i
     patch = patch.resize((bx1 - bx0, by1 - by0), Image.LANCZOS)
     img.paste(patch, (bx0, by0))
     return img
+
+def _crv(pts, n=10):
+    pts = [pts[0]] + list(pts) + [pts[-1]]; out = []
+    for i in range(1, len(pts) - 2):
+        p0, p1, p2, p3 = pts[i - 1], pts[i], pts[i + 1], pts[i + 2]
+        for k in range(n):
+            t = k / n
+            out.append(tuple(.5 * ((2 * p1[j]) + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t * t + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t ** 3) for j in (0, 1)))
+    out.append(pts[-2]); return out
+
+def tired_eye(im, old_top, new_top, lower, skin_at, lash=(46, 30, 28), bag=(120, 70, 80), bag_alpha=.30, lid_dark=.90):
+    """피곤한 눈: 윗눈꺼풀을 new_top 까지 내려 눈동자 위를 덮고(무거운 눈꺼풀), 눈 밑에 다크서클·주름을 더한다.
+    old_top: 원래 윗눈꺼풀 선(위쪽 경계로 쓸 점들), new_top: 내려온 눈꺼풀 선, lower: 아랫눈꺼풀 선, skin_at: 눈꺼풀 피부색을 딸 좌표."""
+    a = _arr(im); H, W = a.shape[:2]
+    sk = np.median(a[skin_at[1] - 2:skin_at[1] + 3, skin_at[0] - 2:skin_at[0] + 3].reshape(-1, 3), axis=0) * lid_dark
+    S = 4
+    xs = [p[0] for p in old_top + new_top + lower]; ys = [p[1] for p in old_top + new_top + lower]
+    bx0, by0, bx1, by1 = int(min(xs)) - 16, int(min(ys)) - 16, int(max(xs)) + 16, int(max(ys)) + 22
+    img = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGB')
+    patch = img.crop((bx0, by0, bx1, by1)).resize(((bx1 - bx0) * S, (by1 - by0) * S), Image.LANCZOS)
+    P = lambda p: ((p[0] - bx0) * S, (p[1] - by0) * S)
+    ot = _crv(old_top); nt = _crv(new_top); lw = _crv(lower)
+    # 1) 눈꺼풀 면: 원래 선 조금 위 ~ 새 선 사이
+    lid = Image.new('L', patch.size, 0); dl = ImageDraw.Draw(lid)
+    dl.polygon([P((x, y - 2.5)) for x, y in ot] + [P(p) for p in reversed(nt)], fill=255)
+    lid = lid.filter(ImageFilter.GaussianBlur(S * .8))
+    grad = Image.new('RGB', patch.size, tuple(int(v) for v in sk))
+    # 눈꺼풀 아래쪽(새 선 가까이)은 살짝 그늘
+    gd = ImageDraw.Draw(grad)
+    for k, (x, y) in enumerate(nt[:-1]):
+        gd.line([P((x, y - 3)), P(nt[k + 1])], fill=tuple(int(v * .86) for v in sk), width=int(S * 3))
+    grad = grad.filter(ImageFilter.GaussianBlur(S * 1.2))
+    patch.paste(grad, (0, 0), lid)
+    d = ImageDraw.Draw(patch, 'RGBA')
+    # 2) 새 윗눈꺼풀 선(바깥쪽이 굵음) + 원래 쌍꺼풀 자리에 옅은 주름선
+    for k in range(len(nt) - 1):
+        t = k / max(1, len(nt) - 2)
+        d.line([P(nt[k]), P(nt[k + 1])], fill=lash + (255,), width=max(1, int(S * (1.6 + 2.0 * t))))
+    for k in range(len(ot) - 1):
+        d.line([P((ot[k][0], ot[k][1] - 3)), P((ot[k + 1][0], ot[k + 1][1] - 3))], fill=(150, 98, 84, 120), width=int(S * 1.1))
+    # 3) 다크서클·눈 밑 주름
+    bagl = Image.new('RGBA', patch.size, (0, 0, 0, 0)); db = ImageDraw.Draw(bagl)
+    db.line([P((x, y + 4)) for x, y in lw], fill=bag + (int(255 * bag_alpha),), width=int(S * 6))
+    bagl = bagl.filter(ImageFilter.GaussianBlur(S * 2.2))
+    patch.alpha_composite(bagl) if patch.mode == 'RGBA' else patch.paste(bagl, (0, 0), bagl)
+    d = ImageDraw.Draw(patch, 'RGBA')
+    d.line([P((x, y + 7)) for x, y in lw[2:-3]], fill=(135, 85, 78, 110), width=int(S * 1.0))
+    patch = patch.resize((bx1 - bx0, by1 - by0), Image.LANCZOS)
+    img.paste(patch, (bx0, by0))
+    return img
+
+def mouth_down(im, left, right, length=5, col=(140, 82, 76), alpha=110):
+    """입꼬리를 살짝 처지게: 양 끝에서 아래로 짧은 그늘 선."""
+    img = im.copy(); S = 4
+    for (x, y), sgn in ((left, -1), (right, 1)):
+        bx0, by0 = int(x) - 12, int(y) - 8
+        patch = img.crop((bx0, by0, bx0 + 24, by0 + 24)).resize((96, 96), Image.LANCZOS)
+        d = ImageDraw.Draw(patch, 'RGBA')
+        px, py = (x - bx0) * S, (y - by0) * S
+        d.line([(px, py), (px + sgn * 1.5 * S, py + length * S)], fill=col + (alpha,), width=int(1.4 * S))
+        img.paste(patch.resize((24, 24), Image.LANCZOS), (bx0, by0))
+    return img

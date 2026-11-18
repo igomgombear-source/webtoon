@@ -10,6 +10,13 @@ svg{position:absolute;left:0;top:0}
 <img class="bg" src="parts/classroom-afternoon.png">
 <div class="chalk hz" style="left:190px;top:150px;font-size:62px">三人成虎</div>
 <div class="chalk" style="left:160px;top:240px;font-size:38px">세 사람이 말하면 → 호랑이도 '있다'</div>
+<svg width="1080" height="810" style="position:absolute;left:0;top:0"><g stroke="#4a3428" stroke-width="2">
+ <rect x="-4" y="200" width="104" height="210" fill="#c9a77a"/><rect x="6" y="210" width="84" height="190" fill="#d9c09a"/>
+ <rect x="14" y="222" width="34" height="44" fill="#f4efe4" transform="rotate(-3 31 244)"/><rect x="54" y="226" width="30" height="38" fill="#e8f0f6"/>
+ <rect x="16" y="282" width="68" height="40" fill="#f6e7c8"/><rect x="20" y="336" width="30" height="50" fill="#f4efe4"/><rect x="56" y="334" width="28" height="30" fill="#ffd8d8"/>
+ <path d="M20 292h56M20 302h48M20 312h52" stroke="#a89a86" stroke-width="1.5"/>
+ <circle cx="31" cy="224" r="3" fill="#c0392b"/><circle cx="69" cy="228" r="3" fill="#2f6fb0"/><circle cx="50" cy="284" r="3" fill="#2a8a4a"/>
+ <rect x="-4" y="410" width="104" height="10" fill="#8a6a46"/></g></svg>
 <div id="seats"></div>
 <img class="t" src="parts/seungmin-012-upper.png">
 <svg id="front" width="1080" height="810"></svg>
@@ -29,10 +36,11 @@ document.getElementById('front').innerHTML = `<g stroke="#3a2a22" stroke-width="
 </g>`;
 // 의자 등받이(배경 그림에서 잰 바깥 테두리): [x0, x1, top, 학생 옵션] — 먼 자리부터 그려 가까운 학생이 앞 의자를 가린다
 const chairs = [
-  [470, 575, 421, {pose:'write'}], [839, 952, 424, {girl:1, tail:1}], [90, 186, 418, {girl:1}],
-  [426, 552, 450, null], [868, 1003, 458, {pose:'turn'}], [0, 108, 441, {pose:'write'}],
-  [374, 522, 489, {girl:1, tail:1, hair:'#3a2a24'}], [902, 1062, 500, {girl:1, pose:'write', hair:'#2e2422'}],
-  [305, 487, 554, {pose:'cheek'}], [952, 1092, 580, {pose:'cheek', tilt:-4}],
+  [470, 575, 421, {pose:'write'}], [839, 952, 424, {girl:1, tail:1, pose:'listen'}], [90, 186, 418, {girl:1, pose:'turn'}],
+  [426, 552, 450, {pose:'hand'}], [868, 1003, 458, {pose:'turn'}], [0, 108, 441, {pose:'write'}],
+  [374, 522, 489, {girl:1, tail:1, hair:'#3a2a24', pose:'listen'}], [902, 1062, 500, {girl:1, pose:'write', hair:'#2e2422'}],
+  [305, 487, 554, {pose:'cheek'}], [952, 1092, 580, {pose:'listen', tilt:3}],
+  [185, 445, 676, {pose:'cheek', tilt:-6}],
 ];
 const box = document.getElementById('seats');
 chairs.forEach(([x0, x1, top, o]) => {

@@ -13,43 +13,68 @@ svg{position:absolute;left:0;top:0}
  <span class="t" style="left:38px;top:110px;font-size:76px;color:#1a1d24">합창제 리허설</span>
  <span class="t" style="left:120px;top:200px;font-size:86px;color:#c2392f">09:00 강당</span>
 </div>
-<svg id="man" width="1080" height="810" style="filter:drop-shadow(-6px 6px 10px rgba(30,20,10,.35)) blur(.5px)"></svg>
+<svg id="man" width="1080" height="810" style="filter:drop-shadow(-4px 5px 8px rgba(30,20,10,.30))"></svg>
 <img class="fg" src="parts/seungmin-back-080.png">
 <div class="warm"></div>
 </div><script>
-// 최기훈(정본: 185cm, 마른 체형, 짧은 스포츠머리, 안경 없음) — 화이트보드에 적고 돌아서는 3/4 뒷모습. 얼굴은 귀·뺨선만(새 얼굴 디자인 없음).
-const L = '#3a2c28';
+// 최기훈(정본: 185cm, 마른 체형, 짧은 스포츠머리, 작은 눈, 안경 없음) — 화이트보드에 적고 사람들 쪽으로 몸을 돌리는 3/4 뒷모습.
+// 얼굴은 새로 디자인하지 않는다(귀·턱선·뺨 윤곽만). 셀 채색 원화에 맞춰: 가는 갈색 선, 2단 그림자, 창빛 림라이트, 옷 주름, 니트 결.
 document.getElementById('man').innerHTML = `
 <defs>
- <linearGradient id="shirt" x1="0" x2="1"><stop offset="0" stop-color="#d9d4cf"/><stop offset=".45" stop-color="#f3f0ec"/><stop offset="1" stop-color="#bfb8b2"/></linearGradient>
- <linearGradient id="vest" x1="0" x2="1"><stop offset="0" stop-color="#5e636c"/><stop offset=".5" stop-color="#7c818a"/><stop offset="1" stop-color="#4d5159"/></linearGradient>
- <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#c99479"/><stop offset=".6" stop-color="#e5bba0"/><stop offset="1" stop-color="#d5a68b"/></linearGradient>
- <radialGradient id="hair" cx=".45" cy=".35" r=".7"><stop offset="0" stop-color="#4a3c36"/><stop offset="1" stop-color="#1f1918"/></radialGradient>
- <linearGradient id="pants" x1="0" x2="1"><stop offset="0" stop-color="#2c2f38"/><stop offset=".5" stop-color="#3b3f4a"/><stop offset="1" stop-color="#262930"/></linearGradient>
- <filter id="soft"><feGaussianBlur stdDeviation=".6"/></filter>
+ <linearGradient id="sh1" x1="0" x2="1"><stop offset="0" stop-color="#bdb6b2"/><stop offset=".35" stop-color="#ebe6e1"/><stop offset=".7" stop-color="#f7f3ee"/><stop offset="1" stop-color="#d9d2cc"/></linearGradient>
+ <linearGradient id="vs1" x1="0" x2="1"><stop offset="0" stop-color="#4c5059"/><stop offset=".45" stop-color="#6c707b"/><stop offset=".8" stop-color="#7f838d"/><stop offset="1" stop-color="#5b5f68"/></linearGradient>
+ <linearGradient id="sk1" x1="0" x2="1"><stop offset="0" stop-color="#b88068"/><stop offset=".5" stop-color="#d9a68b"/><stop offset="1" stop-color="#ecc0a3"/></linearGradient>
+ <radialGradient id="hr1" cx=".55" cy=".35" r=".7"><stop offset="0" stop-color="#3d322e"/><stop offset=".7" stop-color="#231c1a"/><stop offset="1" stop-color="#151110"/></radialGradient>
+ <linearGradient id="pt1" x1="0" x2="1"><stop offset="0" stop-color="#22252d"/><stop offset=".55" stop-color="#363a45"/><stop offset="1" stop-color="#1f2128"/></linearGradient>
+ <pattern id="knit" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 3.5h7" stroke="#000" stroke-width="1" opacity=".12"/></pattern>
+ <pattern id="buzz" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#6b5a52" opacity=".55"/><circle cx="3" cy="3" r=".6" fill="#0d0a09" opacity=".5"/></pattern>
+ <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .42  0 0 0 .10 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+ <filter id="sft"><feGaussianBlur stdDeviation=".45"/></filter><filter id="cast"><feGaussianBlur stdDeviation="14"/></filter>
 </defs>
-<g stroke="#5a4840" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#soft)" opacity=".97">
- <!-- 다리(바지) -->
- <path d="M716 640 L708 810 L760 810 L768 650 Z M772 650 L786 810 L836 810 L820 640 Z" fill="url(#pants)"/>
- <!-- 몸통: 등이 보임, 조끼 등판 -->
- <path d="M692 400 Q700 362 744 352 L800 350 Q842 358 852 398 L842 660 L700 660 Z" fill="url(#shirt)"/>
- <path d="M708 410 Q720 372 770 366 Q820 370 834 410 L826 660 L716 660 Z" fill="url(#vest)"/>
- <path d="M770 372 L770 660" stroke="#4a4e56" stroke-width="2" fill="none" opacity=".6"/>
- <!-- 오른팔(보드 쪽, 화면 왼쪽): 마커를 든 손을 보드에서 막 뗀 자세 -->
- <path d="M700 404 Q660 432 640 486 Q632 512 650 520 Q668 520 676 494 Q690 458 716 440 Z" fill="url(#shirt)"/>
- <path d="M640 486 Q622 470 610 452 L626 440 Q644 456 656 476 Z" fill="url(#shirt)"/>
- <path d="M606 446 Q596 434 604 424 Q616 418 626 428 Q632 440 624 450 Z" fill="url(#skin)"/>
- <rect x="590" y="420" width="34" height="11" rx="4" fill="#f4f4f2" transform="rotate(-34 607 425)"/>
- <!-- 왼팔(화면 오른쪽): 뚜껑을 쥐고 몸 앞쪽으로 — 소매만 보임 -->
- <path d="M846 404 Q872 452 866 520 Q862 548 846 548 Q834 540 838 512 Q842 462 826 432 Z" fill="url(#shirt)"/>
+<!-- 보드에 드리운 그림자 -->
+<path d="M640 300 Q700 270 760 290 L780 420 L640 430 Z" fill="#40352c" opacity=".22" filter="url(#cast)"/>
+<g id="fig" stroke="#4e3a32" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#sft)">
+ <!-- 다리 -->
+ <path d="M722 646 Q716 730 712 810 L760 810 Q764 730 770 652 Z" fill="url(#pt1)"/>
+ <path d="M774 652 Q784 730 790 810 L838 810 Q832 726 822 644 Z" fill="url(#pt1)"/>
+ <path d="M770 660 L772 760" stroke="#121318" stroke-width="2" fill="none" opacity=".7"/>
+ <!-- 셔츠 몸통(조끼 아래로 셔츠 자락) -->
+ <path d="M700 396 Q706 360 744 350 L800 348 Q840 356 850 394 Q842 520 830 650 L716 650 Q706 520 700 396 Z" fill="url(#sh1)"/>
+ <path d="M716 646 L830 646 L830 660 L716 660 Z" fill="#2a2420"/><rect x="764" y="646" width="16" height="14" fill="#9a8a6a"/>
+ <!-- 조끼(니트) -->
+ <path d="M714 404 Q724 370 770 364 Q816 368 830 404 Q824 520 820 630 Q770 642 722 630 Q718 520 714 404 Z" fill="url(#vs1)"/>
+ <path d="M714 404 Q724 370 770 364 Q816 368 830 404 Q824 520 820 630 Q770 642 722 630 Q718 520 714 404 Z" fill="url(#knit)" stroke="none"/>
+ <path d="M722 616 Q770 628 820 616 M722 624 Q770 636 820 624" fill="none" stroke="#3e424b" stroke-width="2"/>
+ <path d="M760 380 Q752 500 762 650" fill="none" stroke="#3e424b" stroke-width="1.6" opacity=".55"/>
+ <path d="M790 400 Q812 470 804 560" fill="none" stroke="#9ea2ab" stroke-width="2" opacity=".5"/>
+ <!-- 오른팔(보드 쪽): 팔꿈치를 굽혀 마커를 보드에서 막 뗌, 셔츠 소매를 걷음 -->
+ <path d="M708 400 Q676 420 656 460 Q646 486 660 498 L688 486 Q700 456 724 438 Z" fill="url(#sh1)"/>
+ <path d="M664 470 Q672 474 680 466 M672 450 Q680 456 690 448" fill="none" stroke="#a49c96" stroke-width="1.4"/>
+ <path d="M656 494 Q640 470 632 444 L652 434 Q662 458 676 482 Z" fill="url(#sh1)"/>
+ <path d="M632 446 L654 436 L656 442 L636 452 Z" fill="#d6cfc8"/>
+ <path d="M628 440 Q618 426 624 414 Q636 406 646 414 Q652 426 644 438 Z" fill="url(#sk1)"/>
+ <path d="M630 416 Q626 404 634 400 Q642 398 644 408" fill="url(#sk1)"/>
+ <rect x="610" y="404" width="34" height="10" rx="4" fill="#f4f4f2" transform="rotate(-50 627 409)"/>
+ <rect x="616" y="388" width="10" height="9" rx="2" fill="#1f3f8a" transform="rotate(-50 621 392)"/>
+ <!-- 왼팔(화면 오른쪽): 몸 옆으로 내림, 마커 뚜껑을 쥔 손 -->
+ <path d="M846 400 Q864 452 862 530 Q860 566 846 590 L826 586 Q838 552 838 520 Q838 456 826 424 Z" fill="url(#sh1)"/>
+ <path d="M848 470 Q852 500 846 530" fill="none" stroke="#b5ada7" stroke-width="1.6"/>
+ <path d="M828 584 Q826 606 838 614 Q852 616 856 600 Q858 588 848 584 Z" fill="url(#sk1)"/>
  <!-- 목 -->
- <path d="M748 320 L750 358 Q770 366 790 356 L790 318 Z" fill="url(#skin)"/>
- <!-- 머리(뒤통수 + 돌린 뺨선·귀) -->
- <path d="M732 278 Q728 226 770 214 Q814 214 822 262 Q826 300 806 326 Q786 340 764 334 Q738 322 732 278 Z" fill="url(#hair)"/>
- <path d="M806 270 Q826 266 834 286 Q836 312 816 334 Q800 346 784 340 Q806 320 806 270 Z" fill="url(#skin)"/>
- <path d="M806 284 Q816 282 820 294 Q818 306 808 308" fill="none" stroke="#a87760" stroke-width="2"/>
- <path d="M760 222 Q790 214 812 232 M744 246 Q770 232 800 240" fill="none" stroke="#5f514a" stroke-width="2" opacity=".7"/>
- <!-- 뒤통수 짧은 머리 경계(목덜미) -->
- <path d="M748 322 Q770 332 794 326" fill="none" stroke="#2a2220" stroke-width="3"/>
-</g>`;
+ <path d="M752 322 L754 356 Q772 364 792 354 L792 318 Z" fill="url(#sk1)"/>
+ <path d="M756 340 Q772 350 790 340" fill="none" stroke="#a46e58" stroke-width="1.4" opacity=".7"/>
+ <!-- 옷깃 -->
+ <path d="M748 352 Q770 366 796 350 L800 362 Q772 380 744 364 Z" fill="#f7f4f0"/>
+ <!-- 머리: 짧은 스포츠머리 뒤통수(완전한 뒷모습) — 오른쪽으로 살짝 고개를 돌려 귀가 보임 -->
+ <path d="M748 318 Q760 336 790 334 Q806 330 812 312 L806 300 Q780 312 754 304 Z" fill="url(#sk1)"/>
+ <path d="M742 280 Q738 232 774 218 Q812 216 820 254 Q824 290 810 312 Q790 322 770 320 Q748 314 742 280 Z" fill="url(#hr1)"/>
+ <path d="M742 280 Q738 232 774 218 Q812 216 820 254 Q824 290 810 312 Q790 322 770 320 Q748 314 742 280 Z" fill="url(#buzz)" stroke="none"/>
+ <path d="M816 266 Q830 262 832 278 Q832 294 820 300 Q814 288 816 266 Z" fill="url(#sk1)"/><path d="M820 272 Q826 274 826 284" fill="none" stroke="#9d6a55" stroke-width="1.3"/>
+ <path d="M738 270 Q736 280 744 290" fill="none" stroke="#d9a68b" stroke-width="2" opacity=".0"/>
+ <path d="M752 312 Q776 324 806 314" fill="none" stroke="#141010" stroke-width="1.8"/>
+ <path d="M768 226 Q798 222 814 244" fill="none" stroke="#7a6860" stroke-width="2.2" opacity=".7"/>
+</g>
+<!-- 창빛 림라이트(왼쪽 위에서) -->
+<path d="M738 270 Q742 232 772 220 M700 400 Q704 370 740 354" fill="none" stroke="#ffe7c4" stroke-width="2.4" opacity=".55" filter="url(#sft)"/>
+<rect x="600" y="200" width="260" height="610" filter="url(#grain)" opacity=".9" style="mix-blend-mode:multiply"/>`;
 </script></body></html>

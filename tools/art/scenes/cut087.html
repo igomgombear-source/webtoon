@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}.cv{position:relative;width:1080px;height:608px;overflow:hidden;background:#1a1416}
+.bg{position:absolute;inset:0;width:1080px;height:608px}
+.head{position:absolute;left:186px;top:206px;width:330px;transform:rotate(-90deg);transform-origin:50% 50%;filter:brightness(.78) saturate(.9)}
+svg{position:absolute;left:0;top:0}
+.night{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 15% 40%,rgba(255,190,120,.12),rgba(0,0,0,0) 60%),linear-gradient(rgba(20,20,40,.0),rgba(10,10,25,.30))}
+</style></head><body><div class="cv">
+<img class="bg" src="parts/livingroom-night.png">
+<svg id="back" width="1080" height="608"></svg>
+<img class="head" src="parts/seungmin-085-sofa.png">
+<svg id="front" width="1080" height="608"></svg>
+<div class="night"></div>
+</div><script>
+const L='#2e2328';
+document.getElementById('back').innerHTML = `<defs><filter id="s"><feGaussianBlur stdDeviation="10"/></filter></defs>
+<path d="M300 380 Q600 360 990 372 L990 420 Q600 410 300 430Z" fill="#000" opacity=".35" filter="url(#s)"/>
+<path d="M188 300 Q240 262 330 270 Q400 280 418 330 Q420 380 380 404 Q300 418 220 404 Q180 380 188 300 Z" fill="#3d3337" stroke="#2e2328" stroke-width="2"/>
+<path d="M210 306 Q280 286 380 300" stroke="#5a4c50" stroke-width="3" fill="none"/>
+<g stroke="#2e2328" stroke-width="1.8" stroke-linejoin="round"><path d="M396 318 Q440 300 500 312 Q540 330 548 372 Q540 404 500 410 L420 410 Q392 380 396 318 Z" fill="#6a5448"/>
+<path d="M420 330 Q460 322 500 334" fill="none" stroke="#86705f" stroke-width="2.4"/></g>`;
+document.getElementById('front').innerHTML = `<defs>
+<linearGradient id="bl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9592a4"/><stop offset=".55" stop-color="#6e6c80"/><stop offset="1" stop-color="#47455a"/></linearGradient>
+<linearGradient id="pl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#4a3f44"/><stop offset="1" stop-color="#2c2428"/></linearGradient>
+<filter id="sf"><feGaussianBlur stdDeviation=".7"/></filter><filter id="sh"><feGaussianBlur stdDeviation="6"/></filter></defs>
+<g stroke="${L}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#sf)">
+ <g transform="translate(0 34)">
+ <!-- 담요: 가슴 아래부터 발끝까지 — 허리·무릎(살짝 굽힘)의 볼륨, 소파 앞으로 늘어진 자락 -->
+ <path d="M470 340 Q520 316 600 322 Q690 318 760 330 Q820 300 880 306 Q950 312 978 340 Q992 368 970 392 Q930 404 880 400 L700 410 Q600 418 520 414 Q470 400 470 340 Z" fill="url(#bl)"/>
+ <path d="M600 410 Q640 470 700 480 Q760 486 800 470 Q820 440 812 404 Z" fill="#5e5c70"/>
+ <path d="M640 416 Q660 452 700 466 M740 414 Q760 444 790 456" fill="none" stroke="#3e3c4e" stroke-width="2"/>
+ <path d="M560 340 Q640 352 700 336 M770 318 Q820 330 860 312 M880 316 Q920 334 960 338" fill="none" stroke="#b2afc0" stroke-width="2" opacity=".7"/>
+ <path d="M640 334 Q660 372 640 410 M840 312 Q860 350 846 400" fill="none" stroke="#4a4858" stroke-width="2" opacity=".7"/>
+ <!-- 발(양말) -->
+ <path d="M962 330 Q994 316 1008 332 Q1012 354 990 362 Q970 356 962 330 Z" fill="#d8d3cc"/>
+ </g>
+</g>
+<path d="M480 446 Q700 454 980 434" stroke="#000" stroke-width="10" opacity=".25" filter="url(#sh)" fill="none"/>`;
+</script></body></html>
