@@ -17,6 +17,16 @@ svg{position:absolute;left:0;top:0}
  <path d="M20 292h56M20 302h48M20 312h52" stroke="#a89a86" stroke-width="1.5"/>
  <circle cx="31" cy="224" r="3" fill="#c0392b"/><circle cx="69" cy="228" r="3" fill="#2f6fb0"/><circle cx="50" cy="284" r="3" fill="#2a8a4a"/>
  <rect x="-4" y="410" width="104" height="10" fill="#8a6a46"/></g></svg>
+<svg width="1080" height="810" style="position:absolute;left:0;top:0">
+ <defs><linearGradient id="wl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#94705f"/><stop offset="1" stop-color="#a27662"/></linearGradient></defs>
+ <rect x="784" y="40" width="296" height="98" fill="url(#wl)"/><rect x="784" y="40" width="296" height="98" fill="url(#wl)" filter="none"/>
+ <g stroke="#5a4232" stroke-width="2">
+  <rect x="770" y="140" width="130" height="190" fill="#b38b62"/><rect x="920" y="140" width="160" height="190" fill="#b38b62"/>
+  <path d="M770 202h130M770 266h130M920 202h160M920 266h160" stroke-width="5"/>
+ </g>
+ <g id="books"></g>
+ <g stroke="#4a3428" stroke-width="2"><rect x="930" y="66" width="120" height="58" fill="#f4efe4"/><path d="M944 80h90M944 92h76M944 104h86" stroke="#b8ad9c"/><circle cx="990" cy="68" r="3" fill="#c0392b"/></g>
+</svg>
 <div id="seats"></div>
 <img class="t" src="parts/seungmin-012-upper.png">
 <svg id="front" width="1080" height="810"></svg>
@@ -35,23 +45,49 @@ document.getElementById('front').innerHTML = `<g stroke="#3a2a22" stroke-width="
  <path d="M600 362 L690 360 L694 372 L598 374 Z" fill="#f1ece2"/><path d="M608 365h70M608 369h52" stroke="#b9b1a4" stroke-width="1.3"/>
 </g>`;
 // 의자 등받이(배경 그림에서 잰 바깥 테두리): [x0, x1, top, 학생 옵션] — 먼 자리부터 그려 가까운 학생이 앞 의자를 가린다
+// [x0, x1, top, 학생 옵션, 짝꿍(같은 책상 옆자리: 'L'|'R', 옵션)] — 먼 자리부터. 짝꿍 의자는 같은 의자 그림을 옆으로 옮겨 다시 쓴다.
+const H = ['#2a2120','#33261f','#231b1a','#3a2b24','#2e2422','#1d1716'];
 const chairs = [
-  [470, 575, 421, {pose:'write'}], [839, 952, 424, {girl:1, tail:1, pose:'listen'}], [90, 186, 418, {girl:1, pose:'turn'}],
-  [426, 552, 450, {pose:'hand'}], [868, 1003, 458, {pose:'turn'}], [0, 108, 441, {pose:'write'}],
-  [374, 522, 489, {girl:1, tail:1, hair:'#3a2a24', pose:'listen'}], [902, 1062, 500, {girl:1, pose:'write', hair:'#2e2422'}],
-  [305, 487, 554, {pose:'cheek'}], [952, 1092, 580, {pose:'listen', tilt:3}],
-  [185, 445, 676, {pose:'cheek', tilt:-6}],
+  [90, 186, 418, {girl:1, hs:'long', pose:'turn', hair:H[1]}, ['R', {hs:'short', pose:'write', part:.05}]],
+  [470, 575, 421, {pose:'write', hs:'short', part:-.06}, ['L', {girl:1, hs:'bob', pose:'look', hair:H[3]}]],
+  [839, 952, 424, {girl:1, tail:1, pose:'listen'}, ['R', {hs:'buzz', pose:'cheek'}]],
+  [0, 108, 441, {pose:'write', hs:'short'}, ['R', {girl:1, hs:'bob', pose:'listen', hair:H[0]}]],
+  [426, 552, 450, {pose:'hand', hs:'short', hair:H[2]}, ['L', {girl:1, hs:'pony', pose:'write', hair:H[4]}]],
+  [868, 1003, 458, {pose:'turn', hs:'short', part:.04}, ['R', {girl:1, hs:'long', pose:'look', hair:H[5]}]],
+  [374, 522, 489, {girl:1, tail:1, hair:'#3a2a24', pose:'listen'}, ['L', {hs:'buzz', pose:'write'}]],
+  [902, 1062, 500, {girl:1, pose:'write', hair:'#2e2422'}, ['L', {hs:'short', pose:'look', part:-.05}]],
+  [305, 487, 554, {pose:'cheek'}, ['R', {girl:1, hs:'bob', pose:'write', hair:H[1]}]],
+  [952, 1092, 580, {pose:'listen', tilt:3, hs:'short'}, ['L', {girl:1, hs:'pony', pose:'look', hair:H[5]}]],
+  [185, 445, 676, {pose:'cheek', tilt:-6}, null],
 ];
 const box = document.getElementById('seats');
-chairs.forEach(([x0, x1, top, o]) => {
+{ // 학급 문고: 책등(색·높이 제각각)
+  let bk = '', sd = 3; const R = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  [[774, 896, 146, 200], [774, 896, 208, 264], [774, 896, 272, 328], [924, 1076, 146, 200], [924, 1076, 208, 264], [924, 1076, 272, 328]].forEach(([x0, x1, y0, y1]) => {
+    let x = x0 + 2; while (x < x1 - 6) { const w = 7 + R() * 9, hh = (y1 - y0) * (.7 + R() * .28), c = ['#7a3b2e','#2f4f6f','#c9a24a','#4e6b3a','#8a8a8a','#b45c3c','#e8dcc4'][Math.floor(R() * 7)];
+      bk += `<rect x="${x.toFixed(1)}" y="${(y1 - hh).toFixed(1)}" width="${w.toFixed(1)}" height="${hh.toFixed(1)}" fill="${c}" stroke="#3a2a22" stroke-width="1"/>`; x += w + .8; } });
+  document.getElementById('books').innerHTML = bk;
+}
+function seat(x0, x1, top, o, srcX0) {   // srcX0: 의자 그림을 가져올 원래 위치(짝꿍이면 이웃 의자)
   const w = x1 - x0;
   if (o) box.insertAdjacentHTML('beforeend', `<svg width="1080" height="810">${student((x0 + x1) / 2, top + w * .02, w * .84, o)}</svg>`);
-  const r = w * .16, y1 = top + w * .62, pts = [];
-  for (let k = 0; k <= 8; k++) { const a = Math.PI + k * Math.PI / 16; pts.push([x0 + r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
-  for (let k = 0; k <= 8; k++) { const a = 1.5 * Math.PI + k * Math.PI / 16; pts.push([x1 - r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
-  pts.push([x1, y1], [x0, y1]);
+  const sx = srcX0 == null ? x0 : srcX0, r = w * .16, y1 = top + w * .62, pts = [];
+  for (let k = 0; k <= 8; k++) { const a = Math.PI + k * Math.PI / 16; pts.push([sx + r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
+  for (let k = 0; k <= 8; k++) { const a = 1.5 * Math.PI + k * Math.PI / 16; pts.push([sx + w - r + Math.cos(a) * r, top + r + Math.sin(a) * r]); }
+  pts.push([sx + w, y1], [sx, y1]);
   const im = document.createElement('img'); im.className = 'ov'; im.src = 'parts/classroom-afternoon.png';
   im.style.clipPath = 'polygon(' + pts.map(p => p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px').join(',') + ')';
+  if (srcX0 != null) im.style.transform = `translateX(${(x0 - sx).toFixed(1)}px)`;
   box.appendChild(im);
+}
+let n = 0;
+chairs.forEach(([x0, x1, top, o, mate]) => {
+  const w = x1 - x0;
+  if (mate) { const dx = (mate[0] === 'L' ? -1 : 1) * w * 1.02; seat(x0 + dx, x1 + dx, top, mate[1], x0); n++; }
+  seat(x0, x1, top, o); if (o) n++;
 });
+// 맨 앞(카메라 쪽) 학생 머리·어깨 — 화면 아래로 잘린 뒷모습, 원근으로 크게
+const near = [[60, 846, 250, {hs:'short', pose:'listen', hair:H[0], tilt:-3}], [640, 858, 230, {girl:1, hs:'bob', pose:'look', hair:H[3]}], [900, 852, 220, {hs:'buzz', pose:'listen', tilt:4}], [350, 880, 210, {girl:1, hs:'pony', pose:'write', hair:H[2]}]];
+near.forEach(([cx, top, w, o]) => { box.insertAdjacentHTML('beforeend', `<svg width="1080" height="810" style="filter:blur(1.2px)">${student(cx, top, w, o)}</svg>`); n++; });
+document.title = 'students ' + n;
 </script></body></html>

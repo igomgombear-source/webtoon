@@ -40,15 +40,21 @@ function student(cx, top, w, o = {}) {
   s += `<path d="M${T(-.07,-.06)} L${T(-.07,-.19)} L${T(.07,-.19)} L${T(.07,-.06)} Z" fill="#c99179"/>`;
   s += `<path d="M${T(-.13,-.07)} L${T(0,.01)} L${T(.13,-.07)} L${T(.1,-.12)} L${T(0,-.06)} L${T(-.1,-.12)} Z" fill="#f6f3f1"/>`;
   // 머리
-  const dy = (pose === 'write' ? .08 : 0), rot = (o.tilt || 0) + (pose === 'cheek' ? 10 : 0) + (pose === 'turn' ? -8 : 0) + (pose === 'stretch' ? -4 : 0);
+  const dy = (pose === 'write' ? .08 : pose === 'look' ? -.03 : 0), rot = (o.tilt || 0) + (pose === 'cheek' ? 10 : 0) + (pose === 'turn' ? -8 : 0) + (pose === 'stretch' ? -4 : 0);
   s += `<g transform="rotate(${rot} ${X(0)} ${Y(-.12)}) translate(0 ${(dy * u).toFixed(1)})">`;
   s += `<ellipse cx="${X(-.19)}" cy="${Y(-.31)}" rx="${(.04 * u).toFixed(1)}" ry="${(.06 * u).toFixed(1)}" fill="url(#${id}k)"/><ellipse cx="${X(.19)}" cy="${Y(-.31)}" rx="${(.04 * u).toFixed(1)}" ry="${(.06 * u).toFixed(1)}" fill="url(#${id}k)"/>`;
   if (pose === 'turn') s += `<path d="M${T(.12,-.36)} Q${T(.25,-.33)} ${T(.22,-.21)} Q${T(.16,-.16)} ${T(.1,-.2)} Z" fill="url(#${id}k)"/>`;
-  if (o.girl) {
-    s += `<path d="M${T(-.215,-.38)} Q${T(-.23,-.63)} ${T(0,-.64)} Q${T(.23,-.63)} ${T(.215,-.38)} L${T(.235,-.1)} Q${T(.1,-.04)} ${T(0,-.06)} Q${T(-.1,-.04)} ${T(-.235,-.1)} Z" fill="url(#${id}h)"/>`;
-    if (o.tail) s += `<path d="M${T(-.05,-.3)} Q${T(-.08,-.02)} ${T(0,.1)} Q${T(.08,-.02)} ${T(.05,-.3)} Z" fill="url(#${id}h)"/><path d="M${T(-.05,-.31)} L${T(.05,-.31)}" stroke="#7b2f3a" stroke-width="${sw * 3}"/>`;
-  } else {
+  const hs = o.hs || (o.girl ? (o.tail ? 'pony' : 'bob') : 'short');
+  if (hs === 'bob' || hs === 'pony' || hs === 'long') {
+    const bot = hs === 'long' ? .14 : -.1;
+    s += `<path d="M${T(-.215,-.38)} Q${T(-.23,-.63)} ${T(0,-.64)} Q${T(.23,-.63)} ${T(.215,-.38)} L${T(.235,bot)} Q${T(.1,bot + .06)} ${T(0,bot + .04)} Q${T(-.1,bot + .06)} ${T(-.235,bot)} Z" fill="url(#${id}h)"/>`;
+    if (hs === 'pony') s += `<path d="M${T(-.05,-.3)} Q${T(-.08,-.02)} ${T(0,.1)} Q${T(.08,-.02)} ${T(.05,-.3)} Z" fill="url(#${id}h)"/><path d="M${T(-.05,-.31)} L${T(.05,-.31)}" stroke="#7b2f3a" stroke-width="${sw * 3}"/>`;
+    if (hs === 'long') s += `<path d="M${T(-.12,-.1)} Q${T(-.1,.06)} ${T(-.13,.13)} M${T(.1,-.1)} Q${T(.12,.06)} ${T(.1,.13)}" fill="none" stroke="#6b5650" stroke-width="${sw}"/>`;
+  } else if (hs === 'buzz') {
+    s += `<path d="M${T(-.2,-.34)} Q${T(-.22,-.6)} ${T(0,-.6)} Q${T(.22,-.6)} ${T(.2,-.34)} Q${T(.18,-.22)} ${T(.1,-.2)} L${T(-.1,-.2)} Q${T(-.18,-.22)} ${T(-.2,-.34)} Z" fill="#4a3b36"/><path d="M${T(-.1,-.2)} L${T(.1,-.2)} L${T(.09,-.16)} L${T(-.09,-.16)} Z" fill="url(#${id}k)"/>`;
+  } else {   // short (남학생 기본) — 뒤통수 가르마 변형
     s += `<path d="M${T(-.205,-.33)} Q${T(-.225,-.61)} ${T(0,-.62)} Q${T(.225,-.61)} ${T(.205,-.33)} Q${T(.19,-.19)} ${T(.1,-.16)} L${T(-.1,-.16)} Q${T(-.19,-.19)} ${T(-.205,-.33)} Z" fill="url(#${id}h)"/>`;
+    if (o.part) s += `<path d="M${T(o.part,-.62)} Q${T(o.part * 1.2,-.5)} ${T(o.part,-.4)}" fill="none" stroke="#7d6862" stroke-width="${sw * 1.3}"/>`;
   }
   s += `<path d="M${T(-.13,-.54)} Q${T(-.02,-.59)} ${T(.11,-.52)} M${T(-.16,-.45)} Q${T(-.11,-.33)} ${T(-.13,-.22)} M${T(-.05,-.51)} Q${T(-.03,-.36)} ${T(-.05,-.2)} M${T(.06,-.49)} Q${T(.1,-.35)} ${T(.08,-.21)} M${T(.15,-.43)} Q${T(.18,-.32)} ${T(.15,-.22)}" fill="none" stroke="#6b5650" stroke-width="${sw * .9}" opacity=".85"/>`;
   s += `<path d="M${T(-.1,-.57)} Q${T(0,-.61)} ${T(.09,-.56)}" fill="none" stroke="#a08880" stroke-width="${sw * 1.8}" opacity=".55"/>`;

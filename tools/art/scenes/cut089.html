@@ -79,32 +79,48 @@ svg{position:absolute;left:0;top:0}
 <img class="fig" src="parts/seungmin-back-080.png">
 <svg id="arm" width="1080" height="1350" style="position:absolute;left:0;top:0">
 <defs>
- <linearGradient id="slv" x1="0" x2="1"><stop offset="0" stop-color="#5c4a3f"/><stop offset=".45" stop-color="#8a7364"/><stop offset=".8" stop-color="#9c8474"/><stop offset="1" stop-color="#6a564a"/></linearGradient>
- <linearGradient id="skn" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#f0c9ae"/><stop offset=".6" stop-color="#e2b090"/><stop offset="1" stop-color="#c58f74"/></linearGradient>
- <linearGradient id="ldl" x1="0" x2="1"><stop offset="0" stop-color="#8d9197"/><stop offset=".5" stop-color="#eef0f2"/><stop offset="1" stop-color="#8d9197"/></linearGradient>
- <filter id="sft"><feGaussianBlur stdDeviation=".7"/></filter><filter id="shd"><feGaussianBlur stdDeviation="9"/></filter>
+ <linearGradient id="slvA" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#5a473d"/><stop offset=".4" stop-color="#8a7262"/><stop offset=".75" stop-color="#9d8473"/><stop offset="1" stop-color="#5e4a3f"/></linearGradient>
+ <linearGradient id="slvB" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#4e3d34"/><stop offset=".5" stop-color="#7d6657"/><stop offset="1" stop-color="#957d6c"/></linearGradient>
+ <linearGradient id="sknA" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#f3cfb4"/><stop offset=".55" stop-color="#e2b092"/><stop offset="1" stop-color="#c48d72"/></linearGradient>
+ <linearGradient id="ldlA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f2f3f5"/><stop offset=".5" stop-color="#b9bcc2"/><stop offset="1" stop-color="#7d8188"/></linearGradient>
+ <filter id="sftA"><feGaussianBlur stdDeviation=".6"/></filter><filter id="shdA"><feGaussianBlur stdDeviation="12"/></filter>
+ <filter id="grA"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="5"/><feColorMatrix values="0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .33  0 0 0 .14 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+ <clipPath id="armc"><path d="M600 1350 Q640 1250 700 1180 Q740 1140 800 1138 Q860 1150 872 1200 Q860 1262 800 1302 Q760 1330 752 1350 Z M800 1140 Q764 1062 706 984 Q668 936 640 890 L692 866 Q726 914 766 962 Q834 1050 872 1196 Z"/></clipPath>
 </defs>
-<!-- 국자: 손잡이 끝은 승민의 손, 머리는 냄비 안 국물 속 -->
-<path d="M468 838 Q530 832 606 848" stroke="#3a3a40" stroke-width="12" stroke-linecap="round" fill="none"/>
-<path d="M468 838 Q530 832 606 848" stroke="url(#ldl)" stroke-width="8" stroke-linecap="round" fill="none"/>
-<ellipse cx="460" cy="840" rx="24" ry="7" fill="#9c4a28" opacity=".85"/>
-<path d="M400 828 Q460 820 528 830" stroke="#e39a62" stroke-width="3" fill="none" opacity=".75"/><path d="M412 840 Q462 852 520 840" stroke="#7d3618" stroke-width="2" fill="none" opacity=".6"/>
-<!-- 팔 그림자(찬장·조리대에) -->
-<path d="M690 1350 Q760 1150 860 1060 Q820 950 650 880 L720 900 Q900 990 930 1100 Q860 1220 840 1350 Z" fill="#2a160c" opacity=".30" filter="url(#shd)"/>
-<g stroke="#3e2c24" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" filter="url(#sft)" transform="translate(606 852) scale(1.85) translate(-606 -852)">
- <!-- 위팔: 어깨(머리 오른쪽 아래)에서 팔꿈치까지, 바깥으로 -->
- <path d="M500 1350 Q520 1210 600 1110 Q640 1060 690 1040 L730 1090 Q690 1120 660 1160 Q600 1250 590 1350 Z" fill="url(#slv)"/>
- <path d="M548 1240 Q574 1222 598 1236 M590 1160 Q618 1148 640 1166" fill="none" stroke="#4a3a31" stroke-width="2" opacity=".75"/>
- <!-- 아래팔: 팔꿈치에서 냄비 쪽으로 앞·위로 굽혀 들어감 -->
- <path d="M690 1040 Q700 980 668 920 Q648 888 630 872 L606 900 Q628 930 640 960 Q656 1010 642 1060 Q690 1080 730 1090 Q736 1060 690 1040 Z" fill="url(#slv)"/>
- <path d="M650 940 Q668 930 684 944 M660 990 Q680 982 696 1000" fill="none" stroke="#4a3a31" stroke-width="2" opacity=".75"/>
- <path d="M602 896 Q616 876 636 870 L626 856 Q604 864 590 884 Z" fill="#6f5b4e"/>
- <!-- 손: 국자 손잡이를 감아 쥔 주먹, 손등이 보이고 엄지는 손잡이 위 -->
- <path d="M590 884 Q572 868 576 846 Q584 828 604 826 Q626 828 634 846 Q636 862 624 872 Z" fill="url(#skn)"/>
- <path d="M578 848 Q572 838 580 832 Q590 828 596 836 Q592 846 586 852 Z" fill="#edc4a7"/>
- <path d="M596 834 Q604 824 614 830 M610 832 Q620 826 628 836 M582 852 Q592 846 600 852" fill="none" stroke="#b07a62" stroke-width="1.6"/>
- <path d="M576 846 Q566 840 566 832 Q570 826 580 830" fill="#eec7aa"/>
+<!-- 국자: 냄비 안 국물에 잠긴 머리 → 냄비 가장자리를 넘어 → 손 안의 손잡이 -->
+<path d="M452 846 Q520 826 608 806" stroke="#3a3a40" stroke-width="13" stroke-linecap="round" fill="none"/>
+<path d="M452 846 Q520 826 608 806" stroke="url(#ldlA)" stroke-width="9" stroke-linecap="round" fill="none"/>
+<path d="M454 843 Q520 824 606 804" stroke="#ffffff" stroke-width="2" opacity=".7" fill="none"/>
+<!-- 국자가 잠긴 자리: 국물 표면이 덮고, 젓는 결이 국자 둘레로 돎 -->
+<ellipse cx="452" cy="846" rx="30" ry="8" fill="#a8542e"/>
+<path d="M392 838 Q440 826 500 834 Q530 842 512 850 M410 850 Q452 860 496 852" stroke="#e9a06a" stroke-width="3" fill="none" opacity=".85" stroke-linecap="round"/>
+<path d="M420 842 Q452 836 480 842" stroke="#6e2d14" stroke-width="2" fill="none" opacity=".7"/>
+<!-- 팔 그림자 -->
+<path d="M680 1350 Q760 1200 860 1180 Q840 1060 700 900 L760 930 Q900 1060 920 1210 Q860 1300 820 1350 Z" fill="#2a160c" opacity=".28" filter="url(#shdA)"/>
+<g stroke="#4a3428" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#sftA)">
+ <!-- 위팔(카메라 가까이, 어깨에서 팔꿈치로) -->
+ <path d="M600 1350 Q640 1250 700 1180 Q740 1140 800 1138 Q860 1150 872 1200 Q860 1262 800 1302 Q760 1330 752 1350 Z" fill="url(#slvA)"/>
+ <path d="M660 1290 Q700 1240 744 1222 M700 1330 Q740 1286 790 1270" fill="none" stroke="#45362e" stroke-width="1.6" opacity=".8"/>
+ <!-- 아래팔(팔꿈치에서 냄비 쪽으로 위·왼쪽, 원근으로 손목 쪽이 가늘어짐) -->
+ <path d="M800 1140 Q764 1062 706 984 Q668 936 640 890 L692 866 Q726 914 766 962 Q834 1050 872 1196 Q852 1150 800 1140 Z" fill="url(#slvB)"/>
+ <path d="M760 1060 Q780 1050 800 1066 M720 1000 Q740 990 758 1004" fill="none" stroke="#45362e" stroke-width="1.5" opacity=".8"/>
+ <!-- 니트 소맷부리(골지) -->
+ <path d="M634 884 L690 860 L702 878 L646 904 Z" fill="#6c574a"/>
+ <path d="M644 882 L654 900 M656 876 L666 895 M668 871 L678 890 M680 866 L690 884" stroke="#4a3a31" stroke-width="1.4"/>
+ <!-- 손: 국자 손잡이를 위에서 감아 쥔 주먹(손등이 카메라 쪽), 엄지는 손잡이 위로 냄비 쪽을 향함 -->
+ <path d="M640 888 Q606 880 594 852 Q586 824 600 806 Q616 790 642 790 Q672 794 684 816 Q694 842 690 866 Z" fill="url(#sknA)"/>
+ <path d="M600 806 Q584 800 578 808 Q574 820 586 826 Q598 826 606 818 Z" fill="#ecc3a5"/>
+ <path d="M612 798 Q604 790 594 794 Q590 804 598 810" fill="#f0c9ad"/>
+ <path d="M616 812 Q632 806 650 812 M612 830 Q630 824 652 830 M614 848 Q632 842 654 848" fill="none" stroke="#b07a62" stroke-width="1.5"/>
+ <path d="M664 802 Q680 812 682 830" fill="none" stroke="#f8dcc6" stroke-width="2.2" opacity=".8"/>
+ <!-- 엄지: 손잡이 위로 뻗음 -->
+ <path d="M604 804 Q588 796 572 800 Q562 806 568 814 Q580 818 600 814 Z" fill="url(#sknA)"/>
+ <path d="M566 806 Q570 802 576 803" fill="none" stroke="#b07a62" stroke-width="1.2"/>
 </g>
+<!-- 젓는 동작 선(국자 둘레의 원호) -->
+<path d="M396 822 Q452 800 516 822" stroke="#fff3e2" stroke-width="2.4" fill="none" opacity=".8" stroke-dasharray="10 6"/>
+<path d="M600 776 Q628 760 660 768" stroke="#fff3e2" stroke-width="2" fill="none" opacity=".6"/>
+<rect x="560" y="760" width="330" height="590" filter="url(#grA)" clip-path="url(#armc)"/>
 </svg>
 
 <div class="warm"></div>

@@ -2,13 +2,13 @@
 html,body{margin:0}.cv{position:relative;width:1080px;height:810px;overflow:hidden}
 .bg{position:absolute;inset:0;width:1080px;height:810px}
 svg{position:absolute;left:0;top:0}
-.board{position:absolute;left:250px;top:60px;width:640px;height:370px;box-sizing:border-box;border-radius:5px;background:linear-gradient(160deg,#fbfcfd,#eceff2);border:12px solid #b9bec4;box-shadow:0 8px 20px rgba(40,30,20,.3),inset 0 0 0 2px #8e949b;transform:rotate(-1deg)}
+.board{position:absolute;left:250px;top:60px;width:640px;height:370px;box-sizing:border-box;border-radius:5px;background:linear-gradient(160deg,#fbfcfd,#eceff2);border:12px solid #b9bec4;box-shadow:0 8px 20px rgba(40,30,20,.3),inset 0 0 0 2px #8e949b;transform:rotate(-1deg);overflow:hidden}
 .t{position:absolute;font-family:"Nanum Pen Script";line-height:1;white-space:nowrap}
 .fg{position:absolute;left:-150px;top:470px;width:620px;filter:blur(1.6px) brightness(.8)}
 .warm{position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,214,150,.22),rgba(255,214,150,0) 50%)}
 </style></head><body><div class="cv">
 <img class="bg" src="parts/staffroom-blur.png">
-<div class="board">
+<div class="board"><div style="position:absolute;inset:0;background:linear-gradient(170deg,rgba(255,255,255,.0) 0%,rgba(255,255,255,.55) 8%,rgba(255,255,255,0) 18%),radial-gradient(ellipse 40% 20% at 70% 85%,rgba(140,150,170,.10),rgba(0,0,0,0) 70%),linear-gradient(180deg,rgba(0,0,0,0) 80%,rgba(60,50,40,.08))"></div>
  <span class="t" style="left:30px;top:22px;font-size:64px;color:#1f3f8a">10/31 (토)</span>
  <span class="t" style="left:38px;top:110px;font-size:76px;color:#1a1d24">합창제 리허설</span>
  <span class="t" style="left:120px;top:200px;font-size:86px;color:#c2392f">09:00 강당</span>
@@ -27,7 +27,7 @@ document.getElementById('man').innerHTML = `
  <radialGradient id="hr1" cx=".55" cy=".35" r=".7"><stop offset="0" stop-color="#3d322e"/><stop offset=".7" stop-color="#231c1a"/><stop offset="1" stop-color="#151110"/></radialGradient>
  <linearGradient id="pt1" x1="0" x2="1"><stop offset="0" stop-color="#22252d"/><stop offset=".55" stop-color="#363a45"/><stop offset="1" stop-color="#1f2128"/></linearGradient>
  <pattern id="knit" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 3.5h7" stroke="#000" stroke-width="1" opacity=".12"/></pattern>
- <pattern id="buzz" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#6b5a52" opacity=".55"/><circle cx="3" cy="3" r=".6" fill="#0d0a09" opacity=".5"/></pattern>
+ <filter id="buzzf"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="9"/><feColorMatrix values="0 0 0 0 .42  0 0 0 0 .35  0 0 0 0 .32  0 0 0 .35 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .42  0 0 0 .10 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
  <filter id="sft"><feGaussianBlur stdDeviation=".45"/></filter><filter id="cast"><feGaussianBlur stdDeviation="14"/></filter>
 </defs>
@@ -68,7 +68,7 @@ document.getElementById('man').innerHTML = `
  <!-- 머리: 짧은 스포츠머리 뒤통수(완전한 뒷모습) — 오른쪽으로 살짝 고개를 돌려 귀가 보임 -->
  <path d="M748 318 Q760 336 790 334 Q806 330 812 312 L806 300 Q780 312 754 304 Z" fill="url(#sk1)"/>
  <path d="M742 280 Q738 232 774 218 Q812 216 820 254 Q824 290 810 312 Q790 322 770 320 Q748 314 742 280 Z" fill="url(#hr1)"/>
- <path d="M742 280 Q738 232 774 218 Q812 216 820 254 Q824 290 810 312 Q790 322 770 320 Q748 314 742 280 Z" fill="url(#buzz)" stroke="none"/>
+ <path d="M742 280 Q738 232 774 218 Q812 216 820 254 Q824 290 810 312 Q790 322 770 320 Q748 314 742 280 Z" fill="#000" stroke="none" filter="url(#buzzf)"/>
  <path d="M816 266 Q830 262 832 278 Q832 294 820 300 Q814 288 816 266 Z" fill="url(#sk1)"/><path d="M820 272 Q826 274 826 284" fill="none" stroke="#9d6a55" stroke-width="1.3"/>
  <path d="M738 270 Q736 280 744 290" fill="none" stroke="#d9a68b" stroke-width="2" opacity=".0"/>
  <path d="M752 312 Q776 324 806 314" fill="none" stroke="#141010" stroke-width="1.8"/>

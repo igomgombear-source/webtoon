@@ -7,32 +7,53 @@ svg{position:absolute;left:0;top:0}
 </style></head><body><div class="cv">
 <img class="bg" src="parts/livingroom-night.png">
 <svg id="back" width="1080" height="608"></svg>
+<svg id="torso" width="1080" height="608"></svg>
 <img class="head" src="parts/seungmin-085-sofa.png">
-<svg id="front" width="1080" height="608"></svg>
+<svg id="front" width="1080" height="608" style="filter:brightness(.74) saturate(.9)"></svg>
 <div class="night"></div>
 </div><script>
 const L='#2e2328';
 document.getElementById('back').innerHTML = `<defs><filter id="s"><feGaussianBlur stdDeviation="10"/></filter></defs>
 <path d="M300 380 Q600 360 990 372 L990 420 Q600 410 300 430Z" fill="#000" opacity=".35" filter="url(#s)"/>
 <path d="M188 300 Q240 262 330 270 Q400 280 418 330 Q420 380 380 404 Q300 418 220 404 Q180 380 188 300 Z" fill="#3d3337" stroke="#2e2328" stroke-width="2"/>
-<path d="M210 306 Q280 286 380 300" stroke="#5a4c50" stroke-width="3" fill="none"/>
-<g stroke="#2e2328" stroke-width="1.8" stroke-linejoin="round"><path d="M396 318 Q440 300 500 312 Q540 330 548 372 Q540 404 500 410 L420 410 Q392 380 396 318 Z" fill="#6a5448"/>
-<path d="M420 330 Q460 322 500 334" fill="none" stroke="#86705f" stroke-width="2.4"/></g>`;
+<path d="M210 306 Q280 286 380 300" stroke="#5a4c50" stroke-width="3" fill="none"/>`;
+// 몸: 원화(85컷) 머리·손과 질감 차이를 줄이려고 셀 채색처럼 2단 그림자 + 스탠드 쪽(왼쪽) 따뜻한 림라이트 + 종이 질감, 가는 갈색 선.
 document.getElementById('front').innerHTML = `<defs>
-<linearGradient id="bl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9592a4"/><stop offset=".55" stop-color="#6e6c80"/><stop offset="1" stop-color="#47455a"/></linearGradient>
-<linearGradient id="pl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#4a3f44"/><stop offset="1" stop-color="#2c2428"/></linearGradient>
-<filter id="sf"><feGaussianBlur stdDeviation=".7"/></filter><filter id="sh"><feGaussianBlur stdDeviation="6"/></filter></defs>
-<g stroke="${L}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#sf)">
- <g transform="translate(0 34)">
- <!-- 담요: 가슴 아래부터 발끝까지 — 허리·무릎(살짝 굽힘)의 볼륨, 소파 앞으로 늘어진 자락 -->
- <path d="M470 340 Q520 316 600 322 Q690 318 760 330 Q820 300 880 306 Q950 312 978 340 Q992 368 970 392 Q930 404 880 400 L700 410 Q600 418 520 414 Q470 400 470 340 Z" fill="url(#bl)"/>
- <path d="M600 410 Q640 470 700 480 Q760 486 800 470 Q820 440 812 404 Z" fill="#5e5c70"/>
- <path d="M640 416 Q660 452 700 466 M740 414 Q760 444 790 456" fill="none" stroke="#3e3c4e" stroke-width="2"/>
- <path d="M560 340 Q640 352 700 336 M770 318 Q820 330 860 312 M880 316 Q920 334 960 338" fill="none" stroke="#b2afc0" stroke-width="2" opacity=".7"/>
- <path d="M640 334 Q660 372 640 410 M840 312 Q860 350 846 400" fill="none" stroke="#4a4858" stroke-width="2" opacity=".7"/>
+ <linearGradient id="kn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8a6e5e"/><stop offset=".55" stop-color="#6a5246"/><stop offset="1" stop-color="#4a3830"/></linearGradient>
+ <linearGradient id="bl" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a39fae"/><stop offset=".45" stop-color="#7d7a8c"/><stop offset="1" stop-color="#55526a"/></linearGradient>
+ <linearGradient id="bl2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6c6a7e"/><stop offset="1" stop-color="#3e3c52"/></linearGradient>
+ <linearGradient id="warm" x1="0" x2="1"><stop offset="0" stop-color="#ffc98a" stop-opacity=".45"/><stop offset=".5" stop-color="#ffc98a" stop-opacity=".12"/><stop offset="1" stop-color="#ffc98a" stop-opacity="0"/></linearGradient>
+ <filter id="sf"><feGaussianBlur stdDeviation=".7"/></filter><filter id="sh"><feGaussianBlur stdDeviation="7"/></filter><filter id="sh2"><feGaussianBlur stdDeviation="3"/></filter>
+ <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .45  0 0 0 .16 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+ <clipPath id="body"><path id="bp" d="M430 330 Q470 312 540 322 Q610 330 650 334 Q690 312 740 318 Q790 330 820 330 Q850 300 900 306 Q950 316 972 338 Q984 362 966 384 Q930 400 880 404 L640 412 Q540 414 470 410 Q430 392 430 330 Z"/></clipPath>
+</defs>
+<!-- 소파에 눌린 자국: 몸 아래 그림자와 쿠션 주름 -->
+<path d="M440 414 Q700 426 980 404" stroke="#120c0e" stroke-width="16" opacity=".45" filter="url(#sh)" fill="none"/>
+<path d="M520 420 Q560 412 600 422 M760 418 Q800 410 840 420" stroke="#2a2024" stroke-width="2" fill="none" opacity=".6"/>
+<g stroke="#2e2328" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#sf)">
+ <!-- 담요: 허리부터 발끝까지, 엉덩이·무릎의 굴곡, 앞으로 흘러내린 자락 -->
+ <path d="M600 334 Q650 318 720 320 Q780 328 816 334 Q852 312 904 314 Q954 320 974 340 Q986 366 966 386 Q930 402 880 406 L640 414 Q604 410 590 380 Q584 352 600 334 Z" fill="url(#bl)"/>
+ <path d="M640 410 L648 452 Q700 446 744 458 Q796 448 852 456 L858 404 Z" fill="url(#bl2)"/>
+ <path d="M690 412 L696 448 M744 410 L744 456 M800 410 L798 452" fill="none" stroke="#2e2c40" stroke-width="1.6"/>
+ <path d="M640 330 Q660 368 646 404 M720 318 Q742 360 724 406 M836 312 Q846 350 830 402 M900 308 Q912 350 898 400" fill="none" stroke="#4a4860" stroke-width="1.6" opacity=".85"/>
+ <path d="M616 340 Q680 326 760 330 M840 314 Q900 310 950 330" fill="none" stroke="#c3c0cf" stroke-width="2" opacity=".75"/>
  <!-- 발(양말) -->
- <path d="M962 330 Q994 316 1008 332 Q1012 354 990 362 Q970 356 962 330 Z" fill="#d8d3cc"/>
- </g>
+ <path d="M962 334 Q990 322 1006 336 Q1010 358 990 366 Q972 360 962 334 Z" fill="#d6d0c8"/>
+ <path d="M970 344 Q988 340 1000 350" fill="none" stroke="#a9a29a" stroke-width="1.2"/>
 </g>
-<path d="M480 446 Q700 454 980 434" stroke="#000" stroke-width="10" opacity=".25" filter="url(#sh)" fill="none"/>`;
+<!-- 스탠드 쪽 따뜻한 림라이트 + 종이 질감 -->
+<path d="M602 333 Q650 318 720 320 Q780 328 816 334 Q852 312 904 314" fill="none" stroke="#ffd6a0" stroke-width="2.4" opacity=".55" filter="url(#sf)"/>
+
+<rect x="400" y="280" width="620" height="220" filter="url(#grain)" clip-path="url(#body)"/>`;
+document.getElementById('torso').innerHTML = `<g stroke="#2e2328" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="filter:brightness(.74) saturate(.9)">
+ <defs><linearGradient id="kn2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8a6e5e"/><stop offset=".55" stop-color="#6a5246"/><stop offset="1" stop-color="#4a3830"/></linearGradient></defs>
+`+` <!-- 니트 상체(어깨·가슴) — 머리 아래에서 이어짐 -->
+ <path d="M420 300 Q470 296 520 312 Q590 326 660 336 L660 404 Q560 412 470 410 Q428 392 420 300 Z" fill="url(#kn2)"/>
+ <path d="M470 330 Q520 338 560 334 M480 360 Q540 370 600 362" fill="none" stroke="#3e2e28" stroke-width="1.4" opacity=".8"/>
+<!-- 위팔: 어깨에서 폰 든 손(원화)까지 — 니트 소매 -->
+<g stroke="#2e2328" stroke-width="1.5" stroke-linejoin="round" filter="url(#sf)">
+ <path d="M452 304 Q500 318 512 352 Q516 384 488 398 Q462 400 450 384 Q470 366 466 346 Q458 326 440 318 Z" fill="url(#kn2)"/>
+ <path d="M462 392 Q470 380 486 382" fill="none" stroke="#3e2e28" stroke-width="1.2"/>
+</g>
+</g>`;
 </script></body></html>
