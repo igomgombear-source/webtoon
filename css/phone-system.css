@@ -1,0 +1,102 @@
+/* 휴대폰 디자인 시스템 (104컷판 전용) — iPhone 17 일반형 기준
+ * 대상: 원화 위 화면 UI(.scr-ui), 확대 인셋(.zoom-box), 83컷 읽기 카드(.read-card), 49컷 단독 화면(.phone-v3).
+ * 70컷판(#ep01)은 이 클래스들을 쓰지 않으므로 영향 없음.
+ * 색·글꼴·상태 표시줄·말풍선을 여기서 한 번에 정한다. 컷마다 다른 것은 data/ep01v3-screens.js 의 데이터(시각·내용·글자 크기)뿐.
+ *   승민 = Black(어두운 화면, theme: dark) · 해인 = Lavender(밝은 화면, theme: light)
+ * 가상 화면은 가로 300px(js/screenui.js BW). 상태 표시줄·Dynamic Island 는 px 로 고정해 모든 컷이 같은 기기로 보이게 한다. */
+.scr-ui, .zoom-box, .read-card, .phone-v3 {
+  --ph-font: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", system-ui, sans-serif;
+  --ph-blue: #0a84ff;
+  --ph-green: #30d158;
+  --ph-red: #ff453a;
+}
+.scr-ui.su-dark, .zoom-box.su-dark, .read-card {
+  --ph-bg: #000; --ph-fg: #f5f5f7; --ph-sub: #8e8e93; --ph-sep: rgba(84, 84, 88, .55);
+  --ph-them: #262629; --ph-them-fg: #f5f5f7; --ph-me: var(--ph-blue); --ph-me-fg: #fff;
+  --ph-card: rgba(44, 44, 48, .92); --ph-field: #1c1c1e; --ph-bar: rgba(18, 18, 20, .96);
+}
+.scr-ui.su-light, .zoom-box.su-light {
+  --ph-bg: #f2f2f7; --ph-fg: #111114; --ph-sub: #6e6e73; --ph-sep: rgba(60, 60, 67, .2);
+  --ph-them: #e9e9eb; --ph-them-fg: #111114; --ph-me: var(--ph-blue); --ph-me-fg: #fff;
+  --ph-card: rgba(255, 255, 255, .86); --ph-field: #fff; --ph-bar: rgba(249, 249, 251, .96);
+}
+.scr-ui, .zoom-box { font-family: var(--ph-font); letter-spacing: -.01em; }
+.scr-ui.su-dark, .scr-ui.su-light { background-color: var(--ph-bg); color: var(--ph-fg); }
+.zoom-box.su-dark, .zoom-box.su-light { background-color: var(--ph-bg); color: var(--ph-fg); }
+
+/* 상태 표시줄 + Dynamic Island (가상 화면 px 고정) */
+.scr-ui .su-status { position: relative; display: flex; align-items: center; justify-content: space-between; height: 40px; min-height: 0; padding: 0 22px; box-sizing: border-box;
+  font-size: 13px; font-weight: 600; opacity: 1; font-variant-numeric: tabular-nums; }
+.su-island { position: absolute; left: 50%; top: 9px; width: 90px; height: 25px; margin-left: -45px; border-radius: 13px; background: #000; }
+.su-light .su-island { background: #0b0b0c; }
+.scr-ui .su-ic { display: inline-flex; align-items: center; gap: 5px; }
+.scr-ui .su-ic i { display: block; border-radius: 0; background: none; opacity: 1; }
+.su-sig { display: inline-flex !important; align-items: flex-end; gap: 1.5px; width: auto !important; height: 10px !important; }
+.su-sig b { display: block; width: 3px; border-radius: 1px; background: currentColor; }
+.su-sig b:nth-child(1) { height: 4px; } .su-sig b:nth-child(2) { height: 6px; } .su-sig b:nth-child(3) { height: 8px; } .su-sig b:nth-child(4) { height: 10px; }
+.su-wifi { width: 13px !important; height: 10px !important; background: currentColor !important; clip-path: polygon(50% 100%, 0 30%, 15% 12%, 50% 0, 85% 12%, 100% 30%); }
+.su-batt { position: relative; width: 22px !important; height: 11px !important; border: 1.2px solid currentColor; border-radius: 3.5px !important; box-sizing: border-box; opacity: .95 !important; }
+.su-batt::before { content: ""; position: absolute; left: 1.2px; top: 1.2px; bottom: 1.2px; width: 70%; border-radius: 1.5px; background: currentColor; }
+.su-batt::after { content: ""; position: absolute; right: -3.4px; top: 3px; width: 1.6px; height: 3.2px; border-radius: 0 1px 1px 0; background: currentColor; }
+
+/* 문자 대화 머리(iOS 메시지): 뒤로 ‹ · 가운데 원형 아바타와 이름 */
+.scr-ui .su-head { position: relative; display: flex; flex-direction: column; align-items: center; gap: .18em; padding: .25em .7em .45em; border-bottom: 1px solid var(--ph-sep); background: var(--ph-bar); }
+.scr-ui .su-back { position: absolute; left: .45em; top: .3em; font-size: 1.6em; line-height: 1; color: var(--ph-blue); opacity: 1; }
+.scr-ui .su-av { width: 1.9em; height: 1.9em; border-radius: 50%; background: linear-gradient(160deg, #a5a9b3, #6e737e); }
+.scr-ui .su-name { font-size: .72em; font-weight: 600; color: var(--ph-fg); }
+
+/* 말풍선(공통): 받은 문자 = 회색, 보낸 문자 = 파랑. 시각은 말풍선 아래 작게 */
+.scr-ui .su-thread, .zoom-box .su-thread { gap: .42em; }
+.scr-ui .su-b, .zoom-box .su-b, .read-card .rc-msg { line-height: 1.34; }
+.scr-ui .su-b, .zoom-box .su-b { max-width: 80%; padding: .5em .75em; border-radius: 1.15em; font-size: .95em; }
+.scr-ui .su-b.them, .zoom-box .su-b.them { background: var(--ph-them); color: var(--ph-them-fg); border-bottom-left-radius: .32em; }
+.scr-ui .su-b.me, .zoom-box .su-b.me { background: var(--ph-me); color: var(--ph-me-fg); border-bottom-right-radius: .32em; }
+.scr-ui .su-time, .zoom-box .su-time { color: var(--ph-sub); opacity: 1; margin: .22em .5em 0; }
+.scr-ui .su-time { font-size: .6em; }
+.zoom-box .su-time { font-size: .72em; }   /* 확대 인셋은 읽혀야 하므로 보조 글자도 9px(360 기준) 이상 */
+/* 강조(85·104컷의 핵심 문장): 흐림 없이 밑줄형 하이라이트만 */
+.scr-ui .su-b mark, .zoom-box .su-b mark { background: rgba(255, 214, 10, .30); color: inherit; padding: 0 .12em; border-radius: .18em; font-weight: 700; }
+/* 모자이크·흐림 제거: 대본 문장은 모두 그대로 읽힌다 */
+.su-b.is-blur p, .su-dim, .zoom-box .su-dim { filter: none !important; opacity: 1 !important; }
+
+/* 입력창 */
+.scr-ui .su-input, .zoom-box .su-input { background: var(--ph-bar); border-top: 1px solid var(--ph-sep); }
+.scr-ui .su-field, .zoom-box .su-field { background: var(--ph-field); border: 1px solid var(--ph-sep); color: var(--ph-fg); }
+.scr-ui .su-send, .zoom-box .su-send { background: var(--ph-blue); }
+.scr-ui .su-send.off { background: #3a3a3c; }
+.scr-ui .su-field .caret { background: var(--ph-blue); }
+
+/* 알림 카드·배너(잠금화면·재생 화면 위·메일) */
+.scr-ui .su-notif, .scr-ui .su-banner, .zoom-box .su-notif { background: var(--ph-card); border-radius: 1.05em; box-shadow: 0 .15em .6em rgba(0, 0, 0, .22); }
+.scr-ui .su-b-top, .zoom-box .su-b-top { color: var(--ph-sub); opacity: 1; }
+.scr-ui .su-b-l1, .zoom-box .su-b-l1 { color: var(--ph-fg); }
+
+/* 연락처·수신 화면 버튼 색 */
+.scr-ui .su-acts .act, .zoom-box .su-acts .act { background: var(--ph-card); color: var(--ph-fg); }
+.scr-ui .su-acts .act i, .zoom-box .su-acts .act i { background: var(--ph-green); }
+.scr-ui .su-acts .act.a-msg i, .zoom-box .su-acts .act.a-msg i { background: var(--ph-blue); }
+.scr-ui .su-knob { background: var(--ph-green); }
+.scr-ui .su-decl { background: var(--ph-red); }
+.scr-ui .su-num { letter-spacing: .03em; }
+
+/* 확대 인셋 상자: 같은 기기 화면의 일부로 보이도록 모서리·테두리 통일 */
+.zoom-box { border-radius: calc(14 * var(--u)); border-color: rgba(235, 235, 245, .85); }
+
+/* 83컷 읽기 카드: 같은 메시지 UI 색 */
+.read-card { background: var(--ph-bg); color: var(--ph-fg); font-family: var(--ph-font); border-color: rgba(235, 235, 245, .3); }
+.read-card .rc-msg { background: var(--ph-them); color: var(--ph-them-fg); border-radius: 1.15em 1.15em 1.15em .32em; }
+.read-card .rc-av { background: linear-gradient(160deg, #a5a9b3, #6e737e); }
+.read-card .rc-time { color: var(--ph-sub); opacity: 1; }
+.scr-read::before { background: #000; border-color: rgba(235, 235, 245, .3); }
+
+/* 49컷 단독 휴대폰(해인 = Lavender): iPhone 17 비율의 둥근 모서리와 얇은 검은 베젤, 측면 버튼 */
+.phone.phone-v3 { position: relative; width: min(78%, 300px); padding: 8px; border-radius: 15% / 7%; background: #0a0a0c; }
+.phone.phone-v3.phone-haein { box-shadow: 0 0 0 3px #cfc3e6, 0 0 0 4.5px #a99bc9, 0 18px 40px rgba(0, 0, 0, .45); }
+.phone.phone-v3.phone-seungmin { box-shadow: 0 0 0 3px #2a2a2d, 0 0 0 4.5px #121214, 0 18px 40px rgba(0, 0, 0, .45); }
+.phone.phone-v3 .phone-screen { border-radius: 13% / 6%; font-family: var(--ph-font); }
+.phone.phone-v3::before, .phone.phone-v3::after { content: ""; position: absolute; width: 4px; border-radius: 2px; }
+.phone.phone-v3::before { left: -7px; top: 22%; height: 9%; }
+.phone.phone-v3::after { right: -7px; top: 26%; height: 14%; }
+.phone.phone-v3.phone-haein::before, .phone.phone-v3.phone-haein::after { background: #b9acd7; }
+.phone.phone-v3.phone-seungmin::before, .phone.phone-v3.phone-seungmin::after { background: #2a2a2d; }
+.phone.phone-v3 .notif { font-family: var(--ph-font); }

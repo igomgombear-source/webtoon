@@ -14,12 +14,14 @@
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  /* 상태 표시줄(iPhone 17): 시각 · Dynamic Island · 신호·와이파이·배터리. 모양은 css/phone-system.css 에서 공통으로 정한다 */
   function status(t) {
-    return '<div class="su-status"><span class="su-clock">' + esc(t || '') + '</span><span class="su-ic" aria-hidden="true"><i></i><i></i><i class="bat"></i></span></div>';
+    return '<div class="su-status"><span class="su-clock">' + esc(t || '') + '</span><span class="su-island" aria-hidden="true"></span>' +
+      '<span class="su-ic" aria-hidden="true"><i class="su-sig"><b></b><b></b><b></b><b></b></i><i class="su-wifi"></i><i class="su-batt"></i></span></div>';
   }
-  function dim(t) { return '<span class="su-dim">' + esc(t) + '</span>'; }
+  function dim(t) { return esc(t); }   /* 예전 흐림 처리(su-dim) 제거: 강조(focus)만 하이라이트로 남긴다 */
   function bubble(m, spec) {
-    var cls = 'su-b ' + (m.from === 'me' ? 'me' : 'them') + (m.blur ? ' is-blur' : '');
+    var cls = 'su-b ' + (m.from === 'me' ? 'me' : 'them');   /* 흐림(blur)·모자이크는 쓰지 않는다 — 대본 문장은 그대로 보인다 */
     var body = m.parts
       ? m.parts.map(function (p) { return p.focus ? '<mark>' + esc(p.t) + '</mark>' : (p.dim ? dim(p.t) : esc(p.t)); }).join('')
       : esc(m.text);
