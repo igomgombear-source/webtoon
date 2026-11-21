@@ -22,7 +22,7 @@
   "view": "messenger",
   "theme": "light",
   "fs": 11,
-  "zoom": { "x": 6, "y": 13, "w": 88, "fs": 15, "parts": "messenger", "frame": false },
+  "zoom": { "x": 10, "y": 41, "w": 88, "fs": 15, "parts": "messenger", "frame": false },
   "aria": "승민 자리 모니터, 교직원 업무 메신저로 온 공지"
  },
  "20": {
