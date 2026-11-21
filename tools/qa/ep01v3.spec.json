@@ -361,22 +361,8 @@
 "time": null,
 "scene": null,
 "rows": null,
-"lines": [
-[
-"최기훈",
-"speech",
-"내일 리허설은 예정대로 아홉 시, 강당입니다. 토요일인데 다들 고생 많으십니다."
-],
-[
-"교사",
-"speech",
-"네에, 기훈쌤."
-]
-],
-"at": [
-"in-tr",
-"edge-bottom-l"
-],
+"lines": [],
+"at": [],
 "inset": null,
 "link": null,
 "overflow": null,
