@@ -46,7 +46,16 @@
     web: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="#3a86e0"/><path d="M3.8 12h16.4M12 3.5c3 3.2 3 13.8 0 17M12 3.5c-3 3.2-3 13.8 0 17" fill="none" stroke="#dbeafe" stroke-width="1.1"/></svg>',
     win: '<svg viewBox="0 0 24 24"><path d="M3 5.2l7.6-1v7.2H3zM11.8 4.1L21 2.8v8.6h-9.2zM3 12.6h7.6v7.2L3 18.8zM11.8 12.6H21v8.6l-9.2-1.3z" fill="#fff"/></svg>'
   };
+  /* 17컷 모니터 메신저 창 — 내용은 컷 데이터 messenger(발신자·날짜·시각·본문)만 쓴다(app.js screenFor 가 spec 에 넘김). 데이터에 없는 제목·버튼 글자는 만들지 않는다 */
+  function messengerWin(s) {
+    var m = s.messenger || {};
+    return '<div class="mg-win"><div class="mg-title" aria-hidden="true"><i></i><i></i><i></i></div>' +
+      '<div class="mg-head"><span class="mg-from">' + esc(m.sender) + '</span><span class="mg-when"><span class="mg-date">' + esc(m.date) + '</span> <span class="mg-time">' + esc(m.time) + '</span></span></div>' +
+      '<div class="mg-body"><p>' + esc(m.body) + '</p></div></div>';
+  }
   var VIEWS = {
+    /* 17컷 — 모니터 속 메신저 창을 불투명하게 덮는 웹 UI(원화 속 글자는 이 아래로 가려진다) */
+    messenger: function (s) { return messengerWin(s); },
     /* U01 — 메일 알림 배너 2줄 (두 번째 줄 말줄임) */
     banner: function (s) {
       return status(s.clock) + '<div class="su-banner"><div class="su-b-top"><span class="su-app mail" aria-hidden="true"></span><span class="su-b-app">' + esc(s.app) + ' · ' + esc(s.from) + '</span><span class="su-b-time">' + esc(s.time) + '</span></div>' +
@@ -143,6 +152,7 @@
   function label(s) {
     var out = [];
     (s.messages || []).forEach(function (m) { out.push(m.text || (m.parts || []).map(function (p) { return p.t; }).join('')); });
+    if (s.messenger) out.push([s.messenger.sender, s.messenger.date, s.messenger.time].filter(Boolean).join(' ') + ' — ' + s.messenger.body);
     return (s.aria || '휴대폰 화면') + (out.length ? ': ' + out.join(' / ') : '');
   }
 
@@ -201,6 +211,8 @@
    *                 parts: 'notif'(알림 카드) | 'thread'(문자 스레드, count 개 말풍선) }
    *   글자 크기·테두리는 --u(폭/360) 단위라 폭이 달라져도 비율이 같다. 읽기 프로그램에는 .scr 의 aria-label 이 있으므로 인셋은 aria-hidden. */
   var ZOOM = {
+    /* 17컷 확대 인셋: 같은 메신저 창을 평면으로 크게(글자 13px 이상) */
+    messenger: function (s) { return messengerWin(s); },
     notif: function (s) { return '<div class="su-notifs">' + (s.items || (s.item ? [s.item] : [])).map(notifCard).join('') + '</div>'; },
     /* 연락처 카드 (60컷): 이름 + 통화·문자 */
     contact: function (s) {

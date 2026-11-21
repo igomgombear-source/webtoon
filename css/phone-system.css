@@ -152,3 +152,18 @@
 .zoom-box.zp-compose .su-head { padding: .3em .55em; }
 .zoom-box.zp-compose .su-input { padding: .35em .5em .4em; }
 .zoom-box.zp-notif .su-b-top, .zoom-box.zp-banner .su-b-top { margin-bottom: .1em; }
+
+/* 17컷 모니터 메신저 창(덮개 .scr-ui 와 확대 인셋 .zoom-box 공용) — 흰 바탕의 PC 창. 글자 있는 요소는 인셋에서 13px 바닥 */
+.scr-ui.su-v-messenger, .zoom-box.su-v-messenger { --ph-bg: #fff; background-color: #fff; color: #1a1f2b; font-family: "Segoe UI", Pretendard, -apple-system, system-ui, sans-serif; letter-spacing: 0; }
+.su-v-messenger .mg-win { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; border: .09em solid #0b2f6e; background: #fff; }
+.su-v-messenger .mg-title { flex: none; display: flex; align-items: center; justify-content: flex-end; gap: .5em; height: 1.3em; padding: 0 .6em; background: linear-gradient(#0b46a8, #00296b); }
+.su-v-messenger .mg-title i { width: .62em; height: .62em; border: .11em solid rgba(255, 255, 255, .92); box-sizing: border-box; }
+.su-v-messenger .mg-title i:first-child { height: 0; border-width: 0 0 .11em; margin-top: .35em; }
+.su-v-messenger .mg-head { flex: none; display: flex; align-items: baseline; justify-content: space-between; gap: .6em; padding: .34em .7em; background: #f3f5f9; border-bottom: .07em solid #c9d0dc; font-weight: 600; }
+.su-v-messenger .mg-when { font-weight: 500; color: #3c4658; white-space: nowrap; }
+.su-v-messenger .mg-body { flex: 1 1 auto; padding: .6em .8em .7em; background: #fff; }
+.su-v-messenger .mg-body p { font-size: 1.04em; line-height: 1.55; font-weight: 500; }
+.zoom-box.su-v-messenger { border-radius: calc(5 * var(--u)); }
+.zoom-box.su-v-messenger .mg-win { height: auto; }
+.zoom-box .mg-from, .zoom-box .mg-when { font-size: max(13px, .95em); }
+.zoom-box .mg-body p { font-size: max(13px, 1.04em); }

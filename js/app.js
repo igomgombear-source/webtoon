@@ -351,7 +351,8 @@
   /* 휴대폰 화면 UI 합성 설정 (data/ep01v3-screens.js): 단독 컷은 '번호', 조각 컷은 '번호:조각순서' */
   function screenFor(ep, cut, pieceIdx) {
     var S = W.screens && W.screens[ep.id];
-    return S ? (S[cut.rows ? cut.no + ':' + pieceIdx : String(cut.no)] || null) : null;
+    var spec = S ? (S[cut.rows ? cut.no + ':' + pieceIdx : String(cut.no)] || null) : null;
+    return spec && cut.messenger && spec.view === 'messenger' ? Object.assign({}, spec, { messenger: cut.messenger }) : spec;   /* 17컷: 메신저 문구는 컷 데이터 하나만 쓴다 */
   }
 
   function renderPanelsV3(ep, cut, lines) {
