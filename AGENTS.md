@@ -1,6 +1,6 @@
 # AGENTS.md — 《마지막 접속》 웹툰 저장소 (Codex 및 호환 코딩 에이전트용)
 
-작업 전에 **`docs/EP01_PRODUCTION_RULES.md`**(제작 공통 규칙)를 먼저 읽는다. 이 파일은 요약이며, 충돌하면 사용자의 최신 지시 → 공통 규칙 → 기존 문서 순서로 따른다.
+작업 전에 **`docs/EP01_PRODUCTION_RULES.md`**(제작 공통 규칙)를 먼저 읽는다. 규칙 반영 상태는 `docs/EP01_RULES_REGISTRATION.md` "적용 기록"에 있으며, 이미 끝난 병합은 반복하지 않는다. 이 파일은 요약이며, 충돌하면 사용자의 최신 지시 → 공통 규칙 → 기존 문서 순서로 따른다.
 
 ## 프로젝트
 - 정적 모바일 웹툰 뷰어(HTML·CSS·JavaScript, 빌드 없음). 실행: 저장소 루트에서 `python3 -m http.server 8765` → `http://localhost:8765/#ep01v3`.

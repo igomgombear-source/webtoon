@@ -9,6 +9,7 @@
  *   id          그림 폴더 이름 (assets/characters/<id>/, data/characters.js 의 '<id>/…')
  *   height      키 (cm)
  *   age         나이 (확정된 경우만)
+ *   gender      성별 (확정된 경우만)
  *   build       체형
  *   hair        머리
  *   eyes        눈
@@ -23,13 +24,13 @@ window.WEBTOON = window.WEBTOON || { episodeData: {} };
 WEBTOON.cast = {
   gihun: {
     name: '최기훈', id: 'gihun',
-    height: 185, build: '마른 체형', hair: '스포츠머리', eyes: '작은 눈', glasses: false,
-    confirmed: '2026-11-11 사용자 확정'
+    height: 185, age: '40대', gender: '남성', build: '마른 체형', hair: '스포츠머리', eyes: '작은 눈', glasses: false,
+    confirmed: '2026-11-11 사용자 확정 (키·외형). 2026-11-21 사용자 확정 (40대 남성)'
   },
   jinseok: {
     name: '서진석', id: 'jinseok',
-    height: 175, age: '50대', glasses: true,
-    confirmed: '2026-11-11 사용자 확정'
+    height: 175, age: '40대', gender: '남성', glasses: true,
+    confirmed: '2026-11-11 사용자 확정 (키·안경). 2026-11-21 사용자 확정 (40대 남성, 이전 50대 표기 정정)'
   },
   hyoeun: {
     name: '임효은', id: 'hyoeun',

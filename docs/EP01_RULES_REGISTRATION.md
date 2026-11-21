@@ -39,3 +39,16 @@ ChatGPT Work에서 원화를 만들 때는 결과물을 저장소에 바로 넣�
    ```
    나중에 그 브랜치를 기준 브랜치에 병합해도 같은 내용의 같은 파일이라 충돌하지 않는다. 규칙이 바뀌었다면 위 `checkout` 한 줄을 다시 실행한다.
 3. **ChatGPT Work·Claude 프로젝트**: 규칙 문서를 새 버전으로 다시 첨부한다.
+
+## 적용 기록 (2026-11-21, 사용자 승인) — 다시 하지 말 것
+
+이 반영 작업은 끝났다. 다른 에이전트는 같은 병합이나 파일 가져오기를 반복하지 않는다. 규칙 문서가 바뀌었을 때만 아래 방법으로 다시 반영한다.
+
+| 브랜치 | 반영 방식 | 범위 |
+|---|---|---|
+| `ep01-redesign-v3` | `ep01-production-rules` 빨리감기 병합 + 정정 커밋 | 문서 4개 추가. 서진석 50대 → 40대 남성(`data/cast.js`, `docs/EP01_ART_QA.md`, `docs/EP01_V3_ART_PRODUCTION_LIST.md`·`.csv`), 최기훈 40대 남성 기록(`data/cast.js`). 다른 코드·원화·말풍선 변경 없음 |
+| `ep01-phone-ui-refactor` | 병합하지 않고 **문서 4개 파일만** 가져와 커밋 | `CLAUDE.md`, `AGENTS.md`, `docs/EP01_PRODUCTION_RULES.md`, `docs/EP01_RULES_REGISTRATION.md`. 휴대폰 UI 변경분은 그대로. `data/cast.js` 정정은 나중에 기준 브랜치와 합칠 때 들어온다 |
+| `compose-system`, `ep01-cut19-seungmin-compose`, `ep01-device-qa`, `ep01-full-direction`, `ep01-qa-automation` | 반영 안 함 | 이미 `ep01-redesign-v3`에 모두 포함된 종료 브랜치 |
+| `main`, `gh-pages` | 반영 안 함 | 변경·배포 금지 |
+
+기존 SVG 원화(2·8·10·17·19(다)·87·89컷 등)는 Work 교체 원화가 확정될 때까지 그대로 둔다.
