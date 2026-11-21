@@ -103,20 +103,16 @@
     if (JSON.stringify(clk.map(function (c) { return c.no; })) !== '[23,57]') add(res, 'fail', 'clock.cuts', w, 0, '벽시계 바늘이 있는 컷 ' + JSON.stringify(clk.map(function (c) { return c.no; })) + ' (기대 [23,57])');
     /* 같은 컷에 원화 합성 휴대폰 UI(.scr)와 말풍선 엔진의 임시 문자 화면(.bv4-screen)이 함께 있으면 두 번 보인다 */
     [].forEach.call(d.querySelectorAll('.cut'), function (c) { if (c.querySelector('.scr') && c.querySelector('.bv4-screen')) add(res, 'fail', 'screen.dup', w, +c.dataset.no, '휴대폰 문자 UI 가 두 겹(합성 UI + 임시 화면)'); });
-    /* 83컷 확대 읽기 카드: 원문 전체·글자 13px 이상·360px 에서 3~4줄·첫 줄에 첫 문장·원화와 안 겹침·aria-hidden(중복 낭독 방지)·잘림 없음 */
-    var rd = d.querySelector('.cut[data-no="83"] .scr-read'), rm = rd && rd.querySelector('.rc-msg');
-    if (!rm) add(res, 'fail', 'read83.missing', w, 83, '83컷 확대 읽기 카드가 없음');
-    else {
+    /* 83컷: 확대 읽기 카드는 휴대폰 화면과 같은 문장을 두 번 보여 줘 제거(2026-11-21 검수 판정). 대신 휴대폰 화면 속 해인 답장이
+     * 원문 전체·실제 화면에서 13px 이상으로 읽혀야 한다(가상 화면 글자 크기 × 화면 축척) */
+    if (d.querySelector('.cut[data-no="83"] .scr-read')) add(res, 'fail', 'read83.dup', w, 83, '83컷에 중복 읽기 카드가 다시 생김');
+    var t83 = d.querySelectorAll('.cut[data-no="83"] .scr .su-b.them p'), u83 = d.querySelector('.cut[data-no="83"] .scr-ui');
+    if (t83.length && u83) {
       var full = '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 휴직도 생각 중이에요. 걱정해 주셔서 감사해요.';
-      if (rm.textContent.replace(/\u00a0/g, ' ') !== full) add(res, 'fail', 'read83.text', w, 83, '확대 카드 문장이 원문과 다름');
-      if (parseFloat(win.getComputedStyle(rm).fontSize) < 13) add(res, 'fail', 'read83.font', w, 83, '확대 카드 글자 ' + win.getComputedStyle(rm).fontSize + ' < 13px');
-      if (rd.getAttribute('aria-hidden') !== 'true') add(res, 'fail', 'read83.aria', w, 83, '확대 카드가 읽기 프로그램에 노출(중복 낭독)');
-      if (rect(rd).top < rect(d.querySelector('.cut[data-no="83"] .art')).bottom - 1) add(res, 'fail', 'read83.cover', w, 83, '확대 카드가 원화를 덮음');
-      if (rm.scrollWidth > rm.clientWidth + 1 || rm.scrollHeight > rm.clientHeight + 1) add(res, 'fail', 'read83.clip', w, 83, '확대 카드 글자 잘림');
-      var rn = rm.firstChild, rr2 = d.createRange(), lines83 = [''], tp83 = null;
-      for (var q = 0; rn && q < rn.length; q++) { rr2.setStart(rn, q); rr2.setEnd(rn, q + 1); var bx2 = rr2.getClientRects()[0]; if (!bx2) continue; if (tp83 !== null && Math.abs(bx2.top - tp83) > bx2.height * 0.6) lines83.push(''); tp83 = bx2.top; lines83[lines83.length - 1] += rn.data[q]; }
-      if (lines83[0].replace(/\u00a0/g, ' ').indexOf('승민쌤, 저 해인이에요.') !== 0) add(res, 'fail', 'read83.first', w, 83, '확대 카드 첫 줄: ' + lines83[0]);
-      if (w === 360 && (lines83.length < 3 || lines83.length > 4)) add(res, 'fail', 'read83.lines', w, 83, '360px 에서 ' + lines83.length + '줄 (3~4줄이어야 함)');
+      var tm = t83[t83.length - 1];
+      if (tm.textContent !== full) add(res, 'fail', 'read83.text', w, 83, '83컷 휴대폰 화면 문장이 원문과 다름');
+      var eff = parseFloat(win.getComputedStyle(tm).fontSize) * u83.getBoundingClientRect().width / 300;
+      if (eff < 13 - 0.05) add(res, 'fail', 'read83.font', w, 83, '83컷 휴대폰 화면 글자 ' + eff.toFixed(1) + 'px < 13px');
     }
     /* 83컷 합성 UI: 해인 답장 첫 문장이 첫 줄에 온전히 있어야 함 */
     var p83 = d.querySelectorAll('.cut[data-no="83"] .scr .su-b.them p'), m83 = p83[p83.length - 1];
@@ -223,6 +219,14 @@
       [['.su-b-l1, .su-b-l2, .su-b p, .su-name, .su-cname, .su-field', 12.5], ['.su-b-top, .su-time', 9]].forEach(function (g) {
         [].forEach.call(bx.querySelectorAll(g[0]), function (el) { var fs = parseFloat(win.getComputedStyle(el).fontSize); if (fs < g[1] * u - 0.3) add(res, 'fail', 'zoom.font', w, n, '확대 인셋 글자 ' + fs.toFixed(1) + 'px < ' + (g[1] * u).toFixed(1)); });
       });
+      /* 모든 폭(320~768)에서 글자가 있는 요소의 렌더링 글자 크기는 절대값 13px 이상 — 위 검사는 폭 비례(u)라 좁은 화면에서 13px 아래를 허용했다 */
+      [].forEach.call(bx.querySelectorAll('*'), function (el) {
+        var own = [].some.call(el.childNodes, function (c) { return c.nodeType === 3 && c.textContent.trim(); });
+        if (!own) return;
+        var f13 = parseFloat(win.getComputedStyle(el).fontSize);
+        if (f13 < 13 - 0.05) add(res, 'fail', 'zoom.font13', w, n, '확대 인셋 글자 ' + f13.toFixed(1) + 'px < 13px: ' + el.textContent.trim().slice(0, 12));
+      });
+      if (bx.scrollHeight > bx.clientHeight + 1 || bx.scrollWidth > bx.clientWidth + 1) add(res, 'fail', 'zoom.clip', w, n, '확대 인셋 안 내용이 잘림(넘침)');
       /* 실제 폰 화면(quad)을 가리지 않고, 말풍선과 겹치지 않는다 */
       var qd = zw.getAttribute('data-quad').split(' ').map(function (s) { var a = s.split(','); return [pr.left + parseFloat(a[0]) * pr.width, pr.top + parseFloat(a[1]) * pr.height]; });
       var qx = qd.map(function (p) { return p[0]; }), qy = qd.map(function (p) { return p[1]; });

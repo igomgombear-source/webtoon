@@ -14,14 +14,16 @@
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  /* 상태 표시줄(iPhone 17): 시각 · Dynamic Island · 신호·와이파이·배터리. 모양은 css/phone-system.css 에서 공통으로 정한다 */
   function status(t) {
-    return '<div class="su-status"><span class="su-clock">' + esc(t || '') + '</span><span class="su-ic" aria-hidden="true"><i></i><i></i><i class="bat"></i></span></div>';
+    return '<div class="su-status"><span class="su-clock">' + esc(t || '') + '</span><span class="su-island" aria-hidden="true"></span>' +
+      '<span class="su-ic" aria-hidden="true"><i class="su-sig"><b></b><b></b><b></b><b></b></i><i class="su-wifi"></i><i class="su-batt"></i></span></div>';
   }
-  function dim(t) { return '<span class="su-dim">' + esc(t) + '</span>'; }
+  function dim(t) { return esc(t); }   /* 예전 흐림 처리(su-dim) 제거 */
   function bubble(m, spec) {
-    var cls = 'su-b ' + (m.from === 'me' ? 'me' : 'them') + (m.blur ? ' is-blur' : '');
+    var cls = 'su-b ' + (m.from === 'me' ? 'me' : 'them');   /* 흐림(blur)·모자이크는 쓰지 않는다 — 대본 문장은 그대로 보인다 */
     var body = m.parts
-      ? m.parts.map(function (p) { return p.focus ? '<mark>' + esc(p.t) + '</mark>' : (p.dim ? dim(p.t) : esc(p.t)); }).join('')
+      ? m.parts.map(function (p) { return p.focus ? '<span class="su-focus">' + esc(p.t) + '</span>' : (p.dim ? dim(p.t) : esc(p.t)); }).join('')   /* 강조 문장도 형광펜 없이 같은 글자로(실제 메시지 화면처럼) */
       : esc(m.text);
     return '<div class="su-brow ' + (m.from === 'me' ? 'me' : 'them') + '"><div class="' + cls + '"><p>' + body + '</p></div>' +
       (m.time ? '<span class="su-time">' + esc(m.time) + '</span>' : '') + '</div>';
@@ -123,7 +125,7 @@
     },
     /* 52 — 화면 꺼짐(옆 버튼을 누른 뒤): 검은 유리 */
     off: function () { return '<div class="su-offglass"></div>'; },
-    /* U13 — 수신: 미저장 번호 + 발신자 정보 */
+    /* U13 — 수신: 미저장 번호 + 발신자 정보. 잠금 상태 수신이라 '밀어서 받기'만 있다(빨간 거절 버튼 없음) */
     incoming: function (s) {
       var head = status(s.clock) + '<div class="su-call"><p class="su-cl">' + esc(s.label) + '</p><p class="su-num">' + esc(s.number).replace(/○/g, '<i class="m"></i>') + '</p><p class="su-info">' + esc(s.info) + '</p></div>';
       /* slide:{cx,cy} — 손잡이 중심(가상 화면 가로 300 기준 px). 94컷: 받기 전(a)·밀어서 받는 중(b)의 엄지 끝 위치에 손잡이를 맞춘다 */
@@ -131,10 +133,10 @@
         var cx = +s.slide.cx, cy = +s.slide.cy;
         var sp = Math.max(0, cx - (s.slide.start == null ? cx : +s.slide.start));   /* 시작 위치에서 밀린 거리(px) → 지나온 길을 옅은 초록으로 채움 */
         return head + '<div class="su-slide is-abs" style="--sx:' + cx + 'px;--sy:' + cy + 'px;--st:' + (s.slide.start == null ? cx : +s.slide.start) + 'px;--sp:' + sp + 'px;">' +
-          '<span class="su-decl" aria-hidden="true"></span><div class="su-track"><span class="su-fill"></span><span class="su-acc">' + esc(s.accept) + '</span></div><span class="su-knob" aria-hidden="true"></span></div>';
+          '<div class="su-track"><span class="su-fill"></span><span class="su-acc">' + esc(s.accept) + '</span></div><span class="su-knob" aria-hidden="true"></span></div>';
       }
       return head +
-        '<div class="su-slide"><span class="su-decl" aria-hidden="true"></span><div class="su-track"><span class="su-knob" style="left:' + (s.knob || 0) + '%"></span><span class="su-acc">' + esc(s.accept) + '</span></div></div>';
+        '<div class="su-slide"><div class="su-track"><span class="su-knob" style="left:' + (s.knob || 0) + '%"></span><span class="su-acc">' + esc(s.accept) + '</span></div></div>';
     }
   };
 
@@ -156,7 +158,7 @@
       wall = 'background-image:url(' + esc(ph.src) + ');background-repeat:no-repeat;background-size:' + (ph.w * k).toFixed(2) + 'px ' + (ph.h * k).toFixed(2) + 'px;background-position:' + (-ph.x * k).toFixed(2) + 'px ' + (-ph.y * k).toFixed(2) + 'px;';
     }
     return '<div class="scr" role="img" aria-label="' + esc(label(spec)) + '" data-quad="' + q + '" data-aspect="' + spec.aspect + '" style="clip-path:polygon(' + poly + ');">' +
-      '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>' +
+      '<div class="scr-ui su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + (spec.tint ? ' is-tint' : '') + '" style="font-size:' + (spec.fs || 18) + 'px;' + (spec.bubbleMax ? '--su-bmax:' + (+spec.bubbleMax) + '%;' : '') + wall + '" aria-hidden="true">' + fn(spec) + '</div></div>' +
       buildFg(spec, poly) + buildClock(spec);
   }
 
@@ -232,7 +234,7 @@
     var wall = z.parts === 'notif' && spec.wall ? 'background-image:url(' + esc(spec.wall) + ');' : '';
     return '<div class="scr-zoom" aria-hidden="true" data-quad="' + q + '" style="--zx:' + (+z.x) + ';--zy:' + (+z.y) + ';--zw:' + (+z.w) + ';--zfs:' + (+z.fs || 14) + ';">' +
       '<svg class="scr-zoom-ln" aria-hidden="true"></svg>' +
-      '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + (z.focusOnly ? ' zf' : '') + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
+      '<div class="zoom-box su-' + (spec.theme === 'light' ? 'light' : 'dark') + ' su-v-' + spec.view + ' zp-' + z.parts + (z.focusOnly ? ' zf' : '') + (z.frame === false ? ' zn' : '') + '" style="' + wall + '">' + ZOOM[z.parts](spec) + '</div></div>';
   }
 
   /* 확대 읽기 카드(readout) — 83컷처럼 휴대폰이 컷을 거의 채워 위에 얹을 자리가 없을 때, 같은 문자 한 통을 컷 '아래' 흐름에 평면으로 크게 보여 준다.
@@ -299,11 +301,11 @@
       var px = Math.max(bx, Math.min(bx + bw, v[0])), py = Math.max(by, Math.min(by + bh, v[1])), d = Math.hypot(v[0] - px, v[1] - py);
       if (!best || d < best.d) best = { d: d, v: v, p: [px, py] };
     });
-    var u = Math.max(1, w / 360), pts = q.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    var u = Math.max(1, w / 360);
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    svg.innerHTML = '<polygon points="' + pts + '" fill="none" stroke="rgba(246,248,252,.88)" stroke-width="' + (1.4 * u).toFixed(2) + '" stroke-linejoin="round"/>' +
-      '<line x1="' + best.p[0].toFixed(1) + '" y1="' + best.p[1].toFixed(1) + '" x2="' + best.v[0].toFixed(1) + '" y2="' + best.v[1].toFixed(1) + '" stroke="rgba(246,248,252,.8)" stroke-width="' + (1.1 * u).toFixed(2) + '" stroke-linecap="round"/>' +
-      '<circle cx="' + best.v[0].toFixed(1) + '" cy="' + best.v[1].toFixed(1) + '" r="' + (2.2 * u).toFixed(2) + '" fill="rgba(246,248,252,.95)"/>';
+    /* 2026-11-21 최종 검수: 실제 폰 화면 둘레의 흰 윤곽선(polygon)·모서리 흰 점(circle)은 흰 베젤처럼 보여 제거.
+     * 확대 위치 안내는 인셋 → 가장 가까운 화면 모서리로 가는 가는 반투명 선 하나만 남긴다(원화의 폰·손가락 윤곽은 그대로). */
+    svg.innerHTML = '<line x1="' + best.p[0].toFixed(1) + '" y1="' + best.p[1].toFixed(1) + '" x2="' + best.v[0].toFixed(1) + '" y2="' + best.v[1].toFixed(1) + '" stroke="rgba(246,248,252,.5)" stroke-width="' + (0.9 * u).toFixed(2) + '" stroke-linecap="round"/>';
     zw.classList.add('is-fit');
   }
 

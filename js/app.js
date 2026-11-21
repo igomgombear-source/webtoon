@@ -205,7 +205,7 @@
     '</div>';
   }
 
-  function renderPhone(cut) {
+  function renderPhone(cut, v3) {
     var p = cut.phone || {};
     var owner = p.owner === 'haein' ? 'haein' : 'seungmin';
     var t = (cut.datetime && cut.datetime.time) || p.clock || '';
@@ -278,7 +278,7 @@
 
     var label = owner === 'haein' ? '해인의 휴대폰' : '승민의 휴대폰';
     /* 화면 속 문자·메일 글자를 화면 읽기 프로그램이 읽을 수 있도록 role="img" 를 쓰지 않는다 */
-    return '<figure class="phone-wrap"><div class="phone phone-' + owner + ' view-' + esc(p.view || 'none') + (p.focus ? ' is-focus' : '') + '">' +
+    return '<figure class="phone-wrap"><div class="phone phone-' + owner + ' view-' + esc(p.view || 'none') + (p.focus ? ' is-focus' : '') + (v3 ? ' phone-v3' : '') + '">' +   /* phone-v3: 104컷판 휴대폰 디자인 시스템(css/phone-system.css), 70컷판은 그대로 */
       '<div class="phone-screen' + (p.wall ? ' has-wall' : '') + '"' +
         (p.wall ? ' style="background-image:url(' + esc(p.wall) + ')"' : '') + '>' + inner + '</div></div>' +
       '<figcaption class="phone-owner">' + label + '</figcaption></figure>';
@@ -415,13 +415,13 @@
     if (cut.type === 'black') {
       body = '<div class="black-cut' + (ep.layout === 'v3' ? ' is-serif' : '') + '"><p>' + esc(cut.text) + '</p></div>';   /* is-serif: 제작기준 v2 의 Noto Serif KR (v3 판만, 70컷 화면은 그대로) */
     } else if (cut.type === 'phone') {
-      body = renderPhone(cut) + renderLines(ep, cut).below;
+      body = renderPhone(cut, ep.layout === 'v3') + renderLines(ep, cut).below;
     } else if (ep.layout === 'v3') {
       var ls = cut.lines || [];
       if (cut.phonePreview && cut.phone) {
         /* 원화가 연결된 컷(63): 원화 아래에 임시 휴대폰 UI 를 둔다. 원화 속 휴대폰 화면에 최종 합성하기 전까지의 임시 상태 */
         var artAbove = cut.image ? renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, []) : '';
-        body = artAbove + '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기(임시)</p>' : '') + renderPhone(cut) + '</div>' + renderGapLines(ep, ls);
+        body = artAbove + '<div class="phone-preview">' + (REVIEW ? '<p class="pp-note">#' + pad2(cut.no) + ' · 원화 합성 전 · 휴대폰 UI 미리보기(임시)</p>' : '') + renderPhone(cut, true) + '</div>' + renderGapLines(ep, ls);
       } else {
         var scr0 = W.screenUi && W.screenUi.buildReadout ? screenFor(ep, cut, 0) : null;   /* 83컷: 휴대폰 문자 확대 읽기 카드(컷 아래 흐름) */
         body = renderAboveLines(ep, ls) + renderPanelsV3(ep, cut, ls) + (scr0 ? W.screenUi.buildReadout(scr0) : '') + renderGapLines(ep, ls);
