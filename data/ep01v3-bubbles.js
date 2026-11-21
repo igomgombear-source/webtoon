@@ -210,6 +210,16 @@ window.EP01V3_BUBBLES = {
     ],
     lines: []
   },
+  90: {
+    note: '분할2 · 오른쪽 b 휴대폰 아래쪽 입력창(쓰다 지운 문장)이 독백에 가려지던 것 → 독백 두 개를 정본(gap)대로 각 조각 아래 여백으로 (2026-11-21)',
+    zones: [
+      { panel: 1, x: 30, y: 0, w: 70, h: 100, label: '휴대폰 화면·입력창', approved: true }
+    ],
+    lines: [
+      { type: 'mono', pref: { panel: 0, x: 50, y: 100 }, region: 'panel', place: 'below' },
+      { type: 'mono', pref: { panel: 1, x: 50, y: 100 }, region: 'panel', place: 'below' }
+    ]
+  },
   93: {
     note: '마감 원화(놀라 눈을 크게 뜬 옆얼굴, 집중선) — 얼굴 보호, 독백 두 개는 정본(gap)대로 컷 아래 (2026-11-18)',
     zones: [
