@@ -301,11 +301,11 @@
       var px = Math.max(bx, Math.min(bx + bw, v[0])), py = Math.max(by, Math.min(by + bh, v[1])), d = Math.hypot(v[0] - px, v[1] - py);
       if (!best || d < best.d) best = { d: d, v: v, p: [px, py] };
     });
-    var u = Math.max(1, w / 360), pts = q.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    var u = Math.max(1, w / 360);
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    svg.innerHTML = '<polygon points="' + pts + '" fill="none" stroke="rgba(246,248,252,.88)" stroke-width="' + (1.4 * u).toFixed(2) + '" stroke-linejoin="round"/>' +
-      '<line x1="' + best.p[0].toFixed(1) + '" y1="' + best.p[1].toFixed(1) + '" x2="' + best.v[0].toFixed(1) + '" y2="' + best.v[1].toFixed(1) + '" stroke="rgba(246,248,252,.8)" stroke-width="' + (1.1 * u).toFixed(2) + '" stroke-linecap="round"/>' +
-      '<circle cx="' + best.v[0].toFixed(1) + '" cy="' + best.v[1].toFixed(1) + '" r="' + (2.2 * u).toFixed(2) + '" fill="rgba(246,248,252,.95)"/>';
+    /* 2026-11-21 최종 검수: 실제 폰 화면 둘레의 흰 윤곽선(polygon)·모서리 흰 점(circle)은 흰 베젤처럼 보여 제거.
+     * 확대 위치 안내는 인셋 → 가장 가까운 화면 모서리로 가는 가는 반투명 선 하나만 남긴다(원화의 폰·손가락 윤곽은 그대로). */
+    svg.innerHTML = '<line x1="' + best.p[0].toFixed(1) + '" y1="' + best.p[1].toFixed(1) + '" x2="' + best.v[0].toFixed(1) + '" y2="' + best.v[1].toFixed(1) + '" stroke="rgba(246,248,252,.5)" stroke-width="' + (0.9 * u).toFixed(2) + '" stroke-linecap="round"/>';
     zw.classList.add('is-fit');
   }
 
