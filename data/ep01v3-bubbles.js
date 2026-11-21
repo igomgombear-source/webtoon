@@ -44,15 +44,9 @@ window.EP01V3_BUBBLES = {
     ]
   },
   17: {
-    note: '마감 원화(화이트보드 앞 최기훈 3/4 뒷모습, 전경 승민 뒷머리) — 공지는 보드 오른쪽 위 벽 쪽, 꼬리는 최기훈 머리. 화면 밖 교사들의 답은 작게 경계-하-좌 (2026-11-18)',
-    zones: [
-      { panel: 0, x: 22, y: 10, w: 56, h: 36, label: '화이트보드 공지', approved: true },
-      { panel: 0, x: 54, y: 24, w: 26, h: 76, label: '최기훈', approved: true }
-    ],
-    lines: [
-      { type: 'speech', pref: { panel: 0, x: 88, y: 12 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 74, y: 34 } },
-      { type: 'offscreen', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, tail: { panel: 0, x: 30, y: 80 } }
-    ]
+    note: '연출 변경(2026-11-21, 사용자 승인): 승민 모니터의 교직원 메신저 공지. 공지 문구는 승인 원화 안에 있으므로 말풍선 없음, 교사 응답도 삭제. 예전 최기훈 직접 공지 배치(화이트보드·최기훈 보호 영역)는 폐기',
+    zones: [],
+    lines: []
   },
   33: {
     note: '위 1컷 + 아래 사선 2분할 · 제작기준 v2의 \'각 조각 안쪽\'을 우선(사용자 지시), 자리가 정말 없을 때만 여백 띠 · 최대 2줄 · 배치 미승인, 원화가 오면 원화와 말풍선 공간을 함께 조정',
