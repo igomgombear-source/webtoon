@@ -107,7 +107,7 @@
  * 크기·글자·테두리는 --u(폭/360) 단위 → 360px 에서 768px 까지 비율이 같다. 말풍선 층(z 4) 아래, 원화 위. */
 .scr-zoom { position: absolute; inset: 0; z-index: 3; pointer-events: none; visibility: hidden; }
 .scr-zoom.is-fit { visibility: visible; }
-.scr-zoom-ln { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, .65)); }
+.scr-zoom-ln { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 1px rgba(0, 0, 0, .4)); }
 .zoom-box { position: absolute; left: calc(var(--zx) * 1%); top: calc(var(--zy) * 1%); width: calc(var(--zw) * 1%); box-sizing: border-box; overflow: hidden;
   font-size: calc(var(--zfs, 14) * var(--u)); line-height: 1.35; word-break: keep-all; overflow-wrap: break-word;
   border-radius: calc(10 * var(--u)); border: calc(1.5 * var(--u)) solid rgba(246, 248, 252, .92); box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(0, 0, 0, .55); }
