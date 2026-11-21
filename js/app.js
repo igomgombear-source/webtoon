@@ -130,6 +130,19 @@
 
   var KIND_NOTE = { key: '핵심 컷', compose: '조립 컷' };
 
+  /* 원화의 좌표에 맞춰 소품 글자를 별도 웹 텍스트로 얹는다. */
+  var ART_LETTERING = {
+    plaque: 'font-family="Noto Serif KR, Noto Serif CJK KR, serif" font-weight="600" fill="#d6b16f" writing-mode="vertical-rl" text-orientation="upright"',
+    chalk: 'font-family="Noto Serif CJK KR, Noto Serif KR, serif" font-weight="600" fill="#efead6" letter-spacing="13"',
+    clock: 'font-family="monospace" font-weight="600" fill="#b7dfc1"'
+  };
+
+  function renderArtLettering(label, size) {
+    if (!label || !size.w || !size.h || !ART_LETTERING[label.kind]) return '';
+    return '<svg class="art-lettering" viewBox="0 0 ' + (+size.w) + ' ' + (+size.h) + '" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" role="img" aria-label="' + esc(label.text) + '">' +
+      '<text x="' + (+label.x) + '" y="' + (+label.y) + '" font-size="' + (+label.size) + '" text-anchor="' + (label.kind === 'plaque' ? 'start' : 'middle') + '" ' + ART_LETTERING[label.kind] + '>' + esc(label.text) + '</text></svg>';
+  }
+
   /* 그림 영역 우선순위
    *   1) image            완성 컷 한 장
    *   2) compose.export   (useExportedCuts 일 때) 미리 합성해 둔 완성 컷. 못 불러오면 3)으로
@@ -160,6 +173,7 @@
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
           ' loading="lazy" decoding="async">' +
+        renderArtLettering(cut.artLettering, z) +
         (cut.screen && W.screenUi ? W.screenUi.build(cut.screen) : '') +
         (REVIEW && cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
         time + overlayHtml + '</div>';
@@ -371,7 +385,7 @@
         first = false;
         var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus, imageLqip: p.imageLqip,
           ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt,
-          screen: screenFor(ep, cut, idx) };
+          screen: screenFor(ep, cut, idx), artLettering: cut.rows ? p.artLettering : cut.artLettering };
         var diag = cut.diagonal && row.length > 1 ? ' diag-' + (pi === 0 ? 'first' : 'last') : '';
         var me = idx++;
         return '<div class="panel' + diag + '" data-panel="' + me + '" style="flex:' + Math.round(ratioVal(p.ratio || cut.ratio) * 1000) + ' 1 0%;">' +
