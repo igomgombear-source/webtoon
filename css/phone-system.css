@@ -128,3 +128,27 @@
   background: linear-gradient(125deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, 0) 28%); }
 .phone.phone-v3.phone-haein::before, .phone.phone-v3.phone-haein::after { background: linear-gradient(90deg, #9d8ec3, #cfc4e8); }
 .phone.phone-v3.phone-seungmin::before, .phone.phone-v3.phone-seungmin::after { background: linear-gradient(90deg, #1a1a1d, #3a3a3e); }
+
+/* 확대 인셋 최소 글자 13px — 폭 360 기준 비율(--u)은 그대로 두고, 좁은 화면(320px 등)에서만 13px 아래로 내려가지 않게 바닥을 둔다.
+ * 글자가 있는 끝 요소마다 max(13px, 원래 비율em). 부모 크기는 건드리지 않아 중첩 em 이 겹쳐 커지지 않는다. QA: tools/qa/v3.js 'zoom.font13' */
+.zoom-box .su-b p { font-size: max(13px, 1em); }
+.zoom-box .su-b-l1 { font-size: max(13px, .9em); }
+.zoom-box .su-b-l2 { font-size: max(13px, .85em); }
+.zoom-box.zp-banner .su-b-l1 { font-size: max(13px, 1em); }
+.zoom-box.zp-banner .su-b-l2 { font-size: max(13px, .92em); }
+.zoom-box .su-name { font-size: max(13px, .95em); }
+.zoom-box .su-zc .su-cname { font-size: max(13px, 1em); }
+.zoom-box .su-field { font-size: max(13px, 1em); }
+.zoom-box .su-b-top { font-size: max(13px, .72em); }
+.zoom-box .su-time { font-size: max(13px, .72em); }
+.zoom-box .su-zc .su-acts .act { font-size: max(13px, .78em); }
+.zoom-box .su-back { font-size: max(13px, 1em); }
+/* 연락처 인셋(59·60): 13px 글자에서 통화·문자 버튼이 한 줄에 안 들어가면 두 줄로 쌓는다(잘림 방지) */
+.zoom-box .su-zc .su-acts { flex-wrap: wrap; justify-content: center; }
+/* 13px 바닥으로 늘어난 인셋 높이를 줄여 실제 폰 화면을 가리지 않게: 알림·입력 카드 안팎 여백만 조인다(글자·내용은 그대로) */
+.zoom-box.zp-notif .su-notifs, .zoom-box.zp-banner .su-notifs { padding: .1em 0 .15em; }
+.zoom-box.zp-notif .su-notif, .zoom-box.zp-banner .su-notif { margin: .1em .3em; padding: .3em .6em; }
+.zoom-box.zp-notif .su-b-l1, .zoom-box.zp-notif .su-b-l2, .zoom-box.zp-banner .su-b-l1, .zoom-box.zp-banner .su-b-l2, .zoom-box.zp-notif .su-b-top, .zoom-box.zp-banner .su-b-top { line-height: 1.28; }
+.zoom-box.zp-compose .su-head { padding: .3em .55em; }
+.zoom-box.zp-compose .su-input { padding: .35em .5em .4em; }
+.zoom-box.zp-notif .su-b-top, .zoom-box.zp-banner .su-b-top { margin-bottom: .1em; }

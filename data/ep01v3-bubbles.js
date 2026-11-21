@@ -210,6 +210,17 @@ window.EP01V3_BUBBLES = {
     ],
     lines: []
   },
+  85: {
+    note: 'DRAFT 원화(소파에서 휴대폰을 보는 해인, 얼굴 오른쪽·휴대폰·손 왼쪽 아래) — 독백 두 개를 정본(gap)대로 컷 아래 여백으로. 예전 자동 배치는 첫 독백이 턱·손·휴대폰 아래를 덮었음 (2026-11-21)',
+    zones: [
+      { panel: 0, x: 50, y: 20, w: 40, h: 50, label: '해인 얼굴·턱', approved: true },
+      { panel: 0, x: 22, y: 44, w: 42, h: 56, label: '휴대폰·손', approved: true }
+    ],
+    lines: [
+      { type: 'mono', pref: { panel: 0, x: 50, y: 100 }, region: 'panel', place: 'below' },
+      { type: 'mono', pref: { panel: 0, x: 50, y: 100 }, region: 'panel', place: 'below' }
+    ]
+  },
   90: {
     note: '분할2 · 오른쪽 b 휴대폰 아래쪽 입력창(쓰다 지운 문장)이 독백에 가려지던 것 → 독백 두 개를 정본(gap)대로 각 조각 아래 여백으로 (2026-11-21)',
     zones: [

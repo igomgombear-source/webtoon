@@ -219,6 +219,14 @@
       [['.su-b-l1, .su-b-l2, .su-b p, .su-name, .su-cname, .su-field', 12.5], ['.su-b-top, .su-time', 9]].forEach(function (g) {
         [].forEach.call(bx.querySelectorAll(g[0]), function (el) { var fs = parseFloat(win.getComputedStyle(el).fontSize); if (fs < g[1] * u - 0.3) add(res, 'fail', 'zoom.font', w, n, '확대 인셋 글자 ' + fs.toFixed(1) + 'px < ' + (g[1] * u).toFixed(1)); });
       });
+      /* 모든 폭(320~768)에서 글자가 있는 요소의 렌더링 글자 크기는 절대값 13px 이상 — 위 검사는 폭 비례(u)라 좁은 화면에서 13px 아래를 허용했다 */
+      [].forEach.call(bx.querySelectorAll('*'), function (el) {
+        var own = [].some.call(el.childNodes, function (c) { return c.nodeType === 3 && c.textContent.trim(); });
+        if (!own) return;
+        var f13 = parseFloat(win.getComputedStyle(el).fontSize);
+        if (f13 < 13 - 0.05) add(res, 'fail', 'zoom.font13', w, n, '확대 인셋 글자 ' + f13.toFixed(1) + 'px < 13px: ' + el.textContent.trim().slice(0, 12));
+      });
+      if (bx.scrollHeight > bx.clientHeight + 1 || bx.scrollWidth > bx.clientWidth + 1) add(res, 'fail', 'zoom.clip', w, n, '확대 인셋 안 내용이 잘림(넘침)');
       /* 실제 폰 화면(quad)을 가리지 않고, 말풍선과 겹치지 않는다 */
       var qd = zw.getAttribute('data-quad').split(' ').map(function (s) { var a = s.split(','); return [pr.left + parseFloat(a[0]) * pr.width, pr.top + parseFloat(a[1]) * pr.height]; });
       var qx = qd.map(function (p) { return p[0]; }), qy = qd.map(function (p) { return p[1]; });
