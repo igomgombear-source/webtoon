@@ -67,8 +67,10 @@
       /* 분할 컷 조각·그림 인셋도 같은 기준: 승인 목록, DRAFT 표시, 크기, 로드 전 미리보기 */
       (c.rows ? [].concat.apply([], c.rows) : []).forEach(function (pc, k) {
         if (!pc.image) return;
-        if (!/^ep01v3-[0-9a-z-]+-DRAFT\.webp$/i.test(pc.image)) add(res, 'fail', 'data.piece.image', 0, c.no, '조각 ' + k + ' 파일 이름 형식 ' + pc.image);
-        if (pc.imageStatus !== 'draft') add(res, 'fail', 'data.piece.draft', 0, c.no, '조각 ' + k + ' DRAFT 표시 없음');
+        /* 19-c 만 예외: 정확한 승인 파일명 + imageStatus 'approved' 가 모두 맞을 때(승인 원화, 사용자 승인 2026-11-21). 다른 조각·컷은 기존 -DRAFT·draft 기준 그대로 */
+        var okApproved19c = c.no === 19 && k === 2 && pc.image === 'ep01v3-019c-yangpyeong-school-night-APPROVED.webp' && pc.imageStatus === 'approved';
+        if (!okApproved19c && !/^ep01v3-[0-9a-z-]+-DRAFT\.webp$/i.test(pc.image)) add(res, 'fail', 'data.piece.image', 0, c.no, '조각 ' + k + ' 파일 이름 형식 ' + pc.image);
+        if (!okApproved19c && pc.imageStatus !== 'draft') add(res, 'fail', 'data.piece.draft', 0, c.no, '조각 ' + k + ' DRAFT 표시 없음');
         if (!pc.imageSize || !(pc.imageSize.w > 0 && pc.imageSize.h > 0)) add(res, 'fail', 'data.piece.size', 0, c.no, '조각 ' + k + ' imageSize 없음');
         if (!/^data:image\/webp;base64,/.test(pc.imageLqip || '')) add(res, 'fail', 'data.piece.lqip', 0, c.no, '조각 ' + k + ' imageLqip 없음');
       });
