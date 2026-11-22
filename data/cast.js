@@ -24,8 +24,10 @@ window.WEBTOON = window.WEBTOON || { episodeData: {} };
 WEBTOON.cast = {
   gihun: {
     name: '최기훈', id: 'gihun',
-    height: 185, age: '40대', gender: '남성', build: '마른 체형', hair: '스포츠머리', eyes: '작은 눈', glasses: false,
-    confirmed: '2026-11-11 사용자 확정 (키·외형). 2026-11-21 사용자 확정 (40대 남성)'
+    height: 185, age: '40대', gender: '남성', build: '마른 체형', hair: '짧은 스포츠머리', eyes: '작은 눈', glasses: false,
+    skin: '자연스러운 짙은 피부톤',
+    outfit: '검은색 계열 집업 트레이닝복 상·하의, 회색 운동화',
+    confirmed: '2026-11-22 사용자 지정 체육복 캐릭터 설정 시트 (키·체형·나이 유지)'
   },
   jinseok: {
     name: '서진석', id: 'jinseok',

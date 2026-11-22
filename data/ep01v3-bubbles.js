@@ -98,6 +98,16 @@ window.EP01V3_BUBBLES = {
       { type: 'speech', pref: { panel: 0, x: 62, y: 5 }, region: 'panel', tail: { panel: 0, x: 62, y: 14 } }
     ]
   },
+  43: {
+    note: '강당 입구에서 안내하는 승민. 컷 왼쪽 상단 경계에 배치하고 승민의 얼굴 쪽으로 꼬리를 낸다.',
+    zones: [
+      { panel: 0, x: 18, y: 22, w: 15, h: 28, label: '승민 얼굴·머리', approved: true },
+      { panel: 0, x: 41, y: 54, w: 8, h: 9, label: '입구를 가리키는 손', approved: true }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, at: 'edge-top-l' }, region: 'panel', edge: true, tailMax: 38, tail: { panel: 0, x: 31, y: 41 } }
+    ]
+  },
   45: {
     note: '승인 원화 REV1(DRAFT) — 발화자는 무대 중앙 앞줄의 손을 든 학생(손끝 원화 약 (527,312)). 말풍선은 그 학생 바로 아래(객석 빈 곳, 믹서 위)에 두고 꼬리가 위로 그 학생을 가리킴 — 위쪽은 뒷줄 얼굴 때문에 다른 학생을 가리키게 되고, 꼬리 길이는 엔진 상한이라 폭에 따라 위치가 달라지지 않는 아래쪽을 택함',
     status: 'provisional',
