@@ -1,5 +1,5 @@
 /* 마지막 접속 — 모바일 웹툰 뷰어
- * 라우팅: index.html (작품 메인) / index.html#ep01 (회차 감상)
+ * 라우팅: index.html (바로 시작 회차) / index.html#home (작품 메인) / index.html#ep01v3 (1화) / #ep02 (2화 공개 예정 안내)
  * 회차 데이터는 data/epNN.js 를 필요할 때 불러온다.
  */
 (function () {
@@ -121,14 +121,7 @@
     return who.length ? who[0] + ' 대사 컷' : '';
   }
 
-  /* 완성 컷을 단일 이미지로 쓸지: ep.useExportedCuts = true | false | 'mobile' */
-  function useExported(ep) {
-    var u = ep.useExportedCuts;
-    if (u === 'mobile') return !!(window.matchMedia && window.matchMedia('(max-width: 720px)').matches);
-    return u === true;
-  }
-
-  var KIND_NOTE = { key: '핵심 컷', compose: '조립 컷' };
+  var KIND_NOTE = { key: '핵심 컷' };
 
   /* 원화의 좌표에 맞춰 소품 글자를 별도 웹 텍스트로 얹는다. */
   var ART_LETTERING = {
@@ -145,8 +138,6 @@
 
   /* 그림 영역 우선순위
    *   1) image            완성 컷 한 장
-   *   2) compose.export   (useExportedCuts 일 때) 미리 합성해 둔 완성 컷. 못 불러오면 3)으로
-   *   3) compose          배경 + 투명 레이어를 화면에서 합성
    *   4) 임시 컷 */
   function renderArt(ep, cut, overlayHtml) {
     var time = cut.datetime && cut.datetime.time
@@ -176,27 +167,6 @@
         renderArtLettering(cut.artLettering, z) +
         (cut.screen && W.screenUi ? W.screenUi.build(cut.screen) : '') +
         (REVIEW && cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
-        time + overlayHtml + '</div>';
-    }
-
-    var c = cut.compose;
-    if (c && (c.bg || (c.layers && c.layers.length) || c.export)) {
-      var C = W.compose, size = C.canvasSize(cut);
-      var box = 'aspect-ratio:' + size.w + ' / ' + size.h + ';';
-      var live =
-        (c.bg ? '<img class="cmp-bg" src="' + esc(C.resolve(c.bg, ep.imageBase)) + '" alt="" loading="lazy" decoding="async">' : '') +
-        (c.layers || []).map(function (l) {
-          return '<img class="cmp-layer" src="' + esc(C.resolve(l.src, ep.imageBase)) + '" alt="" style="' + C.layerStyle(l, size) + '" loading="lazy" decoding="async">';
-        }).join('');
-      var exp = c.export && useExported(ep);
-      /* 그림 부분(cmp-visual)만 하나의 이미지로 읽히게 하고, 시각·대사는 그 밖에 두어 따로 읽힌다 */
-      var visualA11y = alt ? ' role="img" aria-label="' + alt + '"' : ' aria-hidden="true"';
-      return '<div class="art is-compose' + (exp ? ' use-export' : '') + '" style="' + box + '">' +
-        ph +
-        '<div class="cmp-visual"' + visualA11y + '>' +
-          (exp ? '<img class="cmp-export" src="' + esc(C.resolve(c.export, ep.imageBase)) + '" alt="" width="' + size.w + '" height="' + size.h + '" loading="lazy" decoding="async">' : '') +
-          '<div class="cmp-live">' + live + '</div>' +
-        '</div>' +
         time + overlayHtml + '</div>';
     }
 
@@ -454,10 +424,13 @@
   }
 
   /* ---------- 회차 화면 ---------- */
+  /* 회차 이동에서 누를 수 있는 회차: 공개된 회차 또는 '공개 예정' 안내 화면이 있는 회차 */
+  function isOpen(episode) { return !!(episode && (episode.ready || episode.comingSoon)); }
+
   function renderEpisodeStep(episode, label, icon) {
     var attrs = ' class="ep-nav-button" aria-label="' + label + '"';
     var content = '<span aria-hidden="true">' + icon + '</span>';
-    return episode && episode.ready
+    return episode && isOpen(episode)
       ? '<a href="#' + esc(episode.id) + '"' + attrs + '>' + content + '</a>'
       : '<button type="button" disabled' + attrs + '>' + content + '</button>';
   }
@@ -473,7 +446,7 @@
     var list = Array.from(episodes.values()).sort(function (a, b) { return b.no - a.no; })
       .map(function (episode) {
         var label = episode.no + '화';
-        var item = episode.ready
+        var item = isOpen(episode)
           ? '<a href="#' + esc(episode.id) + '"' + (episode === meta ? ' aria-current="page"' : '') + '>' + label + '</a>'
           : '<button type="button" disabled>' + label + '</button>';
         return '<li>' + item + '</li>';
@@ -566,42 +539,6 @@
       img.addEventListener('load', ok);
       img.addEventListener('error', fail);
     });
-
-    /* 조립 컷 로딩 상태
-     *  - export 모드: export 가 들어오면 표시. 실패하면 실시간 조립으로 바꾸고 상태를 다시 계산
-     *  - 실시간 조립: 배경이 들어오면 표시. 배경이 없는 컷(bg 미지정)은 레이어가 하나라도 들어오면 표시
-     *  - 없는 배경·레이어 파일은 조용히 뺀다 (배경 파일이 없으면 임시 컷을 남겨 빈 재료를 알 수 있게 함) */
-    Array.prototype.forEach.call(app.querySelectorAll('.art.is-compose'), function (box) {
-      var ex = box.querySelector('.cmp-export');
-      var bg = box.querySelector('.cmp-bg');
-      var st = { ex: ex ? 'wait' : 'none', bg: bg ? 'wait' : 'none', layers: 0 };
-
-      function update() {
-        var ok;
-        if (box.classList.contains('use-export')) ok = st.ex === 'ok';
-        else if (st.bg === 'ok') ok = true;
-        else if (st.bg === 'none') ok = st.layers > 0;
-        else ok = false;
-        box.classList.toggle('is-loaded', ok);
-      }
-      function watch(img, onOk, onBad) {
-        var done = false;
-        function ok() { if (done) return; done = true; onOk(); update(); }
-        function bad() { if (done) return; done = true; onBad(); update(); }
-        img.addEventListener('load', ok);
-        img.addEventListener('error', bad);
-        if (img.complete) { if (img.naturalWidth) ok(); else if (img.currentSrc) bad(); }
-      }
-
-      if (ex) watch(ex, function () { st.ex = 'ok'; }, function () {
-        st.ex = 'failed'; ex.remove(); box.classList.remove('use-export');   /* 실시간 조립으로 전환 */
-      });
-      if (bg) watch(bg, function () { st.bg = 'ok'; }, function () { st.bg = 'failed'; bg.remove(); });
-      Array.prototype.forEach.call(box.querySelectorAll('.cmp-layer'), function (l) {
-        watch(l, function () { st.layers++; }, function () { l.remove(); });
-      });
-      update();
-    });
   }
 
   /* 컷 등장 효과 */
@@ -659,6 +596,22 @@
       '</p><p><a class="home-start" href="#home">작품 메인으로</a></p></section></main>';
   }
 
+  /* ---------- 다음 화 안내 화면 ---------- */
+  /* 문구는 data/episodes.js 의 해당 회차 comingSoon { title, message, backLabel } 에서 바꾼다 */
+  function renderComingSoon(meta) {
+    var c = meta.comingSoon || {};
+    var title = c.title || (meta.no + '화');
+    var prev = W.series.episodes.filter(function (e) { return e.no === meta.no - 1 && e.ready; })[0];
+    document.title = title + ' · ' + W.series.title;
+    app.innerHTML =
+      '<main class="coming" id="viewer">' +
+        '<h1 class="cs-no" id="page-heading" tabindex="-1">' + esc(title) + '</h1>' +
+        '<p class="cs-msg">' + esc(c.message || '') + '</p>' +
+        (prev ? '<a class="cs-back" href="#' + esc(prev.id) + '">' + esc(c.backLabel || (prev.no + '화로 돌아가기')) + '</a>' : '') +
+      '</main>';
+    window.scrollTo(0, 0);
+  }
+
   /* ---------- 라우터 ---------- */
   /* 화면이 바뀌면 제목으로 초점을 옮겨, 화면 읽기 프로그램이 페이지 처음부터 읽게 한다 */
   var firstRoute = true;
@@ -673,8 +626,11 @@
     var id = (location.hash || '').replace('#', '');
     /* 해시가 없으면 초기 화면 없이 시작 회차(W.series.start)의 첫 컷부터 보여 준다. 주소만 바꾸므로 뒤로 가기가 되돌아오지 않는다. '#home' 은 작품 메인 */
     if (!id && W.series.start) { id = W.series.start; history.replaceState(null, '', '#' + id); }
+    /* 옛 주소(#ep01)는 정식판으로 연결한다 (W.series.aliases) */
+    if (W.series.aliases && W.series.aliases[id]) { id = W.series.aliases[id]; history.replaceState(null, '', '#' + id); }
     var meta = W.series.episodes.filter(function (e) { return e.id === id; })[0];
     if (!meta) { renderHome(); return focusHeading(); }
+    if (meta.comingSoon && !meta.ready) { renderComingSoon(meta); return focusHeading(); }
     if (!meta.ready) { renderError(meta.no + '화는 아직 준비 중입니다.'); return focusHeading(); }
     app.innerHTML = '<p class="loading" role="status">불러오는 중…</p>';
     loadEpisode(meta, function (err, ep) {

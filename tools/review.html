@@ -5,7 +5,7 @@
 <title>회차 스크롤 검수 창</title>
 <!--
   검수용: 회차 전체를 휴대폰 폭으로 펼쳐 놓고 그중 한 구간만 보여 준다. 헤드리스 브라우저로 구간별 캡처를 뜰 때 쓴다.
-  tools/review.html?ep=ep01&w=375&from=0&h=3000
+  tools/review.html?ep=ep01v3&w=375&from=0&h=3000
     w     화면 폭(px)      from  회차 맨 위에서부터 시작 위치(px)      h  보여 줄 높이(px)
   모든 컷을 등장 효과 없이 표시하고, 지연 로딩을 끄고 모든 그림을 불러온 뒤 from 위치로 스크롤한다.
   document.title 이 'ready <전체 높이> missing=<레이어가 빠진 조립 컷 | none>' 으로 바뀌면 준비 완료.
@@ -42,7 +42,7 @@
         Array.prototype.forEach.call(d.querySelectorAll('.reveal'), function (el) { el.classList.add('is-in'); });
         f.contentWindow.scrollTo(0, from);
         /* 로딩 검사: 데이터의 조립 레이어 수보다 화면에 남은 레이어가 적은 컷(=불러오지 못해 빠진 레이어) */
-        var ep = f.contentWindow.WEBTOON.episodeData[q.get('ep') || 'ep01'], miss = [];
+        var ep = f.contentWindow.WEBTOON.episodeData[q.get('ep') || 'ep01v3'], miss = [];
         (ep ? ep.cuts : []).forEach(function (c) {
           var want = c.compose ? (c.compose.layers || []).length + (c.compose.bg ? 1 : 0) : 0;
           if (!want) return;
@@ -54,7 +54,7 @@
       });
     }, 1500);
   };
-  f.src = '../index.html#' + (q.get('ep') || 'ep01');
+  f.src = '../index.html#' + (q.get('ep') || 'ep01v3');
 </script>
 </body>
 </html>

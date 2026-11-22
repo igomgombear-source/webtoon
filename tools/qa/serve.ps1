@@ -1,9 +1,9 @@
 ﻿# 검수용 로컬 서버 (Windows PowerShell 5.1 기본 기능만 사용, 설치할 것 없음)
 #   저장소 루트를 http://localhost:<Port>/ 로 띄운다.
 #   검수 창이 POST /__qa/result, /__qa/baseline 으로 보낸 내용을 tools/qa/out/ 에 저장한다.
-# 보통은 run.ps1 이 자동으로 켜고 끈다. 손으로 띄울 때:
+# 손으로 띄울 때(device.ps1 은 자동으로 켠다):
 #   powershell -ExecutionPolicy Bypass -File tools\qa\serve.ps1 -Port 8765
-#   → 브라우저에서 http://localhost:8765/tools/qa/qa.html
+#   → 브라우저에서 http://localhost:8765/tools/qa/v3.html
 param([int]$Port = 8765)
 $ErrorActionPreference = 'Stop'
 $Root = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path

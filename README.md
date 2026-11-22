@@ -1,5 +1,7 @@
 # 마지막 접속 — 모바일 웹툰 뷰어
 
+> **2026-11-22: 70컷 구판(`data/ep01.js`, `assets/cuts/ep01/`, 조립 컷 합성)은 제거했다. 1화는 104컷판(`#ep01v3`)뿐이며, 아래 70컷 조립·원화 교체 안내는 옛 기록이다. 옛 주소 `#ep01` 은 `#ep01v3` 로 연결된다. 현행 규칙은 `docs/EP01_PRODUCTION_RULES.md`.**
+
 스마트폰 세로 스크롤용 웹툰 사이트입니다. HTML·CSS·JavaScript만 쓰고, 따로 설치할 프로그램이나 외부 라이브러리는 없습니다.
 
 ## 내 컴퓨터에서 실행하기
@@ -19,7 +21,7 @@
    윈도우에서 `python3` 가 안 되면 `py -m http.server 8000` 을 입력합니다.
 4. 브라우저에서 `http://localhost:8000/` 을 엽니다.
    - 작품 메인: `http://localhost:8000/`
-   - 1화: `http://localhost:8000/#ep01`
+   - 1화: `http://localhost:8000/#ep01v3`
 5. 끝낼 때는 터미널에서 `Ctrl + C` 를 누릅니다.
 
 > 서버 없이 `index.html` 을 두 번 눌러 열어도 대부분 동작합니다. 다만 실제 서비스와 같은 상태로 보려면 위의 서버 방식을 권장합니다.
@@ -29,7 +31,7 @@
 저장소 Settings → Pages 에서 Branch 를 `main` / `(root)` 로 켜 두었다면 아래 주소로 볼 수 있습니다.
 
 - https://igomgombear-source.github.io/webtoon/
-- 1화: https://igomgombear-source.github.io/webtoon/#ep01
+- 1화: https://igomgombear-source.github.io/webtoon/#ep01v3
 
 모든 경로가 상대경로라 이 주소(하위 경로)에서도 그대로 동작합니다.
 
@@ -37,7 +39,7 @@
 
 ```
 webtoon/
-├─ index.html                 진입점 (작품 메인 / 회차 화면을 주소 끝 #ep01 로 전환)
+├─ index.html                 진입점 (주소 끝 #ep01v3 = 1화, #ep02 = 2화 공개 예정 안내, #home = 작품 메인)
 ├─ css/style.css              전체 스타일
 ├─ js/app.js                  뷰어 (컷 표시, 휴대폰 화면, 지연 로딩, 진행률)
 ├─ js/compose.js              조립 컷 계산 (뷰어와 내보내기 도구가 함께 씀)
@@ -45,7 +47,7 @@ webtoon/
 ├─ data/characters.js         인물 그림 중앙 목록 (조립 컷에서 @인물/이름 으로 부름)
 ├─ data/cast.js               인물 공식 설정 (사용자 확정 키·외형·안경, 제작·검수 기준)
 ├─ tools/qa/                  1화 자동 검수 (tools/qa/README.md)
-├─ data/ep01.js               1화 70컷 데이터
+├─ data/ep01v3.js             1화 104컷 데이터
 ├─ assets/backgrounds/        배경 재료 (장소별 폴더)
 ├─ assets/characters/         인물 재료 (인물별 폴더, 투명 PNG/WebP)
 ├─ assets/props/              소품 재료 (투명 PNG/WebP)

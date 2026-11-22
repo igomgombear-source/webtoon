@@ -148,13 +148,6 @@ img { display: block; max-width: 100%; }
 .art.has-lqip .placeholder { display: none; }   /* 축소 미리보기가 있으면 어두운 임시 면을 깔지 않는다 */
 
 /* 조립 컷: 비율은 canvasSize 로 고정, 레이어는 가로 폭 기준 % */
-.art.is-compose .cmp-visual { position: absolute; inset: 0; }
-.art.is-compose .cmp-live { position: absolute; inset: 0; }
-.art.is-compose .cmp-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.art.is-compose .cmp-layer { position: absolute; max-width: none; height: auto; }
-.art.is-compose .cmp-export { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.art.is-compose.use-export .cmp-live { display: none; }
-.art.is-compose:not(.is-loaded) .cmp-visual { z-index: 1; }
 
 .placeholder {
   position: absolute; inset: 0;
@@ -333,6 +326,15 @@ mark { background: rgba(201,169,106,.45); color: inherit; padding: 0 2px; border
 .view-zoom .phone-screen { min-height: 0; display: flex; align-items: center; padding: 44px 22px; }
 .zoom-time { margin: 0 0 8px; font-size: 13px; opacity: .6; font-variant-numeric: tabular-nums; }
 .zoom-text { margin: 0; font-size: 22px; font-weight: 600; line-height: 1.5; }
+
+/* ---------- 다음 화 안내 화면 (#ep02) ---------- */
+html:has(.coming), body:has(.coming) { background: #000; }
+.coming { min-height: 100vh; min-height: 100dvh; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(16 * var(--u));
+  padding: 32px max(20px, env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: #000; color: var(--text); text-align: center; }
+.cs-no { margin: 0; font-size: clamp(46px, calc(60 * var(--u)), 76px); font-weight: 700; letter-spacing: .02em; line-height: 1.1; outline: none; }
+.cs-msg { margin: 0; font-size: clamp(20px, calc(24 * var(--u)), 30px); color: var(--text-dim); letter-spacing: .02em; }
+.cs-back { margin-top: calc(28 * var(--u)); padding: 14px 28px; border: 1px solid var(--line); border-radius: 999px; font-size: clamp(16px, calc(18 * var(--u)), 22px); color: var(--text); text-decoration: none; }
+.cs-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ---------- 회차 끝 ---------- */
 .ep-silence { height: calc(var(--after, 600) * var(--u)); }

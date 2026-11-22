@@ -347,22 +347,11 @@
     f.remove();
   }
 
-  async function legacyCheck(res, w) {
-    var f = document.createElement('iframe'); f.style.cssText = 'width:' + w + 'px;height:800px;border:0;position:absolute;left:0;top:0;visibility:hidden'; f.src = '../../index.html#ep01';
-    await new Promise(function (ok) { f.onload = ok; document.body.appendChild(f); });
-    var d = await settle(f), vw = f.contentWindow.innerWidth;
-    var n = d.querySelectorAll('.cut').length;
-    if (n !== 70) add(res, 'fail', 'legacy.count', w, 0, '기존 70컷이 ' + n + '컷으로 그려짐');
-    if (d.documentElement.scrollWidth > vw + 1) add(res, 'fail', 'legacy.hscroll', w, 0, '가로 스크롤');
-    [].forEach.call(d.images, function (im) { if (im.complete && !im.naturalWidth) add(res, 'fail', 'legacy.broken', w, 0, im.getAttribute('src')); });
-    f.remove();
-  }
-
   window.runV3QA = async function (log) {
     var res = { fail: [], warn: [], info: [], widths: WIDTHS, passed: {} };
     var spec = await (await fetch('ep01v3.spec.json')).json();
     await dataChecks(res, spec);
-    for (var i = 0; i < WIDTHS.length; i++) { if (log) log('width ' + WIDTHS[i]); await widthChecks(res, WIDTHS[i]); if (WIDTHS[i] === 360) await reviewCheck(res, 360); await legacyCheck(res, WIDTHS[i]); }
+    for (var i = 0; i < WIDTHS.length; i++) { if (log) log('width ' + WIDTHS[i]); await widthChecks(res, WIDTHS[i]); if (WIDTHS[i] === 360) await reviewCheck(res, 360); }
     return res;
   };
   window.V3_KNOWN = window.V3_KNOWN || {};

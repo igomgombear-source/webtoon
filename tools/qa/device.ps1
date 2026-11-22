@@ -19,7 +19,7 @@ param(
   [string]$ShotProfile = 'iphone-se',
   [string]$PreJs = '',          # 측정 직전에 페이지에서 실행할 JS (원인 실험용: 특정 레이어 빼기 등)
   [switch]$NoHas,
-  [string]$Ep = 'ep01',
+  [string]$Ep = 'ep01v3',
   [string]$Browser = ''
 )
 $ErrorActionPreference = 'Stop'
