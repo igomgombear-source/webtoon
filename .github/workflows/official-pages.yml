@@ -128,7 +128,7 @@ jobs:
                   assert.equal(await names.count(),5);
                   for (const name of await names.all()) await name.evaluate(img => img.decode());
                 }
-                if (no === 43) assert.match(await cut.innerText(),/휴대폰은 미리 무음으로 해 주세요/);
+                if (no === 43) assert.match((await cut.innerText()).replace(/\s+/g, ' '),/휴대폰은 미리 무음으로 해 주세요/);
                 if (no === 57) assert.equal(await cut.locator('.scr-clock').count(),1);
                 if (no === 94) {
                   assert.equal(await cut.locator('.scr-ui').count(),2);
