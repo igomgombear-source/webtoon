@@ -164,6 +164,8 @@
         '<img class="art-img" src="' + esc(src) + '" alt="' + alt + '"' +
           (sized ? ' width="' + (+z.w) + '" height="' + (+z.h) + '"' : '') +
           ' loading="lazy" decoding="async">' +
+        (cut.nameplate ? '<img class="art-lettering" src="' + esc((ep.imageBase || '') + cut.nameplate) +
+          '" alt="" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" loading="lazy" decoding="async">' : '') +
         renderArtLettering(cut.artLettering, z) +
         (cut.screen && W.screenUi ? W.screenUi.build(cut.screen) : '') +
         (REVIEW && cut.imageStatus === 'draft' ? '<span class="draft-badge" aria-hidden="true">DRAFT</span>' : '') +
@@ -355,7 +357,7 @@
         first = false;
         var pc = { no: cut.no, type: 'panel', kind: cut.kind, image: p.image || null, imageSize: p.imageSize, imageStatus: p.imageStatus, imageLqip: p.imageLqip,
           ratio: p.ratio || cut.ratio, desc: p.desc || cut.desc, tone: p.tone || cut.tone, alt: p.alt || cut.alt, datetime: dt,
-          screen: screenFor(ep, cut, idx), artLettering: cut.rows ? p.artLettering : cut.artLettering };
+          screen: screenFor(ep, cut, idx), nameplate: p.nameplate, artLettering: cut.rows ? p.artLettering : cut.artLettering };
         var diag = cut.diagonal && row.length > 1 ? ' diag-' + (pi === 0 ? 'first' : 'last') : '';
         var me = idx++;
         return '<div class="panel' + diag + '" data-panel="' + me + '" style="flex:' + Math.round(ratioVal(p.ratio || cut.ratio) * 1000) + ' 1 0%;">' +
