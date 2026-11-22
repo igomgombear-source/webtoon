@@ -30,7 +30,7 @@ WEBTOON.registerEpisode({
     '교사': { side: 'right' },
     '문상윤': { side: 'center' }
   },
-  endSpacing: 1400,
+  endSpacing: 72,
   cuts: [
     {"no": 1, "type": "panel", "desc": "액자 속 초상 — 대표 그림 · 신규 (기존 `.ep-head` 텍스트 제목 대체)", "width": 100, "ratio": "9:16", "shape": "bleed", "spacing": {"before": 0, "after": 320}, "mood": "corridor", "bubbleNote": "없음.", "image": "ep01v3-001-opening-portrait-DRAFT.webp", "imageSize": {"w": 1080, "h": 1920}, "imageStatus": "draft", "imageLqip": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAACQBgCdASoYACsAPt1gqU8opSOiMBVYARAbiWUAynguHuoUl+mhf/MTVmkD7BocVxFsTysLR7oDc0wVzbwAAP72ilyT5wJ6/h7fJkL6IZrba/wc59nXdUOnwuWTJIj6RYjSz8co5/NhP8E+gbBKLvmHS6VXaPwBFA3WZ+WXR/Wc2cI6MmoOuphHJuDGzch3fLb3d5zrBiPXqcUAczA9/rVZqwjbOpw/CSMhQwegTizQAA=="},
     {"no": 2, "type": "panel", "desc": "장소·시간 카드", "width": 100, "ratio": "3:4", "shape": "box", "spacing": {"before": 0, "after": 96}, "mood": "corridor", "bubbleNote": "없음.", "image": "ep01v3-002-Work-REV3-DRAFT.webp", "imageSize": {"w": 1086, "h": 1448}, "imageStatus": "draft", "imageLqip": "data:image/webp;base64,UklGRtgAAABXRUJQVlA4IMwAAAAwBgCdASoYACAAPt1mq1EopSOiqAgBEBuJZACdMoBOVhFDBtKCfoRpj3HTknygYvXCOylbxtZxu8egAP76XpICx3N3tIUcSsbRtmMTm8L3k8KKy/lcmsfhyvx9hLE26KStAmERyb1wO/PjsVnjgk+rzk6QYYRs6qzgqnyTmAYcvtCIC2mUbh8IsWvjPVHWW3fDacOo4HcSICnQhnAGW0Q9BDHoZtp2NMNH3Qk9IYr10Z6WOAJeXYv8Bibw9OCeilqHRNDRLM0VDCQAAAA=", "card": {"lines": [{"kind": "date", "text": "11월 1일 일요일"}, {"kind": "time", "text": "18:34"}, {"kind": "place", "text": "양평문화회관"}]}},

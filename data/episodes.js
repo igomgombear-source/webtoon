@@ -15,6 +15,7 @@ WEBTOON.series = {
   title: '마지막 접속',
   genre: '미스터리 · 범죄 스릴러',
   status: '6화 완결 예정',
+  start: 'ep01v3',   /* 주소에 회차가 없을 때 바로 시작할 회차(초기 화면 없이 1컷부터) */
   episodes: [
     { id: 'ep01', no: 1, title: '마지막 부탁', ready: true, file: 'data/ep01.js' },
     { id: 'ep01v3', no: 1, title: '마지막 부탁 · 104컷 완성판', ready: true, file: 'data/ep01v3.js' },

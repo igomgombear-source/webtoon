@@ -527,7 +527,7 @@
 
     app.innerHTML =
       '<header class="topbar" id="topbar">' +
-        '<a class="tb-back" href="#" aria-label="작품 메인으로">‹</a>' +
+        '<a class="tb-back" href="#home" aria-label="작품 메인으로">‹</a>' +
         '<p class="tb-title">' + ep.no + '화 〈' + esc(ep.title) + '〉</p>' +
         '<span class="tb-count" id="tb-count" aria-hidden="true">1 / ' + ep.cuts.length + '</span>' +
         '<div class="tb-progress" aria-hidden="true"><span id="tb-bar"></span></div>' +
@@ -537,7 +537,7 @@
         ep.cuts.map(function (c) { return renderCut(ep, c); }).join('') +
         '<div class="ep-silence" style="--after:' + Number(ep.endSpacing || 600) + ';" aria-hidden="true"></div>' +
         '<footer class="ep-end"><p class="end-mark">' + ep.no + '화 끝</p>' + editionLink +
-          '<a class="end-home" href="#">작품 메인으로</a>' + renderEpisodeNav(meta) + '</footer>' +
+          '<a class="end-home" href="#home">작품 메인으로</a>' + renderEpisodeNav(meta) + '</footer>' +
       '</main>';
     window.scrollTo(0, 0);
 
@@ -656,7 +656,7 @@
 
   function renderError(msg) {
     app.innerHTML = '<main class="home"><section class="home-list"><h2 id="page-heading" tabindex="-1">불러오지 못했습니다</h2><p class="err">' + esc(msg) +
-      '</p><p><a class="home-start" href="#">작품 메인으로</a></p></section></main>';
+      '</p><p><a class="home-start" href="#home">작품 메인으로</a></p></section></main>';
   }
 
   /* ---------- 라우터 ---------- */
@@ -671,6 +671,8 @@
   function route() {
     runCleanup();
     var id = (location.hash || '').replace('#', '');
+    /* 해시가 없으면 초기 화면 없이 시작 회차(W.series.start)의 첫 컷부터 보여 준다. 주소만 바꾸므로 뒤로 가기가 되돌아오지 않는다. '#home' 은 작품 메인 */
+    if (!id && W.series.start) { id = W.series.start; history.replaceState(null, '', '#' + id); }
     var meta = W.series.episodes.filter(function (e) { return e.id === id; })[0];
     if (!meta) { renderHome(); return focusHeading(); }
     if (!meta.ready) { renderError(meta.no + '화는 아직 준비 중입니다.'); return focusHeading(); }
