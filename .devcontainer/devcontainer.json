@@ -1,0 +1,18 @@
+{
+  "name": "마지막 접속 EP01 미리보기 (비공개)",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postStartCommand": "bash .devcontainer/start-preview.sh",
+  "forwardPorts": [8765],
+  "portsAttributes": {
+    "8765": {
+      "label": "EP01 미리보기 (비공개)",
+      "onAutoForward": "notify",
+      "protocol": "http"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["docs/EP01_MOBILE_PREVIEW.md"]
+    }
+  }
+}
