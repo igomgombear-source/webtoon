@@ -170,7 +170,7 @@ jobs:
           wc -l "$RUNNER_TEMP/official.sha256"
       - uses: actions/checkout@v4
         with:
-          ref: 3b714475b957334b8d99d47c1d8de182597499d9
+          ref: 87d1549dc8c5c2ef4fc633d58842ecaf5d028565
           path: review-src
           persist-credentials: false
       - name: Add review pages and verify official files are byte-identical
