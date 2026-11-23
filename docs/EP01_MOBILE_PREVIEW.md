@@ -5,3 +5,7 @@
 
 ## 사용자 최종 검수판 (본편과 같은 화면 + 컷 번호·설명)
 - 주소: `/index.html?check=1#ep01v3` (숨긴 컷 포함은 `?check=1&hidden=1#ep01v3`). 자세한 내용은 `docs/EP01_FINAL_REVIEW_20261123.md`.
+
+## 로컬 수정 시안 17장 비교 (미승인, 본편 미연결)
+- 주소: `/tools/compare-local-revisions.html` (Codespaces 8765 포트 주소 뒤). 출처 브랜치 `ep01-local-revisions-art`(`b8789b4`).
+- 승인본과 충돌하는 컷(41)은 빨간 경고로 따로 모았다.
