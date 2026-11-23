@@ -18,7 +18,7 @@ for (const [, f] of index.matchAll(/(?:src|href)="((?:css|js|data)\/[A-Za-z0-9._
 for (const [, f] of rd('data/episodes.js').matchAll(/\{\s*id:\s*'[^']+'[^}]*?ready:\s*true,\s*file:\s*'(data\/[A-Za-z0-9._-]+)'/g)) files.add(f);   /* 회차 데이터는 index.html 이 아니라 episodes.js 가 불러온다 */
 for (const f of fs.readdirSync(path.join(root, 'assets/fonts'))) files.add('assets/fonts/' + f);
 /* 데이터가 가리키는 그림(독자 화면 99컷 + 숨김 5컷, 휴대폰 배경·전경, 이름표) */
-const text = ['data/ep01v3.js', 'data/ep01v3-screens.js', 'data/ep01v3-bubbles.js', 'tools/compare-local-revisions.html'].map(rd).join('\n');   /* 비교 페이지가 가리키는 수정 시안 17개도 함께 */
+const text = ['data/ep01v3.js', 'data/ep01v3-screens.js', 'data/ep01v3-bubbles.js', 'tools/compare-local-revisions.html', 'tools/bubble-editor.html'].map(rd).join('\n');   /* 비교 페이지가 가리키는 수정 시안 17개도 함께 */
 for (const [m] of text.matchAll(/assets\/[A-Za-z0-9_\/.-]+\.(?:webp|png|svg|jpe?g)/g)) files.add(m);
 for (const [m] of text.matchAll(/ep01v3-[A-Za-z0-9._-]+\.(?:webp|png|svg)/g)) { const p = 'assets/cuts/ep01v3/' + m; if (fs.existsSync(path.join(root, p))) files.add(p); }
 for (const f of files) { if (!fs.existsSync(path.join(root, f))) { console.error('missing', f); process.exitCode = 1; continue; } copy(f); }
@@ -30,8 +30,10 @@ function page(query) {
 }
 fs.writeFileSync(path.join(out, 'index.html'), page('?check=1'));
 /* 수정 원화 17개 비교 페이지: review/ 바로 아래에 두고 같은 폴더의 data·assets 를 가리키도록 상대경로만 바꾼다(기능·내용은 그대로) */
-const cmp = rd('tools/compare-local-revisions.html').replace('<head>', '<head>\n' + robots).split('../data/').join('data/').split('../assets/').join('assets/').replace('href="../index.html#ep01v3"', 'href="index.html#ep01v3"');
-if (/\.\.\//.test(cmp.replace(/<!--[\s\S]*?-->/g, ''))) { console.error('compare page still has ../ paths'); process.exitCode = 1; }
-fs.writeFileSync(path.join(out, 'compare-local-revisions.html'), cmp);
+for (const name of ['compare-local-revisions.html', 'bubble-editor.html']) {
+  const html = rd('tools/' + name).replace('<head>', '<head>\n' + robots).split('../data/').join('data/').split('../assets/').join('assets/').replace('href="../index.html#ep01v3"', 'href="index.html#ep01v3"');
+  if (/\.\.\//.test(html.replace(/<!--[\s\S]*?-->/g, ''))) { console.error(name + ' still has ../ paths'); process.exitCode = 1; }
+  fs.writeFileSync(path.join(out, name), html);
+}
 fs.writeFileSync(path.join(out, 'all.html'), page('?check=1&hidden=1'));
 console.log('review package:', files.size + 2, 'files ->', out);

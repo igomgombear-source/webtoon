@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>말풍선 편집기 (EP01~EP06 공용)</title>
+<style>
+@font-face { font-family: "Pretendard"; font-weight: 500; src: url("../assets/fonts/Pretendard-Medium.subset.woff2") format("woff2"); }
+:root { --bg:#0e1116; --panel:#171b22; --line:#2a313b; --text:#e6e8eb; --dim:#9aa3ad; --accent:#c9a96a; --sel:#4aa3ff; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif; -webkit-text-size-adjust:100%; }
+button, select, input, textarea { font:inherit; color:inherit; }
+button { padding:8px 10px; background:#1f252e; border:1px solid var(--line); border-radius:8px; }
+button:disabled { opacity:.4; }
+button[aria-pressed="true"], button.on { background:var(--accent); color:#1a1408; border-color:var(--accent); font-weight:700; }
+select, input[type=number], textarea { background:#10141a; border:1px solid var(--line); border-radius:8px; padding:7px 8px; }
+header.bar { position:sticky; top:0; z-index:20; background:rgba(14,17,22,.97); border-bottom:1px solid var(--line); padding:8px 10px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+header.bar h1 { margin:0 8px 0 0; font-size:15px; }
+.row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.sp { flex:1; }
+main { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; padding:10px; max-width:1500px; margin:0 auto; }
+@media (min-width:1000px) { main { grid-template-columns:minmax(0,1fr) 380px; align-items:start; } aside.ctl { position:sticky; top:62px; max-height:calc(100vh - 74px); overflow:auto; } }
+.info { font-size:13px; color:var(--dim); margin:2px 0 6px; }
+.info b { color:var(--accent); }
+.view { min-width:0; max-width:100%; overflow:auto; background:#07090c; border:1px solid var(--line); border-radius:10px; padding:8px; }
+.stagewrap { margin:0 auto; }
+.stage { position:relative; padding:14% 0; }
+.pbox { position:relative; width:100%; background:#222 center/cover; outline:1px dashed rgba(255,255,255,.35); user-select:none; touch-action:none; }
+.pbox img { display:block; width:100%; height:100%; object-fit:fill; pointer-events:none; }
+.pbox .ph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#777; background:repeating-linear-gradient(45deg,#1b1d22,#1b1d22 10px,#20232a 10px,#20232a 20px); }
+.layer { position:absolute; inset:0; overflow:visible; }
+.tails { position:absolute; left:0; top:0; overflow:visible; pointer-events:none; }
+.b { position:absolute; transform:translate(-50%,-50%); display:flex; align-items:center; justify-content:center; text-align:center; word-break:keep-all; overflow-wrap:break-word; cursor:grab; font-family:"Pretendard",-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif; font-weight:500; color:#111; background:#fff; border:calc(2*var(--u)) solid #111; }
+.b.mono { background:rgba(236,232,224,.93); border-color:rgba(0,0,0,.25); font-family:"Noto Serif KR","Noto Serif CJK KR",serif; }
+.b.caption { background:rgba(12,14,18,.86); color:#efeae0; border-color:#efeae0; }
+.b.phone { border-style:dashed; }
+.b.sel { outline:calc(3*var(--u)) solid var(--sel); outline-offset:calc(2*var(--u)); z-index:5; }
+.b .no { position:absolute; left:calc(-4*var(--u)); top:calc(-10*var(--u)); transform:translateY(-100%); font:700 calc(11*var(--u))/1.2 sans-serif; background:var(--sel); color:#fff; padding:1px 5px; border-radius:6px; white-space:nowrap; }
+.h { position:absolute; width:calc(16*var(--u)); height:calc(16*var(--u)); min-width:14px; min-height:14px; margin:-8px 0 0 -8px; border-radius:50%; border:2px solid #fff; background:var(--sel); z-index:9; cursor:crosshair; touch-action:none; }
+.h.start { border-radius:3px; background:#ffb020; }
+.h.size { border-radius:3px; background:#4cc38a; cursor:nwse-resize; }
+.ctl section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:10px; }
+.ctl h2 { margin:0 0 8px; font-size:14px; color:var(--accent); }
+.ctl label { display:grid; grid-template-columns:92px 1fr 54px; gap:6px; align-items:center; margin:4px 0; font-size:13px; }
+.ctl label input[type=range] { width:100%; min-width:0; }
+.ctl label span.v { text-align:right; color:var(--dim); font-variant-numeric:tabular-nums; }
+.ctl .chips { display:flex; flex-wrap:wrap; gap:6px; }
+.blist { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+.blist button { text-align:left; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+textarea.out { width:100%; height:180px; font:12px/1.5 ui-monospace,Menlo,Consolas,monospace; }
+.note { color:var(--dim); font-size:12px; margin:4px 0 0; }
+.toast { position:fixed; left:50%; bottom:16px; transform:translateX(-50%); background:#000d; padding:8px 14px; border-radius:999px; font-size:13px; z-index:50; display:none; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>말풍선 편집기</h1>
+  <select id="ep" aria-label="회차"></select>
+  <select id="cut" aria-label="컷"></select>
+  <button id="prev">◀ 이전 컷</button><button id="next">다음 컷 ▶</button>
+  <label class="row" style="font-size:12px;color:var(--dim)"><input type="checkbox" id="onlyLines" checked> 대사 있는 컷만</label>
+  <span class="sp"></span>
+  <button id="undo">되돌리기</button><button id="redo">다시 실행</button>
+</header>
+<main>
+  <div>
+    <div class="info" id="info"></div>
+    <div class="row" style="margin-bottom:6px">
+      <span style="font-size:12px;color:var(--dim)">패널</span><span class="row" id="panels"></span>
+      <span class="sp"></span>
+      <span style="font-size:12px;color:var(--dim)">미리보기 폭</span><span class="row" id="widths"></span>
+      <span style="font-size:12px;color:var(--dim)">확대</span><input type="range" id="zoom" min="1" max="3" step="0.25" value="1" style="width:90px">
+    </div>
+    <div class="view" id="view"><div class="stagewrap" id="wrap"><div class="stage" id="stage"></div></div></div>
+    <p class="note">원화 위에 말풍선을 올려 편집합니다(원화·대사는 바뀌지 않음). 말풍선이나 노란 ■(꼬리 시작)·파란 ●(꼬리 끝)·초록 ■(크기)를 끌거나, 선택 후 화살표 키(Shift=크게)로 움직입니다. 휴대폰 화면 UI 는 표시되지 않습니다.</p>
+  </div>
+  <aside class="ctl">
+    <section><h2>말풍선 선택</h2><div class="blist" id="blist"></div><div id="who" class="info"></div></section>
+    <section id="secPos"><h2>위치·배치</h2>
+      <div class="chips" style="margin-bottom:6px"><button data-pre="in">컷 안</button><button data-pre="edgeTop">경계 위</button><button data-pre="edgeBottom">경계 아래</button><button data-pre="gap">컷 사이</button></div>
+      <label>가로 위치<input type="range" id="gx" min="-10" max="110" step="0.1"><span class="v" id="gxv"></span></label>
+      <label>세로 위치<input type="range" id="gy" min="-30" max="130" step="0.1"><span class="v" id="gyv"></span></label>
+    </section>
+    <section><h2>크기·모양</h2>
+      <label>가로 폭 %<input type="range" id="gw" min="10" max="96" step="0.5"><span class="v" id="gwv"></span></label>
+      <label class="row" style="display:flex;gap:6px"><span style="width:92px">높이</span><button id="autoH">자동</button><button id="manH">수동</button></label>
+      <label>세로 높이 %<input type="range" id="gh" min="6" max="70" step="0.5"><span class="v" id="ghv"></span></label>
+      <label>내부 여백<input type="range" id="gp" min="0" max="30" step="1"><span class="v" id="gpv"></span></label>
+      <label>모서리<input type="range" id="gr" min="0" max="60" step="1"><span class="v" id="grv"></span></label>
+      <label>글자 크기<input type="range" id="gf" min="10" max="30" step="0.5"><span class="v" id="gfv"></span></label>
+      <label>줄간격<input type="range" id="gl" min="1" max="2.2" step="0.05"><span class="v" id="glv"></span></label>
+      <p class="note">모서리 60 = 타원형. 크기 값은 360px 기준이며 미리보기 폭에 비례해 커집니다. 글자 16px 미만 등 가독성 기준은 편집기가 막지 않으니 확인하세요.</p>
+    </section>
+    <section><h2>꼬리</h2>
+      <label class="row" style="display:flex;gap:6px"><span style="width:92px">꼬리</span><button id="tOn">있음</button><button id="tOff">없음</button></label>
+      <label>시작점 각도<input type="range" id="ts" min="0" max="359" step="1"><span class="v" id="tsv"></span></label>
+      <label class="row" style="display:flex;gap:6px"><span style="width:92px">시작점</span><button id="tsAuto">자동(끝점 쪽)</button></label>
+      <label>방향 °<input type="range" id="td" min="0" max="359" step="1"><span class="v" id="tdv"></span></label>
+      <label>길이<input type="range" id="tl" min="6" max="260" step="1"><span class="v" id="tlv"></span></label>
+      <label>굵기<input type="range" id="tt" min="4" max="48" step="1"><span class="v" id="ttv"></span></label>
+      <label>곡선<input type="range" id="tc" min="-0.5" max="0.5" step="0.05"><span class="v" id="tcv"></span></label>
+      <p class="note">방향 0°=오른쪽, 90°=아래. 방향·길이는 시작점에서 끝점까지입니다. 곡선 0 = 직선.</p>
+    </section>
+    <section><h2>초기화</h2><div class="chips"><button id="rb">이 말풍선</button><button id="rc">이 컷</button><button id="ra">이 회차 전체</button></div></section>
+    <section><h2>저장·내보내기</h2>
+      <div class="chips" style="margin-bottom:6px"><button id="jsonOut">JSON 다운로드</button><button id="jsonIn">JSON 불러오기</button><button id="patchBtn">적용용 패치 텍스트</button><button id="copyBtn">복사</button></div>
+      <input type="file" id="file" accept="application/json,.json" hidden>
+      <textarea class="out" id="out" spellcheck="false" placeholder="‘적용용 패치 텍스트’를 누르면 data/*-bubbles.js 의 cuts 항목 형식으로 보여 줍니다."></textarea>
+      <p class="note">자동 저장: 이 브라우저(localStorage). 패치의 <code>manual</code> 은 편집기 정밀값이며 현재 독자용 엔진(js/bubbles.js)은 아직 읽지 않습니다(pref·tail 만 호환). 직접 커밋 기능은 없습니다.</p>
+    </section>
+  </aside>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* 회차 등록: EP02~EP06 은 데이터가 생기면 이 목록에 한 줄을 추가한다(file=회차 데이터, bubbles=말풍선 데이터, bubblesVar=전역 이름) */
+var EPISODES = [
+  { id: 'ep01v3', label: '1화 (104컷판)', file: '../data/ep01v3.js', bubbles: '../data/ep01v3-bubbles.js', bubblesVar: 'EP01V3_BUBBLES', imageBase: '../assets/cuts/ep01v3/' },
+  { id: 'ep02', label: '2화 (준비 전)', disabled: true }, { id: 'ep03', label: '3화 (준비 전)', disabled: true },
+  { id: 'ep04', label: '4화 (준비 전)', disabled: true }, { id: 'ep05', label: '5화 (준비 전)', disabled: true }, { id: 'ep06', label: '6화 (준비 전)', disabled: true }
+];
+window.WEBTOON = { episodeData: {}, registerEpisode: function (e) { this.episodeData[e.id] = e; } };
+</script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var STORE = 'ep-bubble-editor-v1';
+  var STYLE_TYPE = { thought: 'mono', phone: 'phone', caption: 'caption', silence: 'mono' };
+  var AT = { 'in-tl': [26, 18], 'in-tr': [74, 18], 'in-bl': [26, 82], 'in-br': [74, 82], 'edge-top-l': [28, 0], 'edge-top-r': [72, 0], 'edge-bottom-l': [28, 100], 'edge-bottom-r': [72, 100], 'gap': [50, 110], 'above': [50, -10] };
+  var FS0 = { speech: 16, offscreen: 16, phone: 16, mono: 15, caption: 13.5 };
+
+  var S = { ep: null, epData: null, bub: {}, cutNo: null, panel: 0, sel: 0, width: 360, zoom: 1, edits: {}, hist: [], hi: -1 };
+  var drag = null;
+
+  function toast(t) { var e = $('toast'); e.textContent = t; e.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(function () { e.style.display = 'none'; }, 1800); }
+  function loadScript(src) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = function () { no(new Error(src)); }; document.head.appendChild(s); }); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function rnd(n, d) { var k = Math.pow(10, d == null ? 1 : d); return Math.round(n * k) / k; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  /* ---------- 데이터 읽기(수정 없음) ---------- */
+  function cutOf(no) { return S.epData.cuts.filter(function (c) { return c.no === no; })[0]; }
+  function panelsOf(cut) { return cut.rows ? [].concat.apply([], cut.rows) : [cut]; }
+  function ratioOf(r) { var p = String(r || '4:3').split(':'); return (parseFloat(p[0]) || 4) / (parseFloat(p[1]) || 3); }
+  function panelOf(cut, l) { var n = panelsOf(cut).length; return l.panel != null ? l.panel : ((l.at || 'gap') === 'gap' ? n - 1 : 0); }
+  function cfgOf(cut, i) { var o = (S.bub.cuts || {})[cut.no]; return (o && o.lines && o.lines[i]) || null; }
+  function typeOf(cut, l, cfg) { if (cfg && cfg.type) return cfg.type; if ((S.bub.offscreen || {})[cut.no] && l.style !== 'thought') return 'offscreen'; return STYLE_TYPE[l.style] || 'speech'; }
+
+  /* 기존 설정(또는 대사의 at)에서 편집기 기하를 만든다. 정밀값이 저장돼 있으면 그것이 우선 */
+  function defaults(cut, i) {
+    var l = cut.lines[i], cfg = cfgOf(cut, i), p = panelOf(cut, l), pref = (cfg && cfg.pref) || { at: l.at || 'gap' };
+    var pos = pref.x != null ? [pref.x, pref.y] : (AT[pref.at] || [50, 110]);
+    var type = typeOf(cut, l, cfg), len = String(l.text || '').replace(/\s/g, '').length;
+    var w = clamp(Math.sqrt(len) * 9.5 + 8, 26, 74);
+    var tip = cfg && cfg.tail ? [cfg.tail.x, cfg.tail.y] : [pos[0] + (50 - pos[0]) * 0.25, pos[1] + 24];
+    return { type: type, panel: p, x: pos[0], y: pos[1], w: rnd(w), h: null, pad: 10, radius: type === 'caption' ? 2 : (type === 'mono' ? 3 : 60), fs: FS0[type] || 16, lh: 1.35,
+      tail: { on: type !== 'mono' && type !== 'caption', tx: tip[0], ty: tip[1], sa: null, th: 16, curve: 0 } };
+  }
+  function geo(cut, i) { var e = (S.edits[S.ep.id] || {})[cut.no + ':' + i]; return e ? clone(e) : defaults(cut, i); }
+  function setGeo(cut, i, g) { var m = S.edits[S.ep.id] || (S.edits[S.ep.id] = {}); m[cut.no + ':' + i] = g; }
+  function isEdited(cut, i) { return !!((S.edits[S.ep.id] || {})[cut.no + ':' + i]); }
+
+  /* ---------- 저장·실행 취소 ---------- */
+  function persist() { try { localStorage.setItem(STORE, JSON.stringify(S.edits)); } catch (e) {} }
+  function commit() { var s = JSON.stringify(S.edits); if (S.hist[S.hi] === s) return; S.hist = S.hist.slice(0, S.hi + 1); S.hist.push(s); if (S.hist.length > 120) S.hist.shift(); S.hi = S.hist.length - 1; persist(); btns(); }
+  function restore(i) { S.hi = i; S.edits = JSON.parse(S.hist[i]); persist(); draw(); btns(); }
+  function btns() { $('undo').disabled = S.hi <= 0; $('redo').disabled = S.hi >= S.hist.length - 1; }
+
+  /* ---------- 화면 ---------- */
+  function visibleLines(cut) { var out = []; (cut.lines || []).forEach(function (l, i) { if (panelOf(cut, l) === S.panel) out.push(i); }); return out; }
+  function selIdx(cut) { var v = visibleLines(cut); if (v.indexOf(S.sel) < 0) S.sel = v.length ? v[0] : -1; return S.sel; }
+
+  function buildCutSelect() {
+    var only = $('onlyLines').checked, cur = S.cutNo;
+    $('cut').innerHTML = S.epData.cuts.filter(function (c) { return !only || (c.lines && c.lines.length) || c.no === cur; }).map(function (c) {
+      return '<option value="' + c.no + '">#' + c.no + ' ' + esc((c.desc || '').slice(0, 24)) + (c.reader === false ? ' (숨김)' : '') + '</option>'; }).join('');
+    $('cut').value = String(cur);
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  function draw() {
+    var cut = cutOf(S.cutNo); if (!cut) return;
+    var ps = panelsOf(cut); if (S.panel >= ps.length) S.panel = 0;
+    var pc = ps[S.panel];
+    var imgSize = pc.imageSize || {}; var ratio = imgSize.w && imgSize.h ? imgSize.w / imgSize.h : ratioOf(pc.ratio || cut.ratio);
+    $('info').innerHTML = '<b>#' + cut.no + '</b>' + (ps.length > 1 ? ' · 패널 ' + (S.panel + 1) + '/' + ps.length : '') + ' · ' + esc(cut.desc || '') + (cut.reader === false ? ' · <b>독자 화면 숨김 컷</b>' : '');
+    $('panels').innerHTML = ps.map(function (_, i) { return '<button data-panel="' + i + '" aria-pressed="' + (i === S.panel) + '">' + (i + 1) + '</button>'; }).join('');
+    $('widths').innerHTML = [320, 360, 390, 430, 768].map(function (w) { return '<button data-w="' + w + '" aria-pressed="' + (w === S.width) + '">' + w + '</button>'; }).join('');
+    var W = S.width * S.zoom; $('wrap').style.width = W + 'px';
+    var st = $('stage'); st.style.setProperty('--u', (W / 360) + '');
+    var src = pc.image ? S.ep.imageBase + pc.image : null;
+    st.innerHTML = '<div class="pbox" id="pbox" style="aspect-ratio:' + ratio + '">' + (src ? '<img src="' + esc(src) + '" alt="">' : '<div class="ph">원화 없음</div>') +
+      '<svg class="tails" id="tails"></svg><div class="layer" id="layer"></div></div>';
+    var sel = selIdx(cut), vis = visibleLines(cut);
+    var layer = $('layer');
+    layer.innerHTML = vis.map(function (i) { return bubbleHtml(cut, i, i === sel); }).join('');
+    $('blist').innerHTML = (cut.lines || []).map(function (l, i) { var inP = vis.indexOf(i) >= 0;
+      return '<button data-sel="' + i + '"' + (i === sel ? ' class="on"' : '') + (inP ? '' : ' disabled') + '>' + (i + 1) + '. ' + esc((l.text || '').slice(0, 14)) + (isEdited(cut, i) ? ' ✎' : '') + '</button>'; }).join('') || '<span class="info">이 컷에는 대사가 없습니다</span>';
+    afterLayout(cut, sel, vis); fill(cut, sel); btns();
+  }
+  function bubbleHtml(cut, i, selected) {
+    var g = geo(cut, i), l = cut.lines[i];
+    var st = 'left:' + g.x + '%;top:' + g.y + '%;width:' + g.w + '%;' + (g.h != null ? 'height:' + g.h + '%;' : '') +
+      'padding:calc(' + g.pad + 'px*var(--u));border-radius:' + (g.radius >= 60 ? '50%' : 'calc(' + g.radius + 'px*var(--u))') + ';font-size:calc(' + g.fs + 'px*var(--u));line-height:' + g.lh + ';';
+    return '<div class="b ' + g.type + (selected ? ' sel' : '') + '" data-i="' + i + '" style="' + st + '">' + (selected ? '<span class="no">대사 ' + (i + 1) + '</span>' : '') + esc(l.text) + '</div>';
+  }
+  /* 말풍선 실제 크기를 재어 꼬리·손잡이를 그린다 */
+  function afterLayout(cut, sel, vis) {
+    var pbox = $('pbox'), pr = pbox.getBoundingClientRect(), u = S.width * S.zoom / 360, svg = $('tails');
+    svg.setAttribute('width', pr.width); svg.setAttribute('height', pr.height); svg.setAttribute('viewBox', '0 0 ' + pr.width + ' ' + pr.height);
+    var out = '', handles = '';
+    vis.forEach(function (i) {
+      var g = geo(cut, i), el = pbox.querySelector('.b[data-i="' + i + '"]'); if (!el) return;
+      var cx = g.x / 100 * pr.width, cy = g.y / 100 * pr.height, bw = el.offsetWidth, bh = el.offsetHeight;
+      if (g.tail.on) { var t = tailGeom(g, cx, cy, bw, bh, pr, u); out += t.svg; if (i === sel) handles += '<div class="h" data-h="tip" style="left:' + t.tip[0] + 'px;top:' + t.tip[1] + 'px"></div><div class="h start" data-h="start" style="left:' + t.start[0] + 'px;top:' + t.start[1] + 'px"></div>'; }
+      if (i === sel) handles += '<div class="h size" data-h="size" style="left:' + (cx + bw / 2) + 'px;top:' + (cy + bh / 2) + 'px"></div>';
+      g._px = { cx: cx, cy: cy, bw: bw, bh: bh };
+    });
+    svg.innerHTML = out;
+    var hl = document.createElement('div'); hl.innerHTML = handles; while (hl.firstChild) $('layer').appendChild(hl.firstChild);
+  }
+  function perimeter(cx, cy, bw, bh, ang, round) {   /* 중심에서 각도 방향으로 말풍선 둘레와 만나는 점 */
+    var a = ang * Math.PI / 180, dx = Math.cos(a), dy = Math.sin(a), hw = bw / 2, hh = bh / 2, t;
+    if (round) t = 1 / Math.sqrt((dx * dx) / (hw * hw) + (dy * dy) / (hh * hh)); else t = Math.min(dx ? hw / Math.abs(dx) : 1e9, dy ? hh / Math.abs(dy) : 1e9);
+    return [cx + dx * t, cy + dy * t];
+  }
+  function tailGeom(g, cx, cy, bw, bh, pr, u) {
+    var tip = [g.tail.tx / 100 * pr.width, g.tail.ty / 100 * pr.height];
+    var ang = g.tail.sa != null ? g.tail.sa : Math.atan2(tip[1] - cy, tip[0] - cx) * 180 / Math.PI;
+    var round = g.radius >= 60, s0 = perimeter(cx, cy, bw, bh, ang, round), inset = 5 * u;
+    var dx = tip[0] - s0[0], dy = tip[1] - s0[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, half = g.tail.th * u / 2;
+    var bs = [s0[0] - (s0[0] - cx) / (Math.hypot(s0[0] - cx, s0[1] - cy) || 1) * inset, s0[1] - (s0[1] - cy) / (Math.hypot(s0[0] - cx, s0[1] - cy) || 1) * inset];
+    var p1 = [bs[0] + nx * half, bs[1] + ny * half], p2 = [bs[0] - nx * half, bs[1] - ny * half];
+    var c = g.tail.curve * L, mx = (bs[0] + tip[0]) / 2 + nx * c, my = (bs[1] + tip[1]) / 2 + ny * c;
+    var fill = g.type === 'caption' ? 'rgba(12,14,18,.86)' : (g.type === 'mono' ? 'rgba(236,232,224,.93)' : '#fff'), stroke = g.type === 'caption' ? '#efeae0' : '#111';
+    var d = 'M' + p1[0] + ',' + p1[1] + ' Q' + mx + ',' + my + ' ' + tip[0] + ',' + tip[1] + ' Q' + mx + ',' + my + ' ' + p2[0] + ',' + p2[1] + ' Z';
+    return { svg: '<path d="' + d + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + (2 * u) + '" stroke-linejoin="round"/>', tip: tip, start: s0, ang: ang };
+  }
+
+  /* ---------- 컨트롤 값 ---------- */
+  function fill(cut, sel) {
+    var dis = sel < 0; document.querySelectorAll('.ctl input[type=range], .ctl [data-pre], #autoH, #manH, #tOn, #tOff, #tsAuto, #rb').forEach(function (e) { e.disabled = dis; });
+    if (dis) { $('who').textContent = ''; return; }
+    var g = geo(cut, sel), l = cut.lines[sel], px = (g._px) || null, u = S.width * S.zoom / 360;
+    var el = $('pbox').querySelector('.b[data-i="' + sel + '"]'), pr = $('pbox').getBoundingClientRect();
+    $('who').innerHTML = '대사 ' + (sel + 1) + '/' + cut.lines.length + ' · <b>' + esc(l.who || '(독백)') + '</b> · ' + g.type + (isEdited(cut, sel) ? ' · 편집됨' : '');
+    var set = function (id, v, txt) { $(id).value = v; $(id + 'v').textContent = txt == null ? v : txt; };
+    set('gx', g.x, rnd(g.x)); set('gy', g.y, rnd(g.y)); set('gw', g.w, rnd(g.w));
+    var hpct = g.h != null ? g.h : (el && pr.height ? el.offsetHeight / pr.height * 100 : 15);
+    set('gh', clamp(hpct, 6, 70), rnd(hpct) + (g.h == null ? ' 자동' : ''));
+    $('autoH').classList.toggle('on', g.h == null); $('manH').classList.toggle('on', g.h != null); $('gh').disabled = g.h == null;
+    set('gp', g.pad); set('gr', g.radius, g.radius >= 60 ? '타원' : g.radius); set('gf', g.fs); set('gl', g.lh, g.lh);
+    $('tOn').classList.toggle('on', g.tail.on); $('tOff').classList.toggle('on', !g.tail.on);
+    var t = el ? tailGeom(g, g.x / 100 * pr.width, g.y / 100 * pr.height, el.offsetWidth, el.offsetHeight, pr, u) : null;
+    var dir = t ? ((Math.atan2(t.tip[1] - t.start[1], t.tip[0] - t.start[0]) * 180 / Math.PI) + 360) % 360 : 0, len = t ? Math.hypot(t.tip[0] - t.start[0], t.tip[1] - t.start[1]) / u : 0;
+    set('ts', t ? Math.round((t.ang + 360) % 360) : 0, g.tail.sa == null ? '자동' : Math.round(g.tail.sa)); set('td', Math.round(dir), Math.round(dir)); set('tl', clamp(Math.round(len), 6, 260), Math.round(len));
+    set('tt', g.tail.th); set('tc', g.tail.curve, g.tail.curve);
+    ['ts', 'td', 'tl', 'tt', 'tc'].forEach(function (id) { $(id).disabled = !g.tail.on; }); $('tsAuto').disabled = !g.tail.on;
+  }
+
+  /* ---------- 편집 동작 ---------- */
+  function mutate(fn, push) { var cut = cutOf(S.cutNo), i = selIdx(cut); if (i < 0) return; var g = geo(cut, i); fn(g, cut); setGeo(cut, i, g); persist(); draw(); if (push) commit(); }
+  function pbox() { return $('pbox').getBoundingClientRect(); }
+  document.addEventListener('pointerdown', function (e) {
+    var h = e.target.closest('.h'), b = e.target.closest('.b'); if (!h && !b) return; if (!$('stage').contains(e.target)) return;
+    var cut = cutOf(S.cutNo); if (b && !h) { var i = +b.dataset.i; if (i !== S.sel) { S.sel = i; draw(); } }
+    var i2 = selIdx(cut); if (i2 < 0) return;
+    var pr = pbox(), g = geo(cut, i2);
+    drag = { kind: h ? h.dataset.h : 'move', i: i2, pr: pr, ox: (e.clientX - pr.left) / pr.width * 100 - g.x, oy: (e.clientY - pr.top) / pr.height * 100 - g.y, moved: false };
+    try { e.target.setPointerCapture(e.pointerId); } catch (x) {}
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (!drag) return; var cut = cutOf(S.cutNo), g = geo(cut, drag.i), pr = drag.pr, u = S.width * S.zoom / 360;
+    var px = (e.clientX - pr.left) / pr.width * 100, py = (e.clientY - pr.top) / pr.height * 100;
+    if (drag.kind === 'move') { var nx = px - drag.ox, ny = py - drag.oy, dx = nx - g.x, dy = ny - g.y; g.x = rnd(nx); g.y = rnd(ny); if (g.tail.on) { g.tail.tx = rnd(g.tail.tx + dx); g.tail.ty = rnd(g.tail.ty + dy); } }
+    else if (drag.kind === 'tip') { g.tail.tx = rnd(px); g.tail.ty = rnd(py); }
+    else if (drag.kind === 'start') { g.tail.sa = Math.round((Math.atan2((py - g.y) / 100 * pr.height, (px - g.x) / 100 * pr.width) * 180 / Math.PI + 360) % 360); }
+    else if (drag.kind === 'size') { g.w = rnd(clamp((px - g.x) * 2, 10, 96)); var hh = clamp((py - g.y) * 2, 6, 70); if (g.h != null || Math.abs(hh - (g._px ? g._px.bh / pr.height * 100 : hh)) > 6) g.h = rnd(hh); }
+    drag.moved = true; setGeo(cut, drag.i, g); draw();
+  });
+  function endDrag() { if (!drag) return; var m = drag.moved; drag = null; if (m) { persist(); commit(); } }
+  document.addEventListener('pointerup', endDrag); document.addEventListener('pointercancel', endDrag);
+  document.addEventListener('keydown', function (e) {
+    var t = e.target.tagName; if (/^(INPUT|TEXTAREA|SELECT)$/.test(t) && !(t === 'INPUT' && e.target.type === 'range' && false)) { if (!(e.ctrlKey || e.metaKey)) return; }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) { e.preventDefault(); if (e.shiftKey) { if (S.hi < S.hist.length - 1) restore(S.hi + 1); } else if (S.hi > 0) restore(S.hi - 1); return; }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || e.key === 'Y')) { e.preventDefault(); if (S.hi < S.hist.length - 1) restore(S.hi + 1); return; }
+    var m = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key]; if (!m) return;
+    var step = e.shiftKey ? 1 : 0.2; e.preventDefault();
+    mutate(function (g) { g.x = rnd(g.x + m[0] * step); g.y = rnd(g.y + m[1] * step); if (g.tail.on) { g.tail.tx = rnd(g.tail.tx + m[0] * step); g.tail.ty = rnd(g.tail.ty + m[1] * step); } }, false);
+    clearTimeout(S.kt); S.kt = setTimeout(commit, 400);
+  });
+
+  function bind(id, fn) { var e = $(id); e.addEventListener('input', function () { var v = +e.value; mutate(function (g, cut) { fn(g, v, cut); }, false); }); e.addEventListener('change', commit); }
+  bind('gx', function (g, v) { var d = v - g.x; g.x = v; if (g.tail.on) g.tail.tx = rnd(g.tail.tx + d); });
+  bind('gy', function (g, v) { var d = v - g.y; g.y = v; if (g.tail.on) g.tail.ty = rnd(g.tail.ty + d); });
+  bind('gw', function (g, v) { g.w = v; }); bind('gh', function (g, v) { g.h = v; });
+  bind('gp', function (g, v) { g.pad = v; }); bind('gr', function (g, v) { g.radius = v; });
+  bind('gf', function (g, v) { g.fs = v; }); bind('gl', function (g, v) { g.lh = v; });
+  bind('tt', function (g, v) { g.tail.th = v; }); bind('tc', function (g, v) { g.tail.curve = v; });
+  bind('ts', function (g, v) { g.tail.sa = v; });
+  function tipFromPolar(g, dirDeg, len, cut) { var pr = pbox(), u = S.width * S.zoom / 360, el = $('pbox').querySelector('.b[data-i="' + selIdx(cut) + '"]');
+    var t = tailGeom(g, g.x / 100 * pr.width, g.y / 100 * pr.height, el.offsetWidth, el.offsetHeight, pr, u), a = dirDeg * Math.PI / 180;
+    g.tail.tx = rnd((t.start[0] + Math.cos(a) * len * u) / pr.width * 100); g.tail.ty = rnd((t.start[1] + Math.sin(a) * len * u) / pr.height * 100); }
+  bind('td', function (g, v, cut) { tipFromPolar(g, v, +$('tl').value, cut); });
+  bind('tl', function (g, v, cut) { tipFromPolar(g, +$('td').value, v, cut); });
+  $('autoH').onclick = function () { mutate(function (g) { g.h = null; }, true); };
+  $('manH').onclick = function () { mutate(function (g, cut) { var el = $('pbox').querySelector('.b[data-i="' + selIdx(cut) + '"]'); g.h = rnd(el.offsetHeight / pbox().height * 100); }, true); };
+  $('tOn').onclick = function () { mutate(function (g) { g.tail.on = true; }, true); }; $('tOff').onclick = function () { mutate(function (g) { g.tail.on = false; }, true); };
+  $('tsAuto').onclick = function () { mutate(function (g) { g.tail.sa = null; }, true); };
+  document.querySelectorAll('[data-pre]').forEach(function (b) { b.onclick = function () { var p = b.dataset.pre;
+    mutate(function (g) { var oy = g.y; g.y = p === 'in' ? clamp(g.y, 18, 82) : p === 'edgeTop' ? 0 : p === 'edgeBottom' ? 100 : 108; if (g.tail.on) g.tail.ty = rnd(g.tail.ty + (g.y - oy)); }, true); }; });
+
+  /* ---------- 초기화 ---------- */
+  function delEdits(pred) { var m = S.edits[S.ep.id] || {}; Object.keys(m).forEach(function (k) { if (pred(k)) delete m[k]; }); }
+  $('rb').onclick = function () { var c = cutOf(S.cutNo), i = selIdx(c); delEdits(function (k) { return k === c.no + ':' + i; }); persist(); draw(); commit(); };
+  $('rc').onclick = function () { var c = cutOf(S.cutNo); delEdits(function (k) { return k.split(':')[0] === String(c.no); }); persist(); draw(); commit(); };
+  $('ra').onclick = function () { if (!confirm('이 회차에서 편집한 말풍선을 모두 되돌릴까요?')) return; S.edits[S.ep.id] = {}; persist(); draw(); commit(); };
+
+  /* ---------- 내보내기 ---------- */
+  function jsLit(v) { if (v === null) return 'null'; if (typeof v === 'string') return "'" + v.replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; if (typeof v !== 'object') return String(v);
+    if (Array.isArray(v)) return '[' + v.map(jsLit).join(', ') + ']'; return '{ ' + Object.keys(v).map(function (k) { return k + ': ' + jsLit(v[k]); }).join(', ') + ' }'; }
+  function lineCfg(cut, i) {
+    if (!isEdited(cut, i)) { var c = cfgOf(cut, i); if (c) return clone(c); var d = defaults(cut, i); return { type: d.type, pref: { panel: d.panel, x: d.x, y: d.y }, region: 'panel' }; }
+    var g = geo(cut, i), o = { type: g.type, pref: { panel: g.panel, x: rnd(g.x), y: rnd(g.y) }, region: 'panel' };
+    if (g.y <= 2 || (g.y >= 98 && g.y <= 102)) o.edge = true; if (g.y > 102) o.place = 'below';
+    if (g.tail.on) o.tail = { panel: g.panel, x: rnd(g.tail.tx), y: rnd(g.tail.ty) };
+    var old = cfgOf(cut, i); if (old && old.type === 'caption' && old.variant) o.variant = old.variant;
+    o.manual = { w: g.w, h: g.h == null ? 'auto' : g.h, pad: g.pad, radius: g.radius, fs: g.fs, lh: g.lh };
+    if (g.tail.on) o.manual.tail = { start: g.tail.sa == null ? 'auto' : g.tail.sa, thick: g.tail.th, curve: g.tail.curve };
+    return o;
+  }
+  function patchText() {
+    var m = S.edits[S.ep.id] || {}, cuts = {}; Object.keys(m).forEach(function (k) { cuts[k.split(':')[0]] = 1; });
+    var nos = Object.keys(cuts).map(Number).sort(function (a, b) { return a - b; });
+    if (!nos.length) return '// 편집한 말풍선이 없습니다.';
+    var out = ['// ' + S.ep.id + ' 말풍선 편집 패치 — ' + new Date().toISOString().slice(0, 10), '// data/' + S.ep.id + '-bubbles.js 의 cuts 안에서 해당 컷 번호 항목의 lines 를 아래로 바꾼다(zones·note 등 다른 키는 그대로 둔다).',
+      '// pref·tail·edge·place 는 현재 엔진과 호환, manual 은 편집기 정밀값(엔진 반영 전까지 무시됨).', ''];
+    nos.forEach(function (no) { var cut = cutOf(no);
+      out.push('  ' + no + ': {', '    lines: ['); cut.lines.forEach(function (_, i) { out.push('      ' + jsLit(lineCfg(cut, i)) + (i < cut.lines.length - 1 ? ',' : '')); }); out.push('    ]', '  },'); });
+    return out.join('\n');
+  }
+  $('patchBtn').onclick = function () { $('out').value = patchText(); };
+  $('copyBtn').onclick = function () { var t = $('out').value || patchText(); $('out').value = t; if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { toast('복사됨'); }, function () { $('out').select(); toast('직접 복사하세요'); }); else { $('out').select(); toast('직접 복사하세요'); } };
+  $('jsonOut').onclick = function () {
+    var data = { tool: 'bubble-editor', version: 1, exported: new Date().toISOString(), edits: S.edits };
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' })); a.download = 'bubble-edits-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(a); a.click(); a.remove(); toast('JSON 저장'); };
+  $('jsonIn').onclick = function () { $('file').click(); };
+  $('file').onchange = function () { var f = this.files[0]; if (!f) return; var r = new FileReader(); r.onload = function () { try { var d = JSON.parse(r.result); if (!d.edits || typeof d.edits !== 'object') throw 0; S.edits = d.edits; persist(); draw(); commit(); toast('불러옴'); } catch (e) { toast('올바른 편집 JSON 이 아닙니다'); } }; r.readAsText(f); this.value = ''; };
+
+  /* ---------- 이동·컨트롤 ---------- */
+  function go(no) { S.cutNo = no; S.panel = 0; S.sel = 0; buildCutSelect(); draw(); try { history.replaceState(null, '', '#' + S.ep.id + '/' + no); } catch (e) {} }
+  function step(d) { var only = $('onlyLines').checked, cs = S.epData.cuts.filter(function (c) { return !only || (c.lines && c.lines.length); }), k = -1;
+    for (var i = 0; i < cs.length; i++) if (cs[i].no === S.cutNo) k = i; if (k < 0) { var nx = cs.filter(function (c) { return d > 0 ? c.no > S.cutNo : c.no < S.cutNo; }); if (nx.length) go((d > 0 ? nx[0] : nx[nx.length - 1]).no); return; }
+    var n = cs[k + d]; if (n) go(n.no); }
+  $('prev').onclick = function () { step(-1); }; $('next').onclick = function () { step(1); };
+  $('cut').onchange = function () { go(+this.value); }; $('onlyLines').onchange = buildCutSelect;
+  $('panels').onclick = function (e) { var b = e.target.closest('button'); if (b) { S.panel = +b.dataset.panel; S.sel = 0; draw(); } };
+  $('widths').onclick = function (e) { var b = e.target.closest('button'); if (b) { S.width = +b.dataset.w; draw(); } };
+  $('zoom').oninput = function () { S.zoom = +this.value; draw(); };
+  $('blist').onclick = function (e) { var b = e.target.closest('button'); if (b && !b.disabled) { S.sel = +b.dataset.sel; draw(); } };
+  $('undo').onclick = function () { if (S.hi > 0) restore(S.hi - 1); }; $('redo').onclick = function () { if (S.hi < S.hist.length - 1) restore(S.hi + 1); };
+  $('ep').onchange = function () { openEp(this.value); };
+  window.addEventListener('resize', function () { if (S.epData) draw(); });
+
+  function openEp(id) {
+    var cfg = EPISODES.filter(function (e) { return e.id === id; })[0];
+    if (!cfg || cfg.disabled) return toast('이 회차의 데이터가 아직 없습니다');
+    Promise.all([window.WEBTOON.episodeData[id] ? 0 : loadScript(cfg.file), window[cfg.bubblesVar] ? 0 : loadScript(cfg.bubbles).catch(function () { return 0; })]).then(function () {
+      S.ep = cfg; S.epData = window.WEBTOON.episodeData[id]; S.bub = window[cfg.bubblesVar] || {}; $('ep').value = id;
+      var h = (location.hash || '').replace('#', '').split('/'), no = h[0] === id && h[1] ? +h[1] : null;
+      var first = S.epData.cuts.filter(function (c) { return c.lines && c.lines.length; })[0];
+      S.cutNo = (no && cutOf(no)) ? no : (first || S.epData.cuts[0]).no; S.panel = 0; S.sel = 0; buildCutSelect(); draw();
+    }).catch(function (e) { toast('불러오기 실패: ' + e.message); });
+  }
+  try { S.edits = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { S.edits = {}; }
+  S.hist = [JSON.stringify(S.edits)]; S.hi = 0;
+  $('ep').innerHTML = EPISODES.map(function (e) { return '<option value="' + e.id + '"' + (e.disabled ? ' disabled' : '') + '>' + e.label + '</option>'; }).join('');
+  var h0 = (location.hash || '').replace('#', '').split('/')[0];
+  openEp(EPISODES.some(function (e) { return e.id === h0 && !e.disabled; }) ? h0 : 'ep01v3');
+})();
+</script>
+</body>
+</html>

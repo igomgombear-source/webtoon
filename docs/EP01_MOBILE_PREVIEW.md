@@ -9,3 +9,8 @@
 ## 로컬 수정 시안 17장 비교 (미승인, 본편 미연결)
 - 주소: `/tools/compare-local-revisions.html` (Codespaces 8765 포트 주소 뒤). 출처 브랜치 `ep01-local-revisions-art`(`b8789b4`).
 - 승인본과 충돌하는 컷(41)은 빨간 경고로 따로 모았다.
+
+## 말풍선 편집기 (EP01~EP06 공용, 원화·대사 불변)
+- 주소: `/tools/bubble-editor.html`(저장소) · GitHub Pages `…/webtoon/review/bubble-editor.html`. `#ep01v3/70` 처럼 회차·컷 번호를 붙여 바로 열 수 있다.
+- 회차 추가: 페이지 맨 위 `EPISODES` 목록에 한 줄(`file`·`bubbles`·`bubblesVar`·`imageBase`).
+- 내보내기: JSON·적용용 패치 텍스트(`pref`·`tail` 호환, `manual` 정밀값은 독자용 엔진이 아직 읽지 않음).
