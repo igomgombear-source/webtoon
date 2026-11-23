@@ -49,6 +49,12 @@
     var ep = W.episodeData.ep01v3; var cuts = ep.cuts;
     if (cuts.length !== 104) add(res, 'fail', 'data.count', 0, 0, '컷 수 ' + cuts.length);
     /* 원본 104컷(데이터)과 독자 화면 99컷(reader:false 5컷 제외)을 따로 본다. 숨김 목록이 바뀌면 사용자 승인 변경이어야 한다 */
+    var APPROVED = {
+      1: ['ep01v3-001-opening-portrait-DRAFT.webp', 'ep01v3-001-haein-portrait-DRAFT.webp', 'ep01v3-001-hyoeun-portrait-DRAFT.webp', 'ep01v3-001-gihun-tracksuit-portrait.webp', 'ep01v3-001-jin-portrait-DRAFT.webp'],
+      16: ['ep01v3-016-natural-mouse-grip-DRAFT.webp'], 19: ['ep01v3-019c-yangpyeong-school-night-APPROVED.webp'],
+      41: ['ep01v3-041-haein-doorway-trousers-REV1-DRAFT.webp'], 43: ['ep01v3-043-entrance-gesture-DRAFT.webp'], 57: ['ep01v3-057-half-size-clock-DRAFT.webp'],
+      94: ['ep01v3-094-a-slim-phone-DRAFT.webp', 'ep01v3-094-b-slim-phone-DRAFT.webp'], 98: ['ep01v3-098-reveal-dark-APPROVED.webp']
+    };
     var HIDDEN = [16, 59, 60, 85, 86];
     var hiddenNow = cuts.filter(function (c) { return c.reader === false; }).map(function (c) { return c.no; });
     var readerNow = cuts.filter(function (c) { return c.reader !== false; }).length;
@@ -75,13 +81,14 @@
         if (!l.text) add(res, 'fail', 'data.empty', 0, c.no, '빈 대사 ' + j);
         if (l.style !== 'thought' && l.style !== 'phone' && l.style !== 'caption' && !l.who && !/^…+$|^……$/.test(l.text)) add(res, 'warn', 'data.speaker', 0, c.no, '화자 없는 말풍선: ' + l.text.slice(0, 16));
       });
-      if (c.image && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff|(003|005|022|025|028|029|030|032|034|036|037|040|044|047|051|056|057|058|061|063|064|067|068|070|071|072|073|074|077|080)|(009|020|021|027|031|042|053|059-thumb-REV1|062|065|078|083|098|099|104)|(023-b|026-a|026-b|033-a|033-b|033-c|052-a|052-b|075-a|075-b)|(011|012|013|043|046|054|055|082|085|086|092|097|100)|045-REV1|048-console-U03|060-two-phones-U05|081-evening-text-U09|103-memory-U10|004-blue-folder-passage|006-stair-landing-loafer|014-music-room-haein|015-afternoon-staffroom|017-messenger-approved|024-haein-at-the-door|038|039-night-phone-handoff|041-haein-doorway|079-empty-hand|102-police-call-threshold|081-living-room-REV1|082-living-room-REV1|084-living-room-REV1|085-living-room-REV1|087-living-room-REV1|002-Work-REV3|008-Work-BATCH1-REV1|010-Work-BATCH1|045-choir-continuity|046-choir-continuity|084-Work-BATCH1|087-Work-BATCH1|089-Work-BATCH1|091-Work-BATCH1-REV1|093-Work-BATCH1-REV1|095-Work-BATCH1-REV1|096-Work-BATCH1-REV1|101-Work-BATCH1-REV1|(002|008|010|017|069|084|087|089|091|093|095|096|101)-final)-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
-      if (c.image && c.imageStatus !== 'draft') add(res, 'fail', 'data.draft', 0, c.no, 'DRAFT 표시 없는 임시 원화');
+      /* 승인 원화 장부: 승인 기록(docs/EP01_APPROVED_ART_INTEGRATION.md·승인 커밋 b80cde5·사용자 승인)이 확인된 파일만, 정확한 파일명 + imageStatus 'approved' 가 모두 맞을 때 -DRAFT·draft 기준의 예외로 허용한다. 89컷(확보한 DRAFT, 승인 미확인)·미확인 항목은 예외가 없다 */
+      var okAppr = APPROVED[c.no] && c.image && APPROVED[c.no].indexOf(c.image) >= 0 && c.imageStatus === 'approved';
+      if (c.image && !okAppr && !/^ep01v3-(035-webtoon-style|050-webtoon-style|066-webtoon-style|001-opening-portrait|016-staffroom-desk-REV2|076-phone-handoff|(003|005|022|025|028|029|030|032|034|036|037|040|044|047|051|056|057|058|061|063|064|067|068|070|071|072|073|074|077|080)|(009|020|021|027|031|042|053|059-thumb-REV1|062|065|078|083|098|099|104)|(023-b|026-a|026-b|033-a|033-b|033-c|052-a|052-b|075-a|075-b)|(011|012|013|043|046|054|055|082|085|086|092|097|100)|045-REV1|048-console-U03|060-two-phones-U05|081-evening-text-U09|103-memory-U10|004-blue-folder-passage|006-stair-landing-loafer|014-music-room-haein|015-afternoon-staffroom|017-messenger-approved|024-haein-at-the-door|038|039-night-phone-handoff|041-haein-doorway|079-empty-hand|102-police-call-threshold|081-living-room-REV1|082-living-room-REV1|084-living-room-REV1|085-living-room-REV1|087-living-room-REV1|002-Work-REV3|008-Work-BATCH1-REV1|010-Work-BATCH1|045-choir-continuity|046-choir-continuity|084-Work-BATCH1|087-Work-BATCH1|089-Work-BATCH1|091-Work-BATCH1-REV1|093-Work-BATCH1-REV1|095-Work-BATCH1-REV1|096-Work-BATCH1-REV1|101-Work-BATCH1-REV1|(002|008|010|017|069|084|087|089|091|093|095|096|101)-final)-DRAFT\.webp$/.test(c.image)) add(res, 'fail', 'data.image', 0, c.no, '승인 목록에 없는 이미지 ' + c.image);
+      if (c.image && !okAppr && c.imageStatus !== 'draft') add(res, 'fail', 'data.draft', 0, c.no, 'DRAFT 표시 없는 임시 원화');
       /* 분할 컷 조각·그림 인셋도 같은 기준: 승인 목록, DRAFT 표시, 크기, 로드 전 미리보기 */
       (c.rows ? [].concat.apply([], c.rows) : []).forEach(function (pc, k) {
         if (!pc.image) return;
-        /* 19-c 만 예외: 정확한 승인 파일명 + imageStatus 'approved' 가 모두 맞을 때(승인 원화, 사용자 승인 2026-11-21). 다른 조각·컷은 기존 -DRAFT·draft 기준 그대로 */
-        var okApproved19c = c.no === 19 && k === 2 && pc.image === 'ep01v3-019c-yangpyeong-school-night-APPROVED.webp' && pc.imageStatus === 'approved';
+        var okApproved19c = APPROVED[c.no] && APPROVED[c.no].indexOf(pc.image) >= 0 && pc.imageStatus === 'approved';   /* 위 승인 장부(19-c 포함): 정확한 파일명 + approved */
         if (!okApproved19c && !/^ep01v3-[0-9a-z-]+-DRAFT\.webp$/i.test(pc.image)) add(res, 'fail', 'data.piece.image', 0, c.no, '조각 ' + k + ' 파일 이름 형식 ' + pc.image);
         if (!okApproved19c && pc.imageStatus !== 'draft') add(res, 'fail', 'data.piece.draft', 0, c.no, '조각 ' + k + ' DRAFT 표시 없음');
         if (!pc.imageSize || !(pc.imageSize.w > 0 && pc.imageSize.h > 0)) add(res, 'fail', 'data.piece.size', 0, c.no, '조각 ' + k + ' imageSize 없음');
@@ -92,7 +99,7 @@
     var withImg = cuts.filter(function (c) { return c.image; }).map(function (c) { return c.no; });
     if (JSON.stringify(withImg) !== '[2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,20,21,22,24,25,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,76,77,78,79,80,81,82,83,84,85,86,87,89,91,92,93,95,96,97,98,99,100,101,102,103,104]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (단독 컷 기준 — 조각 컷 1(초상 5행, 승인 통합)·18·19·23·26·33·52·75·88·90·94 등은 rows 안 조각에 연결)');
     var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
-    if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
+    if (!c16 || !(/REV2/.test(c16.image || '') || (APPROVED[16] && APPROVED[16].indexOf(c16.image) >= 0 && c16.imageStatus === 'approved'))) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
     var c74 = cuts.filter(function (c) { return c.no === 74; })[0];
     if (!c74 || (c74.lines || []).length !== 1 || c74.lines[0].who || c74.lines[0].style !== 'silence') add(res, 'fail', 'data.silence', 0, 74, '74컷은 화자 없는 침묵(silence) 1줄이어야 함');

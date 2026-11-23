@@ -87,6 +87,14 @@
    * 기본(독자) 화면에는 DOM 에도 넣지 않는다. */
   var REVIEW = /[?&]review=1\b/.test(location.search);
   if (REVIEW) document.documentElement.classList.add('is-review');
+  /* 사용자 최종 검수판: index.html?check=1#ep01v3 — 독자 화면과 같은 컷·순서·간격에 원본 컷 번호와 장면 설명(cut.desc)을 작게 얹는다. 주소에 check=1 이 없으면 아무 것도 나오지 않는다.
+   * hidden=1 을 더하면 독자 화면에서 숨긴 컷(16·59·60·85·86)도 '독자 화면 숨김' 표시와 함께 볼 수 있다 */
+  var CHECK = /[?&]check=1\b/.test(location.search);
+  var CHECK_HIDDEN = CHECK && /[?&]hidden=1\b/.test(location.search);
+  if (CHECK) document.documentElement.classList.add('is-check');
+  function checkLabel(cut) {
+    return '<p class="chk-label" aria-hidden="true"><b>#' + cut.no + '</b>' + esc(cut.desc || '') + (cut.reader === false ? '<i>독자 화면 숨김</i>' : '') + '</p>';
+  }
 
   /* ---------- 대사 ---------- */
   function renderLine(ep, line, overlay) {
@@ -348,6 +356,7 @@
     var shape = SHAPE_OK[cut.shape] ? ' shape-' + cut.shape : '';
     var ov = cut.overflow || null;
     var idx = 0, first = true;
+    var totalPanels = rows.reduce(function (a, r) { return a + r.length; }, 0);
     var hasEdgeTop = lines.some(function (l) { return /^edge-top/.test(l.at || ''); });
     var hasEdgeBottom = lines.some(function (l) { return /^edge-bottom/.test(l.at || ''); });
     var html = rows.map(function (row, ri) {
@@ -368,6 +377,7 @@
           (me === 0 && cut.card ? renderTitleCard(cut.card) : '') +   /* 오프닝 장소·시간 대형 카드(2컷) — 그림이 아닌 글자 층 */
           (me === 0 ? renderInsetSelf(ep, cut) : '') +
           '<div class="panel-bubbles">' + bubbleGroups(ep, lines, me) + '</div>' +
+          (CHECK && totalPanels > 1 ? '<span class="chk-sub" aria-hidden="true">조각 ' + String.fromCharCode(97 + me) + (p.desc ? ' · ' + esc(p.desc) : '') + '</span>' : '') +
         '</div>';
       }).join('');
       return '<div class="panel-row' + (cut.diagonal && row.length > 1 ? ' is-diagonal' : '') + '" style="aspect-ratio:' + sum + ' / 1;' +
@@ -421,7 +431,7 @@
     html += '<section class="cut cut-' + esc(cut.type) + ' reveal" id="cut-' + pad2(cut.no) + '" data-no="' + cut.no +
       '" data-transition="' + esc(cut.transition || 'fade') + '"' + moodAttr(cut.mood) +
       (cut.link ? ' data-link="' + esc(cut.link) + '"' : '') + (cut.inset && cut.inset.to === 'prev' ? ' data-inset="prev"' : '') +
-      ' style="--before:' + Number(before) + ';--after:' + Number(after) + ';">' + body + '</section>';
+      ' style="--before:' + Number(before) + ';--after:' + Number(after) + ';">' + (CHECK ? checkLabel(cut) : '') + body + '</section>';
     return html;
   }
 
@@ -494,7 +504,7 @@
 
   function renderEpisode(meta, ep) {
     /* reader:false 컷은 독자 화면에서만 뺀다(데이터·컷 번호는 그대로). 남은 컷 수가 진행 표시·끝 표시의 기준 */
-    if (ep.cuts.some(function (c) { return c.reader === false; })) {
+    if (!CHECK_HIDDEN && ep.cuts.some(function (c) { return c.reader === false; })) {
       ep = Object.assign({}, ep, { cuts: ep.cuts.filter(function (c) { return c.reader !== false; }) });
     }
     var s = W.series;
@@ -519,6 +529,13 @@
           '<a class="end-home" href="#home">작품 메인으로</a>' + renderEpisodeNav(meta) + '</footer>' +
       '</main>';
     window.scrollTo(0, 0);
+    if (CHECK) {
+      var tg = document.createElement('button');
+      tg.type = 'button'; tg.className = 'chk-toggle'; tg.textContent = '번호·설명 끄기';
+      tg.addEventListener('click', function () { var off = document.documentElement.classList.toggle('is-check-off'); tg.textContent = off ? '번호·설명 켜기' : '번호·설명 끄기'; });
+      document.body.appendChild(tg);
+      cleanup.push(function () { document.documentElement.classList.remove('is-check-off'); if (tg.parentNode) tg.parentNode.removeChild(tg); });
+    }
 
     bindImages();
     bindReveal();
