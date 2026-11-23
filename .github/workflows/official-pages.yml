@@ -161,6 +161,26 @@ jobs:
           }
           check().catch(error => {console.error(error); process.exitCode = 1;});
           JS
+      # Add the user review pages under /review/ WITHOUT changing any official reader file:
+      # hash every official file first, add review/, then require the official hashes to be unchanged.
+      - name: Record official site hashes
+        run: |
+          test ! -e _site/review
+          (cd _site && find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/official.sha256"
+          wc -l "$RUNNER_TEMP/official.sha256"
+      - uses: actions/checkout@v4
+        with:
+          ref: 3b714475b957334b8d99d47c1d8de182597499d9
+          path: review-src
+          persist-credentials: false
+      - name: Add review pages and verify official files are byte-identical
+        run: |
+          node review-src/tools/package-review.js _site
+          test -f _site/review/index.html && test -f _site/review/all.html
+          grep -q 'noindex' _site/review/index.html && grep -q 'noindex' _site/review/all.html
+          (cd _site && find . -type f -not -path './review/*' -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/official.after.sha256"
+          diff "$RUNNER_TEMP/official.sha256" "$RUNNER_TEMP/official.after.sha256"
+          echo "official files unchanged: $(wc -l < "$RUNNER_TEMP/official.after.sha256")"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
