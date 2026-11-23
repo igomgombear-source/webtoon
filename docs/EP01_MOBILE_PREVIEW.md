@@ -10,6 +10,11 @@
 - 주소: `/tools/compare-local-revisions.html` (Codespaces 8765 포트 주소 뒤). 출처 브랜치 `ep01-local-revisions-art`(`b8789b4`).
 - 승인본과 충돌하는 컷(41)은 빨간 경고로 따로 모았다.
 
+## 마지막 접속 Studio (EP01~EP06 통합 편집기, 1단계)
+- 주소: `/tools/studio/index.html#ep01v3` (컷 지정 `#ep01v3/62`). 말풍선 편집기 v2 를 확장한 통합 편집 프로그램(실제 독자 화면 렌더러 사용, 컷 썸네일 탐색 바, 통합 JSON v3).
+- 구조·JSON·API: `docs/STUDIO_ARCHITECTURE.md` · 병렬 개발 규칙: `docs/STUDIO_PARALLEL_DEV.md` · 검증: `node tools/studio/tests/run.js`.
+- 아래 v2 편집기는 동결(그대로 동작). v2 의 자동 저장값·JSON 은 Studio 가 그대로 불러온다.
+
 ## 말풍선 편집기 v2 (EP01~EP06 공용, 원화·대사 불변)
 - 주소: `/tools/bubble-editor.html`(저장소) · GitHub Pages `…/webtoon/review/bubble-editor.html`. `#ep01v3/70` 처럼 회차·컷 번호를 붙여 바로 열 수 있다.
 - 구조: **실제 독자 화면**(`index.html`, Pages 에서는 `review/viewer.html`)을 iframe 으로 띄우고 같은 말풍선 엔진(`js/bubbles.js`)으로 다시 배치한다. 휴대폰 UI·확대 인셋·원화 속 글자 등 합성 레이어와 순서가 독자 화면과 같다. 그 위에 투명 핸들(이동·크기·꼬리 시작/끝)만 얹는다.

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<!-- 저장소 루트(독자 화면 index.html 이 있는 곳)까지의 상대 경로와 독자 화면 파일 이름. 배포 패키지에서는 이 두 값만 바꾼다 -->
+<meta name="studio-root" content="../../">
+<meta name="studio-viewer" content="index.html">
+<title>마지막 접속 Studio</title>
+<link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<header class="bar">
+  <strong class="brand">마지막 접속 Studio</strong>
+  <select id="epSel" aria-label="회차"></select>
+  <div class="grp" role="group" aria-label="미리보기 폭"><span class="dim">폭</span><span id="widths" class="seg"></span></div>
+  <label class="grp zoomgrp"><span class="dim">확대</span><input type="range" id="zoom" min="0.5" max="2" step="0.05" value="1"><span id="zoomV" class="dim">100%</span></label>
+  <span class="spacer"></span>
+  <span id="saveState" class="save ok">저장됨</span>
+  <button id="undo" title="실행 취소 (Ctrl+Z)">되돌리기</button><button id="redo" title="다시 실행 (Ctrl+Shift+Z)">다시 실행</button>
+  <button id="jsonOut" title="모든 편집을 JSON 파일 하나로">JSON 내보내기</button><button id="jsonIn">JSON 불러오기</button>
+  <input type="file" id="file" accept="application/json,.json" hidden>
+</header>
+<div class="shell">
+  <nav id="nav" class="nav" aria-label="편집 메뉴"></nav>
+  <main class="center">
+    <div class="stagebar">
+      <button id="prev" title="이전 컷 ( [ )">◀</button><select id="cutSel" aria-label="컷"></select><button id="next" title="다음 컷 ( ] )">▶</button>
+      <label class="chk"><input type="checkbox" id="onlyLines">대사 있는 컷만</label>
+      <span id="modes" class="seg" role="group" aria-label="비교"><button data-mode="edit" aria-pressed="true">편집 후</button><button data-mode="before" aria-pressed="false">원래</button><button data-mode="side" aria-pressed="false">나란히</button></span>
+    </div>
+    <div id="cutInfo" class="cutinfo"></div>
+    <div class="view" id="view"><div class="stage" id="stage"></div></div>
+    <section class="timeline" aria-label="컷 썸네일 탐색">
+      <div class="tl-head"><b>컷</b><input id="tlFind" type="search" inputmode="numeric" placeholder="컷 번호 → Enter" aria-label="컷 번호로 이동"><label class="dim">크기<input type="range" id="tlSize" min="48" max="160" step="4" value="84"></label><span class="dim legend"><i class="lg sel"></i>선택 <i class="lg ed"></i>편집됨 <i class="lg hid"></i>숨김</span></div>
+      <div id="tlBar" class="tl-bar" role="listbox" aria-label="컷 썸네일" tabindex="0"></div>
+    </section>
+    <p class="note">실제 독자 화면(js/app.js·js/bubbles.js·js/screenui.js)을 그대로 띄워 편집합니다. 원화·대사·본편 데이터는 바뀌지 않고 편집값만 따로 저장됩니다(이 브라우저 자동 저장 + JSON).</p>
+  </main>
+  <aside class="props" aria-label="속성">
+    <div id="props"></div>
+    <section class="card"><h2>초기화 <small>모든 모듈</small></h2><div class="chips"><button id="rsEl">선택 요소</button><button id="rsCut">이 컷</button><button id="rsEp">이 회차 전체</button></div></section>
+  </aside>
+</div>
+<div id="thumbHost" class="thumb-host" aria-hidden="true"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<!-- 공통(통합 담당) -->
+<script src="core/util.js"></script>
+<script src="core/ids.js"></script>
+<script src="core/store.js"></script>
+<script src="core/base.js"></script>
+<script src="core/renderer.js"></script>
+<script src="core/stage.js"></script>
+<script src="core/timeline.js"></script>
+<script src="core/shell.js"></script>
+<!-- 모듈(각 담당자 파일). 순서 = 메뉴 순서가 아니라 등록 순서(메뉴는 order 값) -->
+<script src="modules/bubbles.js"></script>
+<script src="modules/dialogue.js"></script>
+<script src="modules/cuts.js"></script>
+<script src="modules/art.js"></script>
+<script src="modules/phone.js"></script>
+<script src="modules/fx.js"></script>
+<script>Studio.boot();</script>
+</body>
+</html>
