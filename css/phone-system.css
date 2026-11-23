@@ -172,3 +172,9 @@
 /* 15컷 확대 메신저: 좁은 인셋에서는 머리글(발신자 / 날짜·시각)을 두 줄로 */
 .zoom-box.su-v-messenger .mg-head { flex-wrap: wrap; row-gap: 0; }
 .zoom-box.su-v-messenger .mg-from { white-space: nowrap; }
+
+/* 15컷 작은 메신저 알림(발신자·시각만). 공지 전문은 17컷. 글자는 모든 폭에서 13px 이상 */
+.zoom-box.su-v-messenger.zp-messengerNotice { border-radius: calc(8 * var(--u)); }
+.zoom-box .mg-notice { display: flex; flex-direction: column; gap: .15em; padding: .55em .75em .6em; border-left: .3em solid #0b46a8; background: #fff; }
+.zoom-box .mg-notice .mg-from { font-weight: 700; font-size: max(13px, 1em); }
+.zoom-box .mg-notice .mg-time { color: #3c4658; font-size: max(13px, .95em); }

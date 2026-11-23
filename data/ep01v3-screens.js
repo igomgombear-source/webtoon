@@ -23,8 +23,8 @@
   "view": "messenger",
   "theme": "light",
   "fs": 11,
-  "zoom": { "x": 49, "y": 5, "w": 44, "fs": 13, "parts": "messenger", "frame": false },
-  "aria": "승민 자리 모니터 옆에 확대한 교직원 업무 메신저 공지"
+  "zoom": { "x": 58, "y": 4, "w": 38, "fs": 13, "parts": "messengerNotice", "frame": false },
+  "aria": "승민 자리 모니터에 도착한 교직원 업무 메신저 알림(발신자와 시각)"
  },
  "17": {
   "quad": [[0.2407, 0.2333], [0.8472, 0.2333], [0.8472, 0.6679], [0.2407, 0.6679]],

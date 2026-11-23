@@ -214,6 +214,11 @@
   var ZOOM = {
     /* 17컷 확대 인셋: 같은 메신저 창을 평면으로 크게(글자 13px 이상) */
     messenger: function (s) { return messengerWin(s); },
+    /* 15컷: 작은 알림 — 발신자와 시각만(공지 전문은 17컷에서). 데이터 messenger 의 sender·time 만 쓴다 */
+    messengerNotice: function (s) {
+      var m = s.messenger || {};
+      return '<div class="mg-notice"><span class="mg-from">' + esc(m.sender) + '</span><span class="mg-time">' + esc(m.time) + '</span></div>';
+    },
     notif: function (s) { return '<div class="su-notifs">' + (s.items || (s.item ? [s.item] : [])).map(notifCard).join('') + '</div>'; },
     /* 연락처 카드 (60컷): 이름 + 통화·문자 */
     contact: function (s) {

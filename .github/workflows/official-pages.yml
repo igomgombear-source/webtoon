@@ -53,7 +53,7 @@ jobs:
             vm.runInContext(read(episode.file), context);
           }
           assert.equal(webtoon.episodeData.ep01v3.cuts.length, 104);   // 원본 데이터 104컷
-          assert.equal(webtoon.episodeData.ep01v3.cuts.filter(cut => cut.reader !== false).length, 98);   // 독자 화면 98컷
+          assert.equal(webtoon.episodeData.ep01v3.cuts.filter(cut => cut.reader !== false).length, 99);   // 독자 화면 99컷
 
           function addArtwork(file, imageBase = '') {
             if (!file) return;
@@ -114,8 +114,8 @@ jobs:
               page.on('pageerror', error => errors.push(error.message));
               await page.goto('http://127.0.0.1:8765/#ep01v3');
               await page.locator('[data-no="104"]').waitFor();
-              assert.equal(await page.locator('.cut[data-no]').count(), 98);   // 16·59·60·85·86·90 숨김
-              for (const no of [16,59,60,85,86,90]) assert.equal(await page.locator('.cut[data-no="' + no + '"]').count(), 0);
+              assert.equal(await page.locator('.cut[data-no]').count(), 99);   // 16·59·60·85·86 숨김
+              for (const no of [16,59,60,85,86]) assert.equal(await page.locator('.cut[data-no="' + no + '"]').count(), 0);
               assert.match(await page.locator('meta[name="robots"]').getAttribute('content'), /noindex/);
               const decoded = await page.locator('.cut .art-img').evaluateAll(async images => {
                 for (const image of images) image.loading = 'eager';

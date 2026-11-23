@@ -279,6 +279,14 @@ window.EP01V3_BUBBLES = {
     ],
     lines: []
   },
+  84: {
+    note: '독백 셋(2026-11-23 승인): 안도 두 개는 기존 자동 배치(안-좌상, 경계-하) 그대로, 85컷(독자 화면 숨김)에서 옮긴 ‘휴대폰 전달’ 독백은 컷 아래 여백(gap)으로 — 얼굴·손·휴대폰을 가리지 않음',
+    lines: [
+      { type: 'mono', pref: { panel: 0, at: 'in-tl' }, region: 'panel', edge: true, join: false },
+      { type: 'mono', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, join: false },
+      { type: 'mono', pref: { panel: 0, x: 50, y: 100 }, region: 'panel', place: 'below', join: false }
+    ]
+  },
   85: {
     note: 'DRAFT 원화(소파에서 휴대폰을 보는 해인, 얼굴 오른쪽·휴대폰·손 왼쪽 아래) — 독백 두 개를 정본(gap)대로 컷 아래 여백으로. 예전 자동 배치는 첫 독백이 턱·손·휴대폰 아래를 덮었음 (2026-11-21)',
     zones: [

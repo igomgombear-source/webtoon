@@ -48,11 +48,11 @@
     var f = await loadFrame(360); var d = await settle(f); var W = f.contentWindow.WEBTOON;
     var ep = W.episodeData.ep01v3; var cuts = ep.cuts;
     if (cuts.length !== 104) add(res, 'fail', 'data.count', 0, 0, '컷 수 ' + cuts.length);
-    /* 원본 104컷(데이터)과 독자 화면 98컷(reader:false 6컷 제외)을 따로 본다. 숨김 목록이 바뀌면 사용자 승인 변경이어야 한다 */
-    var HIDDEN = [16, 59, 60, 85, 86, 90];
+    /* 원본 104컷(데이터)과 독자 화면 99컷(reader:false 5컷 제외)을 따로 본다. 숨김 목록이 바뀌면 사용자 승인 변경이어야 한다 */
+    var HIDDEN = [16, 59, 60, 85, 86];
     var hiddenNow = cuts.filter(function (c) { return c.reader === false; }).map(function (c) { return c.no; });
     var readerNow = cuts.filter(function (c) { return c.reader !== false; }).length;
-    if (readerNow !== 98) add(res, 'fail', 'data.reader', 0, 0, '데이터상 독자 화면 컷 ' + readerNow + ' ≠ 98 (원본 ' + cuts.length + ' − 숨김 ' + HIDDEN.length + ')');
+    if (readerNow !== 99) add(res, 'fail', 'data.reader', 0, 0, '데이터상 독자 화면 컷 ' + readerNow + ' ≠ 99 (원본 ' + cuts.length + ' − 숨김 ' + HIDDEN.length + ')');
     if (JSON.stringify(hiddenNow) !== JSON.stringify(HIDDEN)) add(res, 'fail', 'data.hidden', 0, 0, '독자 화면 제외 컷 ' + JSON.stringify(hiddenNow) + ' ≠ 승인 ' + JSON.stringify(HIDDEN));
     cuts.forEach(function (c, i) {
       var s = spec.cuts[i];
@@ -90,7 +90,7 @@
       if (c.inset && c.inset.image && !/^ep01v3-[0-9a-z-]+-DRAFT\.webp$/i.test(c.inset.image)) add(res, 'fail', 'data.inset.image', 0, c.no, '인셋 파일 이름 형식 ' + c.inset.image);
     });
     var withImg = cuts.filter(function (c) { return c.image; }).map(function (c) { return c.no; });
-    if (JSON.stringify(withImg) !== '[1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,20,21,22,24,25,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,76,77,78,79,80,81,82,83,84,85,86,87,89,91,92,93,95,96,97,98,99,100,101,102,103,104]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (단독 컷 기준 — 조각 컷 23·26·33·52·75는 rows 안 조각에 연결)');
+    if (JSON.stringify(withImg) !== '[2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,20,21,22,24,25,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,76,77,78,79,80,81,82,83,84,85,86,87,89,91,92,93,95,96,97,98,99,100,101,102,103,104]') add(res, 'warn', 'data.images', 0, 0, '그림이 연결된 컷 ' + JSON.stringify(withImg) + ' (단독 컷 기준 — 조각 컷 1(초상 5행, 승인 통합)·18·19·23·26·33·52·75·88·90·94 등은 rows 안 조각에 연결)');
     var c16 = cuts.filter(function (c) { return c.no === 16; })[0];
     if (!c16 || !/REV2/.test(c16.image || '')) add(res, 'fail', 'data.rev2', 0, 16, '16컷은 REV2 원화여야 함');
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'data.names', 0, 0, 'showSpeakerNames 는 false 여야 함(제작기준 9-6)');
@@ -102,16 +102,16 @@
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
     var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', 0, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
-    if (scrs.length !== 15) add(res, 'warn', 'screen.count', 0, 0, '합성된 화면 ' + scrs.length + '개 (기대 15: 21에서 숨긴 59·60(폰 3)·85·86·90 몫 제외. 15컷 메신저는 확대 인셋만)');
+    if (scrs.length !== 16) add(res, 'warn', 'screen.count', 0, 0, '합성된 화면 ' + scrs.length + '개 (기대 16: 21에서 숨긴 59·60(폰 3)·85·86 몫 제외. 15컷 메신저는 확대 인셋만)');
     f.remove();
   }
 
-  var HIDDEN_VIEW = [16, 59, 60, 85, 86, 90];   /* data.hidden 의 승인 목록과 같아야 한다 */
+  var HIDDEN_VIEW = [16, 59, 60, 85, 86];   /* data.hidden 의 승인 목록과 같아야 한다 */
   async function widthChecks(res, w) {
     var f = await loadFrame(w), d = await settle(f), win = f.contentWindow, vw = win.innerWidth, col = d.querySelector('.viewer').getBoundingClientRect().width;
     var cuts = [].slice.call(d.querySelectorAll('.cut'));
     HIDDEN_VIEW.forEach(function (n) { if (d.getElementById('cut-' + String(n).padStart(2, '0'))) add(res, 'fail', 'view.hidden', w, n, '독자 화면에서 숨기기로 한 컷이 그려짐'); });
-    if (cuts.length !== 98) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length + ' (독자 화면 기준 98: 16·59·60·85·86·90 숨김)');
+    if (cuts.length !== 99) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length + ' (독자 화면 기준 99: 16·59·60·85·86 숨김)');
     if (d.documentElement.scrollWidth > vw + 1) add(res, 'fail', 'view.hscroll', w, 0, '가로 스크롤 ' + d.documentElement.scrollWidth + '>' + vw);
     [].forEach.call(d.images, function (im) { if (im.complete && !im.naturalWidth) add(res, 'fail', 'view.broken', w, 0, '깨진 이미지 ' + im.getAttribute('src')); });
     /* 벽시계 SVG: 휴대폰 상태 표시줄 시각(문자열)이 벽시계로 그려지면 NaN·undefined 가 들어간다 — 벽시계는 23·57컷에만 있어야 함 */
