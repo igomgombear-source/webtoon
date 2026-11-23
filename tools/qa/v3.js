@@ -41,6 +41,10 @@
     var f = await loadFrame(360); var d = await settle(f); var W = f.contentWindow.WEBTOON;
     var ep = W.episodeData.ep01v3; var cuts = ep.cuts;
     if (cuts.length !== 104) add(res, 'fail', 'data.count', 0, 0, '컷 수 ' + cuts.length);
+    /* 원본 104컷(데이터)과 독자 화면 98컷(reader:false 6컷 제외)을 따로 본다. 숨김 목록이 바뀌면 사용자 승인 변경이어야 한다 */
+    var HIDDEN = [16, 59, 60, 85, 86, 90];
+    var hiddenNow = cuts.filter(function (c) { return c.reader === false; }).map(function (c) { return c.no; });
+    if (JSON.stringify(hiddenNow) !== JSON.stringify(HIDDEN)) add(res, 'fail', 'data.hidden', 0, 0, '독자 화면 제외 컷 ' + JSON.stringify(hiddenNow) + ' ≠ 승인 ' + JSON.stringify(HIDDEN));
     cuts.forEach(function (c, i) {
       var s = spec.cuts[i];
       if (c.no !== i + 1) add(res, 'fail', 'data.order', 0, i + 1, '번호 순서 ' + c.no);
@@ -93,9 +97,11 @@
     f.remove();
   }
 
+  var HIDDEN_VIEW = [16, 59, 60, 85, 86, 90];   /* data.hidden 의 승인 목록과 같아야 한다 */
   async function widthChecks(res, w) {
     var f = await loadFrame(w), d = await settle(f), win = f.contentWindow, vw = win.innerWidth, col = d.querySelector('.viewer').getBoundingClientRect().width;
     var cuts = [].slice.call(d.querySelectorAll('.cut'));
+    HIDDEN_VIEW.forEach(function (n) { if (d.getElementById('cut-' + String(n).padStart(2, '0'))) add(res, 'fail', 'view.hidden', w, n, '독자 화면에서 숨기기로 한 컷이 그려짐'); });
     if (cuts.length !== 98) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length + ' (독자 화면 기준 98: 16·59·60·85·86·90 숨김)');
     if (d.documentElement.scrollWidth > vw + 1) add(res, 'fail', 'view.hscroll', w, 0, '가로 스크롤 ' + d.documentElement.scrollWidth + '>' + vw);
     [].forEach.call(d.images, function (im) { if (im.complete && !im.naturalWidth) add(res, 'fail', 'view.broken', w, 0, '깨진 이미지 ' + im.getAttribute('src')); });
