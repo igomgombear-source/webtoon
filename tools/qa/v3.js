@@ -32,6 +32,13 @@
       if (!pending) break; await wait(100);
     }
     await wait(300);
+    /* 원화 페이드인(.art-img opacity .3s)이 끝날 때까지 기다린다. 느린 기기·CPU 에서는 load 이벤트가 늦어 위 300ms 뒤에도 전환이 진행 중이라
+     * art.dim 이 불투명도 0.85~0.998 을 '어둡게 보임'으로 오탐했다(2026-11-23 재현). 검사 기준(불투명도 1)은 그대로이고 측정 시점만 늦춘다.
+     * 끝내 불투명도 1 이 안 되는 원화(is-loaded 누락 등)는 제한 시간(약 6초) 뒤에도 그대로 FAIL 로 남는다 */
+    for (var m = 0; m < 60; m++) {
+      var fading = [].filter.call(d.querySelectorAll('.art-img'), function (im) { return im.complete && win.getComputedStyle(im).opacity !== '1'; }).length;
+      if (!fading) break; await wait(100);
+    }
     return d;
   }
   function rect(e) { return e.getBoundingClientRect(); }
@@ -44,6 +51,8 @@
     /* 원본 104컷(데이터)과 독자 화면 98컷(reader:false 6컷 제외)을 따로 본다. 숨김 목록이 바뀌면 사용자 승인 변경이어야 한다 */
     var HIDDEN = [16, 59, 60, 85, 86, 90];
     var hiddenNow = cuts.filter(function (c) { return c.reader === false; }).map(function (c) { return c.no; });
+    var readerNow = cuts.filter(function (c) { return c.reader !== false; }).length;
+    if (readerNow !== 98) add(res, 'fail', 'data.reader', 0, 0, '데이터상 독자 화면 컷 ' + readerNow + ' ≠ 98 (원본 ' + cuts.length + ' − 숨김 ' + HIDDEN.length + ')');
     if (JSON.stringify(hiddenNow) !== JSON.stringify(HIDDEN)) add(res, 'fail', 'data.hidden', 0, 0, '독자 화면 제외 컷 ' + JSON.stringify(hiddenNow) + ' ≠ 승인 ' + JSON.stringify(HIDDEN));
     cuts.forEach(function (c, i) {
       var s = spec.cuts[i];

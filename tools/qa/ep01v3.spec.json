@@ -10,7 +10,13 @@
 "before": 0,
 "time": null,
 "scene": null,
-"rows": null,
+"rows": [
+1,
+1,
+1,
+1,
+1
+],
 "lines": [],
 "at": [],
 "inset": null,
@@ -1092,13 +1098,13 @@
 "rows": null,
 "lines": [
 [
-"부장",
+"승민",
 "speech",
-"1학년 앞줄! 핸드폰 무음!"
+"1학년은 들어가면 앞줄에 앉아요. 휴대폰은 미리 무음으로 해 주세요."
 ]
 ],
 "at": [
-"gap"
+"edge-top-l"
 ],
 "inset": null,
 "link": null,
@@ -2236,7 +2242,7 @@
 "shape": "box",
 "after": 200,
 "before": 0,
-"time": null,
+"time": "18:34",
 "scene": null,
 "rows": null,
 "lines": [],
