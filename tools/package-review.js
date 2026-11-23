@@ -31,9 +31,11 @@ function page(query) {
 fs.writeFileSync(path.join(out, 'index.html'), page('?check=1'));
 /* 수정 원화 17개 비교 페이지: review/ 바로 아래에 두고 같은 폴더의 data·assets 를 가리키도록 상대경로만 바꾼다(기능·내용은 그대로) */
 for (const name of ['compare-local-revisions.html', 'bubble-editor.html']) {
-  const html = rd('tools/' + name).replace('<head>', '<head>\n' + robots).split('../data/').join('data/').split('../assets/').join('assets/').replace('href="../index.html#ep01v3"', 'href="index.html#ep01v3"');
+  const html = rd('tools/' + name).replace('<head>', '<head>\n' + robots).split('../data/').join('data/').split('../assets/').join('assets/').replace('href="../index.html#ep01v3"', 'href="index.html#ep01v3"').replace("'../index.html'", "'viewer.html'");   /* 편집기: 독자 화면 사본 viewer.html 을 iframe 으로 */
   if (/\.\.\//.test(html.replace(/<!--[\s\S]*?-->/g, ''))) { console.error(name + ' still has ../ paths'); process.exitCode = 1; }
   fs.writeFileSync(path.join(out, name), html);
 }
 fs.writeFileSync(path.join(out, 'all.html'), page('?check=1&hidden=1'));
-console.log('review package:', files.size + 2, 'files ->', out);
+/* 편집기가 iframe 으로 띄우는 실제 독자 화면 사본(검수용 번호·설명 없음, noindex) */
+fs.writeFileSync(path.join(out, 'viewer.html'), index.replace('<head>', '<head>\n' + robots));
+console.log('review package:', files.size + 3, 'files ->', out);
