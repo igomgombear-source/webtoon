@@ -493,6 +493,10 @@
   }
 
   function renderEpisode(meta, ep) {
+    /* reader:false 컷은 독자 화면에서만 뺀다(데이터·컷 번호는 그대로). 남은 컷 수가 진행 표시·끝 표시의 기준 */
+    if (ep.cuts.some(function (c) { return c.reader === false; })) {
+      ep = Object.assign({}, ep, { cuts: ep.cuts.filter(function (c) { return c.reader !== false; }) });
+    }
     var s = W.series;
     document.title = ep.no + '화 ' + ep.title + ' · ' + s.title;
     var nextEdition = s.episodes[s.episodes.indexOf(meta) + 1];

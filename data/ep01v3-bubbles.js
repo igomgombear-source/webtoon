@@ -19,6 +19,71 @@ window.EP01V3_BUBBLES = {
   offscreen: { 51: 1 },
   cuts: {
 
+  14: {
+    note: '승민 독백 1개(장면 설명). 음악실 안 해인·학생·피아노 보호, 문틀 밖 오른쪽 어두운 여백 쪽에 둔다 (2026-11-23 사용자 시각 검수)',
+    zones: [
+      { panel: 0, x: 6, y: 25, w: 70, h: 60, label: '음악실 안(해인·학생·피아노)', approved: false }
+    ],
+    lines: [
+      { type: 'mono', pref: { panel: 0, at: 'gap' }, region: 'panel' }
+    ]
+  },
+  19: {
+    note: '띠 3장 — 효은(맨 위 띠, 오른쪽에 말풍선). 효은 얼굴·손 보호 (2026-11-23 사용자 시각 검수: 대사에 ‘승민쌤,’ 추가, 맨 위 띠 효은 옆으로)',
+    zones: [
+      { panel: 0, x: 28, y: 0, w: 30, h: 100, label: '효은 얼굴·손', approved: false }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 80, y: 50 }, region: 'panel', tailMax: 40, tail: { panel: 0, x: 58, y: 38 } }
+    ]
+  },
+  24: {
+    note: '해인 대사 ‘승민쌤.’ — 25컷에서 옮김. 해인 얼굴·몸 옆 왼쪽 위 벽면 (2026-11-23 사용자 시각 검수)',
+    zones: [
+      { panel: 0, x: 24, y: 20, w: 28, h: 62, label: '해인 얼굴·몸', approved: false },
+      { panel: 0, x: 54, y: 6, w: 46, h: 94, label: '앞쪽 인물 머리카락', approved: false }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 16, y: 24 }, region: 'panel', tailMax: 40, tail: { panel: 0, x: 34, y: 30 } }
+    ]
+  },
+  26: {
+    note: '왼쪽 조각 인물 얼굴을 말풍선이 가리지 않게 보호 영역 지정, 대사는 그대로 (2026-11-23 사용자 시각 검수)',
+    zones: [
+      { panel: 0, x: 36, y: 8, w: 50, h: 50, label: '왼쪽 조각 얼굴·머리', approved: false },
+      { panel: 1, x: 22, y: 0, w: 60, h: 62, label: '오른쪽 조각 인물·가방', approved: false }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, at: 'in-bl' }, region: 'panel', tailMax: 40, tail: { panel: 0, x: 48, y: 40 } }
+    ]
+  },
+  34: {
+    note: '위치는 그대로, 꼬리만 5시 방향 (2026-11-23 사용자 시각 검수)',
+    lines: [
+      { type: 'speech', pref: { panel: 0, at: 'in-br' }, tail: { panel: 0, x: 34, y: 30 }, tailDir: 150 }
+    ]
+  },
+  40: {
+    bandBase: 600,
+    note: '해인 두 대사를 이어 붙여 해인 오른쪽에, ‘…네?’는 승민 옆에서 꼬리를 승민 쪽으로 (2026-11-23 사용자 시각 검수)',
+    zones: [
+      { panel: 0, x: 37, y: 4, w: 30, h: 90, label: '해인', approved: false },
+      { panel: 0, x: 0, y: 14, w: 20, h: 50, label: '승민(어깨 너머)', approved: false }
+    ],
+    lines: [
+      { type: 'speech', pref: { panel: 0, x: 86, y: 14 }, region: 'col', tailMax: 50, tail: { panel: 0, x: 66, y: 20 }, noSplit: true },
+      { type: 'speech', pref: { panel: 0, x: 86, y: 36 }, region: 'col', tailMax: 50, tail: { panel: 0, x: 66, y: 24 } },
+      { type: 'speech', pref: { panel: 0, x: 14, y: 88 }, region: 'panel', join: false, tailMax: 60, tail: { panel: 0, x: 6, y: 34 } }
+    ]
+  },
+  98: {
+    note: '통보 문장을 말풍선 대신 가운데 정렬 공포 분위기 자막으로 (2026-11-23 사용자 시각 검수). 배경 원화 수정은 별도 작업',
+    zones: [],
+    lines: [
+      { type: 'caption', variant: 'horror', pref: { panel: 0, x: 50, y: 50 }, region: 'panel' }
+    ]
+  },
+
   18: {
     note: '분할2 · 효은(왼쪽 a)→승민(오른쪽 b)→효은. 승민 말풍선 꼬리는 b의 승민 얼굴로, 마지막 효은 말풍선은 b 아래 경계의 왼쪽(조각 사이 쪽)에 두고 꼬리를 a의 효은 쪽으로 (2026-11-14 꼬리 방향 수정, 정본 위치 유지)',
     zones: [
@@ -39,8 +104,8 @@ window.EP01V3_BUBBLES = {
       { panel: 0, x: 15, y: 18, w: 40, h: 16, label: '칠판 三人成虎', approved: true }
     ],
     lines: [
-      { type: 'speech', pref: { panel: 0, x: 26, y: 40 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 58, y: 30 } },
-      { type: 'speech', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, join: false, tailMax: 60, tail: { panel: 0, x: 58, y: 32 } }
+      { type: 'speech', pref: { panel: 0, x: 26, y: 40 }, region: 'panel', tailMax: 60, tail: { panel: 0, x: 58, y: 30 }, noTail: true },
+      { type: 'speech', pref: { panel: 0, at: 'edge-bottom-l' }, region: 'panel', edge: true, join: false, tailMax: 60, tail: { panel: 0, x: 58, y: 32 }, noTail: true }
     ]
   },
   17: {
@@ -85,7 +150,7 @@ window.EP01V3_BUBBLES = {
     ],
     lines: [
       { type: 'speech', pref: { panel: 0, at: 'in-tr' }, region: 'panel', tail: { panel: 0, x: 82, y: 34 } },
-      { type: 'speech', pref: { panel: 0, at: 'in-bl' }, region: 'panel', tailMax: 50, tail: { panel: 0, x: 20, y: 26 } }
+      { type: 'speech', pref: { panel: 0, at: 'in-bl' }, region: 'panel', tailMax: 50, tail: { panel: 0, x: 20, y: 26 }, noSplit: true }
     ]
   },
   41: {

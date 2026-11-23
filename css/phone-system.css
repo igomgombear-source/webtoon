@@ -168,3 +168,7 @@
 .zoom-box .mg-from, .zoom-box .mg-when { font-size: max(13px, .95em); }
 .zoom-box .mg-body p { font-size: max(13px, 1.04em); }
 .zoom-box.su-v-messenger .mg-title { display: none; }   /* 인셋은 높이를 줄여 원화(승민 뒷모습·모니터)를 덜 가리도록 제목 줄 장식을 뺀다(덮개 .scr 에는 있음) */
+
+/* 15컷 확대 메신저: 좁은 인셋에서는 머리글(발신자 / 날짜·시각)을 두 줄로 */
+.zoom-box.su-v-messenger .mg-head { flex-wrap: wrap; row-gap: 0; }
+.zoom-box.su-v-messenger .mg-from { white-space: nowrap; }

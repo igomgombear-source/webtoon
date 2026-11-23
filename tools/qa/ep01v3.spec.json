@@ -304,8 +304,16 @@
 "time": null,
 "scene": null,
 "rows": null,
-"lines": [],
-"at": [],
+"lines": [
+[
+"",
+"thought",
+"해인쌤이 합창부 연습을 봐 주고 계시네."
+]
+],
+"at": [
+"gap"
+],
 "inset": null,
 "link": null,
 "overflow": null,
@@ -427,7 +435,7 @@
 [
 "효은",
 "speech",
-"먼저 들어갈게요. 내일 파이팅!"
+"승민쌤, 먼저 들어갈게요. 내일 파이팅!"
 ]
 ],
 "at": [
@@ -539,8 +547,16 @@
 "time": "21:37",
 "scene": null,
 "rows": null,
-"lines": [],
-"at": [],
+"lines": [
+[
+"해인",
+"speech",
+"승민쌤."
+]
+],
+"at": [
+"in-tl"
+],
 "inset": null,
 "link": null,
 "overflow": null,
@@ -557,16 +573,8 @@
 "time": null,
 "scene": null,
 "rows": null,
-"lines": [
-[
-"해인",
-"speech",
-"승민쌤."
-]
-],
-"at": [
-"edge-top-l"
-],
+"lines": [],
+"at": [],
 "inset": null,
 "link": null,
 "overflow": null,
@@ -2461,7 +2469,7 @@
 "lines": [
 [
 "문상윤",
-"phone",
+"caption",
 "권해인 선생님께서 어제 저녁, 양평문화회관 계단에서 숨진 채 발견되셨습니다."
 ]
 ],

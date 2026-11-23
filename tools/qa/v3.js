@@ -89,14 +89,14 @@
     var r88 = c88 && c88.rows;
     if (!r88 || r88.length !== 2 || r88.some(function (r) { return r.length !== 1 || r[0].ratio !== '3:1' || !r[0].imageSize || r[0].imageSize.w !== 1080 || r[0].imageSize.h !== 360; }) || c88.rowGap !== 8 || c88.shape !== 'strip') add(res, 'fail', 'data.strip88', 0, 88, '88컷은 3:1 띠 2장(각 imageSize 1080×360, rowGap 8, shape strip)이어야 함');
     var scrs = d.querySelectorAll('.scr'); Array.prototype.forEach.call(scrs, function (e) { if (!e.classList.contains('is-fit')) add(res, 'fail', 'screen.fit', 0, 0, '휴대폰 화면 UI 가 원화에 맞춰지지 않음'); });
-    if (scrs.length !== 21) add(res, 'warn', 'screen.count', 0, 0, '합성된 화면 ' + scrs.length + '개 (기대 21: 휴대폰 19 + 모니터 2 = 17 메신저·23-a)');
+    if (scrs.length !== 15) add(res, 'warn', 'screen.count', 0, 0, '합성된 화면 ' + scrs.length + '개 (기대 15: 21에서 숨긴 59·60(폰 3)·85·86·90 몫 제외. 15컷 메신저는 확대 인셋만)');
     f.remove();
   }
 
   async function widthChecks(res, w) {
     var f = await loadFrame(w), d = await settle(f), win = f.contentWindow, vw = win.innerWidth, col = d.querySelector('.viewer').getBoundingClientRect().width;
     var cuts = [].slice.call(d.querySelectorAll('.cut'));
-    if (cuts.length !== 104) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length);
+    if (cuts.length !== 98) add(res, 'fail', 'view.count', w, 0, '그려진 컷 ' + cuts.length + ' (독자 화면 기준 98: 16·59·60·85·86·90 숨김)');
     if (d.documentElement.scrollWidth > vw + 1) add(res, 'fail', 'view.hscroll', w, 0, '가로 스크롤 ' + d.documentElement.scrollWidth + '>' + vw);
     [].forEach.call(d.images, function (im) { if (im.complete && !im.naturalWidth) add(res, 'fail', 'view.broken', w, 0, '깨진 이미지 ' + im.getAttribute('src')); });
     /* 벽시계 SVG: 휴대폰 상태 표시줄 시각(문자열)이 벽시계로 그려지면 NaN·undefined 가 들어간다 — 벽시계는 23·57컷에만 있어야 함 */
@@ -110,7 +110,7 @@
     if (d.querySelector('.cut[data-no="83"] .scr-read')) add(res, 'fail', 'read83.dup', w, 83, '83컷에 중복 읽기 카드가 다시 생김');
     var t83 = d.querySelectorAll('.cut[data-no="83"] .scr .su-b.them p'), u83 = d.querySelector('.cut[data-no="83"] .scr-ui');
     if (t83.length && u83) {
-      var full = '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 휴직도 생각 중이에요. 걱정해 주셔서 감사해요.';
+      var full = '승민쌤, 저 해인이에요. 휴대폰 잘 받았어요. 몸이 안 좋아서 당분간 쉬려고 해요. 병가도 생각 중이에요. 걱정해 주셔서 감사해요.';
       var tm = t83[t83.length - 1];
       if (tm.textContent !== full) add(res, 'fail', 'read83.text', w, 83, '83컷 휴대폰 화면 문장이 원문과 다름');
       var eff = parseFloat(win.getComputedStyle(tm).fontSize) * u83.getBoundingClientRect().width / 300;
@@ -210,7 +210,7 @@
     var c63 = d.getElementById('cut-63'), s63 = c63 && c63.querySelector('.scr');
     if (!s63 || !s63.classList.contains('is-fit') || ((s63.querySelector('.su-lt') || {}).textContent) !== '10:36') add(res, 'fail', 'phone.63', w, 63, '원화 위 잠금화면 UI(10:36)가 합성되지 않음');
     /* 63·65컷: 휴대폰 화면 확대 인셋(.scr-zoom) — 폭 360 에서도 읽히는 글자, 컬럼 안, 실제 폰·말풍선을 가리지 않음, 읽기 프로그램에 중복 노출 안 됨 */
-    [20, 48, 59, 60, 63, 65, 81, 85].forEach(function (n) {
+    [20, 48, 63, 65, 81].forEach(function (n) {   /* 59·60·85 는 독자 화면에서 숨김(2026-11-23) */
       var cz = d.getElementById('cut-' + String(n).padStart(2, '0')), zw = cz && cz.querySelector('.scr-zoom'), pn = zw && zw.parentNode;
       if (!zw || !zw.classList.contains('is-fit')) return add(res, 'fail', 'zoom.missing', w, n, '확대 인셋이 없거나 배치되지 않음');
       var bx = zw.querySelector('.zoom-box'), br = rect(bx), pr = rect(pn), vr = d.querySelector('.viewer').getBoundingClientRect();
@@ -254,7 +254,7 @@
     /* 글꼴: 실제로 불러왔는지 */
     var faces = {}; d.fonts.forEach(function (ff) { faces[ff.family.replace(/"/g, '') + ' ' + ff.weight] = ff.status; });
     ['Pretendard 500', 'Pretendard 600', 'Noto Serif KR 500'].forEach(function (k) { if (faces[k] !== 'loaded') add(res, 'fail', 'font.loaded', w, 0, k + ' 상태: ' + faces[k]); });
-    var withLines = ep.cuts.filter(function (c) { return c.lines && c.lines.length; }).map(function (c) { return c.no; });
+    var withLines = ep.cuts.filter(function (c) { return c.reader !== false && c.lines && c.lines.length; }).map(function (c) { return c.no; });
     var got = R.cuts.map(function (c) { return c.no; });
     withLines.forEach(function (n) { if (got.indexOf(n) < 0) add(res, 'fail', 'engine.missing', w, n, '대사가 있는데 배치되지 않음'); });
     var nProv = 0;
@@ -294,7 +294,7 @@
     ['DRAFT', '그림 준비 중', '원화 합성 전', '임시 컷', '(가정)'].forEach(function (t) { if (vis.indexOf(t) >= 0) add(res, 'fail', 'reader.text', w, 0, '독자 화면 글자에 "' + t + '"'); });
     if (ep.showSpeakerNames !== false) add(res, 'fail', 'reader.names', w, 0, '화자 이름표가 켜져 있음(제작기준 9-6: false)');
     /* 연결된 원화: 필터·오버레이·투명도로 어둡게 보이지 않아야 하고, 로드 전에는 축소 미리보기가 바탕에 있어야 한다 */
-    ep.cuts.filter(function (c) { return c.image; }).forEach(function (c) {
+    ep.cuts.filter(function (c) { return c.reader !== false && c.image; }).forEach(function (c) {
       var art = d.querySelector('#cut-' + (c.no < 10 ? '0' : '') + c.no + ' .art-img');
       if (!art) return add(res, 'fail', 'art.missing', w, c.no, '원화 이미지 요소 없음');
       var x = art, bad = [];
@@ -304,7 +304,7 @@
       var box = art.closest('.art'); if (!box.classList.contains('has-lqip') || !/data:image\/webp/.test(box.style.backgroundImage)) add(res, 'fail', 'art.lqip', w, c.no, '로드 전 바탕(축소 미리보기)이 없음 — 검은 바탕에서 서서히 나타남');
     });
     /* 분할 컷 조각·그림 인셋: 실제 로드·어둡게 보이지 않음·로드 전 미리보기 */
-    ep.cuts.filter(function (c) { return c.rows || (c.inset && c.inset.image); }).forEach(function (c) {
+    ep.cuts.filter(function (c) { return c.reader !== false && (c.rows || (c.inset && c.inset.image)); }).forEach(function (c) {
       var sec = d.querySelector('#cut-' + (c.no < 10 ? '0' : '') + c.no); if (!sec) return;
       if (c.rows) [].concat.apply([], c.rows).forEach(function (pc, k) {
         var panel = sec.querySelectorAll('.panel')[k]; if (!panel) return add(res, 'fail', 'piece.missing', w, c.no, '조각 ' + k + ' 칸 없음');

@@ -159,6 +159,7 @@
   /* spec 은 하나 또는 배열(한 원화에 폰이 둘인 60컷: 승민 폰 + 꺼진 해인 폰) */
   function build(spec) {
     if (Array.isArray(spec)) return spec.map(build).join('');
+    if (spec.zoomOnly) return '';   /* 확대 인셋만 쓰는 컷(15컷): 원화 위에 화면 UI 를 덮지 않는다 */
     var fn = VIEWS[spec.view]; if (!fn) return buildClock(spec);   /* 화면 UI 없이 벽시계만 있는 컷(57) */
     var q = spec.quad.map(function (p) { return p[0] + ',' + p[1]; }).join(' ');
     var poly = spec.clip.map(function (p) { return p[0] + '% ' + p[1] + '%'; }).join(',');

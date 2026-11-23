@@ -274,6 +274,8 @@
         var x0 = Math.min.apply(null, rowPs.map(function (p) { return p.safe.x; })), x1 = Math.max.apply(null, rowPs.map(function (p) { return p.safe.x + p.safe.w; }));
         region = { x: x0, y: pan.safe.y, w: x1 - x0, h: pan.safe.h };
       }
+      /* region 'col': 좁은 컷(W80 등)에서 컷 오른쪽 어두운 여백까지 말풍선이 나가도 되게 한다 */
+      if (cfg.region === 'col') region = { x: pan.safe.x, y: pan.safe.y, w: Math.max(pan.safe.w, colX1 - pan.safe.x), h: pan.safe.h };
       var pp = pref.at ? AT[pref.at] || AT.gap : [pref.x, pref.y];
       var prefPt = pPt({ panel: pref.panel || 0, x: pp[0], y: pp[1] });
       var bpPt = cfg.bandPref ? pPt(cfg.bandPref) : null;
@@ -400,6 +402,14 @@
           }
         }
       }
+      /* noTail: 위치는 그대로 두고 꼬리만 그리지 않는다 · tailDir: 꼬리를 시계 방향 각도(12시=0°, 5시=150°)로 낸다 */
+      best.variant = cfg.variant || '';
+      if (cfg.noTail) best.tl = null;
+      else if (typeof cfg.tailDir === 'number') {
+        var rad = cfg.tailDir * Math.PI / 180, bcx2 = best.x + best.w / 2, bcy2 = best.y + best.h / 2;
+        best.tl = tailFor(best, { x: bcx2 + Math.sin(rad) * 300, y: bcy2 - Math.cos(rad) * 300 }, 'in', ri, cfg.tailMax || 22);
+        if (best.join) best.tl = null;
+      }
       curPhase = best.phase;
       if (best.phase === 0) aboveH += best.h + GAP;
       else if (best.phase % 2 === 0) bandH[ri] = Math.max(bandH[ri], best.y + best.h + 8 - rowBottom[ri]);
@@ -518,7 +528,7 @@
 
   function drawBubble(layer, c, ep) {
     var el = document.createElement('div');
-    el.className = 'bv4-b bv4-k-' + c.kind + ' bv4-t-' + c.type + ' bv4-w-' + c.where;
+    el.className = 'bv4-b bv4-k-' + c.kind + ' bv4-t-' + c.type + ' bv4-w-' + c.where + (c.variant ? ' bv4-v-' + c.variant : '');
     el.style.cssText = 'left:' + f1(c.x) + 'px;top:' + f1(c.y) + 'px;width:' + c.w + 'px;height:' + c.h + 'px;';
     el.dataset.i = c.i;
     var tail = c.tl ? { x: c.tl.tip.x - c.x, y: c.tl.tip.y - c.y } : null;
