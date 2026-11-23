@@ -53,6 +53,7 @@
       1: ['ep01v3-001-opening-portrait-DRAFT.webp', 'ep01v3-001-haein-portrait-DRAFT.webp', 'ep01v3-001-hyoeun-portrait-DRAFT.webp', 'ep01v3-001-gihun-tracksuit-portrait.webp', 'ep01v3-001-jin-portrait-DRAFT.webp'],
       16: ['ep01v3-016-natural-mouse-grip-DRAFT.webp'], 19: ['ep01v3-019c-yangpyeong-school-night-APPROVED.webp'],
       41: ['ep01v3-041-haein-doorway-trousers-REV1-DRAFT.webp'], 43: ['ep01v3-043-entrance-gesture-DRAFT.webp'], 57: ['ep01v3-057-half-size-clock-DRAFT.webp'],
+      70: ['ep01v3-070-two-shot-REV1-APPROVED.webp'],
       94: ['ep01v3-094-a-slim-phone-DRAFT.webp', 'ep01v3-094-b-slim-phone-DRAFT.webp'], 98: ['ep01v3-098-reveal-dark-APPROVED.webp']
     };
     var HIDDEN = [16, 59, 60, 85, 86];

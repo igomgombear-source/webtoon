@@ -23,3 +23,11 @@
 
 ## 4. QA (`tools/qa/v3.html?auto`, 320·360·390·430·768)
 FAIL 19 → **2**(89컷 `data.image`·`data.draft`), WARN 0, 새 FAIL 0, 콘솔 오류 0.
+
+## 5. 70컷 승인 원화 연결 (2026-11-23, 브랜치 `ep01-cut70-integration-20261123` ← `c5a77d1`)
+- 원화: `ep01v3-070-two-shot-REV1-APPROVED.webp`(브랜치 `ep01-cut70-approved-art`, 승인 커밋 `b7cfb5b`, 1080×810). 파일은 git 블롭이 원본과 동일(바이트 보존, 재생성·재압축 없음). 기존 `ep01v3-070-DRAFT.webp` 는 삭제하지 않고 보존.
+- 데이터: 70컷 `image`·`imageSize`·`imageLqip` 교체, `imageStatus:"approved"`. QA 승인 장부(`APPROVED[70]`)에 정확한 파일명만 추가.
+- 말풍선(대사 2개 그대로): 첫 말은 위 경계(꼬리는 효은 머리), 둘째는 아래 경계(꼬리는 효은 가슴). 효은·승민 얼굴과 폰·손 보호 영역을 원화에서 재설정(`data/ep01v3-bubbles.js` 70). 320~768px 에서 얼굴·폰 비침범, 글자 16px.
+- 69~72 흐름: 69 승민 클로즈업(해인 인셋) → 70 마주 보는 두 사람 → 71 눈 띠 → 72 승민 폰 클로즈업. 시선·장면 연결에 이상 없음(360px 확인).
+- 46컷은 수정하지 않았다(기존 원화·음표 여백 유지, 사용자 최종 검수 대상).
+- QA: 전 FAIL 2 → 후 FAIL 2 / WARN 0 (89컷 `data.image`·`data.draft` 승인 장부 — 승인 확인 전까지 통과 처리하지 않음). 새 FAIL 0.

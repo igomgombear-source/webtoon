@@ -241,14 +241,15 @@ window.EP01V3_BUBBLES = {
     ]
   },
   70: {
-    note: '효은 얼굴(안경)·폰을 내미는 손 보호 — 경계-상 말풍선은 안경·머리를 피해 오른쪽 위(창·벽) 경계로, 안-좌하는 몸 위 — 휴대폰과 안경은 어느 폭에서도 덮지 않음 (2026-11-14 얼굴 가림 수정)',
+    note: '승인 원화 ep01v3-070-two-shot-REV1-APPROVED(왼쪽 효은·오른쪽 승민이 마주 봄, 폰은 승민 손) — 효은 대사 두 개를 효은 쪽 꼬리로: 첫 말은 위 경계(머리·안경 위), 둘째는 아래 경계. 효은·승민 얼굴과 폰·손은 보호 (2026-11-23)',
     zones: [
-      { panel: 0, x: 4, y: 0, w: 52, h: 40, label: '효은 얼굴·안경·머리', approved: true },
-      { panel: 0, x: 46, y: 22, w: 32, h: 60, label: '폰과 손', approved: true }
+      { panel: 0, x: 22, y: 20, w: 24, h: 38, label: '효은 얼굴·안경', approved: true },
+      { panel: 0, x: 64, y: 16, w: 28, h: 42, label: '승민 얼굴', approved: true },
+      { panel: 0, x: 68, y: 56, w: 16, h: 26, label: '폰·손', approved: true }
     ],
     lines: [
-      { type: 'speech', pref: { panel: 0, x: 76, y: 0 }, region: 'panel', edge: true, tail: { panel: 0, x: 50, y: 14 } },
-      { type: 'speech', pref: { panel: 0, x: 20, y: 78 }, region: 'panel', tail: { panel: 0, x: 34, y: 34 } }
+      { type: 'speech', pref: { panel: 0, x: 48, y: 0 }, region: 'panel', edge: true, join: false, tail: { panel: 0, x: 32, y: 21 } },
+      { type: 'speech', pref: { panel: 0, x: 34, y: 100 }, region: 'panel', edge: true, join: false, tail: { panel: 0, x: 34, y: 57 } }
     ]
   },
   71: {
