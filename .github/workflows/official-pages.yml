@@ -170,14 +170,14 @@ jobs:
           wc -l "$RUNNER_TEMP/official.sha256"
       - uses: actions/checkout@v4
         with:
-          ref: c6fabf1d25273e2bb3f1c62578b9879f7091274d
+          ref: 885b14916f65c424c021e2e40a49eb1d14b96a0b
           path: review-src
           persist-credentials: false
       - name: Add review pages and verify official files are byte-identical
         run: |
           node review-src/tools/package-review.js _site
-          test -f _site/review/index.html && test -f _site/review/all.html
-          grep -q 'noindex' _site/review/index.html && grep -q 'noindex' _site/review/all.html
+          test -f _site/review/index.html && test -f _site/review/all.html && test -f _site/review/viewer.html && test -f _site/review/bubble-editor.html
+          grep -q 'noindex' _site/review/index.html && grep -q 'noindex' _site/review/all.html && grep -q 'noindex' _site/review/viewer.html
           (cd _site && find . -type f -not -path './review/*' -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/official.after.sha256"
           diff "$RUNNER_TEMP/official.sha256" "$RUNNER_TEMP/official.after.sha256"
           echo "official files unchanged: $(wc -l < "$RUNNER_TEMP/official.after.sha256")"
