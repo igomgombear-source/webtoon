@@ -95,7 +95,6 @@ jobs:
           console.log('Approved reader files:', assets.size + 2, 'Episodes:', published.map(episode => episode.no));
           JS
       - name: Mobile browser check at 360 pixels
-        continue-on-error: true
         run: |
           npm install --prefix "$RUNNER_TEMP/webtoon-qa" --no-audit --no-fund playwright-core@1.55.0
           python3 -m http.server 8765 --bind 127.0.0.1 --directory _site &
@@ -115,6 +114,13 @@ jobs:
               await page.goto('http://127.0.0.1:8765/#ep01v3');
               await page.locator('[data-no="104"]').waitFor();
               assert.equal(await page.locator('.cut[data-no]').count(), 104);
+              assert.match(await page.locator('meta[name="robots"]').getAttribute('content'), /noindex/);
+              const decoded = await page.locator('.cut .art-img').evaluateAll(async images => {
+                for (const image of images) image.loading = 'eager';
+                await Promise.all(images.map(image => image.decode()));
+                return images.length;
+              });
+              console.log('360px all artwork decoded:', decoded);
               for (const [no,count] of [[1,5],[16,1],[41,1],[43,1],[57,1],[89,1],[94,2]]) {
                 const cut = page.locator('.cut[data-no="' + no + '"]');
                 const art = cut.locator('.art-img');
@@ -129,9 +135,20 @@ jobs:
                   for (const name of await names.all()) await name.evaluate(img => img.decode());
                 }
                 if (no === 43) assert.match((await cut.innerText()).replace(/\s+/g, ' '),/휴대폰은 미리 무음으로 해 주세요/);
+                if (no === 43) {
+                  const bounds = await cut.locator('.bv4-text').evaluateAll(nodes => nodes.map(node => {
+                    const {left, right, height} = node.getBoundingClientRect();
+                    return height > 0 && left >= 0 && right <= innerWidth;
+                  }));
+                  assert.ok(bounds.length >= 2 && bounds.every(Boolean), 'Cut 43 visible dialogue');
+                }
                 if (no === 57) assert.equal(await cut.locator('.scr-clock').count(),1);
                 if (no === 94) {
-                  assert.equal(await cut.locator('.scr-ui').count(),2);
+                  const screens = await cut.locator('.scr-ui').evaluateAll(nodes => nodes.map(node => {
+                    const {width, height} = node.getBoundingClientRect();
+                    return width > 0 && height > 0 && getComputedStyle(node).transform !== 'none';
+                  }));
+                  assert.deepEqual(screens, [true, true], 'Cut 94 phone overlays');
                   for (const fg of await cut.locator('.scr-fg').all()) await fg.evaluate(img => img.decode());
                 }
                 console.log('360px cut',no,'rendered');
