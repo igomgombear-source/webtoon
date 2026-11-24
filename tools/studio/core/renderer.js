@@ -17,8 +17,21 @@
     S.modules[def.id] = def; S.moduleList.push(def); S.moduleList.sort(function (a, b) { return a.order - b.order; });
     return def;
   };
-  function epModules() { return S.moduleList.filter(function (m) { return m.level === 'episode' && m.compile; }); }
-  function cutModules() { return S.moduleList.filter(function (m) { return m.level === 'cut' && m.compileCut; }); }
+  /* 컴파일 순서: order 값 순서 + after:[모듈ID] 의존(그 모듈 다음에 실행). 의존 대상이 없거나 순환이면 issues 에 남기고 order 순서로 둔다 */
+  var orderIssues = [];
+  function sorted(list) {
+    var ids = list.map(function (m) { return m.id; }), out = [], state = {}; orderIssues = orderIssues.filter(function (x) { return ids.indexOf(x.module) < 0; });
+    function visit(m, path) {
+      if (state[m.id] === 2) return; if (state[m.id] === 1) { orderIssues.push({ module: m.id, issue: '순환 의존: ' + path.concat(m.id).join(' → ') }); return; }
+      state[m.id] = 1;
+      (m.after || []).forEach(function (d) { var dm = list.filter(function (x) { return x.id === d; })[0]; if (dm) visit(dm, path.concat(m.id)); else if (!S.modules[d]) orderIssues.push({ module: m.id, issue: '없는 모듈 다음으로 지정: ' + d }); else if (S.modules[d].level !== m.level) orderIssues.push({ module: m.id, issue: d + ' 는 다른 단계(' + S.modules[d].level + ') 모듈 — 회차 단계가 항상 먼저 실행됨' }); });
+      state[m.id] = 2; out.push(m);
+    }
+    list.forEach(function (m) { visit(m, []); });
+    return out;
+  }
+  function epModules() { return sorted(S.moduleList.filter(function (m) { return m.level === 'episode' && m.compile; })); }
+  function cutModules() { return sorted(S.moduleList.filter(function (m) { return m.level === 'cut' && m.compileCut; })); }
 
   var meta = function (n, d) { var e = document.querySelector('meta[name="' + n + '"]'); return e ? e.getAttribute('content') : d; };
   var ROOT = meta('studio-root', '../../'), VIEWER = meta('studio-viewer', 'index.html');
@@ -41,6 +54,9 @@
   Frame.prototype.engine = function () { return this.win().BubblesV4; };
   Frame.prototype.section = function (no) { return this.doc().getElementById('cut-' + U.pad2(no)); };
   Frame.prototype.info = function (no) { return this.engine().info(no) || []; };
+  /* 컷 번호 ↔ 컷 ID. 원본 컷은 'c017', 새로 만든·복제 컷은 컴파일 결과의 cut.sid('c~xxxxx') */
+  Frame.prototype.idOf = function (no) { var c = this.cut(no); return c && c.sid ? c.sid : I.cut(no); };
+  Frame.prototype.noOf = function (cutId) { var c = this.compiled && this.compiled.episode.cuts; if (!c) return I.cutNo(cutId); for (var i = 0; i < c.length; i++) if ((c[i].sid || I.cut(c[i].no)) === cutId) return c[i].no; return null; };
   Frame.prototype.cut = function (no) { var c = this.compiled && this.compiled.episode.cuts; if (!c) return null; for (var i = 0; i < c.length; i++) if (c[i].no === no) return c[i]; return null; };
   function done(f) { return function () { var w = f.win(); return w && w.document && w.document.body && w.document.body.classList.contains('bv4-done'); }; }
 
@@ -57,15 +73,23 @@
   };
 
   function epSignature(f) { if (!f.edits) return ''; var o = {}; epModules().forEach(function (m) { var s = S.store.slice(m.id, f.ep); if (!U.isEmpty(s)) o[m.id] = s; }); return U.stable(o); }
-  function cutSignature(f, no) { if (!f.edits) return ''; var cid = I.cut(no), o = {}; cutModules().forEach(function (m) { var s = S.store.inCut(m.id, cid, f.ep); if (!U.isEmpty(s)) o[m.id] = s; }); return U.isEmpty(o) ? '' : U.stable(o); }
-  function cutsWithCutEdits(f) { var o = {}; if (!f.edits) return o; cutModules().forEach(function (m) { Object.keys(S.store.slice(m.id, f.ep)).forEach(function (id) { var n = I.cutNo(id); if (n != null) o[n] = 1; }); }); return o; }
+  function cutSignature(f, no) { if (!f.edits) return ''; var cid = f.idOf(no), o = {}; cutModules().forEach(function (m) { var s = S.store.inCut(m.id, cid, f.ep); if (!U.isEmpty(s)) o[m.id] = s; }); return U.isEmpty(o) ? '' : U.stable(o); }
+  function cutsWithCutEdits(f) { var o = {}; if (!f.edits) return o; cutModules().forEach(function (m) { Object.keys(S.store.slice(m.id, f.ep)).forEach(function (id) { var n = f.noOf(I.cutOf(id)); if (n != null) o[n] = 1; }); }); return o; }
 
   /* 회차 전체 다시 그리기 */
   Frame.prototype.full = function () {
     var f = this, ep = f.ep, base = S.base.data(ep), win = f.win(), W = win.WEBTOON;
+    var sig = epSignature(f);   /* 컴파일이 읽는 편집값과 같은 시점의 서명 — 그리는 도중 들어온 편집은 서명이 달라 다시 그린다 */
     var data = { episode: U.clone(base.episode), screens: U.clone(base.screens), bubbles: U.clone(base.bubbles) };
     var ctx = { ep: ep, data: data, base: base, frame: f, ids: I, util: U };
     if (f.edits) epModules().forEach(function (m) { ctx.edits = S.store.slice(m.id, ep); try { m.compile(ctx); } catch (e) { console.error('[studio] compile ' + m.id, e); } });
+    /* 새·복제 컷: cut.sid('c~xxxxx')와 원본과 겹치지 않는 cut.no 를 모듈이 넣는다. 대사 줄 ID 가 없으면 '컷ID.l순번' 을 붙인다 */
+    var seen = {}, issues = [];
+    data.episode.cuts.forEach(function (c) {
+      if (seen[c.no]) issues.push('컷 번호 중복: ' + c.no + (c.sid ? ' (' + c.sid + ')' : '')); seen[c.no] = 1;
+      if (c.sid) { var pp = I.parse(c.sid); if (!pp || !pp.fresh || pp.parts.length) issues.push('잘못된 새 컷 ID: ' + c.sid); (c.lines || []).forEach(function (l, k) { if (!l.sid) l.sid = c.sid + '.l' + k; }); }
+    });
+    f.compileIssues = issues; if (issues.length) console.warn('[studio] compile', issues);
     var hidden = {}; data.episode.cuts.forEach(function (c) { if (c.reader === false) hidden[c.no] = true; c.reader = true; });   /* Studio 는 숨김 컷도 그린다(표시는 Studio 가 한다) */
     f.hidden = hidden; f.order = data.episode.cuts.map(function (c) { return c.no; }); f.compiled = data;
     W.episodeData[ep] = U.clone(data.episode);
@@ -74,7 +98,7 @@
     var d = f.doc(); d.documentElement.classList.remove('st-one');
     d.body.classList.remove('bv4-done');
     win.dispatchEvent(new win.HashChangeEvent('hashchange'));
-    return U.wait(done(f), 60000, 60).then(function () { f.cutSig = {}; f.epSig = epSignature(f); });
+    return U.wait(done(f), 60000, 60).then(function () { f.cutSig = {}; f.epSig = sig; });
   };
 
   /* 한 컷의 말풍선 설정을 (회차 컴파일 결과로 되돌린 뒤) 컷 단위 모듈 편집으로 다시 만들고 그 컷만 다시 배치 */
@@ -83,8 +107,8 @@
     var win = f.win(), bo = S.base.bubbleObj(win, f.ep), cb = f.compiled && f.compiled.bubbles;
     if (bo) { bo.cuts = bo.cuts || {}; if (cb && cb.cuts && cb.cuts[no]) bo.cuts[no] = U.clone(cb.cuts[no]); else delete bo.cuts[no]; }
     if (f.edits) cutModules().forEach(function (m) {
-      var ed = S.store.inCut(m.id, I.cut(no), f.ep); if (U.isEmpty(ed)) return;
-      try { m.compileCut({ ep: f.ep, no: no, cutId: I.cut(no), win: win, engine: f.engine(), bubbles: bo, frame: f, edits: ed, base: S.base.data(f.ep), ids: I, util: U }); } catch (e) { console.error('[studio] compileCut ' + m.id, e); }
+      var cid = f.idOf(no), ed = S.store.inCut(m.id, cid, f.ep); if (U.isEmpty(ed)) return;
+      try { m.compileCut({ ep: f.ep, no: no, cutId: cid, win: win, engine: f.engine(), bubbles: bo, frame: f, edits: ed, base: S.base.data(f.ep), ids: I, util: U }); } catch (e) { console.error('[studio] compileCut ' + m.id, e); }
     });
     var sec = f.section(no), tmp = f.single && sec && !sec.classList.contains('st-cur');
     if (tmp) sec.classList.add('st-cur');   /* 보이는 상태에서 배치해야 크기가 잡힌다 */
@@ -138,6 +162,8 @@
   S.renderer = {
     Frame: Frame, root: ROOT, viewer: VIEWER,
     create: function (name, opt) { return new Frame(name, opt); },
-    epModules: epModules, cutModules: cutModules
+    epModules: epModules, cutModules: cutModules,
+    /* QA: 실제 컴파일 순서와 문제(의존·순환·컷 번호 중복·잘못된 새 컷 ID) */
+    compileOrder: function (frame) { var e = epModules().map(function (m) { return m.id; }), c = cutModules().map(function (m) { return m.id; }); return { episode: e, cut: c, issues: orderIssues.map(function (x) { return x.module + ': ' + x.issue; }).concat((frame && frame.compileIssues) || []) }; }
   };
 })();

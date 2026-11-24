@@ -33,6 +33,10 @@
     mono:      { shape: 'rect',    font: 15, fontWide: 16, cls: 'mono',   widths: [11.5, 13.5, 9.5, 8, 6.5], px: 12, py: 8 },
     caption:   { shape: 'rect',    font: 13.5, fontWide: 14, cls: 'caption', widths: [14, 10], px: 9, py: 5 }
   };
+  /* manual.style 로 고를 수 있는 모양·글꼴(없으면 유형 기본값 — 기존 출력과 같다) */
+  var SHAPES = { ellipse: 1, jag: 1, round: 1, jagrect: 1, rect: 1 };
+  var FONTS = { sans: 1, bold: 1, serif: 1 };
+  var COLOR = /^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/;
   var GAP = 6;          /* 말풍선끼리 최소 간격 */
   var ZONE_PAD = 5;     /* 보호 영역과 최소 간격 */
   var EDGE = 6;         /* 조각 안쪽 여백 */
@@ -76,13 +80,13 @@
     }).join('\n');
   }
   var MCACHE = {};
-  function measure(text, type, fs, W, lh) {
-    var ck = type + '|' + fs + '|' + W + '|' + text + (lh ? '|' + lh : '');
+  function measure(text, type, fs, W, lh, font) {
+    var ck = type + '|' + fs + '|' + W + '|' + text + (lh ? '|' + lh : '') + (font ? '|f:' + font : '');
     if (MCACHE[ck]) return MCACHE[ck];
     var m = measurer();
     m.innerHTML = '';
     var t = document.createElement('div');
-    t.className = 'bv4-text bv4-' + TYPE[type].cls;
+    t.className = 'bv4-text bv4-' + TYPE[type].cls + (font ? ' bv4-f-' + font : '');
     t.style.fontSize = fs + 'px';
     t.style.width = W + 'px';
     if (lh) t.style.lineHeight = lh;
@@ -487,19 +491,23 @@
    *   tail      { on:false } 꼬리 없음 · { tip:{x,y}(조각 %), start:각도|'auto'(0=오른쪽 90=아래), thick:밑변 px, curve:-0.5~0.5 } */
   function applyManual(c, m, secR) {
     var T0 = TYPE[c.type], pr = rel(c.panEl, secR), text = c.o.ms.text || c.ln.text;
-    var fs = m.fs != null ? m.fs : c.fs, lh = m.lh != null ? m.lh : null, isRect = c.kind === 'rect';
-    var round = !isRect && m.radius != null && m.radius < 60, boxy = isRect || round;
+    var st = m.style || null, want = st && SHAPES[st.kind] ? st.kind : null, font = st && FONTS[st.font] ? st.font : null;
+    var fs = m.fs != null ? m.fs : c.fs, lh = m.lh != null ? m.lh : null, nativeRect = c.kind === 'rect', isRect = want ? (want === 'rect' && nativeRect) : nativeRect;
+    var round = !isRect && m.radius != null && m.radius < 60, boxy = want ? (want === 'round' || want === 'jagrect' || want === 'rect') : (isRect || round);
     var wantW = m.w != null ? pr.w * m.w / 100 : c.w, hMan = (m.h != null && m.h !== 'auto') ? pr.h * m.h / 100 : null;
-    var px = m.pad != null ? m.pad : (isRect ? T0.px : (boxy ? 12 : T0.mx)), py = m.pad != null ? m.pad : (isRect ? T0.py : (boxy ? 8 : T0.my));
+    var px = m.pad != null ? m.pad : (isRect ? T0.px : (boxy ? 12 : (T0.mx != null ? T0.mx : 6))), py = m.pad != null ? m.pad : (isRect ? T0.py : (boxy ? 8 : (T0.my != null ? T0.my : 5)));
     var cx0 = c.x + c.w / 2, cy0 = c.y + c.h / 2, w = c.w, h = c.h, ms = c.o.ms;
-    var resize = ['w', 'h', 'pad', 'radius', 'fs', 'lh'].some(function (k) { return m[k] != null; });   /* 위치·꼬리만 바꾸면 자동 크기를 그대로 둔다 */
+    var resize = ['w', 'h', 'pad', 'radius', 'fs', 'lh'].some(function (k) { return m[k] != null; }) || !!want || !!font;   /* 위치·꼬리·색만 바꾸면 자동 크기를 그대로 둔다 */
     if (!resize) { /* 크기·글자 유지 */ }
     else if (boxy) {
-      w = Math.round(wantW); ms = Object.assign({}, measure(text, c.type, fs, Math.max(20, w - px * 2), lh)); ms.text = text;
+      w = Math.round(wantW); ms = Object.assign({}, measure(text, c.type, fs, Math.max(20, w - px * 2), lh, font)); ms.text = text;
       h = hMan != null ? hMan : Math.ceil(ms.H + py * 2);
-      c.kind = isRect ? 'rect' : (c.kind === 'jag' ? 'jagrect' : 'round'); c.radius = m.radius != null ? m.radius : null; c.rectRadius = isRect && m.radius != null ? Math.min(m.radius, h / 2) : null;
+      if (want) { c.kind = isRect ? 'rect' : (want === 'rect' ? 'round' : want); c.radius = want === 'rect' && !isRect ? 0 : (m.radius != null ? m.radius : null); }   /* 모양 종류 지정(manual.style.kind) */
+      else { c.kind = isRect ? 'rect' : (c.kind === 'jag' ? 'jagrect' : 'round'); c.radius = m.radius != null ? m.radius : null; }
+      c.rectRadius = isRect && m.radius != null ? Math.min(m.radius, h / 2) : null;
     } else {   /* 타원: 폭 a 를 고정하고 줄들이 모두 들어가는 가장 작은 b 를 구한다 */
-      var a = wantW / 2; ms = Object.assign({}, measure(text, c.type, fs, Math.max(20, Math.round(wantW * 0.8 - px)), lh)); ms.text = text;
+      var a = wantW / 2; ms = Object.assign({}, measure(text, c.type, fs, Math.max(20, Math.round(wantW * 0.8 - px)), lh, font)); ms.text = text;
+      if (want) c.kind = want;   /* 'ellipse' | 'jag' */
       var cyH = ms.H / 2, need = ms.rows.map(function (r) { return { x: (r.r - r.l) / 2 + px, y: Math.max(Math.abs(r.t - cyH), Math.abs(r.b - cyH)) + py }; });
       need.forEach(function (n) { a = Math.max(a, n.x * 1.04); });
       var b = 0; need.forEach(function (n) { b = Math.max(b, n.y / Math.pow(1 - Math.pow(n.x / a, N), 1 / N)); });
@@ -522,7 +530,7 @@
     if (!res) return [];
     return res.placed.filter(function (c) { return !c.fail; }).map(function (c) {
       var secEl = c.panEl.closest('.cut'), secR = secEl.getBoundingClientRect(), pr = rel(c.panEl, secR);
-      return { i: c.i, src: c.src, type: c.type, kind: c.kind, where: c.where, fs: c.fs, lh: c.lh || null, x: c.x, y: c.y, w: c.w, h: c.h, tip: c.tl ? { x: c.tl.tip.x, y: c.tl.tip.y } : null, panel: pr, manual: !!c.manual };
+      return { i: c.i, src: c.src, type: c.type, kind: c.kind, where: c.where, fs: c.fs, lh: c.lh || null, x: c.x, y: c.y, w: c.w, h: c.h, tip: c.tl ? { x: c.tl.tip.x, y: c.tl.tip.y } : null, panel: pr, manual: !!c.manual, style: (c.manual && c.manual.style) || null, align: c.ln.align || null };
     });
   }
 
@@ -597,23 +605,30 @@
     el.className = 'bv4-b bv4-k-' + c.kind + ' bv4-t-' + c.type + ' bv4-w-' + c.where + (c.variant ? ' bv4-v-' + c.variant : '');
     el.style.cssText = 'left:' + f1(c.x) + 'px;top:' + f1(c.y) + 'px;width:' + c.w + 'px;height:' + c.h + 'px;' + (c.rectRadius != null ? 'border-radius:' + c.rectRadius + 'px;' : '');
     el.dataset.i = c.i; el.dataset.src = c.src;
+    var st = c.manual && c.manual.style, bg = st && COLOR.test(st.bg) ? st.bg : null, stroke = st && COLOR.test(st.stroke) ? st.stroke : null, fg = st && COLOR.test(st.color) ? st.color : null;
+    var paint = function (path, cover) { if (cover) { if (bg) path.style.stroke = bg; return; } if (bg) path.style.fill = bg; if (stroke) path.style.stroke = stroke; };   /* manual.style 색(없으면 CSS 기본) */
     var tail = c.tl ? { x: c.tl.tip.x - c.x, y: c.tl.tip.y - c.y } : null;
     if (c.kind === 'ellipse' || c.kind === 'jag') {
       var s = svgEl(c.w, c.h), p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       p.setAttribute('d', ellipsePath(c.w, c.h, tail, c.kind, c.mt));
-      s.appendChild(p); el.appendChild(s);
+      paint(p); s.appendChild(p); el.appendChild(s);
     } else if (c.kind === 'round' || c.kind === 'jagrect') {
       var s2 = svgEl(c.w, c.h), rp = roundPath(c.w, c.h, tail, c.radius, c.mt);
-      if (rp.tail) { var pt = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pt.setAttribute('d', rp.tail); s2.appendChild(pt); }
-      var pb = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pb.setAttribute('d', rp.body); s2.appendChild(pb);
-      if (rp.cover) { var pc = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pc.setAttribute('d', rp.cover); pc.setAttribute('class', 'bv4-cover'); s2.appendChild(pc); }
+      if (rp.tail) { var pt = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pt.setAttribute('d', rp.tail); paint(pt); s2.appendChild(pt); }
+      var pb = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pb.setAttribute('d', rp.body); paint(pb); s2.appendChild(pb);
+      if (rp.cover) { var pc = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pc.setAttribute('d', rp.cover); pc.setAttribute('class', 'bv4-cover'); paint(pc, true); s2.appendChild(pc); }
       if (c.kind === 'jagrect') el.classList.add('is-jag');
       el.appendChild(s2);
+    } else if (c.kind === 'rect' && (bg || stroke)) {
+      if (bg) el.style.background = bg;
+      if (stroke) el.style.boxShadow = 'inset 0 0 0 1.5px ' + stroke + ', 0 1px 3px rgba(0,0,0,.18)';
     }
     var who = c.ln.who ? '<span class="bv4-sr">' + c.ln.who + ': </span>' : '';
     var t = document.createElement('div');
-    t.className = 'bv4-text bv4-' + TYPE[c.type].cls;
+    t.className = 'bv4-text bv4-' + TYPE[c.type].cls + (st && FONTS[st.font] ? ' bv4-f-' + st.font : '');
     t.style.fontSize = c.fs + 'px';
+    if (fg) t.style.color = fg;
+    if (c.ln.align === 'left' || c.ln.align === 'center' || c.ln.align === 'right') t.style.textAlign = c.ln.align;   /* 대사 정렬(cut.lines[i].align) */
     if (c.lh) t.style.lineHeight = c.lh;
     t.style.width = c.o.ms.W + 'px';
     t.textContent = c.o.ms.text || c.ln.text;
@@ -797,6 +812,12 @@
       return infoOf(res);
     },
     info: function (no) { var sec = document.getElementById('cut-' + (no < 10 ? '0' : '') + no), hit = null; last.forEach(function (x) { if (x[0] === sec) hit = x; }); return hit ? infoOf(hit[1]) : []; },
+    /* 편집기용: 자동 설정까지 포함한 컷 전체 설정(zones·lines…) */
+    config: function (no) {
+      if (!current) return null;
+      var ep = current.ep, B = bubbleData(), ov = B.cuts || {}, cut = ep.cuts.filter(function (q) { return q.no === no; })[0];
+      return cut ? JSON.parse(JSON.stringify(autoConfig(cut, ep, ov[no]))) : null;
+    },
     effective: function (no) {
       if (!current) return null;
       var ep = current.ep, B = bubbleData(), ov = B.cuts || {}, cut = ep.cuts.filter(function (q) { return q.no === no; })[0];

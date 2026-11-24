@@ -21,6 +21,10 @@ html.bv4-pending .cut .panel-bubbles, html.bv4-pending .cut .lines { visibility:
 .bv4-phone  { font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 600; line-height: 1.42; color: #15171b; letter-spacing: .02em; }
 .bv4-mono   { font-family: "Noto Serif KR", "Noto Serif CJK KR", "AppleMyungjo", "Nanum Myeongjo", serif; font-weight: 500; line-height: 1.55; color: #22252a; }
 .bv4-caption{ font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 600; line-height: 1.35; color: #1b1d21; letter-spacing: .02em; }
+/* manual.style.font 로 고른 글꼴(클래스가 있을 때만 적용 — 없으면 위 유형 기본값) */
+.bv4-text.bv4-f-sans  { font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 500; }
+.bv4-text.bv4-f-bold  { font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", sans-serif; font-weight: 600; }
+.bv4-text.bv4-f-serif { font-family: "Noto Serif KR", "Noto Serif CJK KR", "AppleMyungjo", "Nanum Myeongjo", serif; font-weight: 500; }
 
 .bv4-on .cut.bv4-cut { position: relative; }
 .bv4-layer { position: absolute; inset: 0; pointer-events: none; z-index: 6; }

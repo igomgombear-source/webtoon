@@ -1,6 +1,7 @@
 # 렌더러 변경 요청 — 말풍선 모양 종류·글꼴·글자 색·배경색
 
-- 요청: Claude Code(말풍선·대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **미반영(Studio 편집 기능은 이 요청이 처리되기 전까지 만들지 않음)**
+- 요청: Claude Code(말풍선·대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **처리됨(2단계 통합)**
+- **처리: 2단계 통합(`studio-integration-phase2-20261124`)** — `js/bubbles.js` 가 `manual.style.{kind,font,color,bg,stroke}` 를 읽는다(`kind:'rect'` 는 원래 네모 유형이면 그대로, 아니면 모서리 0 둥근 사각으로 그림). 글꼴 `sans|bold|serif`(css/bubbles.css `.bv4-f-*`). 대비 경고는 Studio 에서 계산(엔진 `lowContrast` 는 넣지 않음). `BubblesV4.info()` 에 `style`·`align`, `BubblesV4.config(no)` 추가. 키가 없을 때 99컷 HTML 이 이전 엔진과 동일(320~768px, `integration` 검사).
 - 관련 모듈: `tools/studio/modules/bubbles.js` · 규격: `docs/STUDIO_ARCHITECTURE.md` §4
 
 ## 1. 왜 필요한가

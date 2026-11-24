@@ -21,10 +21,10 @@
     /* 현재 컷(원본 컷 번호) 선택 — 썸네일·컷 목록과 동기 */
     select: function (no, opt) {
       if (!st.frame.cut(no)) return false;
-      st.cut = no; S.state.cut = no;
+      var prev = st.cut; st.cut = no; S.state.cut = no;
       st.frame.applyCut(no, true); st.frame.showCut(no);
       if (st.compare && st.mode === 'side') { st.compare.applyCut(no, true); st.compare.showCut(no); }
-      st.layout(); S.emit('cut', { no: no, source: opt && opt.source }); S.emit('stage', {});
+      st.layout(); S.emit('cut', { no: no, source: opt && opt.source, changed: prev !== no });   /* changed:false = 같은 컷 다시 고름(폭·모드 전환) */ S.emit('stage', {});
       return true;
     },
     hidden: function (no) { return !!st.frame.hidden[no == null ? st.cut : no]; },

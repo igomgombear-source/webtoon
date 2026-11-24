@@ -4,6 +4,10 @@
   'use strict';
   var S = window.Studio, U = S.util, I = S.ids, $ = U.$;
   S.state = { ep: null, cut: null, panel: 'bubbles' };
+  /* 컷 번호 → 컷 ID(원본 'c017', 새·복제 컷 'c~xxxxx'). 편집값·초기화·QA·썸네일은 모두 컷 ID 로 묶는다 */
+  S.cutId = function (no) { return S.stage.frame ? S.stage.frame.idOf(no == null ? S.state.cut : no) : I.cut(no == null ? S.state.cut : no); };
+  S.cutNo = function (cutId) { return S.stage.frame ? S.stage.frame.noOf(cutId) : I.cutNo(cutId); };
+  function modLabel(m) { return (S.modules[m] && S.modules[m].label) || m; }
   var WIDTHS = [320, 360, 390, 430, 768];
 
   /* ---------- 선택·이동 ---------- */
@@ -27,9 +31,9 @@
   }
   function cutHead() {
     var no = S.state.cut, c = S.stage.frame.cut(no); if (!c) return;
-    var ps = S.base.panelsOf(c).length, hid = S.stage.hidden(no), ed = S.store.editedCuts()[I.cut(no)];
-    $('cutInfo').innerHTML = '<b>#' + no + '</b> <span class="dim">' + I.cut(no) + '</span> · ' + U.esc(c.desc || '') + (ps > 1 ? ' · 조각 ' + ps : '') +
-      (hid ? ' <span class="chip warn">독자 화면 숨김 컷</span>' : '') + (ed ? ' <span class="chip edit">편집: ' + U.esc(ed.join(', ')) + '</span>' : '');
+    var ps = S.base.panelsOf(c).length, hid = S.stage.hidden(no), cid = S.cutId(no), ed = S.store.editedCuts()[cid];
+    $('cutInfo').innerHTML = '<b>#' + no + '</b> <span class="dim">' + cid + '</span> · ' + U.esc(c.desc || '') + (ps > 1 ? ' · 조각 ' + ps : '') +
+      (hid ? ' <span class="chip warn">독자 화면 숨김 컷</span>' : '') + (ed ? ' <span class="chip edit">편집: ' + U.esc(ed.map(modLabel).join(', ')) + '</span>' : '');
   }
 
   /* ---------- 왼쪽 메뉴·오른쪽 속성 ---------- */
@@ -89,9 +93,10 @@
       '<dt>원본 컷</dt><dd>' + bi.cuts + '컷 (독자 노출 ' + bi.readerCuts + ' · 숨김 ' + (bi.cuts - bi.readerCuts) + ')</dd>' +
       '<dt>지금 숨김</dt><dd>' + hiddenN + '컷 ' + U.esc(Object.keys(f.hidden).join(', ')) + '</dd>' +
       '<dt>데이터 지문</dt><dd><code>' + bi.data + '</code></dd><dt>말풍선 지문</dt><dd><code>' + bi.bubbles + '</code></dd><dt>휴대폰 지문</dt><dd><code>' + bi.screens + '</code></dd></dl></section>' +
-      '<section class="card"><h2>편집 현황</h2><p>' + (Object.keys(cnt).length ? Object.keys(cnt).map(function (m) { return U.esc((S.modules[m] && S.modules[m].label) || m) + ' ' + cnt[m] + '개'; }).join(' · ') : '편집 없음') + '</p>' +
-      '<div class="chips">' + Object.keys(ed).sort().map(function (c) { var n = I.cutNo(c); return '<button data-go="' + n + '">#' + n + '</button>'; }).join('') + '</div></section>' +
-      '<section class="card"><h2>충돌 <small>원본이 바뀌었거나 사라진 요소</small></h2>' + (cf.length ? '<ul class="plan">' + cf.map(function (c) { return '<li><button data-go="' + I.cutNo(c.id) + '">' + U.esc(c.id) + '</button> ' + U.esc(c.module) + ' · ' + (c.reason === 'missing' ? '원본에 없음' : c.reason === 'changed' ? '원본 내용 변경' : '잘못된 ID') + '</li>'; }).join('') + '</ul>' : '<p>없음</p>') + '</section>' +
+      '<section class="card"><h2>편집 현황</h2><p>' + (Object.keys(cnt).length ? Object.keys(cnt).map(function (m) { return U.esc(modLabel(m)) + ' ' + cnt[m] + '개'; }).join(' · ') : '편집 없음') + '</p>' +
+      '<div class="chips">' + Object.keys(ed).sort().map(function (c) { var n = S.cutNo(c); return n == null ? '<span class="chip warn" title="화면에 없는 컷(연결 해제)">' + U.esc(c) + '</span>' : '<button data-go="' + n + '" title="' + U.esc(c) + '">#' + n + (c.indexOf('~') > 0 ? ' ' + U.esc(c) : '') + '</button>'; }).join('') + '</div></section>' +
+      (function () { var co = S.renderer.compileOrder(f); return '<section class="card"><h2>컴파일 순서</h2><p class="note">회차 단계: ' + U.esc(co.episode.map(modLabel).join(' → ') || '-') + ' · 컷 단계: ' + U.esc(co.cut.map(modLabel).join(' → ') || '-') + '</p>' + (co.issues.length ? '<ul class="plan warn">' + co.issues.map(function (x) { return '<li>' + U.esc(x) + '</li>'; }).join('') + '</ul>' : '<p class="note">문제 없음</p>') + '</section>'; })() +
+      '<section class="card"><h2>충돌 <small>원본이 바뀌었거나 사라진 요소</small></h2>' + (cf.length ? '<ul class="plan">' + cf.map(function (c) { return '<li><button data-go="' + S.cutNo(I.cutOf(c.id)) + '">' + U.esc(c.id) + '</button> ' + U.esc(c.module) + ' · ' + (c.reason === 'missing' ? '원본에 없음' : c.reason === 'changed' ? '원본 내용 변경' : '잘못된 ID') + '</li>'; }).join('') + '</ul>' : '<p>없음</p>') + '</section>' +
       '<section class="card"><h2>검사 도구</h2><div class="chips"><a class="btn" href="' + S.renderer.root + 'tools/qa/v3.html?auto" target="_blank" rel="noopener">본편 QA(v3) 열기</a><button data-mode="side">원본과 나란히 보기</button><button id="qaReset">회차 편집 전체 초기화</button></div>' +
       '<p class="note">편집값은 본편 데이터에 적용되지 않습니다. 적용은 사용자 승인 후 별도 작업입니다.</p></section>';
     el.onclick = function (e) { var g = e.target.closest('[data-go]'); if (g) S.select(+g.dataset.go, 'qa'); var md = e.target.closest('[data-mode]'); if (md) setMode(md.dataset.mode); if (e.target.id === 'qaReset' && confirm('이 회차의 모든 편집(모든 모듈)을 되돌릴까요? 실행 취소로 되살릴 수 있습니다.')) S.store.reset({ ep: ep }, '회차 전체 초기화'); };
@@ -120,7 +125,7 @@
   function resetScope(scope) {
     var m = S.modules[S.state.panel], sel = m && m.selection ? m.selection() : null;
     if (scope === 'el') { if (!sel) return U.toast('선택한 요소가 없습니다'); S.store.reset({ id: sel }, '요소 초기화 ' + sel); }
-    else if (scope === 'cut') S.store.reset({ cut: I.cut(S.state.cut) }, '컷 초기화 #' + S.state.cut);
+    else if (scope === 'cut') S.store.reset({ cut: S.cutId() }, '컷 초기화 #' + S.state.cut);
     else if (confirm('이 회차의 모든 편집을 되돌릴까요? 실행 취소로 되살릴 수 있습니다.')) S.store.reset({}, '회차 전체 초기화');
   }
 

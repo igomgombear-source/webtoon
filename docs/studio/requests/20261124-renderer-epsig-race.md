@@ -1,6 +1,7 @@
 # 코어 변경 요청 — 회차 다시 그리기 중 들어온 편집이 누락되는 경쟁 상태
 
-- 요청: Claude Code(대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **미반영(대사 모듈에 임시 방어 코드 있음)**
+- 요청: Claude Code(대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **처리됨(2단계 통합)**
+- **처리: 2단계 통합(`studio-integration-phase2-20261124`)** — `Frame.full()` 이 시작 시점 서명을 기록. 대사 모듈의 임시 보정(`compiledMatches`·강제 재그리기)은 지웠고 `ensureFresh()` 는 대기열만 기다린다 — 중복 작동 없음(그리는 도중 편집 시 회차 그리기 정확히 2회, `integration` 검사).
 - 대상: `tools/studio/core/renderer.js` (`Frame.full` / `Frame.sync`) — 모든 `level:'episode'` 모듈(대사·컷·원화·…)에 해당
 
 ## 1. 증상

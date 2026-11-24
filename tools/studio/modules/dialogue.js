@@ -9,7 +9,8 @@
  * 모든 편집 동작은 편집값 한 곳만 한 번에 바꾼다(원자적 — 렌더러가 다시 그리는 도중의 변경 누락 방지).
  * 말풍선 설정은 대사 ID 로 연결된다(bubbles 모듈 편집값 키 = 대사 ID). 순서·추가·삭제·분할을 해도 ID 는 바뀌지 않으므로
  * 말풍선 설정이 다른 대사에 붙지 않는다. 컴파일된 대사 줄에는 sid(= 대사 ID)를 넣어 말풍선 모듈이 읽는다.
- * 렌더러 연동: level 'episode' — 데이터만 바꾼다(독자 렌더러 변경 없음). 정렬(align)은 렌더러가 읽지 않는다(요청서 참고). */
+ * 렌더러 연동: level 'episode' — 데이터만 바꾼다. 정렬(align)은 js/bubbles.js 가 cut.lines[i].align 으로 읽는다(2단계 통합).
+ * 새·복제 컷(cut.sid 'c~xxxxx', cut.from = 원본 컷 ID)도 컷 ID 로 편집한다 — 컷 구성 모듈 다음에 컴파일(after:['cuts']). */
 (function () {
   'use strict';
   var S = window.Studio, U = S.util, I = S.ids, MOD = 'dialogue';
@@ -28,15 +29,27 @@
     if (e && e.align) l.align = e.align;
     return l;
   }
+  var CID = '(?:\\d+|~[a-z0-9]+)', ORIG = new RegExp('^c' + CID + '\\.l(\\d+)$'), ADDED = new RegExp('^c' + CID + '\\.l~[a-z0-9]+$');
+  function lid(cutId, i) { return cutId + '.l' + i; }
+  /* 컷 서술: 원본 컷이면 { cutId:'c017', base:원본 컷 }, 새·복제 컷이면 컴파일된 컷의 sid 와 원본(from) 의 대사를 쓴다.
+   * cuts: 컴파일 중이면 ctx.data.episode.cuts, 아니면 편집 화면의 컴파일 결과 */
+  function desc(no, ep, cuts) {
+    ep = ep || S.state.ep; var b = S.base.cut(ep, no); if (b) return { no: no, cutId: I.cut(no), base: b, baseNo: no };
+    cuts = cuts || (S.stage && S.stage.frame && S.stage.frame.compiled && S.stage.frame.compiled.episode.cuts) || [];
+    var c = cuts.filter(function (x) { return x.no === no; })[0]; if (!c || !c.sid) return null;
+    var srcNo = c.from ? I.cutNo(c.from) : null, src = srcNo != null ? S.base.cut(ep, srcNo) : null;
+    return { no: no, cutId: c.sid, base: { no: no, lines: src ? src.lines || [] : (c.baseLines || []), rows: c.rows, ratio: c.ratio }, baseNo: src ? srcNo : null, template: c };
+  }
+  function descById(cutId) { var n = S.cutNo ? S.cutNo(cutId) : I.cutNo(cutId); return n == null ? null : desc(n); }
   function effText(slice, lines, id) {
-    var m = /^c\d+\.l(\d+)$/.exec(id); if (!m) return null;
+    var m = ORIG.exec(id); if (!m) return null;
     var e = slice[id] || {}; return e.text != null ? e.text : (lines[+m[1]] ? lines[+m[1]].text : '');
   }
-  function plan(no, ep) {
-    ep = ep || S.state.ep; var cut = S.base.cut(ep, no); if (!cut) return null;
-    var cutId = I.cut(no), slice = S.store.slice(MOD, ep), cutEd = slice[cutId] || {}, lines = cut.lines || [];
-    var added = Object.keys(slice).filter(function (id) { return I.cutOf(id) === cutId && /^c\d+\.l~[a-z0-9]+$/.test(id) && slice[id].added; });
-    var origIds = lines.map(function (l, i) { return I.line(no, i); }), all = origIds.concat(added), order = [];
+  function plan(no, ep, cuts) {
+    ep = ep || S.state.ep; var d = desc(no, ep, cuts); if (!d) return null;
+    var cutId = d.cutId, slice = S.store.slice(MOD, ep), cutEd = slice[cutId] || {}, lines = d.base.lines || [];
+    var added = Object.keys(slice).filter(function (id) { return I.cutOf(id) === cutId && ADDED.test(id) && slice[id].added; });
+    var origIds = lines.map(function (l, i) { return lid(cutId, i); }), all = origIds.concat(added), order = [];
     (cutEd.order || []).forEach(function (id) { if (all.indexOf(id) >= 0 && order.indexOf(id) < 0) order.push(id); });
     origIds.forEach(function (id) { if (order.indexOf(id) < 0) order.push(id); });
     added.forEach(function (id) {   /* 새 대사: 명시한 순서에 없으면 만들 때 지정한 앞 대사 바로 뒤(없으면 맨 끝) */
@@ -45,7 +58,7 @@
     var absorbed = {}; order.forEach(function (id) { var e = slice[id]; if (e && e.absorb) e.absorb.forEach(function (a) { absorbed[a] = id; }); });
     var entries = [], deleted = [];
     order.forEach(function (id) {
-      var e = slice[id] || {}, m = /^c\d+\.l(\d+)$/.exec(id), idx = m ? +m[1] : null;
+      var e = slice[id] || {}, m = ORIG.exec(id), idx = m ? +m[1] : null;
       if (e.deleted) { deleted.push({ id: id, text: idx != null ? lines[idx].text : e.text, who: idx != null ? lines[idx].who : e.who }); return; }
       if (absorbed[id]) return;
       var base = idx != null ? lines[idx] : { style: e.style || 'speech', at: 'gap' }, line = lineWith(base, idx != null ? e : e);
@@ -66,26 +79,27 @@
       entries.push({ id: id, kind: idx != null ? 'orig' : 'added', srcIndex: idx, line: line, noSplit: textChanged, edited: edited });
     });
     var natural = entries.length === lines.length && entries.every(function (e, k) { return e.kind === 'orig' && e.srcIndex === k && JSON.stringify(e.line) === JSON.stringify(lines[k]); });
-    return { no: no, cutId: cutId, entries: entries, deleted: deleted, identity: natural, order: order, base: lines };
+    return { no: no, cutId: cutId, entries: entries, deleted: deleted, identity: natural && !d.template, order: order, base: lines, desc: d };
   }
   function idsOf(no, ep) { var p = plan(no, ep); return p ? p.entries.map(function (e) { return e.id; }) : []; }
 
   /* ---------- 엔진으로 말풍선 설정 계산(데이터 바꿔치기) ---------- */
-  function effectiveWith(frame, no, lines, cfgEntry) {
-    var win = frame.win(), ep = frame.ep, cd = win.WEBTOON.episodeData[ep], cc = cd.cuts.filter(function (c) { return c.no === no; })[0], bo = S.base.bubbleObj(win, ep);
+  function effectiveWith(frame, no, lines, cfgEntry, template) {
+    var win = frame.win(), ep = frame.ep, cd = win.WEBTOON.episodeData[ep], cc = cd.cuts.filter(function (c) { return c.no === no; })[0], bo = S.base.bubbleObj(win, ep), pushed = false;
+    if (!cc && template) { cc = U.clone(template); cd.cuts.push(cc); pushed = true; }   /* 새·복제 컷이 이 화면에 아직 없으면 잠시 넣고 뺀다 */
     if (!cc || !bo) return null; bo.cuts = bo.cuts || {};
     var sl = cc.lines, sb = bo.cuts[no];
     cc.lines = lines; if (cfgEntry) bo.cuts[no] = cfgEntry; else delete bo.cuts[no];
-    try { return win.BubblesV4.effective(no) || []; } finally { cc.lines = sl; if (sb === undefined) delete bo.cuts[no]; else bo.cuts[no] = sb; }
+    try { return win.BubblesV4.effective(no) || []; } finally { cc.lines = sl; if (sb === undefined) delete bo.cuts[no]; else bo.cuts[no] = sb; if (pushed) cd.cuts.splice(cd.cuts.indexOf(cc), 1); }
   }
   /* 컷의 최종 말풍선 설정 lines. 구조가 그대로면 null. { lines:[cfg…], ids:[대사ID…], texts } */
-  function finalConfig(frame, no, ep) {
-    ep = ep || frame.ep; var pl = plan(no, ep); if (!pl || pl.identity) return null;
-    var baseData = S.base.data(ep), baseCfg = baseData.bubbles && baseData.bubbles.cuts && baseData.bubbles.cuts[no];
+  function finalConfig(frame, no, ep, cuts) {
+    ep = ep || frame.ep; var pl = plan(no, ep, cuts); if (!pl || pl.identity) return null;
+    var d = pl.desc, baseData = S.base.data(ep), baseCfg = d.baseNo != null && baseData.bubbles && baseData.bubbles.cuts && baseData.bubbles.cuts[d.baseNo];
     var origLines = U.clone(pl.base), newLines = pl.entries.map(function (e) { var l = U.clone(e.line); l.sid = e.id; return l; });
-    var origEff = effectiveWith(frame, no, origLines, baseCfg ? U.clone(baseCfg) : null);
+    var origEff = effectiveWith(frame, no, origLines, baseCfg ? U.clone(baseCfg) : null, d.template);
     var c2 = baseCfg ? U.clone(baseCfg) : null; if (c2) { delete c2.lines; if (U.isEmpty(c2)) c2 = null; }
-    var autoNew = effectiveWith(frame, no, newLines, c2);
+    var autoNew = effectiveWith(frame, no, newLines, c2, d.template);
     if (!origEff || !autoNew) return null;
     var cfg = pl.entries.map(function (e, k) {
       var c = e.srcIndex != null && origEff[e.srcIndex] ? U.clone(origEff[e.srcIndex]) : U.clone(autoNew[k] || {});
@@ -105,10 +119,11 @@
   var PART = /^(c\d+\.l(?:\d+|~[a-z0-9]+))\.(b(?:\d+|~[a-z0-9]+))$/;
   function once(label, id, value, ids) { S.store.set(MOD, id, value, { label: label }); }
   function get(id) { return U.clone(ed(id)) || {}; }
-  function entryOf(id, no) { var p = plan(no == null ? I.cutNo(id) : no); if (!p) return null; var r = p.entries.filter(function (e) { return e.id === id; })[0]; return r || null; }
+  function entryOf(id, no) { var p = plan(no == null ? S.cutNo(I.cutOf(id)) : no); if (!p) return null; var r = p.entries.filter(function (e) { return e.id === id; })[0]; return r || null; }
   function clean(e) { Object.keys(e).forEach(function (k) { if (e[k] === undefined || e[k] === null || e[k] === '') delete e[k]; }); return e; }
-  function baseLine(p) { return p.fresh || p.parts.length !== 1 ? null : S.base.cut(S.state.ep, p.cut).lines[p.parts[0].index]; }
-  function setOrder(no, ids, label) { var e = get(I.cut(no)); e.order = ids.slice(); once(label || '대사 순서', I.cut(no), e); }
+  function baseLine(p) { if (!p || p.parts.length !== 1 || p.parts[0].fresh) return null; var d = descById(p.cutId); return d ? (d.base.lines || [])[p.parts[0].index] || null : null; }
+  function cutIdOf(no) { var d = desc(no); return d ? d.cutId : I.cut(no); }
+  function setOrder(no, ids, label) { var cid = cutIdOf(no), e = get(cid); e.order = ids.slice(); once(label || '대사 순서', cid, e); }
   /* 조각이면 부모 split 항목을, 아니면 대사 편집 항목을 fn 으로 고친다 */
   function editField(label, id, fn) {
     var m = PART.exec(id), p = I.parse(id); if (!p) return false;
@@ -134,7 +149,7 @@
     setAlign: function (id, align) { return A.setLine(id, { align: align }); },
     /* 새 대사. opt { no, after:대사ID|null, who, text, style, panel } → 새 ID (한 번의 편집) */
     addLine: function (opt) {
-      var no = opt.no, cutId = I.cut(no), p = plan(no); if (!p) return null; var text = String(opt.text == null ? '' : opt.text).replace(/\r\n?/g, '\n').replace(/^\s+|\s+$/g, ''); if (!text) { U.toast('대사 내용을 입력하세요'); return null; }
+      var no = opt.no, p = plan(no); if (!p) return null; var cutId = p.cutId; var text = String(opt.text == null ? '' : opt.text).replace(/\r\n?/g, '\n').replace(/^\s+|\s+$/g, ''); if (!text) { U.toast('대사 내용을 입력하세요'); return null; }
       var id = I.fresh(cutId, 'l'), after = opt.after ? opt.after.replace(/^(c\d+\.l(?:\d+|~[a-z0-9]+)).*$/, '$1') : null;
       if (!after) { var last = p.order.filter(function (x) { return !(S.store.get(MOD, x) || {}).deleted; }); after = last.length ? last[last.length - 1] : null; }
       once('대사 추가 ' + id, id, clean({ added: true, after: after || undefined, text: text, who: trim(opt.who) || undefined, style: opt.style || 'speech', panel: opt.panel || undefined })); return id;
@@ -147,7 +162,7 @@
     restoreLine: function (id) { editField('대사 복원 ' + id, id, function (e) { delete e.deleted; }); },
     /* 최상위 대사를 delta 칸 이동(조각은 같은 분할 안에서만) */
     moveLine: function (id, delta) {
-      var no = I.cutNo(id), p = plan(no); if (!p) return false; var en = p.entries.filter(function (e) { return e.id === id; })[0]; if (!en) return false;
+      var no = S.cutNo(I.cutOf(id)), p = plan(no); if (!p) return false; var en = p.entries.filter(function (e) { return e.id === id; })[0]; if (!en) return false;
       if (en.kind === 'part') {
         var par = en.parent, e = get(par), k = (e.split || []).map(function (q) { return par + '.' + q.id; }).indexOf(id), j = k + delta; if (k < 0 || j < 0 || j >= e.split.length) return false;
         var t = e.split[k]; e.split[k] = e.split[j]; e.split[j] = t; once('조각 순서 ' + id, par, e); return true;
@@ -174,7 +189,7 @@
     },
     /* 선택한 대사를 바로 다음 대사와 합친다 */
     mergeNext: function (id) {
-      var no = I.cutNo(id), p = plan(no); if (!p) return false; var k = p.entries.map(function (e) { return e.id; }).indexOf(id), en = p.entries[k], nx = p.entries[k + 1];
+      var no = S.cutNo(I.cutOf(id)), p = plan(no); if (!p) return false; var k = p.entries.map(function (e) { return e.id; }).indexOf(id), en = p.entries[k], nx = p.entries[k + 1];
       if (!en || !nx) { U.toast('합칠 다음 대사가 없습니다'); return false; }
       if (en.kind === 'part' && nx.kind === 'part' && en.parent === nx.parent) {
         var e = get(en.parent), i = e.split.map(function (q) { return en.parent + '.' + q.id; }).indexOf(id); e.split[i].text = e.split[i].text + ' ' + e.split[i + 1].text; e.split.splice(i + 1, 1);
@@ -191,30 +206,15 @@
     selected: function () { return D.sel; },
     patchText: patchText
   };
-  /* ---------- 렌더러 경쟁 상태 방어 ----------
-   * core/renderer.js 는 회차를 다시 그린 '뒤'에 편집 서명을 기록한다. 그리는 도중에 편집이 또 들어오면 그 변경은 다시 그려지지 않는다(요청서
-   * docs/studio/requests/20261124-renderer-epsig-race.md). 코어가 고쳐지기 전까지, 대사 편집 뒤 화면 데이터가 편집값과 같은지 확인하고 다르면 다시 그린다. */
-  function expectedLines(no, ep, nos) { var p = nos[no] ? plan(no, ep) : null; if (p && !p.identity) return p.entries.map(function (e) { return Object.assign({}, e.line, { sid: e.id }); }); var c = S.base.cut(ep, no); return c ? (c.lines || []) : null; }
-  function compiledMatches(f) {
-    var c = f.compiled; if (!c) return true; var nos = {}; Object.keys(S.store.slice(MOD, f.ep)).forEach(function (id) { var n = I.cutNo(id); if (n != null) nos[n] = 1; });
-    return c.episode.cuts.every(function (cut) { var exp = expectedLines(cut.no, f.ep, nos); return exp == null || JSON.stringify(cut.lines || []) === JSON.stringify(exp); });
-  }
-  function frames() { return [S.stage && S.stage.frame, S.stage && S.stage.compare, S.timeline && S.timeline.frame && S.timeline.frame()].filter(function (f) { return f && f.edits !== false && f.compiled; }); }
-  function ensureFresh() {
-    return Promise.all(frames().map(function (f) {
-      var tries = 0;
-      function step() { return Promise.resolve(f.queue).then(function () { if (compiledMatches(f) || ++tries > 4) return null; return f.sync(true); }).then(function () { return compiledMatches(f) || tries > 4 ? null : step(); }); }
-      return step();
-    }));
-  }
-  var ensureLater = U.debounce(function () { ensureFresh(); }, 700);
-  A.ensureFresh = ensureFresh;
-  S.on('change', function (ev) { if (ev && (ev.module === MOD || ev.module == null)) ensureLater(); });
+  /* 화면이 편집값을 다 반영할 때까지 기다린다(테스트·외부 호출용). 2단계 통합에서 코어(renderer.js)가 경쟁 상태를 고쳐
+   * 예전의 '다르면 강제로 다시 그리기' 보정은 지웠다 — 여기서는 렌더러 대기열만 기다린다(중복 작동 없음). */
+  function frames() { return [S.stage && S.stage.frame, S.stage && S.stage.compare, S.timeline && S.timeline.frame && S.timeline.frame()].filter(function (f) { return f && f.compiled; }); }
+  A.ensureFresh = function () { return Promise.all(frames().map(function (f) { return Promise.resolve(f.queue); })); };
 
   /* 엔진 자동 분할 규칙(js/bubbles.js layoutCut 와 같다): splitParts → 문장 부호 뒤 공백, 말·밖소리만, 공백 뺀 18자 초과, noSplit 아님 */
   function autoParts(en) {
-    var f = S.stage.frame, no = I.cutNo(en.id), eff = null;
-    try { eff = effectiveWith(f, no, S.base.cut(S.state.ep, no).lines, (S.base.data(S.state.ep).bubbles.cuts || {})[no] ? U.clone(S.base.data(S.state.ep).bubbles.cuts[no]) : null); } catch (x) {}
+    var f = S.stage.frame, no = S.cutNo(I.cutOf(en.id)), d = desc(no), eff = null, bc = d && d.baseNo != null ? (S.base.data(S.state.ep).bubbles.cuts || {})[d.baseNo] : null;
+    try { if (d) eff = effectiveWith(f, no, U.clone(d.base.lines || []), bc ? U.clone(bc) : null, d.template); } catch (x) {}
     var cfg = (eff && eff[en.srcIndex]) || {}, ln = en.line, typ = cfg.type || STYLE_TYPE[ln.style] || 'speech';
     var sp = cfg.splitParts && cfg.splitParts.join(' ') === ln.text ? cfg.splitParts : null; if (sp) return sp.slice();
     var parts = ln.text.split(/(?<=[.?!])\s+/);
@@ -234,7 +234,7 @@
     var slice0 = S.store.slice(MOD), nos = {}; Object.keys(slice0).forEach(function (id) { var n = I.cutNo(id); if (n != null) nos[n] = 1; });
     var list = Object.keys(nos).map(Number).sort(function (a, b) { return a - b; }).filter(function (n) { var p = plan(n); return p && !p.identity; });
     if (!list.length) return '// 대사 편집이 없습니다.';
-    var out = ['// ' + S.state.ep + ' 대사 편집 패치 — ' + U.today() + ' (마지막 접속 Studio)', '// data/' + S.state.ep + '.js 의 해당 컷 lines 를 아래로 바꾼다. 말풍선 설정(lines)은 말풍선 패치를 함께 적용한다(같은 순서·같은 개수).', '// align 은 렌더러가 아직 읽지 않는다(요청서 20261124-dialogue-align). 본편 적용은 사용자 승인 후.', ''];
+    var out = ['// ' + S.state.ep + ' 대사 편집 패치 — ' + U.today() + ' (마지막 접속 Studio)', '// data/' + S.state.ep + '.js 의 해당 컷 lines 를 아래로 바꾼다. 말풍선 설정(lines)은 말풍선 패치를 함께 적용한다(같은 순서·같은 개수).', '// align(대사 정렬)은 js/bubbles.js 가 읽는다(2단계 통합). 새·복제 컷은 컷 구성 패치로 따로 낸다. 본편 적용은 사용자 승인 후.', ''];
     list.forEach(function (n) { var p = plan(n); out.push('  // 컷 ' + n, '  ' + n + ': ['); p.entries.forEach(function (e, i) { var l = U.clone(e.line); out.push('    ' + jsLit(l) + (i < p.entries.length - 1 ? ',' : '') + '  // ' + e.id); }); out.push('  ],'); });
     return out.join('\n');
   }
@@ -250,7 +250,7 @@
   function render() {
     var el = D.el; if (!el) return; var no = S.state.cut, p = plan(no); if (!p) { el.innerHTML = ''; return; }
     var ids = p.entries.map(function (e) { return e.id; }); if (D.sel == null || ids.indexOf(D.sel) < 0) D.sel = ids[0] || null;
-    var en = p.entries.filter(function (e) { return e.id === D.sel; })[0], multi = S.base.panelsOf(S.base.cut(S.state.ep, no)).length;
+    var en = p.entries.filter(function (e) { return e.id === D.sel; })[0], pnls = S.base.panelsOf(p.desc.template || p.desc.base), multi = pnls.length;
     var html = '<section class="card"><h2>대사 목록 <small>#' + no + ' · 끌어서 순서 변경</small></h2><ul class="dl-list" id="dl-list">' +
       p.entries.map(function (e, k) { return '<li class="dl-row' + (e.id === D.sel ? ' on' : '') + (e.kind === 'part' ? ' dl-part' : '') + '" draggable="true" data-id="' + e.id + '"><span class="dl-grip" title="끌어서 이동">⠿</span><span class="dl-t"><b>' + (k + 1) + '.</b> ' + U.esc(e.line.who || '(독백)') + ': ' + U.esc(e.line.text.replace(/\n/g, ' ⏎ ')) + '</span>' +
         (e.kind === 'part' ? '<span class="dl-tag">⧉</span>' : e.kind === 'added' ? '<span class="dl-tag">＋</span>' : e.edited ? '<span class="dl-tag">✎</span>' : '') + '<button data-up="' + e.id + '" title="위로" aria-label="위로">▲</button><button data-dn="' + e.id + '" title="아래로" aria-label="아래로">▼</button></li>'; }).join('') +
@@ -260,12 +260,12 @@
       html += '<section class="card dl-form"><h2>선택한 대사 <small><code>' + en.id + '</code></small></h2>' +
         '<label>화자<input type="text" id="dl-who" list="dl-speakers" value="' + U.esc(l.who || '') + '" placeholder="(독백은 비워 둠)"></label><datalist id="dl-speakers">' + speakers().map(function (s) { return '<option value="' + U.esc(s) + '">'; }).join('') + '</datalist>' +
         '<label>내용 <span class="dim">(Enter = 줄바꿈 · Ctrl+Enter = 적용)</span><textarea id="dl-text" spellcheck="false">' + U.esc(l.text) + '</textarea></label>' +
-        '<label>정렬 <small class="warn">화면 미반영 — 렌더러 요청 대기</small><select id="dl-align">' + ALIGNS.map(function (a) { return '<option value="' + a[0] + '"' + ((mine.align || '') === a[0] ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
+        '<label>정렬<select id="dl-align">' + ALIGNS.map(function (a) { return '<option value="' + a[0] + '"' + ((mine.align || '') === a[0] ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
         '<div class="chips"><button id="dl-apply">적용</button><button id="dl-split" title="글자 칸의 커서 위치에서 나눔">커서 위치에서 분할</button><button id="dl-merge">다음 대사와 합치기</button>' + (canAuto ? '<button id="dl-confirm" title="엔진이 자동으로 나눠 그리는 말풍선을 조각 대사로 확정">자동 분할 확정</button>' : '') + (mine.absorb ? '<button id="dl-unmerge">합치기 풀기</button>' : '') + '<button id="dl-del" class="dl-del">삭제</button><button id="dl-reset">이 대사 초기화</button></div></section>';
     }
     html += '<section class="card dl-form"><h2>대사 추가</h2><label>화자<input type="text" id="dl-nwho" list="dl-speakers" placeholder="(독백은 비워 둠)"></label>' +
       '<label>종류<select id="dl-nstyle">' + STYLES.map(function (s) { return '<option value="' + s[0] + '">' + s[1] + '</option>'; }).join('') + '</select></label>' +
-      (multi > 1 ? '<label>조각<select id="dl-npanel">' + S.base.panelsOf(S.base.cut(S.state.ep, no)).map(function (_, i) { return '<option value="' + i + '">조각 ' + (i + 1) + '</option>'; }).join('') + '</select></label>' : '') +
+      (multi > 1 ? '<label>조각<select id="dl-npanel">' + pnls.map(function (_, i) { return '<option value="' + i + '">조각 ' + (i + 1) + '</option>'; }).join('') + '</select></label>' : '') +
       '<label>내용<textarea id="dl-ntext" spellcheck="false"></textarea></label><div class="chips"><button id="dl-add">선택한 대사 뒤에 추가</button><button id="dl-addend">맨 끝에 추가</button></div></section>';
     if (p.deleted.length) html += '<section class="card"><h2>삭제한 대사 <small>복원 가능</small></h2><ul class="dl-list">' + p.deleted.map(function (d) { return '<li class="dl-row"><span class="dl-t">' + U.esc(d.who || '(독백)') + ': ' + U.esc(String(d.text || '').slice(0, 24)) + ' <span class="dl-id">' + d.id + '</span></span><button data-restore="' + d.id + '">복원</button></li>'; }).join('') + '</ul></section>';
     html += '<section class="card"><h2>본편 반영용 패치</h2><div class="chips"><button id="dl-patch">대사 패치 텍스트</button></div><textarea class="out" id="dl-out" spellcheck="false" placeholder="data/*.js 해당 컷 lines (본편 적용은 사용자 승인 후)"></textarea>' +
@@ -315,14 +315,14 @@
   }
 
   S.registerModule({
-    id: MOD, label: '대사', order: 20, owner: 'Claude Code', status: 'partial', level: 'episode',
+    id: MOD, label: '대사', order: 20, owner: 'Claude Code', status: 'ready', level: 'episode', after: ['cuts'],
     planned: [],
     compile: function (ctx) {
-      var nos = {}; Object.keys(ctx.edits || {}).forEach(function (id) { var n = I.cutNo(id); if (n != null) nos[n] = 1; });
-      Object.keys(nos).forEach(function (k) {
-        var no = +k, cut = ctx.data.episode.cuts.filter(function (c) { return c.no === no; })[0]; if (!cut) return;
+      var keyed = {}; Object.keys(ctx.edits || {}).forEach(function (id) { keyed[I.cutOf(id)] = 1; });
+      ctx.data.episode.cuts.forEach(function (cut) {
+        var no = cut.no, cid = cut.sid || I.cut(no); if (!keyed[cid]) return;   /* 원본 컷 c017 · 새·복제 컷 c~xxxxx 모두 컷 ID 로 찾는다 */
         var fc;
-        try { fc = finalConfig(ctx.frame, no, ctx.ep); } catch (e) { console.error('[studio] dialogue finalConfig #' + no, e); return; }
+        try { fc = finalConfig(ctx.frame, no, ctx.ep, ctx.data.episode.cuts); } catch (e) { console.error('[studio] dialogue finalConfig #' + no, e); return; }
         if (!fc) return;   /* 구조가 원본과 같으면 건드리지 않는다 */
         cut.lines = fc.newLines;
         if (ctx.data.bubbles) { ctx.data.bubbles.cuts = ctx.data.bubbles.cuts || {}; var ent = ctx.data.bubbles.cuts[no] || (ctx.data.bubbles.cuts[no] = {}); ent.lines = fc.lines; }

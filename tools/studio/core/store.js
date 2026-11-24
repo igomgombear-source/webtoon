@@ -11,7 +11,7 @@
   var S = window.Studio, U = S.util, I = S.ids;
   var KEY = 'lastaccess-studio-v1', LEGACY_V2 = 'ep-bubble-editor-v2', LEGACY_V1 = 'ep-bubble-editor-v1';
   var FORMAT = 'lastaccess-studio', VERSION = 3, MAXH = 200, MAXLOG = 400;
-  var state = { episodes: {}, log: [] }, hist = [], hi = -1, saveErr = null;
+  var state = { episodes: {}, log: [] }, hist = [], hi = -1, saveErr = null, batching = null;
 
   function epId(ep) { return ep || (S.state && S.state.ep) || 'ep01v3'; }
   function epState(ep, create) { ep = epId(ep); var e = state.episodes[ep]; if (!e && create) e = state.episodes[ep] = { edits: {}, anchors: {} }; return e || null; }
@@ -101,9 +101,37 @@
       }
       store.prune(ep);
       persist();
+      if (batching) { batching.ep = ep; batching.mods[module] = 1; batching.ids.push(id); return; }   /* 일괄 편집 중: 끝에서 변경 알림·실행 취소 지점 한 번 */
       S.emit('change', { ep: ep, module: module, ids: [id], source: opt.source || 'edit' });
       if (!opt.live) store.checkpoint(opt.label || (module + ' 편집'), { module: module, ids: [id] });
     },
+    /* 일괄 편집: fn(store) 안의 set·patch·remove·reset 을 변경 알림 한 번·실행 취소 한 단계로 묶는다(안쪽 batch 는 바깥에 합쳐짐).
+     * opt.live:true 면 실행 취소 지점을 만들지 않는다(연속 동작 중). 반환: fn 의 반환값 */
+    batch: function (label, fn, opt) {
+      if (batching) return fn(store);
+      batching = { mods: {}, ids: [], ep: null, all: false }; var r, b;
+      try { r = fn(store); } finally {
+        b = batching; batching = null;
+        var mods = Object.keys(b.mods), ids = b.all ? null : b.ids.filter(function (x, i, a) { return a.indexOf(x) === i; });
+        if (mods.length) {
+          S.emit('change', { ep: b.ep || epId(), module: mods.length === 1 && mods[0] !== '*' ? mods[0] : null, ids: ids, source: 'batch' });
+          if (!(opt && opt.live)) store.checkpoint(label || '일괄 편집', { module: mods.length === 1 ? mods[0] : null, ids: ids || [] });
+        }
+      }
+      return r;
+    },
+    /* 컷 편집값 복사(복제 컷 승계): fromCut 의 모든 모듈 편집을 toCut ID 로 바꿔 복사. opt.modules 로 모듈 제한. 반환: 복사한 개수 */
+    copyCut: function (fromCut, toCut, opt) {
+      opt = opt || {}; var ep = epId(opt.ep), e = epState(ep); if (!e || fromCut === toCut || !I.valid(toCut)) return 0; var n = 0;
+      store.batch(opt.label || ('편집 승계 ' + fromCut + ' → ' + toCut), function () {
+        Object.keys(e.edits).forEach(function (m) { if (opt.modules && opt.modules.indexOf(m) < 0) return;
+          Object.keys(e.edits[m]).forEach(function (id) { if (I.cutOf(id) !== fromCut) return; var nid = toCut + id.slice(fromCut.length); store.set(m, nid, U.clone(e.edits[m][id]), { ep: ep, live: true }); n++; }); });
+      });
+      return n;
+    },
+    /* 컷 하나의 모든 모듈 편집 { 모듈: { 요소ID: 값 } } */
+    cutEdits: function (cutId, ep) { var e = epState(ep), o = {}; if (!e) return o; Object.keys(e.edits).forEach(function (m) { Object.keys(e.edits[m]).forEach(function (id) { if (I.cutOf(id) === cutId) (o[m] = o[m] || {})[id] = e.edits[m][id]; }); }); return o; },
+    batching: function () { return !!batching; },
     patch: function (module, id, fn, opt) { var v = U.clone(store.get(module, id, opt && opt.ep)) || {}; var r = fn(v); store.set(module, id, r === undefined ? v : r, opt); },
     remove: function (module, id, opt) { store.set(module, id, null, opt); },
 
@@ -114,6 +142,7 @@
 
     /* 실행 취소 지점 */
     checkpoint: function (label, meta) {
+      if (batching) return false;   /* 일괄 편집 안에서는 끝에서 한 번 */
       var s = snap(); if (hist[hi] && hist[hi].s === s) return false;
       hist = hist.slice(0, hi + 1); hist.push({ s: s, label: label || '편집', t: Date.now() }); if (hist.length > MAXH) hist.shift(); hi = hist.length - 1;
       log({ label: label || '편집', module: meta && meta.module, ids: meta && meta.ids && meta.ids.slice(0, 20), ep: epId() });
@@ -131,7 +160,9 @@
       Object.keys(e.edits).forEach(function (m) { if (scope.module && scope.module !== m) return;
         Object.keys(e.edits[m]).forEach(function (id) { if (scope.id && !(id === scope.id || id.indexOf(scope.id + '.') === 0)) return; if (scope.cut && I.cutOf(id) !== scope.cut) return; delete e.edits[m][id]; n++; });
         if (U.isEmpty(e.edits[m])) delete e.edits[m]; });
-      store.prune(ep); persist(); S.emit('change', { ep: ep, module: scope.module || null, ids: null, source: 'reset' });
+      store.prune(ep); persist();
+      if (batching) { batching.ep = ep; batching.mods[scope.module || '*'] = 1; batching.all = true; return n; }
+      S.emit('change', { ep: ep, module: scope.module || null, ids: null, source: 'reset' });
       store.checkpoint(label || '초기화'); return n;
     },
     /* 편집이 있는 컷 { 컷ID: [모듈...] } */

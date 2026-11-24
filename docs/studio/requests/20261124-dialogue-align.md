@@ -1,6 +1,7 @@
 # 렌더러 변경 요청 — 대사 정렬(align)
 
-- 요청: Claude Code(대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **미반영 — Studio 는 값을 저장·내보내기만 하고 화면에는 반영되지 않는다**
+- 요청: Claude Code(대사 모듈) → 통합 담당 · 2026-11-24 · 상태: **처리됨(2단계 통합)**
+- **처리: 2단계 통합(`studio-integration-phase2-20261124`)** — `drawBubble` 이 `cut.lines[i].align`(left·center·right)을 글자 요소 `text-align` 으로 적용. 대사 패널의 '미반영' 표시 제거. 검증 `bubbles-style`.
 - 관련 모듈: `tools/studio/modules/dialogue.js`
 
 ## 1. 현재 상태

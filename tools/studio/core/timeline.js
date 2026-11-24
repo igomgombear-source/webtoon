@@ -50,7 +50,7 @@
   function marks() {
     var ed = S.store.editedCuts(S.state.ep), cf = {};
     S.store.conflicts(S.state.ep).forEach(function (c) { cf[I.cutOf(c.id)] = 1; });
-    Object.keys(tiles).forEach(function (no) { var t = tiles[no], id = I.cut(+no);
+    Object.keys(tiles).forEach(function (no) { var t = tiles[no], id = frame.idOf(+no);
       t.classList.toggle('is-edited', !!ed[id]); t.classList.toggle('is-conflict', !!cf[id]); t.classList.toggle('is-hidden', !!frame.hidden[no]);
       t.title = '#' + no + (frame.hidden[no] ? ' · 독자 화면 숨김' : '') + (ed[id] ? ' · 편집: ' + ed[id].join(', ') : '') + (cf[id] ? ' · 충돌 확인 필요' : '');
     });
@@ -58,7 +58,7 @@
   function render() {
     var bar = U.$('tlBar'); if (!bar || !frame || !frame.compiled) return;
     if (near) near.disconnect(); if (far) far.disconnect(); tiles = {};
-    bar.innerHTML = frame.order.map(function (no) { return '<button class="tl-tile" data-no="' + no + '" role="option" aria-label="컷 ' + no + '"><div class="tl-img"></div><span class="tl-no">#' + no + '</span><i class="tl-badge" aria-hidden="true"></i></button>'; }).join('');
+    bar.innerHTML = frame.order.map(function (no) { return '<button class="tl-tile" data-no="' + no + '" role="option" aria-label="컷 ' + no + '"><div class="tl-img"></div><span class="tl-no">#' + no + (frame.cut(no) && frame.cut(no).sid ? ' 새' : '') + '</span><i class="tl-badge" aria-hidden="true"></i></button>'; }).join('');
     [].forEach.call(bar.children, function (t) { tiles[t.dataset.no] = t; });
     near = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) build(e.target); }); }, { root: bar, rootMargin: '0px 600px' });
     far = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) clear(e.target); }); }, { root: bar, rootMargin: '0px 3000px' });

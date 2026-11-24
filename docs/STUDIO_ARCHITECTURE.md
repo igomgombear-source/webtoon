@@ -1,4 +1,7 @@
-# 마지막 접속 Studio — 구조·통합 JSON·공통 API (1단계)
+# 마지막 접속 Studio — 구조·통합 JSON·공통 API (2단계 통합 반영, `Studio.version` 1.1.0-phase2)
+
+> 2단계 통합(`studio-integration-phase2-20261124`): 공통 코어 안정화(경쟁 상태·일괄 편집·새·복제 컷 ID·컴파일 순서·공통 좌표 변환), 말풍선 모양·글꼴·색·대사 정렬 렌더러 지원.
+> **컷·패널·원화(Codex `studio-cuts-art-20261124`)는 원격에 없어 아직 통합하지 않았다** — 해당 규격은 '예약'이다(§4·§6·§10).
 
 EP01~EP06 공용 웹툰 통합 편집 프로그램. 말풍선 편집기 v2(`tools/bubble-editor.html`, `885b149`)를 확장했다. v2 파일은 그대로 둔다(동결, 비교·대조용).
 병렬 개발 규칙(파일 권한·절차)은 `docs/STUDIO_PARALLEL_DEV.md`.
@@ -38,6 +41,9 @@ EP01~EP06 공용 웹툰 통합 편집 프로그램. 말풍선 편집기 v2(`tool
 3. **컷 컴파일**(level `cut`): 그 컷의 말풍선 설정을 회차 컴파일 결과로 되돌린 뒤 `compileCut(ctx)` → `BubblesV4.rerunCut(no)` 로 그 컷만 다시 배치(수 ms, 드래그 중 실시간).
 4. **동기화**: 편집이 바뀌면 `Frame.sync()` 가 회차 단위 편집 서명이 바뀌었을 때만 2를, 아니면 바뀐 컷만 3을 한다.
 5. **숨김 컷**: Studio 는 `reader:false` 컷도 그린다(편집·검토용). 숨김 여부는 Studio 가 표시한다(`frame.hidden`).
+
+컴파일 순서: 회차 단계 모듈은 `order` 값 순서에 `after:[모듈ID]` 의존을 반영해 위상 정렬한다(대사는 `after:['cuts']` — 컷 구성(복제)이 먼저). 순환·없는 의존·컷 번호 중복·잘못된 새 컷 ID 는 `Studio.renderer.compileOrder(frame).issues` 와 QA 패널에 보인다.
+경쟁 상태(2단계 수정): 편집 서명은 컴파일 **시작 시점**에 계산해 기록한다. 그리는 도중 들어온 편집은 서명이 달라 다음 동기화에서 다시 그린다(대사 모듈의 임시 보정은 지웠다).
 
 검증된 보장(회귀 검사 `regression`): 편집값이 없으면 Studio 렌더의 99개 독자 컷 HTML 이 독자 화면과 **바이트 단위로 같다**(320·390·768px). 숨김 5컷을 함께 그려도 다른 컷은 달라지지 않는다.
 
@@ -97,11 +103,14 @@ EP01~EP06 공용 웹툰 통합 편집 프로그램. 말풍선 편집기 v2(`tool
 | 모듈 | 키 | 값 | 상태 |
 |---|---|---|---|
 | `bubbles` | `c###.l#` | `manual` = `{ x, y, w, h:'auto'|%, pad, radius, fs, lh, tail:{on:false} | {tip:{x,y}, start:°|'auto', thick, curve} }` (위치·크기 %, 글자·여백 px). 엔진 `js/bubbles.js` 가 읽는다 | 구현 |
-| `bubbles` | `c###.l#.b#` | 분할 조각별 manual | 예약 |
+| `bubbles` | `c###.l#.b#`, `c###.l~…` | 분할 조각·새 대사의 manual(키 = 대사 ID) | 구현 |
+| `bubbles` | `manual.style` | `{ kind:'ellipse'|'jag'|'round'|'jagrect'|'rect', font:'sans'|'bold'|'serif', color, bg, stroke('#rrggbb') }` — `js/bubbles.js` 가 그린다(없으면 유형 기본, 출력 동일) | 구현 |
+| `bubbles` | `c###` (컷 키) | `{ zones:[{panel,x,y,w,h,label,approved}] }` — 보호 영역(원화 변형 연동 `transformZones`) | 구현 |
 | `cuts` | `c###` | `{ hidden: true|false }` | 구현 |
 | `cuts` | `c###` | `{ spacing:{before,after}, width, ratio, panels:{ order:[패널ID], removed:[패널ID] } }` | 예약 |
-| `cuts` | `c000`(회차 단위) 또는 별도 키 | `{ order:[컷ID…], added:[{id, from:컷ID}] }` — 담당자가 확정 후 이 표를 갱신 | 예약 |
-| `dialogue` | `c###.l#` | `{ text, who, br, align }` / `c###`: `{ order:[대사ID] }` | 예약 |
+| `cuts` | `c000`(회차 단위) 또는 별도 키 | `{ order:[컷ID…], added:[{id, from:컷ID}] }` — Codex 브랜치 통합 때 확정 | 예약(Codex) |
+| 새·복제 컷(코어 규약) | 컴파일된 컷 | `cut.sid = 'c~xxxxx'`, `cut.no` = 원본과 겹치지 않는 번호(예: 1000+), `cut.from = 원본 컷 ID`(복제), 새 컷은 `cut.baseLines`(선택). 코어가 대사 줄에 `sid = 컷ID.l순번` 을 붙인다. 편집값은 `c~xxxxx…` ID, 승계는 `Studio.store.copyCut(원본, 새)` | 코어 구현 |
+| `dialogue` | `c###.l#` · `c###.l~…` · `c###` | `docs/studio/dialogue.md` §2 (글자·줄바꿈 `\n`·화자·정렬 `align`·삭제·합치기 `absorb`·분할 `split[]`·새 대사 `added`·컷 `order`). 정렬은 `cut.lines[i].align` 로 엔진이 읽는다 | 구현 |
 | `art` | `c###.p#` | `{ src, transform:{scale, x, y, rotate, flipX}, crop:{x,y,w,h}, filter:{brightness, contrast, saturate, blur} }` | 예약 |
 | `phone` | `c###.s#` | `{ quad:[[x,y]×4], content:{…}, on:true|false }` | 예약 |
 | `fx` | `c###.f#` / `c###.f~…` / `c###.z#` | 자막·효과음 `{ text, x, y, fs, color }`, 효과 `{ mood, transition, gradient }`, 인셋 `{ x, y, w, src:{x,y,w,h} }` | 예약 |
@@ -145,6 +154,10 @@ EP01~EP06 공용 웹툰 통합 편집 프로그램. 말풍선 편집기 v2(`tool
 3. 원화 교체(`src`)는 원화 비율 레이어 좌표를 바꾸지 않는다. 새 원화의 화면 위치가 다르면 휴대폰 모듈로 다시 맞춘다(지문이 달라져 충돌로 표시된다).
 4. 자르기 후 패널 비율은 컷 구성 모듈의 `ratio` 가 정한다(원화 모듈은 비율을 바꾸지 않는다).
 
+공통 변환 API(2단계): `Studio.geom.point/rect/quad/poly/invert` — T 와 패널 크기(size, px 또는 비)를 받아 같은 규칙으로 변환한다. 휴대폰(quad 0~1·clip %)·합성 글씨·인셋 원본 영역은 원화 비율 좌표이므로 그대로 쓰면 된다.
+연동 함수: 말풍선 꼬리 `Studio.modules.bubbles.transformTips(panelId, T, {apply})`, 보호 영역 `transformZones(panelId, T, {apply})` — 사용자가 연동을 고르면 원화 모듈이 `Studio.store.batch` 안에서 원화 편집과 함께 호출(실행 취소 한 단계).
+**미통합**: 원화 변형 자체(렌더러가 `art.transform` 을 읽어 그리기)와 휴대폰 화면·합성 레이어·인셋의 자동 연동은 Codex 원화 모듈이 필요하다(원격에 없음).
+
 패널 제거(컷 구성 모듈):
 - `S.base.links(ep, 'c033.p1')` 이 그 패널에 붙은 대사·말풍선 설정·휴대폰 화면을 준다. 제거 전에 이 목록을 경고로 보여 준다.
 - 제거는 `cuts[c###].panels.removed` 편집값이다. 연결된 편집값은 지우지 않고 '고아'로 보존해 QA 에 표시한다. 복원하면 같은 ID 로 다시 연결된다(ID 가 원본 위치 기준이므로).
@@ -158,7 +171,8 @@ Studio.registerModule({
   planned: [...],                     // 메뉴의 '예정' 카드
   compile(ctx),                       // level episode: ctx = { ep, data:{episode,screens,bubbles}(사본), base(원본), edits(이 모듈 slice), frame, ids, util }
   compileCut(ctx),                    // level cut: ctx = { ep, no, cutId, win, engine(BubblesV4), bubbles(실시간 설정 객체), edits(이 컷의 이 모듈 편집), frame, base }
-  mount(el, api), unmount(), onCut(no, api),
+  after: ['모듈ID'],                   // (선택) 같은 단계에서 이 모듈들 다음에 컴파일
+  mount(el, api), unmount(), onCut(no, api),   // onCut: 'cut' 이벤트 — 같은 컷을 다시 고르면 ev.changed=false
   drawOverlay(ov, api),               // 중앙 오버레이(#ov) — 활성 모듈만
   onKey(e, api) → true(처리함),
   selection() → 요소ID|null           // 공통 '선택 요소 초기화'
@@ -166,14 +180,21 @@ Studio.registerModule({
 Studio.plannedModule(def)             // 아직 구현 전 모듈(원본 보기 view() + 예정 카드)
 
 Studio.store: get(module,id,ep?) · slice(module,ep?) · inCut(module,cutId,ep?) · set(module,id,value,{live,label,ep}) · patch · remove
+              batch(label, fn(store), {live}) — 여러 편집을 변경 알림 1번·실행 취소 1단계로(안쪽 batch·checkpoint 는 합쳐짐)
+              copyCut(원본컷ID, 새컷ID, {modules}) — 복제 컷 편집 승계 · cutEdits(컷ID) · batching()
               checkpoint(label) · undo() · redo() · goto(i) · history() · log() · reset({ep,module,cut,id},label)
               editedCuts(ep) · count(ep) · conflicts(ep) · anchors(ep) · exportData() · importData(obj) · migrate(obj) · flush()
 Studio.base:  data(ep) · cut(ep,no) · cuts(ep) · panelsOf(cut) · screenKey(cut,piece) · bubbleObj(win,ep) · fingerprint(ep,id) · links(ep,panelId) · info()
 Studio.ids:   cut · panel · line · part · screen · zoom · fx · fresh · parse · cutOf · cutNo · valid
+Studio.cutId(no) / Studio.cutNo(cutId) — 화면의 컷 번호 ↔ 컷 ID('c017' / 새·복제 'c~xxxxx'). 편집값·초기화·QA·썸네일은 컷 ID 로 묶는다
+Studio.geom:  point(p,T,size) · invert(p,T,size) · rect(r,T,size) · quad(q0~1,T,size) · poly(pts%,T,size) · identity(T) — §6 원화 변형 T 공통 변환
+Studio.renderer: compileOrder(frame) → { episode:[…], cut:[…], issues:[…] } · Frame.idOf(no) · Frame.noOf(cutId)
+Studio.modules.bubbles: transformTips(panelId,T,{apply,source,size}) · transformZones(panelId,T,{apply,size}) · zones(no) · selectLine(id) · selectedId()
+Studio.modules.dialogue: plan · setLine · addLine · deleteLine · restoreLine · moveLine · setOrder · split · confirmSplit · mergeNext · unmerge · resetLine · finalConfig · ensureFresh(대기만)
 Studio.stage: frame · compare · width · zoom · mode · cut · select(no) · point(e)→섹션 px · toOv(x,y) · origin() · hidden(no) · setWidth · setZoom · setMode
 Studio.timeline: setReorder(fn(옮길 컷번호, 앞 컷번호|null)) · setSize(px) · frame() · tiles()
 Studio.select(no) · Studio.step(±1) · Studio.activate(panelId) · Studio.state {ep, cut, panel}
-이벤트 Studio.on(name, fn): change{ep,module,ids,source} · rendered{frame,full,cuts} · stage · cut{no,source} · mode · status · history · ready · thumbs-ready
+이벤트 Studio.on(name, fn): change{ep,module,ids,source:'edit'|'batch'|'reset'|'history'|'import'} · rendered{frame,full,cuts} · stage · cut{no,source,changed} · mode · status · history · ready · thumbs-ready
 ```
 
 ## 8. 썸네일 탐색 바
@@ -190,10 +211,11 @@ Studio 는 본편 데이터 파일을 고치지 않는다. 적용 경로:
 - 말풍선: 말풍선 패널의 '적용용 패치'(`data/ep01v3-bubbles.js` cuts 형식, `manual` 포함) → 승인 후 통합 담당이 반영하고 QA·회귀 검사.
 - 다른 모듈: 각 모듈이 같은 방식의 '적용용 패치'를 만든다(후속). 공통 '적용 도구'는 후속 통합 작업.
 
-## 10. 1단계 한계
+## 10. 한계 (2단계 통합 시점)
 
-- 구현된 편집: 말풍선(v2 전 기능), 컷 숨김·복원. 나머지 모듈은 메뉴·원본 보기·규격만.
-- 분할 말풍선(대사 하나가 여러 말풍선, EP01 96개 중 12개)은 아직 편집하지 않는다.
+- 구현된 편집: 말풍선(위치·크기·꼬리·모양·글꼴·색·추가·삭제·분할·합치기·조각 독립 편집·꼬리/보호 영역 연동), 대사(글자·줄바꿈·정렬·화자·순서·추가·삭제·분할·합치기), 컷 숨김·복원.
+- **미통합(Codex 2단계 원격 없음)**: 컷 순서·복제·패널·여백·원화 변형 렌더러, 휴대폰·합성·인셋 좌표 자동 연동. 코어 쪽 새·복제 컷 ID·승계 경로는 시험 모듈로 검증만 했다.
+- 휴대폰 UI·자막·효과 모듈은 3단계(자리만).
 - EP02~EP06 은 데이터가 없어 회차 선택에서 '준비 전'으로 비활성. 회차 데이터가 `data/episodes.js` 에 `ready:true` 로 등록되면 코드 수정 없이 열린다(말풍선 설정은 `window.EP_BUBBLES[id]`).
 - 회차 단위 편집(숨김·복원 등)은 회차 전체를 다시 그리므로 1~2초 걸린다.
 - 배포용 패키징(`tools/package-review.js`)에는 아직 Studio 가 없다(이번 단계 배포 금지). 배포할 때 meta `studio-root`·`studio-viewer` 만 바꾸고 `studio-base.json` 에 커밋을 넣는다.

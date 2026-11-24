@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var S = window.Studio = window.Studio || {};
-  S.version = '1.0.0-phase1';
+  S.version = '1.1.0-phase2';
   var U = S.util = {};
   U.$ = function (id) { return document.getElementById(id); };
   U.clone = function (o) { return o == null ? o : JSON.parse(JSON.stringify(o)); };
@@ -47,4 +47,30 @@
   U.addStyle = function (id, css) { var el = document.getElementById('style-' + id); if (!el) { el = document.createElement('style'); el.id = 'style-' + id; document.head.appendChild(el); } el.textContent = css; };
   U.download = function (name, text, type) { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: type || 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 0); };
   U.today = function () { return new Date().toISOString().slice(0, 10); };
+  /* 공통 좌표 변환(docs/STUDIO_ARCHITECTURE.md §6) — 원화 변형 T 를 '패널 %' 점에 적용. 말풍선 꼬리·보호 영역·휴대폰 화면·합성 레이어·인셋 원본 영역이 같은 함수를 쓴다.
+   * T = { scale=1, x=0, y=0 (이동, 패널 %), rotate=0 (시계 방향 °), flipX, flipY, origin:{x:50,y:50} } · 순서: 뒤집기 → 확대 → 회전 → 이동
+   * size = 패널의 실제 가로·세로(px 또는 비) — 회전이 찌그러지지 않게 */
+  var G = S.geom = {
+    identity: function (T) { T = T || {}; return !T.flipX && !T.flipY && (T.scale == null || T.scale === 1) && !T.rotate && !T.x && !T.y; },
+    point: function (p, T, size) {
+      T = T || {}; size = size || { w: 1, h: 1 }; var o = T.origin || { x: 50, y: 50 }, x = (p.x - o.x) / 100 * size.w, y = (p.y - o.y) / 100 * size.h;
+      if (T.flipX) x = -x; if (T.flipY) y = -y; var s = T.scale == null ? 1 : T.scale; x *= s; y *= s;
+      var a = (T.rotate || 0) * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a), rx = x * c - y * sn, ry = x * sn + y * c;
+      return { x: U.rnd(o.x + rx / size.w * 100 + (T.x || 0), 3), y: U.rnd(o.y + ry / size.h * 100 + (T.y || 0), 3) };
+    },
+    /* 역변환(원화 좌표로 되돌리기) */
+    invert: function (p, T, size) {
+      T = T || {}; size = size || { w: 1, h: 1 }; var o = T.origin || { x: 50, y: 50 }, x = (p.x - (T.x || 0) - o.x) / 100 * size.w, y = (p.y - (T.y || 0) - o.y) / 100 * size.h;
+      var a = -(T.rotate || 0) * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a), rx = x * c - y * sn, ry = x * sn + y * c, s = T.scale == null ? 1 : T.scale; rx /= s; ry /= s;
+      if (T.flipX) rx = -rx; if (T.flipY) ry = -ry; return { x: U.rnd(o.x + rx / size.w * 100, 3), y: U.rnd(o.y + ry / size.h * 100, 3) };
+    },
+    /* 사각형(x,y,w,h %) → 네 꼭짓점 변환 후 감싸는 사각형 */
+    rect: function (r, T, size) { var ps = [[r.x, r.y], [r.x + r.w, r.y], [r.x + r.w, r.y + r.h], [r.x, r.y + r.h]].map(function (q) { return G.point({ x: q[0], y: q[1] }, T, size); });
+      var xs = ps.map(function (q) { return q.x; }), ys = ps.map(function (q) { return q.y; }), x0 = Math.min.apply(0, xs), y0 = Math.min.apply(0, ys);
+      return { x: U.rnd(x0, 3), y: U.rnd(y0, 3), w: U.rnd(Math.max.apply(0, xs) - x0, 3), h: U.rnd(Math.max.apply(0, ys) - y0, 3) }; },
+    /* 사각형 네 모서리(0~1 비율, 휴대폰 화면 quad 형식) */
+    quad: function (q, T, size) { return q.map(function (pt) { var r = G.point({ x: pt[0] * 100, y: pt[1] * 100 }, T, size); return [U.rnd(r.x / 100, 5), U.rnd(r.y / 100, 5)]; }); },
+    /* 폴리곤(% 점 배열, 휴대폰 clip 형식) */
+    poly: function (pts, T, size) { return pts.map(function (pt) { var r = G.point({ x: pt[0], y: pt[1] }, T, size); return [r.x, r.y]; }); }
+  };
 })();
