@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>EP01 로컬 수정 시안 17장 비교 (검수용)</title>
+<title>EP01 로컬 수정 시안 16장 비교 (검수용)</title>
 <style>
 :root { --bg:#0e1116; --panel:#171b22; --line:#2a313b; --text:#e6e8eb; --dim:#9aa3ad; --accent:#c9a96a; --ok:#4cc38a; --hold:#e0b341; --no:#e5675c; }
 * { box-sizing: border-box; }
@@ -72,16 +72,16 @@ pre.out.on { display:block; }
 </head>
 <body>
 <header class="top">
-  <h1>EP01 로컬 수정 시안 17장 <span style="color:var(--dim);font-weight:400">· 미승인 후보</span></h1>
+  <h1>EP01 로컬 수정 시안 16장 <span style="color:var(--dim);font-weight:400">· 미승인 후보</span></h1>
   <p>현재 본편 연결본 ↔ 수정 시안을 전환해 보고 판단을 눌러 주세요. 본편에는 연결되지 않았습니다.</p>
   <nav class="chips" id="chips"></nav>
 </header>
 <main>
-  <div class="notice">17장의 시안은 모두 DRAFT 이며 <b>본편에는 연결되지 않았습니다</b>. 현재 연결본이 이미 승인된 컷은 빨간 경고(승인본과 충돌)로 따로 모았습니다. 이미지를 탭하면 크게 열립니다(좌우·상하로 밀어 확대 부분을 봅니다). 판단은 이 기기에만 저장되며, 하단 <b>요약 보기</b>로 한 번에 정리됩니다. 실제 웹툰 화면은 <a href="../index.html#ep01v3" style="color:var(--accent)">index.html#ep01v3</a> 입니다.</div>
+  <div class="notice">16장의 시안은 모두 DRAFT 이며 <b>본편에는 연결되지 않았습니다</b>. 현재 연결본이 이미 승인된 컷은 빨간 경고(승인본과 충돌)로 따로 모았습니다. 이미지를 탭하면 크게 열립니다(좌우·상하로 밀어 확대 부분을 봅니다). 최신 수정 원화 12장과 이전 시안 4장(18b·20·41·58)의 비교입니다. 18a는 최신 지시에 따라 후보에서 제외하되 원본은 보존합니다. 14컷은 수정 대상 확인 대기입니다. 이전 판정은 별도 보존하며 이번 검수에는 적용하지 않습니다. 판단은 이 기기에만 저장되며, 하단 <b>요약 보기</b>로 한 번에 정리됩니다. 실제 웹툰 화면은 <a href="../index.html#ep01v3" style="color:var(--accent)">index.html#ep01v3</a> 입니다.</div>
   <pre class="out" id="out"></pre>
   <div id="cards"></div>
 </main>
-<div class="sum"><span id="count">0 / 17 판단</span><button id="show">요약 보기</button><button id="copy">요약 복사</button></div>
+<div class="sum"><span id="count">0 / 16 판단</span><button id="show">요약 보기</button><button id="copy">요약 복사</button></div>
 <div id="zoom" aria-hidden="true">
   <div class="bar"><div class="seg" id="zseg"></div><button class="close" id="zclose">닫기</button></div>
   <div class="view" id="zview"><div class="inner" id="zinner"></div></div>
@@ -98,10 +98,10 @@ window.WEBTOON = { episodeData: {}, registerEpisode: function (e) { this.episode
   var A = '../assets/cuts/ep01v3/';
   /* 시안 파일 → 원본 컷 번호·패널 번호(0부터). 현재 연결본·설명·상태는 본편 데이터에서 읽는다(수정 없음) */
   var FILES = [
-    [10, 0, 'ep01v3-010-local-REV-DRAFT.webp'], [13, 0, 'ep01v3-013-local-REV-DRAFT.webp'], [18, 0, 'ep01v3-018a-local-REV-DRAFT.webp'], [18, 1, 'ep01v3-018b-local-REV-DRAFT.webp'],
-    [19, 1, 'ep01v3-019b-local-REV-DRAFT.webp'], [20, 0, 'ep01v3-020-local-REV-DRAFT.webp'], [41, 0, 'ep01v3-041-local-REV-DRAFT.webp'], [47, 0, 'ep01v3-047-local-REV-DRAFT.webp'],
-    [48, 0, 'ep01v3-048-local-REV-DRAFT.webp'], [50, 0, 'ep01v3-050-local-REV-DRAFT.webp'], [51, 0, 'ep01v3-051-local-REV-DRAFT.webp'], [52, 0, 'ep01v3-052a-local-REV-DRAFT.webp'],
-    [52, 1, 'ep01v3-052b-local-REV-DRAFT.webp'], [53, 0, 'ep01v3-053-local-REV-DRAFT.webp'], [54, 0, 'ep01v3-054-local-REV-DRAFT.webp'], [55, 0, 'ep01v3-055-local-REV-DRAFT.webp'],
+    [10, 0, 'ep01v3-010-restore-students-REV3-DRAFT.webp'], [13, 0, 'ep01v3-013-eyeline-REV2-DRAFT.webp'], [18, 1, 'ep01v3-018b-local-REV-DRAFT.webp'],
+    [19, 1, 'ep01v3-019b-local-REV3-DRAFT.webp'], [20, 0, 'ep01v3-020-local-REV-DRAFT.webp'], [41, 0, 'ep01v3-041-local-REV-DRAFT.webp'], [47, 0, 'ep01v3-047-local-REV3-DRAFT.webp'],
+    [48, 0, 'ep01v3-048-local-REV3-DRAFT.webp'], [50, 0, 'ep01v3-050-local-REV3-DRAFT.webp'], [51, 0, 'ep01v3-051-local-REV3-DRAFT.webp'], [52, 0, 'ep01v3-052a-local-REV3-DRAFT.webp'],
+    [52, 1, 'ep01v3-052b-local-REV3-DRAFT.webp'], [53, 0, 'ep01v3-053-local-REV3-DRAFT.webp'], [54, 0, 'ep01v3-054-local-REV3-DRAFT.webp'], [55, 0, 'ep01v3-055-local-REV3-DRAFT.webp'],
     [58, 0, 'ep01v3-058-local-REV-DRAFT.webp']
   ];
   var cuts = window.WEBTOON.episodeData.ep01v3.cuts;
@@ -112,21 +112,24 @@ window.WEBTOON = { episodeData: {}, registerEpisode: function (e) { this.episode
     var multi = panels.length > 1;
     var approved = pc.imageStatus === 'approved';
     return { id: 'x' + f[0] + (multi ? 'p' + f[1] : ''), no: f[0], panel: multi ? f[1] : null, letter: multi ? String.fromCharCode(97 + f[1]) : '',
-      desc: cut.desc || '', cur: pc.image, curStatus: pc.imageStatus || '(표시 없음)', neu: f[2], conflict: approved,
+      desc: cut.desc || '', cur: pc.image, curStatus: pc.imageStatus || '(표시 없음)', neu: f[2], overlay: f[0] === 10 ? 'ep01v3-010-chalk-REV3-DRAFT.svg' : null, conflict: approved,
       hidden: cut.reader === false, w: pc.imageSize && pc.imageSize.w, h: pc.imageSize && pc.imageSize.h };
   });
   ITEMS.sort(function (a, b) { return (a.conflict - b.conflict) || (a.no - b.no) || ((a.panel || 0) - (b.panel || 0)); });
 
   var state = {}, verdict = {};
-  try { verdict = JSON.parse(localStorage.getItem('ep01-localrev-verdict') || '{}') || {}; } catch (e) {}
-  function saveV() { try { localStorage.setItem('ep01-localrev-verdict', JSON.stringify(verdict)); } catch (e) {} }
+  try { verdict = JSON.parse(localStorage.getItem('ep01-localrev-verdict-20261129') || '{}') || {}; } catch (e) {}
+  function saveV() { try { localStorage.setItem('ep01-localrev-verdict-20261129', JSON.stringify(verdict)); } catch (e) {} }
   var VL = { ok: '시안 채택 후보', hold: '보류', no: '반려' };
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function candidate(it, alt, lazy) {
+    return '<img src="' + A + it.neu + '" alt="' + alt + '"' + (lazy ? ' loading="lazy"' : '') + '>' + (it.overlay ? '<img src="' + A + it.overlay + '" alt="칠판 글자 레이어" style="pointer-events:none">' : '');
+  }
   function stage(it, mode, pos) {
-    var o = A + it.cur, n = A + it.neu;
+    var o = A + it.cur;
     if (mode === 'old') return '<span class="tag">현재 연결본</span><div class="layer"><img src="' + o + '" alt="현재 연결본" loading="lazy"></div>';
-    if (mode === 'new') return '<span class="tag new">수정 시안</span><div class="layer"><img src="' + n + '" alt="수정 시안" loading="lazy"></div>';
-    return '<span class="tag">현재</span><span class="tag new" style="left:auto;right:8px">시안</span><div class="layer"><img src="' + o + '" alt=""></div><div class="cmp" style="clip-path:inset(0 ' + (100 - pos) + '% 0 0)"><div class="layer"><img src="' + n + '" alt=""></div></div>';
+    if (mode === 'new') return '<span class="tag new">수정 시안</span><div class="layer">' + candidate(it, '수정 시안', true) + '</div>';
+    return '<span class="tag">현재</span><span class="tag new" style="left:auto;right:8px">시안</span><div class="layer"><img src="' + o + '" alt=""></div><div class="cmp" style="clip-path:inset(0 ' + (100 - pos) + '% 0 0)"><div class="layer">' + candidate(it, '수정 시안', false) + '</div></div>';
   }
   function card(it) {
     var st = state[it.id] || (state[it.id] = { mode: 'new', pos: 50 });
@@ -161,7 +164,7 @@ window.WEBTOON = { episodeData: {}, registerEpisode: function (e) { this.episode
     c.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.mode === st.mode)); }); c.querySelector('.slider').classList.toggle('on', st.mode === 'cmp'); }
   var zoomId = null;
   function zdraw() { var it = ITEMS.filter(function (x) { return x.id === zoomId; })[0], m = state[zoomId].mode === 'old' ? 'old' : 'new';
-    document.getElementById('zinner').innerHTML = '<img src="' + A + (m === 'old' ? it.cur : it.neu) + '" alt="">';
+    document.getElementById('zinner').innerHTML = m === 'old' ? '<img src="' + A + it.cur + '" alt="현재 연결본">' : candidate(it, '수정 시안', false);
     document.getElementById('zseg').innerHTML = [['old', '현재 연결본'], ['new', '수정 시안']].map(function (x) { return '<button data-m="' + x[0] + '" aria-pressed="' + (m === x[0]) + '">' + x[1] + '</button>'; }).join('');
     document.getElementById('zcap').textContent = '#' + it.no + (it.letter ? ' 패널 ' + it.letter : '') + ' — ' + (m === 'old' ? '현재 연결본' : '수정 시안') + ' (밀어서 확대 부분 보기)'; }
   document.getElementById('cards').addEventListener('click', function (e) {
@@ -172,7 +175,7 @@ window.WEBTOON = { episodeData: {}, registerEpisode: function (e) { this.episode
   document.getElementById('cards').addEventListener('input', function (e) { if (e.target.type !== 'range') return; var c = e.target.closest('.card'); state[c.dataset.id].pos = +e.target.value; var m = c.querySelector('.cmp'); if (m) m.style.clipPath = 'inset(0 ' + (100 - state[c.dataset.id].pos) + '% 0 0)'; });
   document.getElementById('zseg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; state[zoomId].mode = b.dataset.m; zdraw(); });
   document.getElementById('zclose').addEventListener('click', function () { document.getElementById('zoom').classList.remove('on'); var c = document.getElementById(zoomId); if (c) refresh(c); });
-  function summary() { return ['EP01 로컬 수정 시안 17장 판단'].concat(ITEMS.map(function (i) { return '#' + i.no + (i.letter ? ' 패널 ' + i.letter : '') + (i.conflict ? ' [승인본 충돌]' : '') + ': ' + (VL[verdict[i.id]] || '미판단'); })).join('\n'); }
+  function summary() { return ['EP01 로컬 수정 시안 16장 판단'].concat(ITEMS.map(function (i) { return '#' + i.no + (i.letter ? ' 패널 ' + i.letter : '') + (i.conflict ? ' [승인본 충돌]' : '') + ': ' + (VL[verdict[i.id]] || '미판단') + ' — ' + i.neu + (i.overlay ? ' + ' + i.overlay : ''); })).join('\n'); }
   document.getElementById('show').addEventListener('click', function () { var o = document.getElementById('out'); o.textContent = summary(); o.classList.toggle('on'); window.scrollTo(0, 0); });
   document.getElementById('copy').addEventListener('click', function () { var t = summary(), b = this; if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { b.textContent = '복사됨'; setTimeout(function () { b.textContent = '요약 복사'; }, 1500); }); else { document.getElementById('out').textContent = t; document.getElementById('out').classList.add('on'); } });
   render();
