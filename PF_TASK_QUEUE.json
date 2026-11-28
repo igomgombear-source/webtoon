@@ -60,14 +60,26 @@
     },
     {
       "id": "PF-008",
-      "status": "ready",
+      "status": "complete",
       "owner": "GPT",
       "depends_on": [
         "PF-007"
       ],
       "scope": "audit existing shared screen UI, composite and lettering capabilities against reuse needs; no Studio development",
-      "acceptance": "map implemented reusable components and identify evidence-based gaps without duplicate development"
+      "acceptance": "map implemented reusable components and identify evidence-based gaps without duplicate development",
+      "result": "PF_SHARED_RENDERING.md",
+      "verification": "remote source inventory and executed screen config read; no visual test"
+    },
+    {
+      "id": "PF-009",
+      "status": "ready",
+      "owner": "GPT",
+      "depends_on": [
+        "PF-008"
+      ],
+      "scope": "consolidate deferred tool assignments and resumption gates, identify remaining truly independent work",
+      "acceptance": "no duplicated or reassigned specialist work; stop when direct independent work exhausted"
     }
   ],
-  "next": "PF-008"
+  "next": "PF-009"
 }
