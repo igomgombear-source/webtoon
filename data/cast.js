@@ -31,8 +31,8 @@ WEBTOON.cast = {
   },
   jinseok: {
     name: '서진석', id: 'jinseok',
-    height: 175, age: '40대', gender: '남성', glasses: true,
-    confirmed: '2026-11-11 사용자 확정 (키·안경). 2026-11-21 사용자 확정 (40대 남성, 이전 50대 표기 정정)'
+    height: 175, age: '50대', gender: '남성', glasses: true,
+    confirmed: '2026-11-11 사용자 확정 (키·안경). 2026-11-21 사용자 확정 (40대 남성, 이전 50대 표기 정정). 2026-11-24 최종 승인 콘티 정정 기록 (50대 남성, 현행 기준)'
   },
   hyoeun: {
     name: '임효은', id: 'hyoeun',
