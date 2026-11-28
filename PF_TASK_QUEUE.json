@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-29",
+  "canonical_repository": "igomgombear-source/webtoon",
+  "management_branch": "pf-handoff",
+  "approval_ledger": "PF_APPROVAL_LEDGER.json",
+  "policy": {
+    "active_director_count": 1,
+    "parallel_overlapping_files": false,
+    "approved_asset_replacement_requires_user": true,
+    "official_deploy_requires_user": true,
+    "studio_new_development_paused": true
+  },
+  "tasks": [
+    {
+      "id": "PF-005A",
+      "status": "complete",
+      "owner": "GPT",
+      "result": "PF_APPROVAL_LEDGER.json",
+      "verification": "16 unique pending candidates; 14 existing data flags; exact blob hashes",
+      "approval": "none_granted"
+    },
+    {
+      "id": "PF-003C-BROWSER",
+      "status": "blocked",
+      "owner": "unassigned",
+      "branch": "pf-review-revisions-20261129",
+      "depends_on": [],
+      "blocker": "repository checkout/browser access",
+      "test": "tools/qa/compare-local-revisions.browser.cjs"
+    },
+    {
+      "id": "PF-006-BUILD",
+      "status": "blocked",
+      "owner": "unassigned",
+      "depends_on": [
+        "PF-003C-BROWSER"
+      ],
+      "branch": "pf-review-revisions-20261129",
+      "test": "tools/package-revision-review.cjs"
+    },
+    {
+      "id": "PF-007",
+      "status": "ready",
+      "owner": "GPT",
+      "depends_on": [
+        "PF-005A"
+      ],
+      "scope": "existing remote asset inventory and gaps for upcoming production; no image generation, no source changes",
+      "acceptance": "reusable assets mapped and missing/unverified assets recorded without new approvals"
+    },
+    {
+      "id": "PF-004",
+      "status": "paused",
+      "owner": "unassigned",
+      "blocker": "user pause and original Studio B workspace recovery",
+      "depends_on": []
+    }
+  ],
+  "next": "PF-007"
+}
