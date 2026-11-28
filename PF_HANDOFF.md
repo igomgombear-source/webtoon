@@ -52,8 +52,8 @@ EP02~06 최종 승인 문서의 원격 보관 여부 미확인. 원문 미공개
 | PF-002 | 최신 제작 브랜치·승인 장부·작업지시·결과 보고서 대조 | 완료 — [PF_STATUS.md](PF_STATUS.md) |
 | PF-003 | 원화 수정/승인 현황 및 제작 준비 체크리스트 갱신 | 완료 — [PF_ART_READINESS.md](PF_ART_READINESS.md) |
 | PF-003A | 인물 설정 충돌 범위 확인 및 정정 계획 | 완료 — [PF_CAST_CORRECTION.md](PF_CAST_CORRECTION.md) |
-| PF-003A-APPLY | 독립 브랜치 설정 정정 및 검수 | 다음 작업 |
-| PF-003B | 최신 DRAFT 비교 도구 검수 준비 | 대기 |
+| PF-003A-APPLY | 독립 브랜치 설정 정정 및 검수 | 완료(미병합) — `pf-cast-correction-20261129` / `bd603a6` |
+| PF-003B | 최신 DRAFT 비교 도구 검수 준비 | 다음 작업 |
 | PF-004 | Studio B 복구 가능 여부 확인 | 보류(기존 작업 보존 및 사용자 지시 우선) |
 | PF-005 | GitHub 기반 작업 배정·결과·승인 기록 운영 | 진행 |
 
@@ -71,3 +71,5 @@ EP02~06 최종 승인 문서의 원격 보관 여부 미확인. 원문 미공개
 - 2026-11-29 / PF-003 / GPT 직접 / [PF_ART_READINESS.md](PF_ART_READINESS.md), 커밋 1dbd6e6. 원화 수정안·승인 상태·제작 준비 항목 정리. 비교 도구의 구버전 경로 확인. 개별 원화 시각 QA 미실시, 미승인 상태 유지. 다음 PF-003A.
 
 - 2026-11-29 / PF-003A / GPT 직접 / [PF_CAST_CORRECTION.md](PF_CAST_CORRECTION.md), 커밋 e1100b9. 현행 설정 충돌 6개 파일 확인, AGENTS/CLAUDE 직접 나이 표기 없음 확인. 실제 설정 변경은 다음 작업. 기존 브랜치·코드·원화·배포 무변경.
+
+- 2026-11-29 / PF-003A-APPLY / GPT 직접 / 독립 브랜치 `pf-cast-correction-20261129`, 커밋 [`bd603a6`](https://github.com/igomgombear-source/webtoon/commit/bd603a694c15c50fccee67b448cc3cbb226e7c95). 대상 6개 파일, 정확한 문자열 치환 8건, 변경 파일 목록·브랜치 HEAD 재조회 일치. 서진석 50대 현행값, 최기훈 40대 및 과거 이력 보존. CSV 구분자·줄바꿈 구조 검사 통과. JS 실행·브라우저 QA 미실시. 원화·기존 브랜치·배포 미변경, 병합 대기. 다음 PF-003B(정정 브랜치를 후속 작업 기준으로 활용하되 공식 적용 금지).
