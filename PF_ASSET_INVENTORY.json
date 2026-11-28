@@ -1,0 +1,1108 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-29",
+  "scope": "remote asset existence and reuse candidates, not visual approval",
+  "sources": [
+    {
+      "branch": "pf-review-revisions-20261129",
+      "commit": "9227ed88c0c3f67ed19dc3ddd0dc05a870cb05d3"
+    },
+    {
+      "branch": "ep01-redesign-v3",
+      "commit": "e8be72ad18a4c5268090693c23f464fd8f611535"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/backgrounds/auditorium/booth-copy.webp",
+      "blob_sha": "435de4869d5fc81ac6ef100f9865bf14bb2600d7",
+      "bytes": 120846,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/booth-desk.webp",
+      "blob_sha": "4596110abd35b0a61a9cbee44998572915f2518a",
+      "bytes": 59722,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/clock-wall.webp",
+      "blob_sha": "5d4497dc74f298e090529df3ed816331241bee11",
+      "bytes": 74522,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/morning-booth.webp",
+      "blob_sha": "e27896e425092213bd3ec0957f8cae94023001f7",
+      "bytes": 185868,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/morning-entrance-front.webp",
+      "blob_sha": "9af7c820c8a21e01be0b72604b36917bed95250f",
+      "bytes": 110020,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/morning-entrance.webp",
+      "blob_sha": "103508c5937904bdc9d144bc5c94ba09d81c9ce1",
+      "bytes": 132034,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/morning-exterior.webp",
+      "blob_sha": "b92a7305f0e4732bde217b5e77b6ccfdbc292093",
+      "bytes": 314572,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/auditorium/morning-stage.webp",
+      "blob_sha": "9fb6e7d030b84f6dff51e2f4f6b225dca15ce20b",
+      "bytes": 122042,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/hall-corridor/evening-wide.webp",
+      "blob_sha": "3137b54922b3d35a505ec2f431a79a0797ade748",
+      "bytes": 91594,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/home/evening-wide.webp",
+      "blob_sha": "19257deb312a8c3e2dd70d3711c4fcc18650fc59",
+      "bytes": 168288,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/home/morning-wide.webp",
+      "blob_sha": "e6808aeaa343313e9c2e9fbf2abe94e13ed918a2",
+      "bytes": 121862,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/musicroom/night-desk.webp",
+      "blob_sha": "84d428dead9b7bf6dd54e85a10ac15e9fac4a5d8",
+      "bytes": 86106,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/musicroom/night-locker.webp",
+      "blob_sha": "83545876234e32be04881334047d4419e729da82",
+      "bytes": 66730,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/musicroom/night-wide.jpg",
+      "blob_sha": "285df8e2e0703c214ad347ddf2b0351ca323e241",
+      "bytes": 291614,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/backgrounds/schoolgate/night-wide.webp",
+      "blob_sha": "2fd985b6420ab9415d6dc1f7a309f9aca2de00d9",
+      "bytes": 247434,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "backgrounds",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/NanumPenScript-OFL.txt",
+      "blob_sha": "69ff40157d0bba4c65e4ecf77564e1f01d0b02a5",
+      "bytes": 4534,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/NotoSerifKR-Medium.subset.woff",
+      "blob_sha": "fa62f4e88340219ba8055a00f0d7a20d2cd2b960",
+      "bytes": 526424,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/NotoSerifKR-OFL.txt",
+      "blob_sha": "ecb8bf71f83d96e7205c745c63933d1c869ac9d7",
+      "bytes": 4632,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/Pretendard-Medium.subset.woff2",
+      "blob_sha": "941998059709e738d9632f93961c5ed31a9f081e",
+      "bytes": 268324,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/Pretendard-OFL.txt",
+      "blob_sha": "497b88f9fa7623ba9f8fdac86b43dec5621984ed",
+      "bytes": 4419,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/Pretendard-SemiBold.subset.woff2",
+      "blob_sha": "38175ff01aa576ef289b308ebdb9d4f1e3bcdf74",
+      "bytes": 268752,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/fonts/nanum-pen-cover.woff",
+      "blob_sha": "15c13a7a8f9ec5d330771458b2c051d38bf91293",
+      "bytes": 9452,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "fonts",
+      "reuse_status": "existing_font_or_license",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/phone/ep01v3-haein-lockscreen-CLEAN-DERIVED.webp",
+      "blob_sha": "8da5746d39325180b7cec127a953b818adf1b630",
+      "bytes": 633332,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "phone",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/phone/ep01v3-haein-lockscreen-DRAFT.webp",
+      "blob_sha": "9183614eaff01c36e66db2fd9142884a20d42204",
+      "bytes": 602166,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "phone",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/phone/ep01v3-seungmin-lockscreen-CLEAN-DERIVED.webp",
+      "blob_sha": "18d9b6b511f217e433d13e3f69c2508cc0e12de7",
+      "bytes": 173328,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "phone",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/phone/ep01v3-seungmin-lockscreen-DRAFT.webp",
+      "blob_sha": "9b1b3575bee24f0263bb3866ab2e9573b0234e56",
+      "bytes": 171192,
+      "branches": [
+        "pf-review-revisions-20261129",
+        "ep01-redesign-v3"
+      ],
+      "category": "phone",
+      "reuse_status": "existing_reference_candidate",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/over-shoulder-photo.webp",
+      "blob_sha": "6881a1234df0009c3d5870353fb44cf80c0ada5f",
+      "bytes": 305794,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/over-shoulder.webp",
+      "blob_sha": "8048e82976a05b9e02bf0f76741b987177c0e188",
+      "bytes": 247662,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-explain-photo.webp",
+      "blob_sha": "67497988758cce03ce57b837260706271b957027",
+      "bytes": 206358,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-explain.webp",
+      "blob_sha": "8a8a150b147651bc09fdab18d1f5aee8e91fed31",
+      "bytes": 188318,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-phone-photo.webp",
+      "blob_sha": "4bada0a143d6a9839ca85de406b8f24d893062a4",
+      "bytes": 380780,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-phone.webp",
+      "blob_sha": "5aa4d5702ca7fa2654954f8fe22e143fb3082b5f",
+      "bytes": 322588,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-point-photo.webp",
+      "blob_sha": "31ab82adaac4093b67871dffa7b8554418423bc5",
+      "bytes": 289842,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-point.webp",
+      "blob_sha": "39cf061758e1ab753f2bd07bd7bb68b88bf205e2",
+      "bytes": 250278,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-talk-photo.webp",
+      "blob_sha": "1d4e2705ea0342a81c828dba1fb368aab65e2a3a",
+      "bytes": 228948,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/haein/sit-talk.webp",
+      "blob_sha": "82d4ac48232c2d91cf3be8cb7b7e9fcefbc203cd",
+      "bytes": 160196,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-enter-official.webp",
+      "blob_sha": "32188a19b974f22a99b1ea07fa9ad1e19207a6b8",
+      "bytes": 493032,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-enter-photo.webp",
+      "blob_sha": "4a66daf8e21b504f5cccd567822f0c94e0a43fa5",
+      "bytes": 74806,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-enter.webp",
+      "blob_sha": "7deb3c8aae794ff1ed7ea1e16e2850fc635bdefb",
+      "bytes": 137972,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-gesture-photo.webp",
+      "blob_sha": "fcaf16c5c8d29af214c1c9436e37ab992a49f52a",
+      "bytes": 191598,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-gesture.webp",
+      "blob_sha": "d0202cdd75b7c0b59bae29e72ed000f64e4c58bc",
+      "bytes": 166632,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-listen-glasses.webp",
+      "blob_sha": "0c9121417df7f844af687ee9f431f67e1966cdc9",
+      "bytes": 186374,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-listen-photo.webp",
+      "blob_sha": "03f66f17d29d98f3c087efcbcab61d351f8db6c0",
+      "bytes": 181382,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-listen.webp",
+      "blob_sha": "25617b2abf3dc1cf91f73ab8c89adadb517c9406",
+      "bytes": 119220,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-look-aside-glasses.webp",
+      "blob_sha": "785ee8ca286e8db293e21d194ae6822cd1154246",
+      "bytes": 282334,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-look-aside-photo.webp",
+      "blob_sha": "c2ab2c8eb6a9bec0b6867785bbcafa0f996a6e19",
+      "bytes": 304438,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-look-aside.webp",
+      "blob_sha": "94c31a9c80f0095a2cfb55c52583feba72dbd670",
+      "bytes": 176008,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-talk-photo.webp",
+      "blob_sha": "434ebfb5a4b7aa539d7e47ab97443d7774aeb1ef",
+      "bytes": 193394,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/hyoeun/stand-talk.webp",
+      "blob_sha": "bb8acc4eeaecb24c2117fba8bcaafe773c12a9d2",
+      "bytes": 145432,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/phone-call-likeness.webp",
+      "blob_sha": "3a8234f60ef8e3e4e93887cb8f988265dcb43858",
+      "bytes": 236194,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/phone-call.webp",
+      "blob_sha": "9c8e7f9d43ffe73b701614101009ede766d1b22f",
+      "bytes": 235726,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-check-score-likeness.webp",
+      "blob_sha": "65b6000776042e910b583a4a4640d9eb95641e09",
+      "bytes": 256004,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-check-score.webp",
+      "blob_sha": "02ef2802dd02bf6521b96f3247fb18063d801353",
+      "bytes": 261918,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-glance-phone-likeness.webp",
+      "blob_sha": "15cb7816c4575bc963dd6c07a361d7a8e7170290",
+      "bytes": 191274,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-glance-phone.webp",
+      "blob_sha": "73916de4a07c395e0db1f6f26cdf1cd1b5ae507c",
+      "bytes": 187520,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-hold-phone-likeness.webp",
+      "blob_sha": "7b9079da5ddc757a8f881942f441b7290ccf62aa",
+      "bytes": 198570,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-hold-phone.webp",
+      "blob_sha": "3f3e61e3ca7f8a214665968a359ed0ad479a2fa3",
+      "bytes": 195204,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-talk-likeness.webp",
+      "blob_sha": "52dba41276649e8cc5b94067d79a2fe24d0b6e0a",
+      "bytes": 257016,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/sit-talk.webp",
+      "blob_sha": "b6a4259582581a5c6c0da2610357ac58ebc88ba3",
+      "bytes": 261884,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-alone-likeness.webp",
+      "blob_sha": "6be33171bf473a01a5d9a7a74336ac1054ab96b8",
+      "bytes": 24038,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-alone.webp",
+      "blob_sha": "68e2bfdaebc48ffb794a2d7d39a4e8fb37d4e7cf",
+      "bytes": 149284,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-leave-likeness.webp",
+      "blob_sha": "3fc65e813ad210c4122643b3f4b2aa2e2c3eec49",
+      "bytes": 161740,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-leave.webp",
+      "blob_sha": "402b640cc7261416233c59a99b080221aba56a9e",
+      "bytes": 165904,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-question-phone-likeness.webp",
+      "blob_sha": "d3b27bfe8b4581b58575737b644c41ba52e46f26",
+      "bytes": 170316,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-question-phone.webp",
+      "blob_sha": "20aa000254f4af1b8a42fd26304b0c8fa4ec86c1",
+      "bytes": 171824,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-wait-phone-likeness.webp",
+      "blob_sha": "20608f7f05a57119683b54b11160eef13ff0a373",
+      "bytes": 185248,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/seungmin/stand-wait-phone.webp",
+      "blob_sha": "58d650d3d594b6a7deaa8e6e2989da876162ebb1",
+      "bytes": 187872,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-enter-realistic.webp",
+      "blob_sha": "fc255e300d5da3688cc9d06d219f82e7e8262363",
+      "bytes": 108770,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-enter.webp",
+      "blob_sha": "05f2b0cf37db47aa2c375d4739f0416d24591a6d",
+      "bytes": 283678,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-question-realistic.webp",
+      "blob_sha": "db714e0344c4977e8d17102e060f08acc78dbedc",
+      "bytes": 243036,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-question.webp",
+      "blob_sha": "d3eee0449484c8f2a34e154d88cc29aa93bc2fb9",
+      "bytes": 155528,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-sing-realistic.webp",
+      "blob_sha": "ea06c0a60722e8ffda14502009033d2b1aa8543d",
+      "bytes": 493268,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/characters/student/choir-sing.webp",
+      "blob_sha": "7d869affb6e6b36f460e710750562b5c4ce99ec8",
+      "bytes": 406630,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "characters",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/auditorium-audio-copy.svg",
+      "blob_sha": "5bff2e87c04f82499ed483be38463af38cc285f9",
+      "bytes": 1027,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/auditorium-clock-1030.svg",
+      "blob_sha": "e9e47c7946c38e827f84f06e988bdb03e06fcc5f",
+      "bytes": 1518,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/auditorium-cold-grade.svg",
+      "blob_sha": "6157b5402124e54798e147e5f6b882d4215f7755",
+      "bytes": 467,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/auditorium-morning-grade.svg",
+      "blob_sha": "53726e561eb4b4e1ca6b3aaa398db0c280b08272",
+      "bytes": 469,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/blue-file-17-label.svg",
+      "blob_sha": "c7fa66fec469c88719b93232b20cbc4c884369b5",
+      "bytes": 285,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/contact-shadow.svg",
+      "blob_sha": "ab4d81234804397f82ce196a9b6d565604edbd21",
+      "bytes": 433,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/haein-phone-camera.svg",
+      "blob_sha": "10378ada881968a905fc19874ee7660ff84acc70",
+      "bytes": 1367,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/haein-phone-camera.webp",
+      "blob_sha": "a39b8a809f77d697266e17edbe50ac4a5aefd708",
+      "bytes": 12512,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/haein-phone-playlist.svg",
+      "blob_sha": "1a71d6d4fbf4de730c02e0ff733dcebf579a6cd0",
+      "bytes": 1506,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/locker-17-label.svg",
+      "blob_sha": "047eb9c173153c2875bbb1424a3d1b282319689b",
+      "bytes": 307,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/overlays/musicroom-night-grade.svg",
+      "blob_sha": "131c07234c43eda1e6bde7b5789add57aac2d84a",
+      "bytes": 1190,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "overlays",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/auditorium-clock-frame.webp",
+      "blob_sha": "5da035d0c41c9dc190ca409d47eba2fe00e12902",
+      "bytes": 297196,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/auditorium-phone-connect.webp",
+      "blob_sha": "8733bf299d77ea9cbb9939d53b4fcc632eb60ecc",
+      "bytes": 203772,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/brown-envelope.webp",
+      "blob_sha": "d18ae61beaab02f09cc5f9384bbf26720cc38740",
+      "bytes": 229218,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/haein-phone-back.webp",
+      "blob_sha": "1ab4f45b3c61f721b0ac39465a957fcdad57ae2f",
+      "bytes": 117366,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/haein-phone-camera-hand.webp",
+      "blob_sha": "33634cffbcfd4c1c2d7c00a7a1a5eb34bb10091a",
+      "bytes": 129056,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/haein-phone-front.webp",
+      "blob_sha": "ab1e5d8ca76abc8eb940b05d3040f7d6073f0efb",
+      "bytes": 60346,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/haein-phone-screen-off.webp",
+      "blob_sha": "9ff69380f1a7b0f9722f1e85324752fe24fd0ab5",
+      "bytes": 133358,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/musicroom-desk-rehearsal.webp",
+      "blob_sha": "24d57e7b74468e2a883f0dd16ed0fd635c39a1e7",
+      "bytes": 121744,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/seungmin-phone-back.webp",
+      "blob_sha": "121b89675425ec19ace2873fd15b050798ef3cab",
+      "bytes": 72846,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    },
+    {
+      "path": "assets/props/sheet-music-turn.webp",
+      "blob_sha": "a37c44c14f574efcf9f820b94683218362e7d7ac",
+      "bytes": 263148,
+      "branches": [
+        "ep01-redesign-v3"
+      ],
+      "category": "props",
+      "reuse_status": "legacy_reference_only",
+      "visual_approval": "not_rechecked"
+    }
+  ],
+  "current_cut_assets": {
+    "cuts": 104,
+    "reader": 99,
+    "distinct_image_and_nameplate_references": 123
+  },
+  "gaps": [
+    {
+      "id": "G01",
+      "type": "character",
+      "status": "unverified",
+      "scope": "new supporting-character designs (2), current wardrobe variants (2), existing fifth portrait approval"
+    },
+    {
+      "id": "G02",
+      "type": "background",
+      "status": "unverified",
+      "scope": "new locations B27–B29 and consistent multi-area venue layout; existing auditorium assets only references, not equivalent approval"
+    },
+    {
+      "id": "G03",
+      "type": "costume",
+      "status": "unverified",
+      "scope": "choir uniform and approved formalwear implementation"
+    },
+    {
+      "id": "G04",
+      "type": "shared_ui",
+      "status": "inventory_pending",
+      "scope": "check screen UI, composite and lettering implementations before creating any new assets"
+    }
+  ]
+}
