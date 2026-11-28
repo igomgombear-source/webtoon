@@ -72,14 +72,21 @@
     },
     {
       "id": "PF-009",
-      "status": "ready",
+      "status": "complete",
       "owner": "GPT",
       "depends_on": [
         "PF-008"
       ],
       "scope": "consolidate deferred tool assignments and resumption gates, identify remaining truly independent work",
-      "acceptance": "no duplicated or reassigned specialist work; stop when direct independent work exhausted"
+      "acceptance": "no duplicated or reassigned specialist work; stop when direct independent work exhausted",
+      "result": "PF_RESUME_PLAN.md",
+      "verification": "reserved specialist tasks; no remaining verified independent tasks"
     }
   ],
-  "next": "PF-009"
+  "next": null,
+  "waiting_for": [
+    "specialist tools available and user resumption instruction",
+    "user approval or new revision request",
+    "original Studio B recovery"
+  ]
 }
