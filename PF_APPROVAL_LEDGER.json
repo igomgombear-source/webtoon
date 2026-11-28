@@ -1,0 +1,489 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-29",
+  "source_branch": "pf-review-revisions-20261129",
+  "source_commit": "9227ed88c0c3f67ed19dc3ddd0dc05a870cb05d3",
+  "scope": "EP01 comparison candidates and explicit approved data flags; not complete approval history",
+  "rules": {
+    "approval_requires": "explicit user decision tied to exact candidate blob and layers",
+    "review_candidate_does_not_authorize_integration": true,
+    "publication_requires_separate_approval": true,
+    "unknown_is_not_approval": true
+  },
+  "candidates": [
+    {
+      "id": "EP01-010",
+      "cut": 10,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-010-Work-BATCH1-DRAFT.webp",
+        "git_blob_sha": "286ad2ce1a52ec04e873aa310b87a39ecd92cfbe"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-010-restore-students-REV3-DRAFT.webp",
+        "git_blob_sha": "286ad2ce1a52ec04e873aa310b87a39ecd92cfbe"
+      },
+      "layers": [
+        {
+          "path": "assets/cuts/ep01v3/ep01v3-010-chalk-REV3-DRAFT.svg",
+          "git_blob_sha": "404298c594b9b67acd893fd1468796e3713b1652"
+        }
+      ],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-013",
+      "cut": 13,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-013-DRAFT.webp",
+        "git_blob_sha": "5970389c64f4dcdfeb329434a48a5920cf46235c"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-013-eyeline-REV2-DRAFT.webp",
+        "git_blob_sha": "bb0667f6889aa2b12187943e00c9913de10a68c6"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-018b",
+      "cut": 18,
+      "panel_index": 1,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-018-b-DRAFT.webp",
+        "git_blob_sha": "bf15948ad27943feb48fab9db60de706b226cf39"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-018b-local-REV-DRAFT.webp",
+        "git_blob_sha": "97593388cd9608b07ec7af2f247e6ea69ac02848"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-019b",
+      "cut": 19,
+      "panel_index": 1,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-019-b-DRAFT.webp",
+        "git_blob_sha": "f6bb38d8b9c84ecfb037934413c9bcb9ecbb65a6"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-019b-local-REV3-DRAFT.webp",
+        "git_blob_sha": "990096589954699f177027228c26ff3b6accbf6e"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-020",
+      "cut": 20,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-020-DRAFT.webp",
+        "git_blob_sha": "96ec200bfce505e40f1111230c30ccb5220adc2c"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-020-local-REV-DRAFT.webp",
+        "git_blob_sha": "6a2eee18fc12884b4b3081db2f75f2cc64f6e7e4"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-041",
+      "cut": 41,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-041-haein-doorway-trousers-REV1-DRAFT.webp",
+        "git_blob_sha": "7f356234d0abbbccd2d3147532aa9c9c38ea3cbf"
+      },
+      "current_data_status": "approved",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-041-local-REV-DRAFT.webp",
+        "git_blob_sha": "9e0bd2d4382e132b8ebd3b7b0517eb388410b5f9"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-047",
+      "cut": 47,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-047-DRAFT.webp",
+        "git_blob_sha": "f52ab9ec69b4760a9da63734f9cb4d62c636e726"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-047-local-REV3-DRAFT.webp",
+        "git_blob_sha": "ab58dbef02aa336f772423cad5da29181516114c"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-048",
+      "cut": 48,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-048-console-U03-DRAFT.webp",
+        "git_blob_sha": "2b4a69b2e9b399b1deca00ff8c116ce3b47c57b9"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-048-local-REV3-DRAFT.webp",
+        "git_blob_sha": "2139c27c5e1a26fbd28fbfa591ff258e9c246089"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-050",
+      "cut": 50,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-050-webtoon-style-DRAFT.webp",
+        "git_blob_sha": "e0be1d9c6d3fa1c1ac41d0444d542cfaae940edc"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-050-local-REV3-DRAFT.webp",
+        "git_blob_sha": "9efacc1ebae08a2ec3351eac6d790248e5aefb8f"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-051",
+      "cut": 51,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-051-DRAFT.webp",
+        "git_blob_sha": "cbe8fa88aac9ad888793c1eb5d39024390650350"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-051-local-REV3-DRAFT.webp",
+        "git_blob_sha": "e2422d6f8d22dd983b129e4946f8d8237920010b"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-052a",
+      "cut": 52,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-052-a-DRAFT.webp",
+        "git_blob_sha": "b8f479040063822d1113e24327a53ab51629be64"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-052a-local-REV3-DRAFT.webp",
+        "git_blob_sha": "3f966407abb9524094f9f864082e5cba1683c1aa"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-052b",
+      "cut": 52,
+      "panel_index": 1,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-052-b-DRAFT.webp",
+        "git_blob_sha": "fdd9b82eacbba9cff936d1a1a080a5fcf3d08ab8"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-052b-local-REV3-DRAFT.webp",
+        "git_blob_sha": "5f6d5737d2b5214f9040c9b45a5a73aedf2350d7"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-053",
+      "cut": 53,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-053-DRAFT.webp",
+        "git_blob_sha": "9db88ef32a1942034626722854ce49d436c35995"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-053-local-REV3-DRAFT.webp",
+        "git_blob_sha": "a6cd806b50f6c8294b715b9b554a3a3a5f2667f2"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-054",
+      "cut": 54,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-054-DRAFT.webp",
+        "git_blob_sha": "873c14431d0a2e08ee4e672bc9f681aacdcdb19d"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-054-local-REV3-DRAFT.webp",
+        "git_blob_sha": "5a3943625b4edf815bad33d6387f34443b52c91a"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-055",
+      "cut": 55,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-055-DRAFT.webp",
+        "git_blob_sha": "26955b5e9229bf327490ec81f7bebd0a8fe2581c"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-055-local-REV3-DRAFT.webp",
+        "git_blob_sha": "a942a609a1f01a2bc6c81df71178ecb1d08098a7"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    },
+    {
+      "id": "EP01-058",
+      "cut": 58,
+      "panel_index": 0,
+      "current": {
+        "path": "assets/cuts/ep01v3/ep01v3-058-DRAFT.webp",
+        "git_blob_sha": "110f52ee30fce759249a5a579cdb55fd78fa5bbb"
+      },
+      "current_data_status": "draft",
+      "candidate": {
+        "path": "assets/cuts/ep01v3/ep01v3-058-local-REV-DRAFT.webp",
+        "git_blob_sha": "33a297d6a3ea6926a71a19f06c796ef15058ffc3"
+      },
+      "layers": [],
+      "decision": "pending",
+      "approval_evidence": null,
+      "review": "browser_pending",
+      "integration": "not_integrated"
+    }
+  ],
+  "existing_approved_data_flags": [
+    {
+      "cut": 1,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-001-opening-portrait-DRAFT.webp",
+        "git_blob_sha": "a386da127318aafa1ca81c120c80c349025163d3"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 1,
+      "panel_index": 1,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-001-haein-portrait-DRAFT.webp",
+        "git_blob_sha": "affe0996f745082da48fd50bfb31e8e1dba5626e"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 1,
+      "panel_index": 2,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-001-hyoeun-portrait-DRAFT.webp",
+        "git_blob_sha": "fcd42c9b488caf67f71b47a590b0443847ea67d8"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 1,
+      "panel_index": 3,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-001-gihun-tracksuit-portrait.webp",
+        "git_blob_sha": "d6e0ea37f491adbd86b14c4efeac189e5fc95cc3"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 1,
+      "panel_index": 4,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-001-jin-portrait-DRAFT.webp",
+        "git_blob_sha": "1e5c51582b6cd127bd19f0c9091142abab10001e"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 16,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-016-natural-mouse-grip-DRAFT.webp",
+        "git_blob_sha": "6525419b06f21fb9685f5087d8793f2200d06cbe"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 19,
+      "panel_index": 2,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-019c-yangpyeong-school-night-APPROVED.webp",
+        "git_blob_sha": "43e713b3a9566fcc75a6d1ec02107d6268ffed45"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 41,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-041-haein-doorway-trousers-REV1-DRAFT.webp",
+        "git_blob_sha": "7f356234d0abbbccd2d3147532aa9c9c38ea3cbf"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 43,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-043-entrance-gesture-DRAFT.webp",
+        "git_blob_sha": "5b672a06c5309b9939e34d954b92698f5152ea83"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 57,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-057-half-size-clock-DRAFT.webp",
+        "git_blob_sha": "4a1e9ad7f1853fd8bdce933de87d46415d444a6e"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 70,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-070-two-shot-REV1-APPROVED.webp",
+        "git_blob_sha": "1cabb6340f52843db0d85747ccea52c655a9335f"
+      },
+      "data_status": "approved",
+      "user_evidence": "prior_approval_record"
+    },
+    {
+      "cut": 94,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-094-a-slim-phone-DRAFT.webp",
+        "git_blob_sha": "2dc2fa1c58e3c6634d71f888bbed03c6959ed38f"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 94,
+      "panel_index": 1,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-094-b-slim-phone-DRAFT.webp",
+        "git_blob_sha": "4dac075db409076dab581b6beddea49a47568871"
+      },
+      "data_status": "approved",
+      "user_evidence": "individual_evidence_not_rechecked"
+    },
+    {
+      "cut": 98,
+      "panel_index": 0,
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-098-reveal-dark-APPROVED.webp",
+        "git_blob_sha": "78bc9138a5e3da8032fec0c4d20fc9c2d161a917"
+      },
+      "data_status": "approved",
+      "user_evidence": "prior_approval_record"
+    }
+  ],
+  "exceptions": [
+    {
+      "cut": 14,
+      "status": "scope_confirmation_pending"
+    },
+    {
+      "cut": 46,
+      "status": "visual_review_pending"
+    },
+    {
+      "cut": 89,
+      "status": "approval_evidence_missing",
+      "asset": {
+        "path": "assets/cuts/ep01v3/ep01v3-089-real-kitchen-DRAFT.webp",
+        "git_blob_sha": "22d86627968626d6397c82ffec6b851d3b19ef01"
+      }
+    },
+    {
+      "cut": 1,
+      "panel_index": 4,
+      "status": "individual_approval_evidence_not_rechecked"
+    }
+  ]
+}
